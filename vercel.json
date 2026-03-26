@@ -1,7 +1,4 @@
 {
-  "functions": {
-    "api/subscribe.js": { "runtime": "edge" }
-  },
   "headers": [
     {
       "source": "/(.*)",
