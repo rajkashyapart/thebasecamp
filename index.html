@@ -38,7 +38,7 @@
 <div id="vid-white"></div>
 <div id="screen-video" class="screen" style="overflow:hidden;background:#0d0d0f;">
   <div id="video-wrap" style="position:absolute;inset:0;overflow:hidden;">
-    <iframe src="https://iframe.mediadelivery.net/embed/624272/d8ca3744-0545-4c85-a5ee-1d317952a942?autoplay=true&muted=true&loop=false&preload=true" allow="autoplay;fullscreen" allowfullscreen style="position:absolute;top:-60px;left:0;width:100%;height:calc(100% + 120px);border:none;"></iframe>
+    <iframe id="vid-frame" src="https://iframe.mediadelivery.net/embed/624272/d8ca3744-0545-4c85-a5ee-1d317952a942?autoplay=true&muted=true&loop=false&preload=true&playsinline=true" allow="autoplay;fullscreen;encrypted-media" allowfullscreen playsinline webkit-playsinline style="position:absolute;top:-60px;left:0;width:100%;height:calc(100% + 120px);border:none;"></iframe>
     <div style="position:absolute;inset:0;z-index:5;pointer-events:none;"></div>
     <div id="controls-cover"></div>
   </div>
@@ -109,10 +109,26 @@ function skipIntro() {
     logo.classList.add('waiting');
   }, 150);
 
-  // Absolute end fallback from page load — video is ~5s, 13s is generous even on slow connections
+  // On mobile, autoplay in iframes is often blocked — shorten the fallback so user isn't stuck
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  var fallbackMs = isMobile ? 4500 : 13000;
   var absoluteEndFallback = setTimeout(function() {
     if (!videoEnded) { videoEnded = true; doEndTransition(); }
-  }, 13000);
+  }, fallbackMs);
+
+  // On mobile: show a "tap to skip" hint after 2s in case autoplay is blocked
+  if (isMobile) {
+    setTimeout(function() {
+      if (!videoEnded && !videoStarted) {
+        var skip = document.createElement('div');
+        skip.id = 'vid-skip';
+        skip.textContent = 'tap to skip';
+        skip.style.cssText = 'position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:30;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;padding:10px 20px;-webkit-tap-highlight-color:transparent;';
+        skip.addEventListener('click', function() { if (!videoEnded) { videoEnded = true; clearTimeout(absoluteEndFallback); doEndTransition(); } });
+        document.body.appendChild(skip);
+      }
+    }, 2000);
+  }
 
   var playStartTime = 0;
   var timeupdateWatchdog = null;

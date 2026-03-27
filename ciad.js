@@ -45,9 +45,19 @@ const galleryIds=[
   'https://vz-466dc643-be5.b-cdn.net/ccf7889d-3372-4abc-9ddb-1e1e2b00fabc/playlist.m3u8'
 ];
 function buildGalleryRow(el, ids, offset){
-  [...ids,...ids].forEach(function(src){
+  [...ids,...ids].forEach(function(src, i){
     var cell=document.createElement('div');cell.className='gcell';
-    cell.dataset.hlsSrc=src;
+    if(i < ids.length){
+      // First set: real HLS stream (loads on CIAD open)
+      cell.dataset.hlsSrc=src;
+    } else {
+      // Second set: static thumbnail only (seamless loop visual, no extra stream)
+      var thumb=src.replace('playlist.m3u8','thumbnail.jpg');
+      var img=document.createElement('img');
+      img.src=thumb;img.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;';
+      img.loading='lazy';
+      cell.appendChild(img);
+    }
     el.appendChild(cell);
   });
 }

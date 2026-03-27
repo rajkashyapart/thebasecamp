@@ -51,6 +51,21 @@ var pgGlyphs = [
   {svg:G_EYE, cls:'', pos:[[-650,0],[650,0],[-200,440],[250,-420]]}
 ];
 
+// Mobile: compress card positions so photos are visible within the narrow viewport.
+// Desktop cards span ±780px from center; on a 390px phone that means nothing shows.
+if (window.innerWidth < 640) {
+  var _sx = 0.30, _sy = 0.38, _sw = 0.58;
+  photoCards = photoCards.map(function(c) {
+    return {x:Math.round(c.x*_sx),y:Math.round(c.y*_sy),w:Math.round(c.w*_sw),h:Math.round(c.h*_sw),rot:c.rot,src:c.src};
+  });
+  textCards = textCards.map(function(c) {
+    return {x:Math.round(c.x*_sx),y:Math.round(c.y*_sy),w:Math.round(c.w*_sw),h:Math.round(c.h*_sw),rot:c.rot,bg:c.bg,headline:c.headline,tag:c.tag,dark:c.dark};
+  });
+  pgGlyphs = pgGlyphs.map(function(g) {
+    return {svg:g.svg,cls:g.cls,pos:g.pos.map(function(p){return [Math.round(p[0]*_sx),Math.round(p[1]*_sy)];})};
+  });
+}
+
 function initPlayground() {
   var world = document.getElementById('pg-world');
   if (world.childElementCount > 0) return;
