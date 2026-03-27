@@ -26,19 +26,38 @@ When you're unsure between two approaches, pick the one with more craft.
 
 ## Always do first
 
-1. Read `rajkashyap-studio.html` — all context is in the code.
+1. Read the relevant page file — see file structure below.
 2. Start the local server: `python3 -m http.server 8080`
 3. Screenshot the current state before changing anything.
 
 ---
 
-## Constraints
+## File structure (multi-page, no build tools)
 
-**Single HTML file.** No build tools, no npm, no frameworks. Opens by double-clicking. Fonts via Google Fonts `<link>` only. Non-negotiable.
+```
+index.html        Video intro — navigates to playground.html on end
+playground.html   Photo scatter canvas
+hub.html          Work With Me / hub
+about.html        About page
+ciad.html         Content in a Day full experience
 
-**Validate JS after every edit:**
+styles.css        All shared CSS (extracted, browser-cached)
+shared.js         Nav init only
+playground.js     initPlayground() and canvas logic
+hub.js            initHub()
+about.js          initAbout()
+ciad.js           All CIAD logic (ciadInit, folders, pricing, email bar)
+```
+
+No build tools, no npm, no frameworks. Fonts via Google Fonts `<link>` only. Navigation uses real `<a href>` links between pages (not switchTo). CSS View Transitions API handles smooth page fades automatically.
+
+**Validate JS after every edit (HTML files):**
 ```bash
-node -e "const fs=require('fs'),vm=require('vm'),h=fs.readFileSync('rajkashyap-studio.html','utf8'),s=[],r=/<script[^>]*>([\s\S]*?)<\/script>/gi;let m;while((m=r.exec(h))!==null)s.push(m[1]);s.forEach((x,i)=>{try{new vm.Script(x);console.log('Block '+i+': OK')}catch(e){console.log('Block '+i+': ERROR - '+e.message)}})"
+node -e "const fs=require('fs'),vm=require('vm'),h=fs.readFileSync('FILENAME.html','utf8'),s=[],r=/<script[^>]*>([\s\S]*?)<\/script>/gi;let m;while((m=r.exec(h))!==null)s.push(m[1]);s.forEach((x,i)=>{try{new vm.Script(x);console.log('Block '+i+': OK')}catch(e){console.log('Block '+i+': ERROR - '+e.message)}})"
+```
+**Validate JS files directly:**
+```bash
+node -e "const fs=require('fs'),vm=require('vm'); try{new vm.Script(fs.readFileSync('FILENAME.js','utf8'));console.log('OK')}catch(e){console.log('ERROR: '+e.message)}"
 ```
 Known corruption causes: smart quotes in strings, `/* */` comments, Unicode in comments, template literals. Use `//` comments only, `&rsquo;` for contractions.
 
