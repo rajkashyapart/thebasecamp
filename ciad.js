@@ -713,7 +713,7 @@ function toggleWork(itemId, hlsSrc) {
   else{
     item.classList.add('expanded');embed.style.display='block';embed.innerHTML='';
     var wrap=document.createElement('div');wrap.className='vimeo-wrap';
-    var vid=document.createElement('video');vid.muted=true;vid.autoplay=true;vid.loop=true;vid.playsInline=true;vid.setAttribute('playsinline','');vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:none;pointer-events:none;';
+    var vid=document.createElement('video');vid.autoplay=true;vid.loop=true;vid.controls=true;vid.playsInline=true;vid.setAttribute('playsinline','');vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:none;pointer-events:auto;';
     wrap.appendChild(vid);embed.appendChild(wrap);
     var closeEl=document.createElement('div');closeEl.className='close-embed';closeEl.innerHTML='<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>Close';
     closeEl.onclick=function(e){e.stopPropagation();toggleWork(itemId,hlsSrc);};embed.appendChild(closeEl);
