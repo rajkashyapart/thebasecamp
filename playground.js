@@ -193,7 +193,8 @@ function initPlayground() {
   var pgWorld = document.getElementById('pg-world');
   var dragging=false, startX, startY, offX=0, offY=0, velX=0, velY=0, lastX, lastY, rafId;
   function applyXY() { pgWorld.style.transform = 'translate('+offX+'px,'+offY+'px)'; }
-  function centerView() { offX = window.innerWidth/2 - WCX; offY = window.innerHeight/2 - WCY; applyXY(); }
+  function getNavHeight() { var n = document.getElementById('pg-nav'); return n ? n.offsetHeight : 0; }
+  function centerView() { var nh = getNavHeight(); offX = window.innerWidth/2 - WCX; offY = (window.innerHeight + nh)/2 - WCY; applyXY(); }
   centerView();
   window.addEventListener('resize', function() { centerView(); });
   canvas.addEventListener('mousedown', function(e) {
