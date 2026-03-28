@@ -1011,6 +1011,13 @@ function closeMobilePanel(){
 function initPage() {
   if(window.innerWidth >= 640){
     renderFolders();
+    // Click outside on desktop: #desktop now sits above the overlay (z-index:640)
+    // so overlay clicks never fire -- wire click-outside directly on #desktop
+    desktop.addEventListener('click', function(e){
+      if(!e.target.closest('.folder') && document.getElementById('screen-ciad').classList.contains('has-open-window')){
+        handleOverlayClick();
+      }
+    });
   } else {
     buildMobilePanel();
     positionHero();
