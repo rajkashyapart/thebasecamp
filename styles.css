@@ -52,20 +52,25 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
 ====================================================== */
 #screen-playground{z-index:100;background:var(--bg-warm);font-family:'DM Mono',monospace;cursor:crosshair;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;}
 
-#pg-nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:16px 26px;pointer-events:none;background:rgba(245,242,238,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(30,25,20,0.06);}
+#pg-nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:11px 22px;pointer-events:none;background:rgba(245,242,238,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(30,25,20,0.06);}
 /* On CIAD page, nav adapts to dark/light theme */
 [data-theme="dark"] #pg-nav{background:rgba(13,13,15,0.88);border-bottom-color:rgba(255,255,255,0.07);}
 [data-theme="light"] #pg-nav{background:rgba(245,237,225,0.90);border-bottom-color:rgba(120,80,40,0.10);}
+.pg-brand{font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:0.1em;color:var(--ink);pointer-events:all;cursor:pointer;}
+.pg-brand a{color:inherit;text-decoration:none;cursor:pointer;}
+.pg-links{display:flex;gap:22px;pointer-events:all;}
+.pg-links a{font-family:'DM Mono',monospace;font-size:11px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.58;transition:opacity 0.2s;cursor:pointer;white-space:nowrap;}
+.nav-short{display:none;}
 /* Mobile: compact nav — single line, no wrapping */
 @media(max-width:639px){
-  #pg-nav{padding:10px 14px;}
-  .pg-brand{font-size:12px;}
-  .pg-links{gap:14px;}
-  .pg-links a{font-size:9px;letter-spacing:0.08em;white-space:nowrap;}
+  #pg-nav{padding:7px 12px;}
+  .pg-brand{font-size:10px;}
+  .pg-links{gap:7px;}
+  .pg-links a{font-size:8px;letter-spacing:0.05em;white-space:nowrap;}
+  .nav-full{display:none;}
+  .nav-short{display:inline;}
+  .pg-headline{font-size:28px;}
 }
-.pg-brand{font-family:'DM Mono',monospace;font-size:14px;font-weight:400;letter-spacing:0.1em;color:var(--ink);pointer-events:all;cursor:pointer;}
-.pg-links{display:flex;gap:28px;pointer-events:all;}
-.pg-links a{font-family:'DM Mono',monospace;font-size:12px;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.58;transition:opacity 0.2s;cursor:pointer;white-space:nowrap;}
 .pg-links a:hover{opacity:1;}
 .pg-links a.active{opacity:1;text-decoration:underline;text-underline-offset:3px;}
 

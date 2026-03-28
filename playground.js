@@ -55,30 +55,33 @@ var pgGlyphs = [
 var isMobile = window.innerWidth < 640;
 
 if (isMobile) {
-  // Photo card mobile positions — hero clear zone: avoid x:-170 to +170 between y:-95 to +115
-  // Cards cluster above, below, and bleeding off left/right edges
+  // Photo card mobile positions -- hard clear zone: y must be < -145 or > 140 (hero + breathing room)
+  // Cards cluster tightly above and below, edge-bleed cards stay in their vertical zone
   photoCards = [
-    {x:-158, y:-305, w:145, h:145, rot:-1.0, src:photoCards[0].src},  // top left
-    {x:18,   y:-270, w:110, h:110, rot:1.5,  src:photoCards[1].src},  // top center
-    {x:148,  y:-238, w:130, h:87,  rot:0.6,  src:photoCards[2].src},  // top right (edge bleed)
-    {x:-200, y:-82,  w:120, h:80,  rot:-1.2, src:photoCards[3].src},  // hard left (off-screen bleed)
-    {x:172,  y:-72,  w:110, h:90,  rot:0.8,  src:photoCards[4].src},  // hard right (off-screen bleed)
-    {x:-200, y:42,   w:82,  h:55,  rot:-0.8, src:photoCards[5].src},  // hard left lower (off-screen bleed)
-    {x:172,  y:55,   w:100, h:100, rot:1.2,  src:photoCards[6].src},  // hard right lower (off-screen bleed)
-    {x:-148, y:138,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},  // below left
-    {x:28,   y:172,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},  // below center
-    {x:152,  y:152,  w:110, h:110, rot:1.0,  src:photoCards[9].src}   // below right (edge bleed)
+    {x:-150, y:-325, w:145, h:145, rot:-1.0, src:photoCards[0].src},
+    {x:15,   y:-295, w:110, h:110, rot:1.5,  src:photoCards[1].src},
+    {x:155,  y:-265, w:130, h:87,  rot:0.6,  src:photoCards[2].src},
+    {x:-195, y:-260, w:100, h:68,  rot:-1.2, src:photoCards[3].src},
+    {x:168,  y:-250, w:115, h:78,  rot:0.8,  src:photoCards[4].src},
+    {x:-195, y:148,  w:100, h:68,  rot:-0.8, src:photoCards[5].src},
+    {x:168,  y:158,  w:115, h:80,  rot:1.2,  src:photoCards[6].src},
+    {x:-148, y:195,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
+    {x:28,   y:228,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
+    {x:155,  y:258,  w:110, h:110, rot:1.0,  src:photoCards[9].src}
   ];
-  // Text card mobile positions — all outside hero clear zone
+  // Text cards -- clear zone respected, well outside hero
   textCards = [
-    {x:-178, y:-205, w:140, h:80, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
-    {x:72,   y:128,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
-    {x:-145, y:268,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
+    {x:-180, y:-248, w:140, h:80, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
+    {x:65,   y:150,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
+    {x:-148, y:298,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
   ];
-  // Glyphs scaled down for mobile
-  pgGlyphs = pgGlyphs.map(function(g) {
-    return {svg:g.svg,cls:g.cls,pos:g.pos.map(function(p){return [Math.round(p[0]*0.22),Math.round(p[1]*0.22)];})};
-  });
+  // Glyphs -- explicitly positioned for organic scatter, not scaled from desktop grid
+  pgGlyphs = [
+    {svg:G_STICK, cls:'', pos:[[-168,-155],[162,-160],[-180,160],[158,175],[-65,-372],[95,340]]},
+    {svg:G_EYE,   cls:'g', pos:[[-38,-385],[105,-358],[-198,130],[205,115],[-28,362],[118,395]]},
+    {svg:G_STICK, cls:'b', pos:[[218,-165],[-225,-188],[212,195],[-218,210]]},
+    {svg:G_EYE,   cls:'',  pos:[[-242,-200],[238,-115],[-52,380],[82,-408]]}
+  ];
 }
 
 // Float animation index assignment (cycles 0-7)
