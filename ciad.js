@@ -125,71 +125,71 @@ function buildWorkContent(){return workItems.map(function(item){var thumb=item.h
 const folders=[
   // 0 TLDR
   { id:'tldr', preview:'60 seconds. the whole picture.', label:'TLDR', glyph:'flash', color:'fi-rose',
-    eyebrow:'60 seconds', title:'TLDR', subtitle:"For the founder who isn&rsquo;t reading all of it.",
+    eyebrow:'60 seconds', title:'TLDR', subtitle:"for the founder who isn&rsquo;t reading all of it.",
     content:`
       <div class="w-eye">tldr &mdash; for the founder who isn&rsquo;t reading all of it</div>
-      <div class="w-h">you&rsquo;re busy.<br><em>here's the short version.</em></div>
+      <div class="w-h">you&rsquo;re busy. fair.<br><em>here&rsquo;s the short version.</em></div>
 
-      <div class="w-step"><div class="w-sn">1</div><div><div class="w-st">before cameras &mdash; strategy</div><div class="w-sb">Strategy calls. A proper brief. Positioning, through-line, who you&rsquo;re talking to, what will make them stop. <strong>This is where most content fails. We fix it before it starts.</strong> And you&rsquo;ve given us zero shoot time yet.</div></div></div>
-      <div class="w-step"><div class="w-sn">2</div><div><div class="w-st">one shoot day</div><div class="w-sb">You show up once. That's your entire monthly content commitment. We direct, capture, handle everything on the day.</div></div></div>
-      <div class="w-step"><div class="w-sn">3</div><div><div class="w-st">you don&rsquo;t touch it again</div><div class="w-sb">Editing handled. Revisions via Frame.io, fast and seamless. Everything scheduled and out the door for the full month.</div></div></div>
+      <div class="w-step"><div class="w-sn">1</div><div><div class="w-st">before cameras &mdash; strategy</div><div class="w-sb">positioning calls. a proper brief. we figure out who you&rsquo;re talking to, what they actually care about, and what will make them stop scrolling. this is where most content fails. we sort it before a single camera comes out.</div></div></div>
+      <div class="w-step"><div class="w-sn">2</div><div><div class="w-st">one shoot day</div><div class="w-sb">you show up once. we direct, shoot, handle everything. that&rsquo;s your entire monthly content commitment. done.</div></div></div>
+      <div class="w-step"><div class="w-sn">3</div><div><div class="w-st">you don&rsquo;t touch it again</div><div class="w-sb">editing handled. revisions on frame.io &mdash; you watch, comment, approve right on the frame. everything scheduled and out the door for the full month.</div></div></div>
 
       <div class="w-div"></div>
-      <p class="w-p" style="color:var(--text);font-weight:500;">No daily decisions. No wondering what to post. No agency that keeps your page active but never grows it.</p>
-      <div class="w-closer"><em>One shoot day. A month sorted. That's it.</em></div>
+      <p class="w-p">no daily decisions. no wondering what to post. no agency keeping your page active while your business stands still.</p>
+      <div class="w-closer"><em>one shoot day. a month sorted. that&rsquo;s genuinely it.</em></div>
       <button class="w-cta" onclick="bookCall()">Book a Call &rarr;</button>
-    
+
       <div class="w-next" onclick="openNextFolder('problem')">next: the problem &#8594;</div>
     `
   },
 
   // 1 THE PROBLEM
   { id:'problem', preview:'why most content fails. and why yours can&rsquo;t.', label:'The Problem', glyph:'bolt', color:'fi-pink',
-    eyebrow:'The real problem', title:'The Real Problem', subtitle:"It was never effort. It was never budget.",
+    eyebrow:'The real problem', title:'The Real Problem', subtitle:"it was never effort. it was never budget.",
     content:`
       <div class="w-eye">the real problem</div>
       <div class="w-h">most content is built on<br><em>aesthetics and volume.</em><br>not on why anyone stops.</div>
 
-      <p class="w-p">You already know content matters. You've tried doing it yourself &mdash; and realised fast that it&rsquo;s a full-time job requiring skills across ideation, strategy, psychology, production, and distribution. <strong>All at once. Every single week.</strong></p>
+      <p class="w-p">you already know content matters. you&rsquo;ve probably tried doing it yourself and realised fast &mdash; it&rsquo;s a full-time job. ideation, strategy, psychology, production, distribution. all at once. every single week. forever.</p>
 
-      <div class="w-outcome"><div class="w-dot" style="background:var(--pink)"></div><div class="w-outcome-text">Maybe you tried an agency. Expensive. And honestly? <strong>Most of them just kept your page active.</strong> Great for retaining existing customers. Useless for reaching new ones.</div></div>
-      <div class="w-outcome"><div class="w-dot" style="background:var(--pink)"></div><div class="w-outcome-text">The agencies actually good at this work with bigger brands &mdash; they won&rsquo;t take your call, and you can&rsquo;t afford them anyway.</div></div>
-      <div class="w-outcome"><div class="w-dot" style="background:var(--pink)"></div><div class="w-outcome-text"><strong>It takes up time you don&rsquo;t have, every single week, forever.</strong> You don&rsquo;t need to post more. You need to post smarter.</div></div>
+      <div class="w-outcome"><div class="w-dot" style="background:var(--pink)"></div><div class="w-outcome-text">maybe you tried an agency. expensive. and if you&rsquo;re honest? they just kept your page alive. great for letting existing customers know you still exist. useless for reaching anyone new.</div></div>
+      <div class="w-outcome"><div class="w-dot" style="background:var(--pink)"></div><div class="w-outcome-text">the agencies actually good at this are working with brands ten times your size. they won&rsquo;t take your call. and you can&rsquo;t afford them anyway.</div></div>
+      <div class="w-outcome"><div class="w-dot" style="background:var(--pink)"></div><div class="w-outcome-text">and i think that&rsquo;s actually the problem. not your effort. not your budget. the model is broken. you don&rsquo;t need to post more. you need to post smarter.</div></div>
 
       <div class="w-div"></div>
-      <div class="w-quote"><p>"Most agencies hand you edited files and move on. Nobody's asking if you actually made your money back."</p></div>
-    
+      <div class="w-quote"><p>&ldquo;most agencies hand you edited files and move on. nobody&rsquo;s asking if you actually made your money back.&rdquo;</p></div>
+
       <div class="w-next" onclick="openNextFolder('reviews')">next: the word on the street &#8594;</div>
     `
   },
 
   // 2 HOW IT WORKS
   { id:'how', preview:'one shoot day. a month handled.', label:'How It Works', glyph:'arrow', color:'fi-violet',
-    eyebrow:'4 steps', title:'How It Works', subtitle:'One day. One system.',
+    eyebrow:'4 steps', title:'How It Works', subtitle:'one day. one system.',
     content:`
       <div class="w-eye">how it works</div>
       <div class="w-h">one shoot day.<br><em>a month of content.</em><br>you don&rsquo;t come back to it until next month.</div>
-      <div class="w-step"><div class="w-sn">1</div><div><div class="w-st">clarify your positioning</div><div class="w-sb">Strategy calls. A proper brief &mdash; your positioning, through-line, who you&rsquo;re talking to, what will make them stop. <strong>This is where most content falls apart. We fix it here.</strong> Zero shoot time used yet.</div></div></div>
-      <div class="w-step"><div class="w-sn">2</div><div><div class="w-st">batch shoot in one day</div><div class="w-sb">One focused shoot. You show up once. We direct, we capture, we handle everything. That's your entire monthly content commitment &mdash; done.</div></div></div>
-      <div class="w-step"><div class="w-sn">3</div><div><div class="w-st">distribute with intent</div><div class="w-sb">Editing handled. Revisions via <strong>Frame.io</strong> &mdash; you watch, comment, approve right on the frame. Unlimited revisions. Scheduled. You're done for the month.</div></div></div>
-      <div class="w-step"><div class="w-sn">4</div><div><div class="w-st">learn and refine</div><div class="w-sb">We look at what resonates. We adjust the strategy. Every month gets better. <strong>You don&rsquo;t have to do anything differently. We do.</strong></div></div></div>
-    
+      <div class="w-step"><div class="w-sn">01</div><div><div class="w-st">clarify your positioning</div><div class="w-sb">strategy calls. a proper brief. your positioning, your through-line, who you&rsquo;re talking to, what will make them stop. this is where most content falls apart &mdash; before anyone even picks up a camera. we fix it here.</div></div></div>
+      <div class="w-step"><div class="w-sn">02</div><div><div class="w-st">batch shoot in one day</div><div class="w-sb">one focused shoot. you show up once. we direct, we capture, we handle everything on the day. that&rsquo;s your entire monthly content commitment &mdash; done.</div></div></div>
+      <div class="w-step"><div class="w-sn">03</div><div><div class="w-st">distribute with intent</div><div class="w-sb">editing handled. revisions via frame.io &mdash; watch, comment, approve right on the frame. unlimited revisions. everything scheduled. you&rsquo;re done for the month.</div></div></div>
+      <div class="w-step"><div class="w-sn">04</div><div><div class="w-st">learn and refine</div><div class="w-sb">we look at what resonated. we adjust the strategy. every month gets better &mdash; not because you did anything differently, but because the system compounds.</div></div></div>
+
       <div class="w-next" onclick="openNextFolder('outcomes')">next: what actually changes &#8594;</div>
     `
   },
 
   // 3 OUTCOMES
   { id:'outcomes', preview:'what actually changes when it works.', label:'Outcomes', glyph:'spark', color:'fi-green',
-    eyebrow:'What changes', title:'What Changes', subtitle:'You show up once. Everything else is handled.',
+    eyebrow:'What changes', title:'What Changes', subtitle:'you show up once. everything else is handled.',
     content:`
       <div class="w-eye">what changes</div>
       <div class="w-h">you show up once a month.<br><em>everything else is handled.</em></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text"><strong>your ICP stops scrolling.</strong> because the content was built to make them stop &mdash; not just to look good in the feed.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text"><strong>your message feels coherent.</strong> people understand what you do and why it&rsquo;s for them &mdash; before they&rsquo;ve had a single conversation with you.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text"><strong>your content works when you&rsquo;re not.</strong> the system runs. you focus on the actual business.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text"><strong>you stop gambling on content.</strong> every piece has a strategic reason to exist. you reduce the probability of pouring in and having it fail.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text"><strong>content stops being the thing you&rsquo;re always behind on.</strong> after one shoot day, you&rsquo;re ahead for the entire month.</div></div>
-    
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your ideal customer stops scrolling. because the content was built to make them stop &mdash; not just to look good in the feed.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your message feels coherent. people understand what you do and why it&rsquo;s for them before they&rsquo;ve had a single conversation with you.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your content works when you&rsquo;re not. the system runs. you focus on the actual business.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">you stop gambling on content. every piece has a reason to exist. you stop pouring in and hoping.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">content stops being the thing you&rsquo;re always behind on. after one shoot day, you&rsquo;re ahead for the entire month.</div></div>
+
       <button class="w-cta" onclick="bookCall()">Book a Call &#8594;</button>
       <div class="w-next" onclick="openNextFolder('fit')">next: is this for you? &#8594;</div>
     `
@@ -197,17 +197,16 @@ const folders=[
 
   // 4 IS THIS YOU?
   { id:'fit', preview:'is this the right move for you?', label:'Is This You?', glyph:'diamond', color:'fi-cyan',
-    eyebrow:'Fit check', title:'Is This For You?', subtitle:'Honest.',
+    eyebrow:'Fit check', title:'Is This For You?', subtitle:'honest.',
     content:`
       <div class="w-eye">is this for you</div>
       <div class="w-h">honest<br><em>fit check.</em></div>
       <div class="w-fit w-fit-yes">
         <div class="w-fit-tag">this works if</div>
         <ul>
-          <li>you&rsquo;re a founder, coach, or creator past the "figuring it out" phase</li>
+          <li>you&rsquo;re a founder, coach, or creator who&rsquo;s past the figuring-it-out phase</li>
           <li>you&rsquo;ve tried content &mdash; yourself or through an agency &mdash; and it hasn&rsquo;t worked the way it should</li>
-          <li>you know spray and pray isn&rsquo;t a strategy and you want content built on science</li>
-          <li>you want a month of content handled from one shoot day &mdash; without touching it again</li>
+          <li>you want a month of content handled from one shoot day without touching it again</li>
           <li>you&rsquo;re done with agencies making content like it&rsquo;s 2017</li>
         </ul>
       </div>
@@ -215,12 +214,12 @@ const folders=[
       <div class="w-fit w-fit-no">
         <div class="w-fit-tag">this doesn&rsquo;t work if</div>
         <ul>
-          <li>you&rsquo;re chasing viral numbers over actual business impact</li>
-          <li>you want someone to "just edit clips"</li>
-          <li>you want shortcuts without the strategy and positioning work</li>
+          <li>you&rsquo;re chasing vanity numbers over actual business impact</li>
+          <li>you want someone to &ldquo;just edit clips&rdquo;</li>
+          <li>you want the output without the strategy and positioning work that makes it worth anything</li>
         </ul>
       </div>
-    
+
       <button class="w-cta" onclick="bookCall()">Book a Call &#8594;</button>
       <div class="w-next" onclick="openNextFolder('pricing')">next: packages &#8594;</div>
     `
@@ -228,11 +227,11 @@ const folders=[
 
   // 5 PACKAGES
   { id:'pricing', preview:'one shoot day. three tiers.', label:'Packages', glyph:'square', color:'fi-teal',
-    eyebrow:'Packages', title:'Packages', subtitle:'One shoot day. Across all packages.',
+    eyebrow:'Packages', title:'Packages', subtitle:'one shoot day. across all packages.',
     content:`
       <div class="w-eye">packages</div>
       <div class="w-h">one shoot day per month.<br><em>across all packages.</em></div>
-      <p class="w-p" style="font-size:12px;color:var(--muted);">The difference is volume and how fast the feedback loop compounds.</p>
+      <p class="w-p" style="font-size:12px;color:var(--muted);">the difference isn&rsquo;t ego. it&rsquo;s volume and how fast the feedback loop compounds.</p>
       <div class="currency-toggle"><button class="ctog-btn active" id="btn-inr" onclick="setCurrency('inr')">₹ INR</button><button class="ctog-btn" id="btn-usd" onclick="setCurrency('usd')">$ USD</button></div>
       <div class="w-tier">
         <div class="w-tier-header"><div class="w-tier-name">foundation</div></div>
@@ -261,10 +260,10 @@ const folders=[
 
   // 6 THE WORD (testimonials)
   { id:'reviews', preview:'four founders. unprompted.', label:'The Word', glyph:'quote', color:'fi-teal',
-    eyebrow:'Word on the street', title:'The Word on the Street', subtitle:'Four founders. Unprompted.',
+    eyebrow:'Word on the street', title:'The Word on the Street', subtitle:'i didn&rsquo;t ask any of them to say this.',
     content:`
       <div class="w-eye">word on the street</div>
-      <div class="w-h">four founders.<br><em>unprompted.</em></div>
+      <div class="w-h">four founders.<br><em>i didn&rsquo;t ask any of them to say this.</em></div>
 
       <div class="w-testi">
         <div class="w-testi-top">
@@ -274,7 +273,7 @@ const folders=[
             <div class="w-testi-role">Founder, Copper + Cloves</div>
           </div>
         </div>
-        <div class="w-testi-text">"Loved working with Raj to create new content to deliver the messages that drive me and the business. His editing style helped shape this piece into something direct and impactful."</div>
+        <div class="w-testi-text">&ldquo;loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.&rdquo;</div>
       </div>
 
       <div class="w-testi">
@@ -282,10 +281,10 @@ const folders=[
           <div class="w-testi-avatar" id="testi-photo-2"><!-- SWAP: <img src="patricia.jpg" alt="Patricia Cosma"> -->P</div>
           <div class="w-testi-meta">
             <div class="w-testi-name">Patricia Cosma</div>
-            <div class="w-testi-role">Co-founder, Indian Cacao & Craft Chocolate Festival</div>
+            <div class="w-testi-role">Co-founder, Indian Cacao &amp; Craft Chocolate Festival</div>
           </div>
         </div>
-        <div class="w-testi-text">"I enjoy working with Raj, he is very focused and motivated, which makes it a smooth experience. The results of his work are great without too much back and forth."</div>
+        <div class="w-testi-text">&ldquo;i enjoy working with raj, he is very focused and motivated, which makes it a smooth experience. the results of his work are great without too much back and forth.&rdquo;</div>
       </div>
 
       <div class="w-testi">
@@ -293,23 +292,23 @@ const folders=[
           <div class="w-testi-avatar" id="testi-photo-3"><!-- SWAP: <img src="kavya.jpg" alt="Kavya Peerbhoy"> -->K</div>
           <div class="w-testi-meta">
             <div class="w-testi-name">Kavya Peerbhoy</div>
-            <div class="w-testi-role">Founder, &Shine</div>
+            <div class="w-testi-role">Founder, &amp;Shine</div>
           </div>
         </div>
-        <div class="w-testi-text">"His first draft was excellent and exactly what I was looking for. He is easy to work with and truly understands what is required. I have worked with him on several projects since the first time."</div>
+        <div class="w-testi-text">&ldquo;his first draft was excellent and exactly what i was looking for. he is easy to work with and truly understands what is required. i have worked with him on several projects since the first time.&rdquo;</div>
       </div>
 
       <div class="w-testi">
         <div class="w-testi-top">
           <div class="w-testi-avatar" id="testi-photo-4"><!-- SWAP: <img src="sakshee-aditya.jpg" alt="Sakshee & Aditya"> -->S</div>
           <div class="w-testi-meta">
-            <div class="w-testi-name">Sakshee & Aditya</div>
-            <div class="w-testi-role">Co-founders, Stamp & Seal Company</div>
+            <div class="w-testi-name">Sakshee &amp; Aditya</div>
+            <div class="w-testi-role">Co-founders, Stamp &amp; Seal Company</div>
           </div>
         </div>
-        <div class="w-testi-text">"He has an incredible talent for taking a moodboard and turning it into something even better than expected. What surprised me most was how he elevated the project with his creative ideas."</div>
+        <div class="w-testi-text">&ldquo;he has an incredible talent for taking a moodboard and turning it into something even better than expected. what surprised me most was how he elevated the project with his creative ideas.&rdquo;</div>
       </div>
-    
+
       <button class="w-cta" onclick="bookCall()">Book a Call &#8594;</button>
       <div class="w-next" onclick="openNextFolder('how')">next: how it works &#8594;</div>
     `
@@ -317,18 +316,18 @@ const folders=[
 
   // 7 TEAM
   { id:'team', preview:'two people. your whole pipeline.', label:'Team', glyph:'people', color:'fi-cyan',
-    eyebrow:'The people', title:'Meet the Team', subtitle:'Two people. No fluff.',
+    eyebrow:'The people', title:'Meet the Team', subtitle:'we&rsquo;re not an agency.',
     content:`
       <div class="w-eye">meet the team</div>
       <div class="w-h">two people.<br><em>no fluff.</em></div>
-      <p class="w-p">We're not an agency. We're two people who understand social at a level most agencies don&rsquo;t &mdash; because we grew up on it, study it obsessively, and build our own presence too. Between the two of us, your entire content pipeline is covered. You show up for the shoot. We handle everything else.</p>
+      <p class="w-p">we&rsquo;re not an agency. we&rsquo;re two people who understand social at a level most agencies don&rsquo;t &mdash; because we grew up on it, study it obsessively, and build our own presence too. between the two of us, your entire content pipeline is covered. you show up for the shoot. we handle everything else.</p>
       <div class="w-div"></div>
       <div class="w-team-member">
         <div class="w-avatar" id="photo-raj"><!-- SWAP: <img src="raj.jpg" alt="Raj"> -->R</div>
         <div>
           <div class="w-tname">Raj Kashyap</div>
           <div class="w-trole">strategy · positioning · direction · editing</div>
-          <p class="w-tbio">Every client Raj has ever had came through word of mouth. Not ads, not cold outreach &mdash; people telling other people. That only happens when you genuinely want the person you&rsquo;re working with to win.<br><br><strong>He understands the psychology of why content works or doesn&rsquo;t</strong> &mdash; not from a textbook but from years of being deep in it. He also builds his own presence at <em>raj.uncurated</em>, testing what works in real time.</p>
+          <p class="w-tbio">every client i&rsquo;ve ever had came through word of mouth. not ads, not cold outreach &mdash; people telling other people. that only happens when you genuinely want the person you&rsquo;re working with to win. i care about whether your content makes you money. not just whether it looks good.<br><br>i understand the psychology of why content works &mdash; not from a textbook but from years of being deep in it. i also build my own presence at <em>raj.uncurated</em>, testing what works in real time. i&rsquo;m not advising you on something i don&rsquo;t do myself.</p>
         </div>
       </div>
       <div class="w-team-member">
@@ -336,11 +335,11 @@ const folders=[
         <div>
           <div class="w-tname">Dhiman</div>
           <div class="w-trole">editing · post-production · execution</div>
-          <p class="w-tbio">Dhiman is the reason the work ships clean and on time. Where Raj is ideas and instinct, <strong>Dhiman is precision and patience</strong> &mdash; the kind of editor who notices what most people skip.<br><br>One of Northeast India's fastest growing streamers &mdash; he understands social-first content not as a language he follows but as one he already speaks fluently.</p>
+          <p class="w-tbio">dhiman is the reason the work ships clean and on time. where i&rsquo;m ideas and instinct, dhiman is precision and patience &mdash; the kind of editor who notices what most people skip.<br><br>one of northeast india&rsquo;s fastest growing streamers &mdash; he understands social-first content not as a language he follows but as one he already speaks fluently.</p>
         </div>
       </div>
-      <div class="w-note"><span class="w-note-icon">note</span><span class="w-note-text">between the two of us: strategy, ideation, shoot direction, editing, colour grading, distribution. <strong>everything your content needs &mdash; without the agency overhead or the agency indifference.</strong></span></div>
-    
+      <div class="w-note"><span class="w-note-icon">note</span><span class="w-note-text">between the two of us: strategy, ideation, shoot direction, editing, colour grading, distribution. everything your content needs &mdash; without the agency overhead or the agency indifference.</span></div>
+
       <button class="w-cta" onclick="bookCall()">Book a Call &#8594;</button>
       <div class="w-next" onclick="openNextFolder('work')">next: recent work &#8594;</div>
     `
@@ -348,15 +347,15 @@ const folders=[
 
   // 8 RECENT WORK
   { id:'work', preview:'every frame from one day.', label:'Recent Work', glyph:'film', color:'fi-indigo',
-    eyebrow:'Portfolio', title:'Recent Work', subtitle:'Every frame from one shoot day.',
+    eyebrow:'Portfolio', title:'Recent Work', subtitle:'every frame you&rsquo;re about to see came from a single shoot day.',
     content:`
       <div class="w-eye">in the wild</div>
       <div class="w-h"><em>every frame from one day.</em></div>
-      <p class="w-p" style="font-size:12px;color:var(--muted);margin-bottom:14px;">Tap any project to watch.</p>
+      <p class="w-p" style="font-size:12px;color:var(--muted);margin-bottom:14px;">tap any project to watch.</p>
       ${buildWorkContent()}
-    
+
       <div class="w-div"></div>
-      <div class="w-closer"><em>You\'ve seen everything.</em> Ready to talk?</div>
+      <div class="w-closer"><em>you&rsquo;ve seen everything. ready to talk?</em></div>
       <button class="w-cta" onclick="bookCall()">Book a Call &#8594;</button>
     `
   },
