@@ -55,32 +55,34 @@ var pgGlyphs = [
 var isMobile = window.innerWidth < 640;
 
 if (isMobile) {
-  // Photo card mobile positions -- hard clear zone: y must be < -145 or > 140 (hero + breathing room)
-  // Cards cluster tightly above and below, edge-bleed cards stay in their vertical zone
+  // Photo cards -- two vertical zones, max ~8% overlap between any two cards.
+  // Top zone (y < -148): cards staggered horizontally across 390px viewport.
+  // Bottom zone (y > 148): mirrored logic below hero.
   photoCards = [
-    {x:-150, y:-325, w:145, h:145, rot:-1.0, src:photoCards[0].src},
-    {x:15,   y:-295, w:110, h:110, rot:1.5,  src:photoCards[1].src},
-    {x:155,  y:-265, w:130, h:87,  rot:0.6,  src:photoCards[2].src},
-    {x:-195, y:-260, w:100, h:68,  rot:-1.2, src:photoCards[3].src},
-    {x:168,  y:-250, w:115, h:78,  rot:0.8,  src:photoCards[4].src},
-    {x:-195, y:148,  w:100, h:68,  rot:-0.8, src:photoCards[5].src},
-    {x:168,  y:158,  w:115, h:80,  rot:1.2,  src:photoCards[6].src},
-    {x:-148, y:195,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
-    {x:28,   y:228,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
-    {x:155,  y:258,  w:110, h:110, rot:1.0,  src:photoCards[9].src}
+    {x:-150, y:-385, w:145, h:145, rot:-1.0, src:photoCards[0].src},
+    {x:28,   y:-360, w:110, h:110, rot:1.5,  src:photoCards[1].src},
+    {x:155,  y:-310, w:125, h:83,  rot:-0.8, src:photoCards[2].src},
+    {x:-195, y:-232, w:90,  h:60,  rot:-1.2, src:photoCards[3].src},
+    {x:168,  y:-222, w:110, h:72,  rot:0.8,  src:photoCards[4].src},
+    {x:-195, y:152,  w:90,  h:60,  rot:-0.8, src:photoCards[5].src},
+    {x:162,  y:148,  w:110, h:72,  rot:2.0,  src:photoCards[6].src},
+    {x:-148, y:222,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
+    {x:25,   y:235,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
+    {x:145,  y:295,  w:115, h:115, rot:-1.8, src:photoCards[9].src}
   ];
-  // Text cards -- clear zone respected, well outside hero
+  // Text cards -- no card overlaps more than 8% with any photo card
   textCards = [
-    {x:-180, y:-248, w:140, h:80, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
-    {x:65,   y:150,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
-    {x:-148, y:298,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
+    {x:35,   y:-225, w:135, h:78, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
+    {x:150,  y:228,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
+    {x:-155, y:315,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
   ];
-  // Glyphs -- explicitly positioned for organic scatter, not scaled from desktop grid
+  // Glyphs -- organically scattered. Near-hero glyphs at y:+-118-132 (just outside hero zone).
+  // Far glyphs reach toward canvas edges for depth.
   pgGlyphs = [
-    {svg:G_STICK, cls:'', pos:[[-168,-155],[162,-160],[-180,160],[158,175],[-65,-372],[95,340]]},
-    {svg:G_EYE,   cls:'g', pos:[[-38,-385],[105,-358],[-198,130],[205,115],[-28,362],[118,395]]},
-    {svg:G_STICK, cls:'b', pos:[[218,-165],[-225,-188],[212,195],[-218,210]]},
-    {svg:G_EYE,   cls:'',  pos:[[-242,-200],[238,-115],[-52,380],[82,-408]]}
+    {svg:G_STICK, cls:'', pos:[[-78,-122],[82,-118],[-164,126],[134,132],[-90,-328],[74,305]]},
+    {svg:G_EYE,   cls:'g', pos:[[-48,-345],[98,-302],[-190,110],[200,100],[-18,328],[112,368]]},
+    {svg:G_STICK, cls:'b', pos:[[212,-160],[-220,-182],[210,188],[-214,200]]},
+    {svg:G_EYE,   cls:'',  pos:[[-238,-190],[232,-114],[-50,372],[80,-405]]}
   ];
 }
 
