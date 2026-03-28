@@ -51,20 +51,37 @@ var pgGlyphs = [
   {svg:G_EYE, cls:'', pos:[[-650,0],[650,0],[-200,440],[250,-420]]}
 ];
 
-// Mobile: compress card positions so photos are visible within the narrow viewport.
-// Desktop cards span ±780px from center; on a 390px phone that means nothing shows.
-if (window.innerWidth < 640) {
-  var _sx = 0.30, _sy = 0.38, _sw = 0.58;
-  photoCards = photoCards.map(function(c) {
-    return {x:Math.round(c.x*_sx),y:Math.round(c.y*_sy),w:Math.round(c.w*_sw),h:Math.round(c.h*_sw),rot:c.rot,src:c.src};
-  });
-  textCards = textCards.map(function(c) {
-    return {x:Math.round(c.x*_sx),y:Math.round(c.y*_sy),w:Math.round(c.w*_sw),h:Math.round(c.h*_sw),rot:c.rot,bg:c.bg,headline:c.headline,tag:c.tag,dark:c.dark};
-  });
+// Mobile: replace card positions with viewport-friendly layout (fits 390px wide phone)
+var isMobile = window.innerWidth < 640;
+
+if (isMobile) {
+  // Photo card mobile positions — centred around WCX/WCY, within +-160x / +-300y
+  photoCards = [
+    {x:-150, y:-280, w:150, h:150, rot:-1.0, src:photoCards[0].src},
+    {x:30,   y:-250, w:110, h:110, rot:1.5,  src:photoCards[1].src},
+    {x:140,  y:-200, w:130, h:87,  rot:0.6,  src:photoCards[2].src},
+    {x:-140, y:-110, w:120, h:80,  rot:-1.2, src:photoCards[3].src},
+    {x:80,   y:-100, w:90,  h:90,  rot:0.8,  src:photoCards[4].src},
+    {x:-155, y:30,   w:80,  h:53,  rot:-0.8, src:photoCards[5].src},
+    {x:110,  y:50,   w:100, h:100, rot:1.2,  src:photoCards[6].src},
+    {x:-120, y:170,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
+    {x:40,   y:200,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
+    {x:145,  y:170,  w:100, h:100, rot:1.0,  src:photoCards[9].src}
+  ];
+  // Text card mobile positions
+  textCards = [
+    {x:-130, y:-150, w:140, h:80, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
+    {x:80,   y:-60,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
+    {x:30,   y:250,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
+  ];
+  // Glyphs scaled down for mobile
   pgGlyphs = pgGlyphs.map(function(g) {
-    return {svg:g.svg,cls:g.cls,pos:g.pos.map(function(p){return [Math.round(p[0]*_sx),Math.round(p[1]*_sy)];})};
+    return {svg:g.svg,cls:g.cls,pos:g.pos.map(function(p){return [Math.round(p[0]*0.22),Math.round(p[1]*0.22)];})};
   });
 }
+
+// Float animation index assignment (cycles 0-7)
+var pgFloatIdx = 0;
 
 function initPlayground() {
   var world = document.getElementById('pg-world');
@@ -77,10 +94,15 @@ function initPlayground() {
   ct.innerHTML = '<span class="pg-headline">never stop playing &lt;3</span><div class="pg-sub">drag to move</div><a href="hub.html" class="pg-cta">work with me &#8594;</a>';
   world.appendChild(ct);
 
+  var isDragging = false;
+
   function addCard(c, i, delayed) {
     var el = document.createElement('div');
-    el.className = 'pg-card pg-card-link';
+    var floatClass = 'pgFloat' + (pgFloatIdx % 8);
+    pgFloatIdx++;
+    el.className = 'pg-card pg-card-link ' + floatClass;
     el.style.cssText = 'left:'+(WCX+c.x)+'px;top:'+(WCY+c.y)+'px;width:'+c.w+'px;height:'+c.h+'px;transform:rotate('+c.rot+'deg);z-index:'+(5+(i%8))+';';
+    el.dataset.rot = c.rot;
     if (delayed) { el.style.opacity = '0'; el.style.transition = 'opacity 0.6s ease'; setTimeout(function() { el.style.opacity = '1'; }, 50); }
     var img = document.createElement('img');
     img.src = c.src; img.alt = ''; img.loading = i < 3 ? 'eager' : 'lazy'; img.draggable = false;
@@ -93,6 +115,7 @@ function initPlayground() {
       csl = parseInt(el.style.left) || 0; cst = parseInt(el.style.top) || 0;
       el.style.zIndex = '80'; el.style.cursor = 'grabbing';
       el.style.transition = 'none';
+      el.style.animationPlayState = 'paused';
     });
     window.addEventListener('mousemove', function(e) {
       if (!cardDragging) return;
@@ -103,13 +126,26 @@ function initPlayground() {
     window.addEventListener('mouseup', function() {
       if (!cardDragging) return;
       cardDragging = false; el.style.cursor = 'grab';
-      el.style.transition = 'box-shadow 0.25s ease, transform 0.25s ease';
+      el.style.transition = 'box-shadow 0.25s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+      el.style.animationPlayState = 'running';
       if (!cardMoved) window.location.href='hub.html';
     });
-    el.addEventListener('mouseenter', function() { if (!cardDragging) { el.style.transform = 'rotate('+(c.rot*0.4)+'deg) translateY(-5px) scale(1.025)'; el.style.cursor = 'grab'; } });
-    el.addEventListener('mouseleave', function() { if (!cardDragging) el.style.transform = 'rotate('+c.rot+'deg)'; });
+    el.addEventListener('mouseenter', function() {
+      if (!cardDragging) {
+        el.style.animationPlayState = 'paused';
+        el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) translateY(-6px) scale(1.04) rotateX(4deg)';
+        el.style.cursor = 'grab';
+      }
+    });
+    el.addEventListener('mouseleave', function() {
+      if (!cardDragging) {
+        el.style.transform = 'rotate('+c.rot+'deg)';
+        el.style.animationPlayState = 'running';
+      }
+    });
     world.appendChild(el);
   }
+
   // First 3 cards load immediately
   for (var fi = 0; fi < Math.min(3, photoCards.length); fi++) { addCard(photoCards[fi], fi, false); }
   // Rest fade in after 2.5s
@@ -183,6 +219,5 @@ function initPlayground() {
     if(Math.abs(velX)>0.25||Math.abs(velY)>0.25) rafId=requestAnimationFrame(coast);
   }
 }
-/* CIAD adapter - modifies the original basecamp JS for screen system */
 
 document.addEventListener('DOMContentLoaded', function() { initPlayground(); });

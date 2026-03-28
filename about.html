@@ -37,6 +37,7 @@
   <div class="pg-links">
     <a href="playground.html" class="pg-home-link">Playground</a>
     <a href="hub.html" id="pg-hub-link">Work With Me</a>
+    <a href="portfolio.html" id="pg-port-link">Portfolio</a>
     <a href="about.html" id="pg-about-link" class="active">About</a>
   </div>
 </nav>
@@ -181,5 +182,65 @@
 
 <script src="shared.js"></script>
 <script src="about.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Spring entrance for about sections via IntersectionObserver
+  var objs = document.querySelectorAll('.about-obj');
+  objs.forEach(function(el, i) {
+    el.style.opacity = '0';
+    el.style.transform = (el.style.transform || '') + ' translateY(18px)';
+    el.style.transition = 'none';
+  });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var delay = parseFloat(el.dataset.delay || 0);
+      setTimeout(function() {
+        el.style.transition = 'opacity 0.6s cubic-bezier(0.34,1.56,0.64,1), transform 0.6s cubic-bezier(0.34,1.56,0.64,1)';
+        el.style.opacity = '1';
+        // preserve existing rotations — only clear the added translateY
+        var cur = el.style.transform || '';
+        el.style.transform = cur.replace(/translateY([^)]*)/g, 'translateY(0)');
+      }, delay);
+      io.unobserve(el);
+    });
+  }, {threshold:0.1});
+  objs.forEach(function(el, i) {
+    el.dataset.delay = i * 70;
+    io.observe(el);
+  });
+  // 3D tilt on about hang-tag and receipt cards
+  document.querySelectorAll('.about-hang-tag,.about-receipt').forEach(function(el) {
+    el.addEventListener('mousemove', function(e) {
+      var r = el.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5;
+      var y = (e.clientY - r.top) / r.height - 0.5;
+      var cur = window.getComputedStyle(el).transform;
+      el.style.transform = 'perspective(700px) rotateX('+(-y*6)+'deg) rotateY('+(x*6)+'deg) scale(1.02)';
+      el.style.transition = 'none';
+    });
+    el.addEventListener('mouseleave', function() {
+      el.style.transform = '';
+      el.style.transition = 'transform 0.45s cubic-bezier(0.34,1.56,0.64,1)';
+    });
+  });
+  // Magnetic effect on about links
+  document.querySelectorAll('.rf-link').forEach(function(el) {
+    el.addEventListener('mousemove', function(e) {
+      var r = el.getBoundingClientRect();
+      var dx = (e.clientX - (r.left + r.width/2)) * 0.15;
+      var dy = (e.clientY - (r.top + r.height/2)) * 0.15;
+      el.style.transform = 'translate('+dx+'px,'+dy+'px)';
+      el.style.transition = 'transform 0.1s';
+    });
+    el.addEventListener('mouseleave', function() {
+      el.style.transform = '';
+      el.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+    });
+  });
+});
+</script>
 </body>
 </html>

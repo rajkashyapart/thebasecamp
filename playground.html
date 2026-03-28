@@ -37,6 +37,7 @@
   <div class="pg-links">
     <a href="playground.html" class="active pg-home-link">Playground</a>
     <a href="hub.html" id="pg-hub-link">Work With Me</a>
+    <a href="portfolio.html" id="pg-port-link">Portfolio</a>
     <a href="about.html" id="pg-about-link">About</a>
   </div>
 </nav>
@@ -50,5 +51,25 @@
 
 <script src="shared.js"></script>
 <script src="playground.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Magnetic on pg-cta work-with-me link
+  var cta = document.querySelector('.pg-cta');
+  if (cta) {
+    cta.addEventListener('mousemove', function(e) {
+      var r = cta.getBoundingClientRect();
+      var dx = (e.clientX - (r.left + r.width/2)) * 0.25;
+      var dy = (e.clientY - (r.top + r.height/2)) * 0.25;
+      cta.style.transform = 'scale(1.06) translate('+dx+'px,'+dy+'px)';
+      cta.style.transition = 'transform 0.1s';
+    });
+    cta.addEventListener('mouseleave', function() {
+      cta.style.transform = '';
+      cta.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), color 0.25s';
+    });
+  }
+});
+</script>
 </body>
 </html>
