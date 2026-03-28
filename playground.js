@@ -55,24 +55,25 @@ var pgGlyphs = [
 var isMobile = window.innerWidth < 640;
 
 if (isMobile) {
-  // Photo card mobile positions — centred around WCX/WCY, within +-160x / +-300y
+  // Photo card mobile positions — hero clear zone: avoid x:-170 to +170 between y:-95 to +115
+  // Cards cluster above, below, and bleeding off left/right edges
   photoCards = [
-    {x:-150, y:-280, w:150, h:150, rot:-1.0, src:photoCards[0].src},
-    {x:30,   y:-250, w:110, h:110, rot:1.5,  src:photoCards[1].src},
-    {x:140,  y:-200, w:130, h:87,  rot:0.6,  src:photoCards[2].src},
-    {x:-140, y:-110, w:120, h:80,  rot:-1.2, src:photoCards[3].src},
-    {x:80,   y:-100, w:90,  h:90,  rot:0.8,  src:photoCards[4].src},
-    {x:-155, y:30,   w:80,  h:53,  rot:-0.8, src:photoCards[5].src},
-    {x:110,  y:50,   w:100, h:100, rot:1.2,  src:photoCards[6].src},
-    {x:-120, y:170,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
-    {x:40,   y:200,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
-    {x:145,  y:170,  w:100, h:100, rot:1.0,  src:photoCards[9].src}
+    {x:-158, y:-305, w:145, h:145, rot:-1.0, src:photoCards[0].src},  // top left
+    {x:18,   y:-270, w:110, h:110, rot:1.5,  src:photoCards[1].src},  // top center
+    {x:148,  y:-238, w:130, h:87,  rot:0.6,  src:photoCards[2].src},  // top right (edge bleed)
+    {x:-200, y:-82,  w:120, h:80,  rot:-1.2, src:photoCards[3].src},  // hard left (off-screen bleed)
+    {x:172,  y:-72,  w:110, h:90,  rot:0.8,  src:photoCards[4].src},  // hard right (off-screen bleed)
+    {x:-200, y:42,   w:82,  h:55,  rot:-0.8, src:photoCards[5].src},  // hard left lower (off-screen bleed)
+    {x:172,  y:55,   w:100, h:100, rot:1.2,  src:photoCards[6].src},  // hard right lower (off-screen bleed)
+    {x:-148, y:138,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},  // below left
+    {x:28,   y:172,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},  // below center
+    {x:152,  y:152,  w:110, h:110, rot:1.0,  src:photoCards[9].src}   // below right (edge bleed)
   ];
-  // Text card mobile positions
+  // Text card mobile positions — all outside hero clear zone
   textCards = [
-    {x:-130, y:-150, w:140, h:80, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
-    {x:80,   y:-60,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
-    {x:30,   y:250,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
+    {x:-178, y:-205, w:140, h:80, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
+    {x:72,   y:128,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
+    {x:-145, y:268,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
   ];
   // Glyphs scaled down for mobile
   pgGlyphs = pgGlyphs.map(function(g) {
