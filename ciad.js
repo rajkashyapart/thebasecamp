@@ -882,7 +882,7 @@ function markEscSeen(){
     <div class="h-eye" style="opacity:1;filter:none;transform:none;">Content in a Day</div>
     <h1 class="h-title" style="opacity:1;filter:none;transform:none;">
       <span style="display:block;">there&rsquo;s no scroll.</span>
-      <em class="h-glow" style="display:block;opacity:1;filter:none;transform:none;animation:glowD 3.2s ease-in-out infinite;">${isMob() ? 'just tap on explore.' : 'just tap the folders.'}</em>
+      <em class="h-glow" style="display:block;opacity:1;filter:none;transform:none;animation:glowD 3.2s ease-in-out infinite;">${isMob() ? 'tap &ldquo;see the work&rdquo; below.' : 'just tap the folders.'}</em>
       <span style="display:block;font-size:0.72em;opacity:0.5;margin-top:0.18em;">:')</span>
     </h1>`;
 

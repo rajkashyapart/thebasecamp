@@ -114,28 +114,46 @@ function initPlayground() {
     img.src = c.src; img.alt = ''; img.loading = i < 3 ? 'eager' : 'lazy'; img.draggable = false;
     el.appendChild(img);
     var cardDragging = false, cardMoved = false, csx, csy, csl, cst;
-    el.addEventListener('mousedown', function(e) {
-      e.stopPropagation(); e.preventDefault();
+    function cardDragStart(cx, cy) {
       cardDragging = true; cardMoved = false;
-      csx = e.clientX; csy = e.clientY;
+      csx = cx; csy = cy;
       csl = parseInt(el.style.left) || 0; cst = parseInt(el.style.top) || 0;
       el.style.zIndex = '80'; el.style.cursor = 'grabbing';
       el.style.transition = 'none';
       el.style.animationPlayState = 'paused';
-    });
-    window.addEventListener('mousemove', function(e) {
+    }
+    function cardDragMove(cx, cy) {
       if (!cardDragging) return;
-      var dx = e.clientX - csx, dy = e.clientY - csy;
+      var dx = cx - csx, dy = cy - csy;
       if (Math.abs(dx) + Math.abs(dy) > 4) cardMoved = true;
       if (cardMoved) { el.style.left = (csl + dx) + 'px'; el.style.top = (cst + dy) + 'px'; }
-    });
-    window.addEventListener('mouseup', function() {
+    }
+    function cardDragEnd() {
       if (!cardDragging) return;
       cardDragging = false; el.style.cursor = 'grab';
       el.style.transition = 'box-shadow 0.25s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
       el.style.animationPlayState = 'running';
       if (!cardMoved) window.location.href='hub.html';
+    }
+    // Mouse events
+    el.addEventListener('mousedown', function(e) {
+      e.stopPropagation(); e.preventDefault();
+      cardDragStart(e.clientX, e.clientY);
     });
+    window.addEventListener('mousemove', function(e) { cardDragMove(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', function() { cardDragEnd(); });
+    // Touch events for mobile
+    el.addEventListener('touchstart', function(e) {
+      e.stopPropagation();
+      var t = e.touches[0];
+      cardDragStart(t.clientX, t.clientY);
+    }, {passive: true});
+    window.addEventListener('touchmove', function(e) {
+      if (!cardDragging) return;
+      var t = e.touches[0];
+      cardDragMove(t.clientX, t.clientY);
+    }, {passive: true});
+    window.addEventListener('touchend', function() { cardDragEnd(); });
     el.addEventListener('mouseenter', function() {
       if (!cardDragging) {
         el.style.animationPlayState = 'paused';

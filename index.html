@@ -33,7 +33,6 @@
 </head>
 <body>
 
-<div id="vid-white"></div>
 <!-- ═══ SCREEN 0: VIDEO INTRO ═══ -->
 <div id="vid-white"></div>
 <div id="screen-video" class="screen" style="overflow:hidden;background:#0d0d0f;">
@@ -67,104 +66,73 @@
 </div>
 
 <script>
-
-function skipIntro() {
-  var vidWhite = document.getElementById('vid-white');
-  var hl = document.getElementById('vid-headline');
-  if (hl) hl.classList.add('out');
-  setTimeout(function() {
-    if (vidWhite) vidWhite.classList.add('flash');
-    setTimeout(function() {
-      var vs = document.getElementById('screen-video');
-      var txtOv = document.getElementById('vid-text-overlay');
-      var cover = document.getElementById('vid-cover');
-      if (vs) { vs.classList.add('hidden'); vs.style.display = 'none'; }
-      if (txtOv) txtOv.style.display = 'none';
-      if (cover) cover.style.display = 'none';
-      if (vidWhite) vidWhite.classList.add('to-warm');
-      setTimeout(function() {
-        if (vidWhite) vidWhite.classList.add('fade-out');
-        setTimeout(function() {
-          if (vidWhite) vidWhite.style.display = 'none';
-          window.location.href = 'playground.html';
-        }, 700);
-      }, 100);
-    }, 600);
-  }, 300);
-}
-
 (function() {
   var logo = document.getElementById('raj-logo');
   var cover = document.getElementById('vid-cover');
   var hl = document.getElementById('vid-headline');
-  if (!logo || !cover) return;
+  var vidWhite = document.getElementById('vid-white');
+  var iframe = document.getElementById('vid-frame');
+  if (!logo || !cover || !iframe) return;
 
-  var videoStarted = false;
+  var videoRevealed = false;
   var videoEnded = false;
   var transitionStarted = false;
-  var endFallbackTimer = null;
+  var videoDuration = 0;    // learned from timeupdate data
+  var revealTime = 0;       // timestamp when video was revealed
+  var endTimer = null;       // precise end timer based on real duration
 
-  // 0.15s - logo fades in and breathes while video buffers
+  // Logo fades in and breathes while video preloads
   setTimeout(function() {
     logo.classList.add('in');
     logo.classList.add('waiting');
   }, 150);
 
-  // On mobile, autoplay in iframes is often blocked — shorten the fallback so user isn't stuck
-  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  var fallbackMs = isMobile ? 4500 : 13000;
-  var absoluteEndFallback = setTimeout(function() {
+  // Absolute fallback: 15s max wait
+  var absoluteFallback = setTimeout(function() {
     if (!videoEnded) { videoEnded = true; doEndTransition(); }
-  }, fallbackMs);
+  }, 15000);
 
-  // On mobile: show a "tap to skip" hint after 2s in case autoplay is blocked
-  if (isMobile) {
-    setTimeout(function() {
-      if (!videoEnded && !videoStarted) {
-        var skip = document.createElement('div');
-        skip.id = 'vid-skip';
-        skip.textContent = 'tap to skip';
-        skip.style.cssText = 'position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:30;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);cursor:pointer;padding:10px 20px;-webkit-tap-highlight-color:transparent;';
-        skip.addEventListener('click', function() { if (!videoEnded) { videoEnded = true; clearTimeout(absoluteEndFallback); doEndTransition(); } });
-        document.body.appendChild(skip);
-      }
-    }, 2000);
+  // Schedule end based on real video duration + current playback position
+  function scheduleEnd(currentTime, duration) {
+    if (videoEnded || !videoRevealed) return;
+    clearTimeout(endTimer);
+    var remaining = (duration - currentTime) * 1000;
+    if (remaining < 50) remaining = 50;
+    endTimer = setTimeout(function() {
+      if (!videoEnded) { videoEnded = true; doEndTransition(); }
+    }, remaining);
   }
 
-  var playStartTime = 0;
-  var timeupdateWatchdog = null;
-
-  function scheduleEndCheck() {
-    clearTimeout(timeupdateWatchdog);
-    timeupdateWatchdog = setTimeout(function check() {
-      if (videoEnded || !videoStarted) return;
-      if ((Date.now() - playStartTime) > 3500) {
-        // Enough play time has elapsed and timeupdate stopped — video ended
-        videoEnded = true;
-        clearTimeout(absoluteEndFallback);
-        doEndTransition();
-      } else {
-        // Not enough play time yet, keep polling every 400ms
-        timeupdateWatchdog = setTimeout(check, 400);
-      }
-    }, 900);
-  }
-
-  function onVideoPlay() {
-    if (videoStarted) return;
-    videoStarted = true;
-    playStartTime = Date.now();
+  // Reveal video: logo out -> cover dissolves -> headline in
+  function revealVideo() {
+    if (videoRevealed) return;
+    videoRevealed = true;
+    revealTime = Date.now();
     logo.classList.remove('waiting');
     logo.classList.remove('in');
     logo.classList.add('out');
-    // 400ms - cover dissolves revealing video
-    setTimeout(function() { cover.classList.add('fade'); }, 400);
-    // 700ms - headline fades in over live video
-    setTimeout(function() { if (hl) hl.classList.add('show'); }, 700);
-    scheduleEndCheck();
+    setTimeout(function() { cover.classList.add('fade'); }, 350);
+    setTimeout(function() { if (hl) hl.classList.add('show'); }, 650);
+    // If we already know the duration, schedule end now
+    if (videoDuration > 0) {
+      scheduleEnd(0, videoDuration);
+    }
+    // Safety net: if no duration data arrives within 1.5s of reveal,
+    // use a conservative 4s play window (video is ~3.5s)
+    setTimeout(function() {
+      if (videoDuration === 0 && !videoEnded) {
+        videoEnded = true;
+        doEndTransition();
+      }
+    }, 4000);
   }
 
-  // Listen for postMessage events from Bunny player
+  // PRIMARY: iframe load = player + video buffered, autoplay fires
+  iframe.addEventListener('load', function() {
+    setTimeout(revealVideo, 800);
+  });
+
+  // postMessage from Bunny: learn duration + detect end precisely
   window.addEventListener('message', function(e) {
     if (!e.data) return;
     var data = e.data;
@@ -173,37 +141,41 @@ function skipIntro() {
     }
     if (typeof data !== 'object') return;
     var evt = data.event || '';
-    // Any playback event confirms video is running; reset end-check window
-    if (evt === 'play' || evt === 'playing' || evt === 'timeupdate') {
-      onVideoPlay();
-      if (videoStarted) { scheduleEndCheck(); }
+
+    // Any playback event confirms video is running
+    if (evt === 'play' || evt === 'playing' || evt === 'timeupdate' || evt === 'videoProgress') {
+      revealVideo();
     }
-    // Video ended via postMessage
+
+    // Learn duration + current time — Bunny may nest under data or send flat
+    var inner = data.data || data;
+    var ct = inner.currentTime || data.currentTime || 0;
+    var dur = inner.duration || data.duration || 0;
+    if (dur > 0 && ct >= 0) {
+      videoDuration = dur;
+      scheduleEnd(ct, dur);
+    }
+
+    // Video ended — immediate transition
     if ((evt === 'videoEnded' || evt === 'ended' || evt === 'end') && !videoEnded) {
       videoEnded = true;
-      clearTimeout(absoluteEndFallback);
-      clearTimeout(timeupdateWatchdog);
-      if (!videoStarted) { videoStarted = true; }
+      clearTimeout(absoluteFallback);
+      clearTimeout(endTimer);
       doEndTransition();
     }
   });
 
-  // Play fallback: if no postMessage at all within 2s, proceed anyway
-  setTimeout(function() { onVideoPlay(); }, 2000);
-
+  // Cross-dissolve to warm bg, then navigate to playground
   function doEndTransition() {
     if (transitionStarted) return;
     transitionStarted = true;
-    clearTimeout(endFallbackTimer);
-    clearTimeout(absoluteEndFallback);
-    // Show playground beneath video before fading video out
-    // Navigate to playground
+    clearTimeout(absoluteFallback);
+    clearTimeout(endTimer);
     if (hl) hl.classList.add('out');
-    var vs = document.getElementById('screen-video');
-    if (vs) vs.classList.add('fading-out');
+    if (vidWhite) { vidWhite.classList.add('flash'); }
     setTimeout(function() {
       window.location.href = 'playground.html';
-    }, 1100);
+    }, 650);
   }
 })();
 
