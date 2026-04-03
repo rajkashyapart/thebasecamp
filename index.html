@@ -181,9 +181,10 @@
     // Headline stays visible — shifts white->black, overlay bg clears
     if (textOverlay) textOverlay.classList.add('clear');
     if (hl) hl.classList.add('dark');
+    // Navigate after color shift completes so view-transition morphs black->black
     setTimeout(function() {
       window.location.href = 'playground.html';
-    }, 900);
+    }, 600);
   }
 })();
 

@@ -102,6 +102,42 @@ function initPlayground() {
 
   var isDragging = false;
 
+  // macOS Window Tiling — snap preview overlay
+  var snapPreview = document.createElement('div');
+  snapPreview.className = 'pg-snap-preview';
+  document.body.appendChild(snapPreview);
+  var SNAP_EDGE = 12; // px from viewport edge to trigger snap
+  var SNAP_GAP = 6;   // gap around tiled cards
+  var navEl = document.getElementById('pg-nav');
+
+  function getSnapZone(cx, cy) {
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var nt = navEl ? navEl.offsetHeight : 0;
+    var atLeft = cx < SNAP_EDGE;
+    var atRight = cx > vw - SNAP_EDGE;
+    var atTop = cy < nt + SNAP_EDGE;
+    var atBottom = cy > vh - SNAP_EDGE;
+    // Corners = quarter, edges = half
+    if (atLeft && atTop) return {t:nt+SNAP_GAP, l:SNAP_GAP, w:vw/2-SNAP_GAP*1.5, h:(vh-nt)/2-SNAP_GAP*1.5, zone:'tl'};
+    if (atRight && atTop) return {t:nt+SNAP_GAP, l:vw/2+SNAP_GAP*0.5, w:vw/2-SNAP_GAP*1.5, h:(vh-nt)/2-SNAP_GAP*1.5, zone:'tr'};
+    if (atLeft && atBottom) return {t:nt+(vh-nt)/2+SNAP_GAP*0.5, l:SNAP_GAP, w:vw/2-SNAP_GAP*1.5, h:(vh-nt)/2-SNAP_GAP*1.5, zone:'bl'};
+    if (atRight && atBottom) return {t:nt+(vh-nt)/2+SNAP_GAP*0.5, l:vw/2+SNAP_GAP*0.5, w:vw/2-SNAP_GAP*1.5, h:(vh-nt)/2-SNAP_GAP*1.5, zone:'br'};
+    if (atLeft) return {t:nt+SNAP_GAP, l:SNAP_GAP, w:vw/2-SNAP_GAP*1.5, h:vh-nt-SNAP_GAP*2, zone:'left'};
+    if (atRight) return {t:nt+SNAP_GAP, l:vw/2+SNAP_GAP*0.5, w:vw/2-SNAP_GAP*1.5, h:vh-nt-SNAP_GAP*2, zone:'right'};
+    if (atTop) return {t:nt+SNAP_GAP, l:SNAP_GAP, w:vw-SNAP_GAP*2, h:(vh-nt)/2-SNAP_GAP*1.5, zone:'top'};
+    if (atBottom) return {t:nt+(vh-nt)/2+SNAP_GAP*0.5, l:SNAP_GAP, w:vw-SNAP_GAP*2, h:(vh-nt)/2-SNAP_GAP*1.5, zone:'bottom'};
+    return null;
+  }
+
+  function showSnapPreview(snap) {
+    snapPreview.style.top = snap.t + 'px';
+    snapPreview.style.left = snap.l + 'px';
+    snapPreview.style.width = snap.w + 'px';
+    snapPreview.style.height = snap.h + 'px';
+    snapPreview.classList.add('visible');
+  }
+  function hideSnapPreview() { snapPreview.classList.remove('visible'); }
+
   function addCard(c, i, delayed) {
     var el = document.createElement('div');
     var floatClass = 'pgFloat' + (pgFloatIdx % 8);
@@ -109,28 +145,84 @@ function initPlayground() {
     el.className = 'pg-card pg-card-link ' + floatClass;
     el.style.cssText = 'left:'+(WCX+c.x)+'px;top:'+(WCY+c.y)+'px;width:'+c.w+'px;height:'+c.h+'px;transform:rotate('+c.rot+'deg);z-index:'+(5+(i%8))+';';
     el.dataset.rot = c.rot;
+    // Store original world-space position for untiling
+    el.dataset.origLeft = (WCX+c.x);
+    el.dataset.origTop = (WCY+c.y);
+    el.dataset.origW = c.w;
+    el.dataset.origH = c.h;
     if (delayed) { el.style.opacity = '0'; el.style.transition = 'opacity 0.6s ease'; setTimeout(function() { el.style.opacity = '1'; }, 50); }
     var img = document.createElement('img');
     img.src = c.src; img.alt = ''; img.loading = i < 3 ? 'eager' : 'lazy'; img.draggable = false;
     el.appendChild(img);
     var cardDragging = false, cardMoved = false, csx, csy, csl, cst;
+    var isTiled = false, currentSnap = null;
+
     function cardDragStart(cx, cy) {
       cardDragging = true; cardMoved = false;
       csx = cx; csy = cy;
-      csl = parseInt(el.style.left) || 0; cst = parseInt(el.style.top) || 0;
-      el.style.zIndex = '80'; el.style.cursor = 'grabbing';
+      // If tiled, use the fixed position for drag start
+      if (isTiled) {
+        csl = parseInt(el.style.left) || 0;
+        cst = parseInt(el.style.top) || 0;
+      } else {
+        csl = parseInt(el.style.left) || 0;
+        cst = parseInt(el.style.top) || 0;
+      }
+      el.style.zIndex = '120'; el.style.cursor = 'grabbing';
       el.style.transition = 'none';
       el.style.animationPlayState = 'paused';
+      currentSnap = null;
     }
     function cardDragMove(cx, cy) {
       if (!cardDragging) return;
       var dx = cx - csx, dy = cy - csy;
       if (Math.abs(dx) + Math.abs(dy) > 4) cardMoved = true;
-      if (cardMoved) { el.style.left = (csl + dx) + 'px'; el.style.top = (cst + dy) + 'px'; }
+      if (cardMoved) {
+        // While dragging a tiled card, untile it first so it moves freely
+        if (isTiled) {
+          isTiled = false;
+          el.classList.remove('tiled');
+          // Reparent back to world
+          el.style.position = 'absolute';
+          el.style.width = el.dataset.origW + 'px';
+          el.style.height = el.dataset.origH + 'px';
+          world.appendChild(el);
+          // Recalculate start position based on where it visually was
+          csl = parseInt(el.dataset.origLeft) || 0;
+          cst = parseInt(el.dataset.origTop) || 0;
+          csx = cx; csy = cy;
+        }
+        el.style.left = (csl + (cx - csx)) + 'px';
+        el.style.top = (cst + (cy - csy)) + 'px';
+        // Check snap zones
+        var snap = getSnapZone(cx, cy);
+        if (snap) {
+          currentSnap = snap;
+          showSnapPreview(snap);
+        } else {
+          currentSnap = null;
+          hideSnapPreview();
+        }
+      }
     }
     function cardDragEnd() {
       if (!cardDragging) return;
       cardDragging = false; el.style.cursor = 'grab';
+      hideSnapPreview();
+      if (currentSnap && cardMoved) {
+        // Snap to tiled position
+        isTiled = true;
+        el.classList.add('tiled');
+        el.style.position = 'fixed';
+        el.style.left = currentSnap.l + 'px';
+        el.style.top = currentSnap.t + 'px';
+        el.style.width = currentSnap.w + 'px';
+        el.style.height = currentSnap.h + 'px';
+        el.style.transition = 'top 0.35s cubic-bezier(0.34,1.56,0.64,1),left 0.35s cubic-bezier(0.34,1.56,0.64,1),width 0.35s cubic-bezier(0.34,1.56,0.64,1),height 0.35s cubic-bezier(0.34,1.56,0.64,1),transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+        currentSnap = null;
+        return;
+      }
+      currentSnap = null;
       el.style.transition = 'box-shadow 0.25s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
       el.style.animationPlayState = 'running';
       if (!cardMoved) window.location.href='hub.html';
@@ -155,16 +247,35 @@ function initPlayground() {
     }, {passive: true});
     window.addEventListener('touchend', function() { cardDragEnd(); });
     el.addEventListener('mouseenter', function() {
-      if (!cardDragging) {
+      if (!cardDragging && !isTiled) {
         el.style.animationPlayState = 'paused';
         el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) translateY(-6px) scale(1.04) rotateX(4deg)';
         el.style.cursor = 'grab';
       }
     });
     el.addEventListener('mouseleave', function() {
-      if (!cardDragging) {
+      if (!cardDragging && !isTiled) {
         el.style.transform = 'rotate('+c.rot+'deg)';
         el.style.animationPlayState = 'running';
+      }
+    });
+    // Double-click to untile
+    el.addEventListener('dblclick', function() {
+      if (isTiled) {
+        isTiled = false;
+        el.classList.remove('tiled');
+        el.style.position = 'absolute';
+        el.style.left = el.dataset.origLeft + 'px';
+        el.style.top = el.dataset.origTop + 'px';
+        el.style.width = el.dataset.origW + 'px';
+        el.style.height = el.dataset.origH + 'px';
+        el.style.transition = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+        el.style.transform = 'rotate('+c.rot+'deg)';
+        world.appendChild(el);
+        setTimeout(function() {
+          el.style.transition = 'box-shadow 0.25s ease, transform 0.25s ease';
+          el.style.animationPlayState = 'running';
+        }, 450);
       }
     });
     world.appendChild(el);
