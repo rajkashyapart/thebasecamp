@@ -88,8 +88,8 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
 .pg-recenter:active{transform:scale(0.97);}
 
 /* macOS window drag — card lifts and shrinks under cursor */
-.pg-card.dragging-macos{transition:transform 0.2s cubic-bezier(0.2,0,0.13,1),box-shadow 0.2s ease!important;animation-play-state:paused!important;z-index:120!important;cursor:grabbing!important;}
-.pg-card.drop-settle{transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease!important;}
+.pg-card.dragging-macos{transition:transform 160ms cubic-bezier(0.23,1,0.32,1),box-shadow 160ms cubic-bezier(0.23,1,0.32,1)!important;animation-play-state:paused!important;z-index:120!important;cursor:grabbing!important;}
+.pg-card.drop-settle{transition:box-shadow 300ms cubic-bezier(0.23,1,0.32,1)!important;}
 
 .pg-center{position:absolute;text-align:center;z-index:90;pointer-events:none;transform:translate(-50%,-50%);}
 .pg-headline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:42px;line-height:1.2;color:var(--ink);letter-spacing:0.015em;white-space:nowrap;view-transition-name:nsp-headline;}
@@ -104,16 +104,16 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
   opacity:0;animation:pgCtaIn 0.6s ease 1.2s forwards,pgBreathe 3s ease-in-out 2s infinite;
   transition:color 0.25s,transform 0.25s;
 }
-.pg-cta:hover{color:var(--ink);transform:scale(1.04);}
+@media(hover:hover) and (pointer:fine){.pg-cta:hover{color:var(--ink);transform:scale(1.04);}}
 .pg-cta:active{transform:scale(0.97);}
 @keyframes pgCtaIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
 @keyframes pgBreathe{0%,100%{opacity:0.8;}50%{opacity:1;}}
 
-.pg-card{position:absolute;border-radius:5px;overflow:hidden;cursor:grab;box-shadow:3px 6px 24px rgba(30,25,20,0.14),0 1px 4px rgba(30,25,20,0.05);transition:box-shadow 0.25s ease,transform 0.25s ease;cursor:pointer;}
-.pg-card:hover{box-shadow:4px 10px 38px rgba(30,25,20,0.2);z-index:80!important;}
+.pg-card{position:absolute;border-radius:5px;overflow:hidden;cursor:grab;box-shadow:3px 6px 24px rgba(30,25,20,0.14),0 1px 4px rgba(30,25,20,0.05);transition:box-shadow 0.25s cubic-bezier(0.23,1,0.32,1),transform 0.25s cubic-bezier(0.23,1,0.32,1);cursor:pointer;}
+@media(hover:hover) and (pointer:fine){.pg-card:hover{box-shadow:4px 10px 38px rgba(30,25,20,0.2);z-index:80!important;}}
 .pg-card img{width:100%;height:100%;object-fit:cover;display:block;}
-.pg-card-link::after{content:'->';position:absolute;top:10px;right:12px;font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);opacity:0;transform:translateX(-4px);transition:opacity 0.2s,transform 0.2s;}
-.pg-card-link:hover::after{opacity:1;transform:translateX(0);}
+.pg-card-link::after{content:'->';position:absolute;top:10px;right:12px;font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);opacity:0;transform:translateX(-4px);transition:opacity 0.2s cubic-bezier(0.23,1,0.32,1),transform 0.2s cubic-bezier(0.23,1,0.32,1);}
+@media(hover:hover) and (pointer:fine){.pg-card-link:hover::after{opacity:1;transform:translateX(0);}}
 
 .pg-text-card{position:absolute;border-radius:5px;overflow:hidden;box-shadow:3px 6px 24px rgba(30,25,20,0.14),0 1px 4px rgba(30,25,20,0.05);transition:box-shadow 0.25s ease,transform 0.25s ease;cursor:default;}
 .pg-text-inner{width:100%;height:100%;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;}
@@ -148,6 +148,13 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
 .pg-card.pgFloat5{animation:pgFadeIn 0.5s ease both,pgFloat5 5.9s ease-in-out 0.3s infinite alternate;}
 .pg-card.pgFloat6{animation:pgFadeIn 0.5s ease both,pgFloat6 4.1s ease-in-out 1.2s infinite alternate;}
 .pg-card.pgFloat7{animation:pgFadeIn 0.5s ease both,pgFloat7 5.3s ease-in-out 0.7s infinite alternate;}
+
+/* Reduced motion: disable ambient float, keep fade-in */
+@media(prefers-reduced-motion:reduce){
+.pg-card.pgFloat0,.pg-card.pgFloat1,.pg-card.pgFloat2,.pg-card.pgFloat3,
+.pg-card.pgFloat4,.pg-card.pgFloat5,.pg-card.pgFloat6,.pg-card.pgFloat7{animation:pgFadeIn 0.5s ease both!important;}
+.pg-card.drop-settle{transition:none!important;}
+}
 
 /* 3D card hover — preserve-3d so perspective tilt registers */
 .pg-card{transform-style:preserve-3d;}

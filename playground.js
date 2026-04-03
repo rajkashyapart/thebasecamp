@@ -119,19 +119,19 @@ function initPlayground() {
     allCardEls.push({el:el, data:c});
 
     var cardDragging = false, cardMoved = false, csx, csy, csl, cst;
-    var DRAG_SCALE = 0.92;
-    // Spring physics state for elastic drag
-    var springX = 0, springY = 0; // current interpolated position offset
-    var targetX = 0, targetY = 0; // where cursor wants the card
-    var springVX = 0, springVY = 0; // spring velocity
+    var DRAG_SCALE = 0.96;
+    // Spring physics for elastic drag
+    var springX = 0, springY = 0;
+    var targetX = 0, targetY = 0;
+    var springVX = 0, springVY = 0;
     var cardRafId = null;
-    var SPRING_STIFFNESS = 0.14; // how snappy the follow is
-    var SPRING_DAMPING = 0.72; // how quickly oscillation dies
-    var MESH_INTENSITY = 0.35; // how much velocity warps the card
+    var SPRING_STIFFNESS = 0.12;
+    var SPRING_DAMPING = 0.74;
+    var MESH_INTENSITY = 0.3;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function cardSpringTick() {
       if (!cardDragging) return;
-      // Spring force toward target
       var fx = (targetX - springX) * SPRING_STIFFNESS;
       var fy = (targetY - springY) * SPRING_STIFFNESS;
       springVX = (springVX + fx) * SPRING_DAMPING;
@@ -142,13 +142,47 @@ function initPlayground() {
       el.style.left = (csl + springX) + 'px';
       el.style.top = (cst + springY) + 'px';
 
-      // Mesh warp: skew based on velocity, perspective tilt based on direction
-      var skewX = Math.max(-12, Math.min(12, springVX * MESH_INTENSITY));
-      var skewY = Math.max(-8, Math.min(8, springVY * MESH_INTENSITY * 0.5));
-      var rotZ = Math.max(-6, Math.min(6, springVX * 0.08));
-      el.style.transform = 'perspective(600px) rotate('+(c.rot + rotZ)+'deg) scale('+DRAG_SCALE+') skewX('+skewX+'deg) skewY('+skewY+'deg)';
+      if (!reducedMotion) {
+        // Mesh warp: skew + tilt from velocity
+        var skewX = Math.max(-10, Math.min(10, springVX * MESH_INTENSITY));
+        var skewY = Math.max(-6, Math.min(6, springVY * MESH_INTENSITY * 0.4));
+        var rotZ = Math.max(-4, Math.min(4, springVX * 0.06));
+        el.style.transform = 'perspective(600px) rotate('+(c.rot + rotZ)+'deg) scale('+DRAG_SCALE+') skewX('+skewX+'deg) skewY('+skewY+'deg)';
+      } else {
+        el.style.transform = 'rotate('+c.rot+'deg) scale('+DRAG_SCALE+')';
+      }
 
       cardRafId = requestAnimationFrame(cardSpringTick);
+    }
+
+    // Settle spring: card coasts to rest after release with momentum
+    function cardSettleTick() {
+      var fx = (targetX - springX) * 0.08;
+      var fy = (targetY - springY) * 0.08;
+      springVX = (springVX + fx) * 0.82;
+      springVY = (springVY + fy) * 0.82;
+      springX += springVX;
+      springY += springVY;
+      el.style.left = (csl + springX) + 'px';
+      el.style.top = (cst + springY) + 'px';
+
+      // Warp decays during settle
+      if (!reducedMotion) {
+        var skewX = Math.max(-10, Math.min(10, springVX * MESH_INTENSITY));
+        var skewY = Math.max(-6, Math.min(6, springVY * MESH_INTENSITY * 0.4));
+        var settleScale = DRAG_SCALE + (1 - DRAG_SCALE) * (1 - Math.min(1, (Math.abs(springVX) + Math.abs(springVY)) * 0.5));
+        el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) scale('+settleScale+') skewX('+skewX+'deg) skewY('+skewY+'deg)';
+      }
+
+      if (Math.abs(springVX) + Math.abs(springVY) > 0.15) {
+        cardRafId = requestAnimationFrame(cardSettleTick);
+      } else {
+        // Fully settled
+        el.style.transform = 'rotate('+c.rot+'deg) scale(1)';
+        el.classList.remove('drop-settle');
+        el.style.animationPlayState = 'running';
+        checkRecenter();
+      }
     }
 
     function cardDragStart(cx, cy) {
@@ -157,10 +191,9 @@ function initPlayground() {
       csl = parseInt(el.style.left) || 0; cst = parseInt(el.style.top) || 0;
       springX = 0; springY = 0; targetX = 0; targetY = 0;
       springVX = 0; springVY = 0;
-      // macOS pickup: shrink + lift + deeper shadow
       el.classList.add('dragging-macos');
       el.style.transform = 'rotate('+c.rot+'deg) scale('+DRAG_SCALE+')';
-      el.style.boxShadow = '0 22px 70px rgba(30,25,20,0.25), 0 4px 16px rgba(30,25,20,0.10)';
+      el.style.boxShadow = '0 22px 70px rgba(30,25,20,0.22), 0 4px 16px rgba(30,25,20,0.08)';
       cancelAnimationFrame(cardRafId);
       cardRafId = requestAnimationFrame(cardSpringTick);
     }
@@ -177,20 +210,13 @@ function initPlayground() {
       if (!cardDragging) return;
       cardDragging = false;
       cancelAnimationFrame(cardRafId);
-      // Snap position to final spring position
-      el.style.left = (csl + springX) + 'px';
-      el.style.top = (cst + springY) + 'px';
       el.classList.remove('dragging-macos');
       el.classList.add('drop-settle');
-      // macOS drop: spring back to full size, remove warp
-      el.style.transform = 'rotate('+c.rot+'deg) scale(1)';
       el.style.boxShadow = '';
-      setTimeout(function() {
-        el.classList.remove('drop-settle');
-        el.style.animationPlayState = 'running';
-      }, 400);
+      // Coast to rest with spring settle instead of hard stop
+      targetX = springX; targetY = springY;
+      cardRafId = requestAnimationFrame(cardSettleTick);
       if (!cardMoved) window.location.href='hub.html';
-      else checkRecenter();
     }
     // Mouse events
     el.addEventListener('mousedown', function(e) {
@@ -211,19 +237,22 @@ function initPlayground() {
       cardDragMove(t.clientX, t.clientY);
     }, {passive: true});
     window.addEventListener('touchend', function() { cardDragEnd(); });
-    el.addEventListener('mouseenter', function() {
-      if (!cardDragging) {
-        el.style.animationPlayState = 'paused';
-        el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) translateY(-6px) scale(1.04) rotateX(4deg)';
-        el.style.cursor = 'grab';
-      }
-    });
-    el.addEventListener('mouseleave', function() {
-      if (!cardDragging) {
-        el.style.transform = 'rotate('+c.rot+'deg)';
-        el.style.animationPlayState = 'running';
-      }
-    });
+    var hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if (hasFinePointer) {
+      el.addEventListener('mouseenter', function() {
+        if (!cardDragging) {
+          el.style.animationPlayState = 'paused';
+          el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) translateY(-6px) scale(1.04) rotateX(4deg)';
+          el.style.cursor = 'grab';
+        }
+      });
+      el.addEventListener('mouseleave', function() {
+        if (!cardDragging) {
+          el.style.transform = 'rotate('+c.rot+'deg)';
+          el.style.animationPlayState = 'running';
+        }
+      });
+    }
     world.appendChild(el);
   }
 
