@@ -73,6 +73,7 @@
   var vidWhite = document.getElementById('vid-white');
   var video = document.getElementById('vid-player');
   if (!logo || !cover || !video) return;
+  video.muted = true;
 
   var videoRevealed = false;
   var videoEnded = false;
@@ -87,10 +88,11 @@
     logo.classList.add('waiting');
   }, 150);
 
-  // Absolute fallback: 15s max wait
+  // Absolute fallback: shorter on mobile where autoplay may need a tap
+  var isMobile = window.innerWidth < 768;
   var absoluteFallback = setTimeout(function() {
     if (!videoEnded) { videoEnded = true; doEndTransition(); }
-  }, 15000);
+  }, isMobile ? 8000 : 15000);
 
   // Schedule end based on real video duration + current playback position
   function scheduleEnd(currentTime, duration) {
@@ -127,6 +129,17 @@
     }, 4000);
   }
 
+  // Retry playback on first user interaction (mobile autoplay policy)
+  function onPlayFail() {
+    function retry() {
+      document.removeEventListener('touchstart', retry);
+      document.removeEventListener('click', retry);
+      video.play().catch(function() {});
+    }
+    document.addEventListener('touchstart', retry, { once: true });
+    document.addEventListener('click', retry, { once: true });
+  }
+
   // HLS setup — native <video> for reliable mobile autoplay
   var hlsSrc = 'https://vz-466dc643-be5.b-cdn.net/d8ca3744-0545-4c85-a5ee-1d317952a942/playlist.m3u8';
 
@@ -155,14 +168,14 @@
   if (video.canPlayType('application/vnd.apple.mpegurl')) {
     // Safari: native HLS support
     video.src = hlsSrc;
-    video.play().catch(function() {});
+    video.play().catch(onPlayFail);
   } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
     // Chrome, Firefox, etc: use HLS.js
     var hls = new Hls({ enableWorker: true, startLevel: -1 });
     hls.loadSource(hlsSrc);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, function() {
-      video.play().catch(function() {});
+      video.play().catch(onPlayFail);
     });
   } else {
     // No HLS support at all — skip to playground
