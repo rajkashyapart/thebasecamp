@@ -29,7 +29,7 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
 /* ======================================================
    SCREEN 0: VIDEO INTRO
 ====================================================== */
-#screen-video{z-index:500;background:#0d0d0f;overflow:hidden;transition:opacity 1s cubic-bezier(0.4,0,0.2,1);}
+#screen-video{z-index:500;background:#0d0d0f;overflow:hidden;transition:opacity 1s cubic-bezier(0.4,0,0.2,1);height:100vh;height:100dvh;}
 #screen-video.fading-out{opacity:0;}
 
 #controls-cover{position:absolute;bottom:0;left:0;right:0;height:52px;z-index:6;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 100%);pointer-events:none;}
