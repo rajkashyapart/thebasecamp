@@ -210,11 +210,116 @@ function initPlayground() {
   var canvas = document.getElementById('pg-canvas');
   var pgWorld = document.getElementById('pg-world');
   var dragging=false, startX, startY, offX=0, offY=0, velX=0, velY=0, lastX, lastY, rafId;
-  function applyXY() { pgWorld.style.transform = 'translate('+offX+'px,'+offY+'px)'; }
+  var scale = 1, minScale = 1, maxScale = 3;
+  var homeX = 0, homeY = 0;
+
+  function applyTransform() { pgWorld.style.transform = 'translate('+offX+'px,'+offY+'px) scale('+scale+')'; }
   function getNavHeight() { var n = document.getElementById('pg-nav'); return n ? n.offsetHeight : 0; }
-  function centerView() { var nh = getNavHeight(); offX = window.innerWidth/2 - WCX; offY = (window.innerHeight + nh)/2 - WCY; applyXY(); }
+  function centerView() { var nh = getNavHeight(); offX = window.innerWidth/2 - WCX; offY = (window.innerHeight + nh)/2 - WCY; homeX = offX; homeY = offY; applyTransform(); }
   centerView();
-  window.addEventListener('resize', function() { centerView(); });
+  window.addEventListener('resize', function() { centerView(); scale = 1; applyTransform(); hideRecenter(); });
+
+  // Re-center button
+  var recenterBtn = document.createElement('button');
+  recenterBtn.className = 'pg-recenter';
+  recenterBtn.textContent = 're-center';
+  recenterBtn.style.opacity = '0';
+  recenterBtn.style.pointerEvents = 'none';
+  canvas.parentElement.appendChild(recenterBtn);
+  var recenterVisible = false;
+
+  function checkRecenter() {
+    var drifted = Math.abs(offX - homeX) > 30 || Math.abs(offY - homeY) > 30 || scale > 1.05;
+    if (drifted && !recenterVisible) {
+      recenterVisible = true;
+      recenterBtn.style.opacity = '1';
+      recenterBtn.style.pointerEvents = 'auto';
+    } else if (!drifted && recenterVisible) {
+      hideRecenter();
+    }
+  }
+  function hideRecenter() {
+    recenterVisible = false;
+    recenterBtn.style.opacity = '0';
+    recenterBtn.style.pointerEvents = 'none';
+  }
+  recenterBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    cancelAnimationFrame(rafId);
+    velX = velY = 0;
+    scale = 1;
+    pgWorld.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+    offX = homeX; offY = homeY;
+    applyTransform();
+    hideRecenter();
+    setTimeout(function() { pgWorld.style.transition = 'none'; }, 550);
+  });
+
+  // Scroll to zoom (into only, clamped at minScale on zoom out)
+  canvas.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    var rect = canvas.getBoundingClientRect();
+    var mouseX = e.clientX - rect.left;
+    var mouseY = e.clientY - rect.top;
+    // Point in world space under cursor before zoom
+    var wx = (mouseX - offX) / scale;
+    var wy = (mouseY - offY) / scale;
+    var delta = e.deltaY > 0 ? -0.08 : 0.08;
+    var newScale = Math.min(maxScale, Math.max(minScale, scale + delta));
+    // Adjust offset so the point under cursor stays fixed
+    offX = mouseX - wx * newScale;
+    offY = mouseY - wy * newScale;
+    scale = newScale;
+    applyTransform();
+    checkRecenter();
+  }, {passive:false});
+
+  // Pinch to zoom (mobile)
+  var lastPinchDist = 0, pinching = false;
+  canvas.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      pinching = true; dragging = false;
+      var dx = e.touches[0].clientX - e.touches[1].clientX;
+      var dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastPinchDist = Math.sqrt(dx*dx + dy*dy);
+      return;
+    }
+    if(e.target.closest('.pg-card,.pg-text-card,.pg-cta,.pg-links')) return;
+    var t=e.touches[0]; dragging=true;
+    startX=t.clientX-offX; startY=t.clientY-offY;
+    lastX=t.clientX; lastY=t.clientY; velX=velY=0; cancelAnimationFrame(rafId);
+  }, {passive:true});
+  canvas.addEventListener('touchmove', function(e) {
+    if (pinching && e.touches.length === 2) {
+      e.preventDefault();
+      var dx = e.touches[0].clientX - e.touches[1].clientX;
+      var dy = e.touches[0].clientY - e.touches[1].clientY;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      var midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      var midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      var rect = canvas.getBoundingClientRect();
+      var mx = midX - rect.left, my = midY - rect.top;
+      var wx = (mx - offX) / scale, wy = (my - offY) / scale;
+      var factor = dist / lastPinchDist;
+      var newScale = Math.min(maxScale, Math.max(minScale, scale * factor));
+      offX = mx - wx * newScale;
+      offY = my - wy * newScale;
+      scale = newScale;
+      lastPinchDist = dist;
+      applyTransform();
+      checkRecenter();
+      return;
+    }
+    if(!dragging) return; var t=e.touches[0];
+    velX=t.clientX-lastX; velY=t.clientY-lastY;
+    lastX=t.clientX; lastY=t.clientY;
+    offX=t.clientX-startX; offY=t.clientY-startY; applyTransform(); e.preventDefault();
+  }, {passive:false});
+  canvas.addEventListener('touchend', function(e) {
+    if (pinching && e.touches.length < 2) { pinching = false; checkRecenter(); return; }
+    dragging=false; coast(); checkRecenter();
+  });
+
   canvas.addEventListener('mousedown', function(e) {
     if (e.target.closest('.pg-card,.pg-text-card,.pg-cta,.pg-links')) return;
     dragging=true; canvas.classList.add('dragging');
@@ -224,24 +329,12 @@ function initPlayground() {
   });
   window.addEventListener('mousemove', function(e) {
     if(!dragging) return; velX=e.clientX-lastX; velY=e.clientY-lastY;
-    lastX=e.clientX; lastY=e.clientY; offX=e.clientX-startX; offY=e.clientY-startY; applyXY();
+    lastX=e.clientX; lastY=e.clientY; offX=e.clientX-startX; offY=e.clientY-startY; applyTransform();
   });
-  window.addEventListener('mouseup', function() { if(!dragging) return; dragging=false; canvas.classList.remove('dragging'); coast(); });
-  canvas.addEventListener('touchstart', function(e) {
-    if(e.target.closest('.pg-card,.pg-text-card,.pg-cta,.pg-links')) return;
-    var t=e.touches[0]; dragging=true;
-    startX=t.clientX-offX; startY=t.clientY-offY;
-    lastX=t.clientX; lastY=t.clientY; velX=velY=0; cancelAnimationFrame(rafId);
-  }, {passive:true});
-  canvas.addEventListener('touchmove', function(e) {
-    if(!dragging) return; var t=e.touches[0];
-    velX=t.clientX-lastX; velY=t.clientY-lastY;
-    lastX=t.clientX; lastY=t.clientY;
-    offX=t.clientX-startX; offY=t.clientY-startY; applyXY(); e.preventDefault();
-  }, {passive:false});
-  canvas.addEventListener('touchend', function() { dragging=false; coast(); });
-  function coast() { velX*=0.91; velY*=0.91; offX+=velX; offY+=velY; applyXY();
+  window.addEventListener('mouseup', function() { if(!dragging) return; dragging=false; canvas.classList.remove('dragging'); coast(); checkRecenter(); });
+  function coast() { velX*=0.91; velY*=0.91; offX+=velX; offY+=velY; applyTransform();
     if(Math.abs(velX)>0.25||Math.abs(velY)>0.25) rafId=requestAnimationFrame(coast);
+    else checkRecenter();
   }
 }
 

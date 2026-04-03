@@ -22,9 +22,9 @@
 <script defer data-domain="rajkashyap.studio" src="https://plausible.io/js/script.js"></script>
 <link rel="preload" as="image" href="https://vz-466dc643-be5.b-cdn.net/d8ca3744-0545-4c85-a5ee-1d317952a942/thumbnail.jpg">
 <link rel="preconnect" href="https://iframe.mediadelivery.net">
-<link rel="dns-prefetch" href="https://iframe.mediadelivery.net">
 <link rel="preconnect" href="https://vz-466dc643-be5.b-cdn.net">
 <link rel="dns-prefetch" href="https://vz-466dc643-be5.b-cdn.net">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
 <div id="vid-white"></div>
 <div id="screen-video" class="screen" style="overflow:hidden;background:#0d0d0f;">
   <div id="video-wrap" style="position:absolute;inset:0;overflow:hidden;">
-    <iframe id="vid-frame" src="https://iframe.mediadelivery.net/embed/624272/d8ca3744-0545-4c85-a5ee-1d317952a942?autoplay=true&muted=true&loop=false&preload=true&playsinline=true" allow="autoplay;fullscreen;encrypted-media" allowfullscreen playsinline webkit-playsinline style="position:absolute;top:-60px;left:0;width:100%;height:calc(100% + 120px);border:none;"></iframe>
+    <video id="vid-player" muted autoplay playsinline webkit-playsinline preload="auto" style="position:absolute;top:-60px;left:0;width:100%;height:calc(100% + 120px);object-fit:cover;border:none;"></video>
     <div style="position:absolute;inset:0;z-index:5;pointer-events:none;"></div>
     <div id="controls-cover"></div>
   </div>
@@ -71,8 +71,8 @@
   var cover = document.getElementById('vid-cover');
   var hl = document.getElementById('vid-headline');
   var vidWhite = document.getElementById('vid-white');
-  var iframe = document.getElementById('vid-frame');
-  if (!logo || !cover || !iframe) return;
+  var video = document.getElementById('vid-player');
+  if (!logo || !cover || !video) return;
 
   var videoRevealed = false;
   var videoEnded = false;
@@ -127,55 +127,63 @@
     }, 4000);
   }
 
-  // PRIMARY: iframe load = player + video buffered, autoplay fires
-  iframe.addEventListener('load', function() {
-    setTimeout(revealVideo, 800);
-  });
+  // HLS setup — native <video> for reliable mobile autoplay
+  var hlsSrc = 'https://vz-466dc643-be5.b-cdn.net/d8ca3744-0545-4c85-a5ee-1d317952a942/playlist.m3u8';
 
-  // postMessage from Bunny: learn duration + detect end precisely
-  window.addEventListener('message', function(e) {
-    if (!e.data) return;
-    var data = e.data;
-    if (typeof data === 'string') {
-      try { data = JSON.parse(data); } catch(ex) { return; }
-    }
-    if (typeof data !== 'object') return;
-    var evt = data.event || '';
-
-    // Any playback event confirms video is running
-    if (evt === 'play' || evt === 'playing' || evt === 'timeupdate' || evt === 'videoProgress') {
+  function attachVideoEvents() {
+    video.addEventListener('playing', function() {
       revealVideo();
-    }
+    });
+    video.addEventListener('timeupdate', function() {
+      if (video.duration > 0) {
+        videoDuration = video.duration;
+        scheduleEnd(video.currentTime, video.duration);
+      }
+    });
+    video.addEventListener('ended', function() {
+      if (!videoEnded) {
+        videoEnded = true;
+        clearTimeout(absoluteFallback);
+        clearTimeout(endTimer);
+        doEndTransition();
+      }
+    });
+  }
 
-    // Learn duration + current time — Bunny may nest under data or send flat
-    var inner = data.data || data;
-    var ct = inner.currentTime || data.currentTime || 0;
-    var dur = inner.duration || data.duration || 0;
-    if (dur > 0 && ct >= 0) {
-      videoDuration = dur;
-      scheduleEnd(ct, dur);
-    }
+  attachVideoEvents();
 
-    // Video ended — immediate transition
-    if ((evt === 'videoEnded' || evt === 'ended' || evt === 'end') && !videoEnded) {
-      videoEnded = true;
-      clearTimeout(absoluteFallback);
-      clearTimeout(endTimer);
-      doEndTransition();
-    }
-  });
+  if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Safari: native HLS support
+    video.src = hlsSrc;
+    video.play().catch(function() {});
+  } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+    // Chrome, Firefox, etc: use HLS.js
+    var hls = new Hls({ enableWorker: true, startLevel: -1 });
+    hls.loadSource(hlsSrc);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play().catch(function() {});
+    });
+  } else {
+    // No HLS support at all — skip to playground
+    doEndTransition();
+  }
 
   // Cross-dissolve to warm bg, then navigate to playground
+  var textOverlay = document.getElementById('vid-text-overlay');
   function doEndTransition() {
     if (transitionStarted) return;
     transitionStarted = true;
     clearTimeout(absoluteFallback);
     clearTimeout(endTimer);
-    if (hl) hl.classList.add('out');
+    // Warm bg washes in behind the headline
     if (vidWhite) { vidWhite.classList.add('flash'); }
+    // Headline stays visible — shifts white->black, overlay bg clears
+    if (textOverlay) textOverlay.classList.add('clear');
+    if (hl) hl.classList.add('dark');
     setTimeout(function() {
       window.location.href = 'playground.html';
-    }, 650);
+    }, 900);
   }
 })();
 
