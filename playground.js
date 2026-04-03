@@ -120,31 +120,69 @@ function initPlayground() {
 
     var cardDragging = false, cardMoved = false, csx, csy, csl, cst;
     var DRAG_SCALE = 0.92;
+    // Spring physics state for elastic drag
+    var springX = 0, springY = 0; // current interpolated position offset
+    var targetX = 0, targetY = 0; // where cursor wants the card
+    var springVX = 0, springVY = 0; // spring velocity
+    var cardRafId = null;
+    var SPRING_STIFFNESS = 0.14; // how snappy the follow is
+    var SPRING_DAMPING = 0.72; // how quickly oscillation dies
+    var MESH_INTENSITY = 0.35; // how much velocity warps the card
+
+    function cardSpringTick() {
+      if (!cardDragging) return;
+      // Spring force toward target
+      var fx = (targetX - springX) * SPRING_STIFFNESS;
+      var fy = (targetY - springY) * SPRING_STIFFNESS;
+      springVX = (springVX + fx) * SPRING_DAMPING;
+      springVY = (springVY + fy) * SPRING_DAMPING;
+      springX += springVX;
+      springY += springVY;
+
+      el.style.left = (csl + springX) + 'px';
+      el.style.top = (cst + springY) + 'px';
+
+      // Mesh warp: skew based on velocity, perspective tilt based on direction
+      var skewX = Math.max(-12, Math.min(12, springVX * MESH_INTENSITY));
+      var skewY = Math.max(-8, Math.min(8, springVY * MESH_INTENSITY * 0.5));
+      var rotZ = Math.max(-6, Math.min(6, springVX * 0.08));
+      el.style.transform = 'perspective(600px) rotate('+(c.rot + rotZ)+'deg) scale('+DRAG_SCALE+') skewX('+skewX+'deg) skewY('+skewY+'deg)';
+
+      cardRafId = requestAnimationFrame(cardSpringTick);
+    }
 
     function cardDragStart(cx, cy) {
       cardDragging = true; cardMoved = false;
       csx = cx; csy = cy;
       csl = parseInt(el.style.left) || 0; cst = parseInt(el.style.top) || 0;
+      springX = 0; springY = 0; targetX = 0; targetY = 0;
+      springVX = 0; springVY = 0;
       // macOS pickup: shrink + lift + deeper shadow
       el.classList.add('dragging-macos');
       el.style.transform = 'rotate('+c.rot+'deg) scale('+DRAG_SCALE+')';
       el.style.boxShadow = '0 22px 70px rgba(30,25,20,0.25), 0 4px 16px rgba(30,25,20,0.10)';
+      cancelAnimationFrame(cardRafId);
+      cardRafId = requestAnimationFrame(cardSpringTick);
     }
     function cardDragMove(cx, cy) {
       if (!cardDragging) return;
       var dx = cx - csx, dy = cy - csy;
       if (Math.abs(dx) + Math.abs(dy) > 4) cardMoved = true;
       if (cardMoved) {
-        el.style.left = (csl + dx) + 'px';
-        el.style.top = (cst + dy) + 'px';
+        targetX = dx;
+        targetY = dy;
       }
     }
     function cardDragEnd() {
       if (!cardDragging) return;
       cardDragging = false;
+      cancelAnimationFrame(cardRafId);
+      // Snap position to final spring position
+      el.style.left = (csl + springX) + 'px';
+      el.style.top = (cst + springY) + 'px';
       el.classList.remove('dragging-macos');
       el.classList.add('drop-settle');
-      // macOS drop: spring back to full size
+      // macOS drop: spring back to full size, remove warp
       el.style.transform = 'rotate('+c.rot+'deg) scale(1)';
       el.style.boxShadow = '';
       setTimeout(function() {
