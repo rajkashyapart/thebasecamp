@@ -114,6 +114,7 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
 .pg-card img{width:100%;height:100%;object-fit:cover;display:block;}
 .pg-card-link::after{content:'->';position:absolute;top:10px;right:12px;font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);opacity:0;transform:translateX(-4px);transition:opacity 0.2s cubic-bezier(0.23,1,0.32,1),transform 0.2s cubic-bezier(0.23,1,0.32,1);}
 @media(hover:hover) and (pointer:fine){.pg-card-link:hover::after{opacity:1;transform:translateX(0);}}
+.pg-video-card::after{display:none;}
 
 .pg-text-card{position:absolute;border-radius:5px;overflow:hidden;box-shadow:3px 6px 24px rgba(30,25,20,0.14),0 1px 4px rgba(30,25,20,0.05);transition:box-shadow 0.25s ease,transform 0.25s ease;cursor:default;}
 .pg-text-inner{width:100%;height:100%;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;}

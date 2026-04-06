@@ -2,34 +2,41 @@ var WCX = 1800, WCY = 1400;
 
 var photoCards = [
   // -- TOP-LEFT (far, bleeds edge) --
-  {x:-740, y:-380, w:320, h:320, rot:-1.0, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap.jpg'},
-  {x:-520, y:-320, w:200, h:200, rot:1.5, src:'https://picturesbyraj.b-cdn.net/20230908%20-%20IMG_2075%20-%20Raj%20Kashyap.jpg'},
+  {x:-740, y:-380, w:320, h:320, rot:-1.0, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.jpg'},
+  {x:-520, y:-320, w:200, h:200, rot:1.5, src:'https://picturesbyraj.b-cdn.net/20230908%20-%20IMG_2075%20-%20Raj%20Kashyap122023raj.jpg'},
 
   // -- TOP-CENTRE (above hero, pushed up) --
-  {x:-120, y:-500, w:380, h:253, rot:0.6, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap.jpg'},
-  {x:220, y:-440, w:180, h:180, rot:-1.2, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1747%20-%20Raj%20Kashyap.jpg'},
+  {x:-120, y:-500, w:380, h:253, rot:0.6, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap102023raj.jpg'},
+  {x:220, y:-440, w:180, h:180, rot:-1.2, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1747%20-%20Raj%20Kashyap112023raj.jpg'},
 
   // -- TOP-RIGHT (far, bleeds edge) --
-  {x:540, y:-360, w:420, h:298, rot:0.8, src:'https://picturesbyraj.b-cdn.net/an%20art%20village.jpg'},
-  {x:780, y:-200, w:220, h:220, rot:-1.5, src:'https://picturesbyraj.b-cdn.net/20230908%20-%20IMG_2116%20-%20Raj%20Kashyap.jpg'},
+  {x:540, y:-360, w:420, h:298, rot:0.8, src:'https://picturesbyraj.b-cdn.net/an%20art%20village22019raj.jpg'},
+  {x:780, y:-200, w:220, h:220, rot:-1.5, src:'https://picturesbyraj.b-cdn.net/20230908%20-%20IMG_2116%20-%20Raj%20Kashyap132023raj.jpg'},
 
   // -- LEFT-MID (pushed far left) --
-  {x:-760, y:-20, w:280, h:187, rot:-0.8, src:'https://picturesbyraj.b-cdn.net/it%27s%20her.JPG'},
-  {x:-640, y:160, w:340, h:227, rot:1.2, src:'https://picturesbyraj.b-cdn.net/hault.jpg'},
+  {x:-760, y:-20, w:280, h:187, rot:-0.8, src:'https://picturesbyraj.b-cdn.net/it\'s%20her52020raj.jpg'},
+  {x:-640, y:160, w:340, h:227, rot:1.2, src:'https://picturesbyraj.b-cdn.net/hault32020raj.jpg'},
 
   // -- RIGHT-MID (pushed far right) --
-  {x:620, y:40, w:300, h:300, rot:-0.5, src:'https://picturesbyraj.b-cdn.net/IMG_1788-Enhanced-NR22022raj.jpg'},
-  {x:780, y:220, w:200, h:300, rot:1.0, src:'https://picturesbyraj.b-cdn.net/IMG_18822022Raj%20Kashyap.JPG'},
+  {x:620, y:40, w:300, h:300, rot:-0.5, src:'https://picturesbyraj.b-cdn.net/IMG_1788-Enhanced-NR22022raj62022raj.jpg'},
+  {x:780, y:220, w:200, h:300, rot:1.0, src:'https://picturesbyraj.b-cdn.net/IMG_18822022Raj%20Kashyap72022raj.jpg'},
 
   // -- BOTTOM-LEFT (far, bleeds edge) --
-  {x:-720, y:340, w:380, h:380, rot:1.0, src:'https://picturesbyraj.b-cdn.net/IMG_2252-Enhanced-NR32023raj.jpg'},
-  {x:-430, y:400, w:220, h:147, rot:-1.5, src:'https://picturesbyraj.b-cdn.net/IMG_25282022Raj%20Kashyap.JPG'},
+  {x:-720, y:340, w:380, h:380, rot:1.0, src:'https://picturesbyraj.b-cdn.net/IMG_2252-Enhanced-NR32023raj142023raj.jpg'},
+  {x:-430, y:400, w:220, h:147, rot:-1.5, src:'https://picturesbyraj.b-cdn.net/IMG_25282022Raj%20Kashyap82022raj.jpg'},
 
   // -- BOTTOM-CENTRE --
-  {x:-40, y:380, w:340, h:227, rot:-0.6, src:'https://picturesbyraj.b-cdn.net/green%20is%20the%20color.jpg'},
+  {x:-40, y:380, w:340, h:227, rot:-0.6, src:'https://picturesbyraj.b-cdn.net/green%20is%20the%20color42020raj.jpg'},
+  {x:240, y:460, w:260, h:260, rot:1.4, src:'https://picturesbyraj.b-cdn.net/IMG_9371152026raj.jpg'},
 
   // -- BOTTOM-RIGHT (far, bleeds edge) --
-  {x:500, y:340, w:420, h:280, rot:0.8, src:'https://picturesbyraj.b-cdn.net/IMG_29022019raj%20kashyap.JPG'}
+  {x:500, y:340, w:420, h:280, rot:0.8, src:'https://picturesbyraj.b-cdn.net/IMG_29022019raj%20kashyap12019raj.jpg'}
+];
+
+var videoCards = [
+  {x:-380, y:-100, w:280, h:210, rot:0.7, src:'https://vz-e64eb025-1b9.b-cdn.net/c83992da-4cdf-4a84-967f-28d9fccb3132/playlist.m3u8'},
+  {x:380, y:-60, w:250, h:188, rot:-1.1, src:'https://vz-e64eb025-1b9.b-cdn.net/e81a6c0d-4c93-443f-a656-22b9ded34e64/playlist.m3u8'},
+  {x:-200, y:440, w:300, h:225, rot:-0.4, src:'https://vz-e64eb025-1b9.b-cdn.net/f90ef4e1-501f-4f0f-9558-d6be051f11f0/playlist.m3u8'}
 ];
 
 var textCards = [
@@ -68,7 +75,13 @@ if (isMobile) {
     {x:162,  y:148,  w:110, h:72,  rot:2.0,  src:photoCards[6].src},
     {x:-148, y:222,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
     {x:25,   y:235,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
-    {x:145,  y:295,  w:115, h:115, rot:-1.8, src:photoCards[9].src}
+    {x:145,  y:295,  w:115, h:115, rot:-1.8, src:photoCards[9].src},
+    {x:-60,  y:370,  w:100, h:100, rot:1.4,  src:photoCards[13].src}
+  ];
+  videoCards = [
+    {x:-170, y:-158, w:120, h:90,  rot:0.7, src:videoCards[0].src},
+    {x:170,  y:168,  w:110, h:82,  rot:-1.1, src:videoCards[1].src},
+    {x:-10,  y:420,  w:130, h:98,  rot:-0.4, src:videoCards[2].src}
   ];
   // Text cards -- no card overlaps more than 8% with any photo card
   textCards = [
@@ -256,11 +269,144 @@ function initPlayground() {
     world.appendChild(el);
   }
 
+  function addVideoCard(c, i) {
+    var el = document.createElement('div');
+    var floatClass = 'pgFloat' + (pgFloatIdx % 8);
+    pgFloatIdx++;
+    el.className = 'pg-card pg-card-link pg-video-card ' + floatClass;
+    el.style.cssText = 'left:'+(WCX+c.x)+'px;top:'+(WCY+c.y)+'px;width:'+c.w+'px;height:'+c.h+'px;transform:rotate('+c.rot+'deg);z-index:'+(5+(i%8))+';opacity:0;transition:opacity 0.6s ease;';
+    el.dataset.rot = c.rot;
+    el.dataset.homeLeft = (WCX+c.x);
+    el.dataset.homeTop = (WCY+c.y);
+    var vid = document.createElement('video');
+    vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
+    vid.setAttribute('playsinline', '');
+    vid.setAttribute('webkit-playsinline', '');
+    vid.draggable = false;
+    vid.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:inherit;pointer-events:none;';
+
+    if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+      vid.src = c.src;
+      vid.play().catch(function(){});
+    } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+      var hls = new Hls({ enableWorker: true, startLevel: -1 });
+      hls.loadSource(c.src);
+      hls.attachMedia(vid);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() { vid.play().catch(function(){}); });
+    }
+
+    el.appendChild(vid);
+    allCardEls.push({el:el, data:c});
+
+    // Reuse same drag logic as photo cards
+    var cardDragging = false, cardMoved = false, csx, csy, csl, cst;
+    var DRAG_SCALE = 0.96;
+    var springX = 0, springY = 0, targetX = 0, targetY = 0;
+    var springVX = 0, springVY = 0, cardRafId = null;
+    var SPRING_STIFFNESS = 0.12, SPRING_DAMPING = 0.74, MESH_INTENSITY = 0.3;
+    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function cardSpringTick() {
+      if (!cardDragging) return;
+      var fx = (targetX - springX) * SPRING_STIFFNESS;
+      var fy = (targetY - springY) * SPRING_STIFFNESS;
+      springVX = (springVX + fx) * SPRING_DAMPING;
+      springVY = (springVY + fy) * SPRING_DAMPING;
+      springX += springVX; springY += springVY;
+      el.style.left = (csl + springX) + 'px';
+      el.style.top = (cst + springY) + 'px';
+      if (!reducedMotion) {
+        var skewX = Math.max(-10, Math.min(10, springVX * MESH_INTENSITY));
+        var skewY = Math.max(-6, Math.min(6, springVY * MESH_INTENSITY * 0.4));
+        var rotZ = Math.max(-4, Math.min(4, springVX * 0.06));
+        el.style.transform = 'perspective(600px) rotate('+(c.rot + rotZ)+'deg) scale('+DRAG_SCALE+') skewX('+skewX+'deg) skewY('+skewY+'deg)';
+      } else {
+        el.style.transform = 'rotate('+c.rot+'deg) scale('+DRAG_SCALE+')';
+      }
+      cardRafId = requestAnimationFrame(cardSpringTick);
+    }
+    function cardSettleTick() {
+      var fx = (targetX - springX) * 0.08;
+      var fy = (targetY - springY) * 0.08;
+      springVX = (springVX + fx) * 0.82;
+      springVY = (springVY + fy) * 0.82;
+      springX += springVX; springY += springVY;
+      el.style.left = (csl + springX) + 'px';
+      el.style.top = (cst + springY) + 'px';
+      if (!reducedMotion) {
+        var skewX = Math.max(-10, Math.min(10, springVX * MESH_INTENSITY));
+        var skewY = Math.max(-6, Math.min(6, springVY * MESH_INTENSITY * 0.4));
+        var settleScale = DRAG_SCALE + (1 - DRAG_SCALE) * (1 - Math.min(1, (Math.abs(springVX) + Math.abs(springVY)) * 0.5));
+        el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) scale('+settleScale+') skewX('+skewX+'deg) skewY('+skewY+'deg)';
+      }
+      if (Math.abs(springVX) + Math.abs(springVY) > 0.15) {
+        cardRafId = requestAnimationFrame(cardSettleTick);
+      } else {
+        el.style.transform = 'rotate('+c.rot+'deg) scale(1)';
+        el.classList.remove('drop-settle');
+        el.style.animationPlayState = 'running';
+        checkRecenter();
+      }
+    }
+    function cardDragStart(cx, cy) {
+      cardDragging = true; cardMoved = false;
+      csx = cx; csy = cy;
+      csl = parseInt(el.style.left) || 0; cst = parseInt(el.style.top) || 0;
+      springX = 0; springY = 0; targetX = 0; targetY = 0;
+      springVX = 0; springVY = 0;
+      el.classList.add('dragging-macos');
+      el.style.transform = 'rotate('+c.rot+'deg) scale('+DRAG_SCALE+')';
+      el.style.boxShadow = '0 22px 70px rgba(30,25,20,0.22), 0 4px 16px rgba(30,25,20,0.08)';
+      cancelAnimationFrame(cardRafId);
+      cardRafId = requestAnimationFrame(cardSpringTick);
+    }
+    function cardDragMove(cx, cy) {
+      if (!cardDragging) return;
+      var dx = cx - csx, dy = cy - csy;
+      if (Math.abs(dx) + Math.abs(dy) > 4) cardMoved = true;
+      if (cardMoved) { targetX = dx; targetY = dy; }
+    }
+    function cardDragEnd() {
+      if (!cardDragging) return;
+      cardDragging = false;
+      cancelAnimationFrame(cardRafId);
+      el.classList.remove('dragging-macos');
+      el.classList.add('drop-settle');
+      el.style.boxShadow = '';
+      targetX = springX; targetY = springY;
+      cardRafId = requestAnimationFrame(cardSettleTick);
+      if (!cardMoved) window.location.href='hub.html';
+    }
+    el.addEventListener('mousedown', function(e) { e.stopPropagation(); e.preventDefault(); cardDragStart(e.clientX, e.clientY); });
+    window.addEventListener('mousemove', function(e) { cardDragMove(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', function() { cardDragEnd(); });
+    el.addEventListener('touchstart', function(e) { e.stopPropagation(); var t = e.touches[0]; cardDragStart(t.clientX, t.clientY); }, {passive: true});
+    window.addEventListener('touchmove', function(e) { if (!cardDragging) return; var t = e.touches[0]; cardDragMove(t.clientX, t.clientY); }, {passive: true});
+    window.addEventListener('touchend', function() { cardDragEnd(); });
+    var hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if (hasFinePointer) {
+      el.addEventListener('mouseenter', function() {
+        if (!cardDragging) {
+          el.style.animationPlayState = 'paused';
+          el.style.transform = 'perspective(600px) rotate('+c.rot+'deg) translateY(-6px) scale(1.04) rotateX(4deg)';
+          el.style.cursor = 'grab';
+        }
+      });
+      el.addEventListener('mouseleave', function() {
+        if (!cardDragging) { el.style.transform = 'rotate('+c.rot+'deg)'; el.style.animationPlayState = 'running'; }
+      });
+    }
+    world.appendChild(el);
+    setTimeout(function() { el.style.opacity = '1'; }, 50);
+  }
+
   // First 3 cards load immediately
   for (var fi = 0; fi < Math.min(3, photoCards.length); fi++) { addCard(photoCards[fi], fi, false); }
   // Rest fade in after 2.5s
   setTimeout(function() {
     for (var ri = 3; ri < photoCards.length; ri++) { addCard(photoCards[ri], ri, true); }
+    // Video cards load with the delayed batch
+    for (var vi = 0; vi < videoCards.length; vi++) { addVideoCard(videoCards[vi], vi); }
   }, 2500);
 
   textCards.forEach(function(c, i) {
