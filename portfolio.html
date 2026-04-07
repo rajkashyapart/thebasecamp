@@ -23,6 +23,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <title>things i&rsquo;ve made &mdash; Raj Kashyap</title>
 <link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
 </head>
 <body>
 
@@ -37,216 +38,21 @@
 </nav>
 
 <div id="screen-port" class="screen">
-  <a id="port-back" href="playground.html">&larr; back</a>
 
-  <div id="port-inner">
+  <div id="port-mosaic"></div>
 
-    <!-- INTRO -->
-    <div class="port-intro port-obj">
-      <div class="about-eyebrow">raj kashyap &mdash; selected work</div>
-      <h1 class="port-h1">things i&rsquo;ve made.</h1>
-      <p class="port-lead">brand films, photo essays, strategy, and events &mdash; for brands that wanted to feel like something.</p>
-    </div>
-
-    <!-- FILTER TABS -->
-    <div class="port-filters port-obj">
-      <button class="port-filter active" data-filter="all">all</button>
-      <button class="port-filter" data-filter="photo-film">photo &amp; film</button>
-      <button class="port-filter" data-filter="brand-strategy">brand strategy</button>
-      <button class="port-filter" data-filter="events">events</button>
-    </div>
-
-    <!-- CHAPTER: BRAND & STRATEGY -->
-    <div class="about-chapter port-obj">
-      <div class="about-chapter-line"></div>
-      <span class="about-chapter-label">brand &amp; strategy</span>
-      <div class="about-chapter-line"></div>
-    </div>
-
-    <!-- ROW 1: 2-col -->
-    <div class="port-row port-obj">
-
-      <div class="port-card port-card--wide" data-category="brand-strategy">
-        <div class="port-thumb port-thumb--logo" style="background:#f0ebe0;">
-          <img src="c+c.png" alt="copper + cloves" class="port-logo-img">
-          <div class="port-thumb-label">copper + cloves</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--strategy">brand strategy</span>
-          <div class="port-brand-name">copper + cloves</div>
-          <p class="port-desc">built the content voice from the ground up &mdash; from the very first reel to a recognisable brand that smells like warmth.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="brand-strategy">
-        <div class="port-thumb port-thumb--placeholder" style="background:#f0e8e4;">
-          <div class="port-placeholder-text">cultfit</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--strategy">brand strategy</span>
-          <div class="port-brand-name">cultfit</div>
-          <p class="port-desc">content strategy for their fitness creator programme. made working out look like a culture, not a chore.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ROW 2: 3-col mosaic -->
-    <div class="port-row port-row--3 port-obj">
-
-      <div class="port-card port-card--tall" data-category="brand-strategy">
-        <div class="port-thumb port-thumb--logo" style="background:#e0ede8;">
-          <img src="Amintiri-Logo-Teal.png" alt="amintiri" class="port-logo-img">
-          <div class="port-thumb-label">amintiri</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--strategy">brand strategy</span>
-          <div class="port-brand-name">amintiri</div>
-          <p class="port-desc">romanian for &ldquo;memories&rdquo; &mdash; positioned this keepsake brand around the feeling of being remembered.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="brand-strategy">
-        <div class="port-thumb port-thumb--placeholder" style="background:#f0ede0;">
-          <div class="port-placeholder-text">stamp &amp; seal co.</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--strategy">brand strategy</span>
-          <div class="port-brand-name">stamp &amp; seal co.</div>
-          <p class="port-desc">helped a stationery and gifting studio find their voice &mdash; tactile, crafted, deliberately slow.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="photo-film">
-        <div class="port-thumb port-thumb--logo" style="background:#e8e0d0;">
-          <img src="bira.png" alt="bira 91" class="port-logo-img">
-          <div class="port-thumb-label">bira 91</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--photo">photo &amp; film</span>
-          <div class="port-brand-name">bira 91</div>
-          <p class="port-desc">product shoots and bar-night content for india&rsquo;s most irreverent craft beer.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- CHAPTER: PHOTO & FILM -->
-    <div class="about-chapter port-obj">
-      <div class="about-chapter-line"></div>
-      <span class="about-chapter-label">photo &amp; film</span>
-      <div class="about-chapter-line"></div>
-    </div>
-
-    <!-- ROW 3: 2-col asymmetric -->
-    <div class="port-row port-obj">
-
-      <div class="port-card port-card--wide" data-category="photo-film">
-        <div class="port-thumb port-thumb--logo" style="background:#ede8e0;">
-          <img src="ember.png" alt="ember cookware" class="port-logo-img">
-          <div class="port-thumb-label">ember cookware</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--photo">photo &amp; film</span>
-          <div class="port-brand-name">ember cookware</div>
-          <p class="port-desc">kitchen stories. cast iron + open fire + the kind of food that takes all day.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="photo-film">
-        <div class="port-thumb port-thumb--placeholder" style="background:#e8f0ed;">
-          <div class="port-placeholder-text">nicobar</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--photo">photo &amp; film</span>
-          <div class="port-brand-name">nicobar</div>
-          <p class="port-desc">lifestyle and product content for india&rsquo;s clean-living design brand. slow, considered, beautiful.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ROW 4: 2-col -->
-    <div class="port-row port-obj">
-
-      <div class="port-card port-card--square" data-category="photo-film">
-        <div class="port-thumb port-thumb--placeholder" style="background:#e8e0f0;">
-          <div class="port-placeholder-text">Indian Music Experience</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--photo">photo &amp; film</span>
-          <div class="port-brand-name">indian music experience</div>
-          <p class="port-desc">documentation photography for india&rsquo;s only interactive music museum. shot the stories between the exhibits.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="photo-film">
-        <div class="port-thumb port-thumb--placeholder" style="background:#ede0d0;">
-          <div class="port-placeholder-text">insanely good coffee</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--photo">photo &amp; film</span>
-          <div class="port-brand-name">insanely good coffee</div>
-          <p class="port-desc">cafe content. steam and crema and the morning light through the window at exactly the right angle.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- CHAPTER: EVENTS -->
-    <div class="about-chapter port-obj">
-      <div class="about-chapter-line"></div>
-      <span class="about-chapter-label">events</span>
-      <div class="about-chapter-line"></div>
-    </div>
-
-    <!-- ROW 5: 3-col mosaic -->
-    <div class="port-row port-row--3 port-obj">
-
-      <div class="port-card port-card--tall" data-category="events">
-        <div class="port-thumb port-thumb--placeholder" style="background:#e0e8f0;">
-          <div class="port-placeholder-text">BFLA</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--events">events</span>
-          <div class="port-brand-name">bangalore football league academy</div>
-          <p class="port-desc">match-day coverage and season storytelling. the dust, the fouls, the goals that mattered.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="events">
-        <div class="port-thumb port-thumb--placeholder" style="background:#f0e8ee;">
-          <div class="port-placeholder-text">thabisa</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--events">events</span>
-          <div class="port-brand-name">thabisa</div>
-          <p class="port-desc">event photography for a south african-inspired dining experience in bangalore. food as ceremony.</p>
-        </div>
-      </div>
-
-      <div class="port-card port-card--square" data-category="events">
-        <div class="port-thumb port-thumb--placeholder" style="background:#e8ede0;">
-          <div class="port-placeholder-text">nomada</div>
-        </div>
-        <div class="port-meta">
-          <span class="port-tag port-tag--events">events</span>
-          <div class="port-brand-name">nomada</div>
-          <p class="port-desc">pop-up event content for a nomadic food collective. each location left behind a story.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- CLOSING -->
-    <div class="port-closing port-obj">
-      <div class="about-pq-line"></div>
-      <p class="port-pq">every one of these started with a brief.<br>they all ended with something people actually shared.</p>
-      <div class="about-eyebrow" style="margin-top:20px;">want to make something together?</div>
-      <a href="hub.html" class="port-cta">let&rsquo;s talk &rarr;</a>
-    </div>
-
+  <div id="port-lens" aria-hidden="true">
+    <div class="lens-highlight"></div>
+    <div class="lens-ring"></div>
   </div>
+
+  <div id="port-credits" class="port-obj">
+    <p class="port-credit-line"><span class="port-credit-cat">food &amp; beverage</span> &mdash; for brands including Amintiri, Copper + Cloves, Indian Cacao &amp; Craft Chocolate Festival, Fifty 50, Ulo, and more.</p>
+    <p class="port-credit-line"><span class="port-credit-cat">events</span> &mdash; events by Cult.fit, Indian Cacao &amp; Craft Chocolate Festival, Ulo, and &amp;Shine.</p>
+  </div>
+
+  <div id="win-overlay"></div>
+
 </div>
 
 <script src="shared.js"></script>
