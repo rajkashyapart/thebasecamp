@@ -41,8 +41,43 @@
 
   <div id="port-mosaic"></div>
 
+  <!-- SVG filters for glass sphere refraction -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <!-- Main refraction: turbulent displacement + chromatic aberration -->
+      <filter id="glass-refract" color-interpolation-filters="sRGB" x="-15%" y="-15%" width="130%" height="130%">
+        <!-- Turbulence noise for organic fluid distortion -->
+        <feTurbulence type="turbulence" baseFrequency="0.015 0.012" numOctaves="3" seed="5" result="noise"/>
+        <!-- Red channel: offset source right+down, then displace -->
+        <feOffset in="SourceGraphic" dx="6" dy="3" result="src-r"/>
+        <feDisplacementMap in="src-r" in2="noise" scale="55" xChannelSelector="R" yChannelSelector="G" result="disp-r"/>
+        <!-- Green channel: displace source in place (center) -->
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="45" xChannelSelector="R" yChannelSelector="G" result="disp-g"/>
+        <!-- Blue channel: offset source left+up, then displace -->
+        <feOffset in="SourceGraphic" dx="-6" dy="-3" result="src-b"/>
+        <feDisplacementMap in="src-b" in2="noise" scale="55" xChannelSelector="R" yChannelSelector="G" result="disp-b"/>
+        <!-- Extract individual color channels -->
+        <feColorMatrix in="disp-r" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+        <feColorMatrix in="disp-g" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+        <feColorMatrix in="disp-b" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+        <!-- Recombine R+G -->
+        <feComposite in="red" in2="green" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="rg"/>
+        <!-- Recombine RG+B -->
+        <feComposite in="rg" in2="blue" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="rgb"/>
+        <!-- Boost saturation and brightness for glass intensity -->
+        <feColorMatrix in="rgb" type="saturate" values="1.6" result="sat"/>
+        <feComponentTransfer in="sat">
+          <feFuncR type="linear" slope="1.12" intercept="0.02"/>
+          <feFuncG type="linear" slope="1.12" intercept="0.02"/>
+          <feFuncB type="linear" slope="1.12" intercept="0.02"/>
+        </feComponentTransfer>
+      </filter>
+    </defs>
+  </svg>
+
   <div id="port-lens" aria-hidden="true">
     <div class="lens-highlight"></div>
+    <div class="lens-edge-light"></div>
     <div class="lens-ring"></div>
   </div>
 
