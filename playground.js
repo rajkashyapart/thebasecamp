@@ -2,41 +2,41 @@ var WCX = 1800, WCY = 1400;
 
 var photoCards = [
   // -- TOP-LEFT (far, bleeds edge) --
-  {x:-740, y:-380, w:320, h:320, rot:-1.0, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.jpg'},
-  {x:-520, y:-320, w:200, h:200, rot:1.5, src:'https://picturesbyraj.b-cdn.net/20230908%20-%20IMG_2075%20-%20Raj%20Kashyap122023raj.jpg'},
+  {x:-740, y:-380, w:320, h:320, rot:-1.0, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.jpg'},
+  {x:-520, y:-320, w:200, h:200, rot:1.5, src:'https://picturesbyrajj.b-cdn.net/20230908%20-%20IMG_2075%20-%20Raj%20Kashyap122023raj.jpg'},
 
   // -- TOP-CENTRE (above hero, pushed up) --
-  {x:-120, y:-500, w:380, h:253, rot:0.6, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap102023raj.jpg'},
-  {x:220, y:-440, w:180, h:180, rot:-1.2, src:'https://picturesbyraj.b-cdn.net/20230907%20-%20IMG_1747%20-%20Raj%20Kashyap112023raj.jpg'},
+  {x:-120, y:-500, w:380, h:253, rot:0.6, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap102023raj.jpg'},
+  {x:220, y:-440, w:180, h:180, rot:-1.2, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1747%20-%20Raj%20Kashyap112023raj.jpg'},
 
   // -- TOP-RIGHT (far, bleeds edge) --
-  {x:540, y:-360, w:420, h:298, rot:0.8, src:'https://picturesbyraj.b-cdn.net/an%20art%20village22019raj.jpg'},
-  {x:780, y:-200, w:220, h:220, rot:-1.5, src:'https://picturesbyraj.b-cdn.net/20230908%20-%20IMG_2116%20-%20Raj%20Kashyap132023raj.jpg'},
+  {x:540, y:-360, w:420, h:298, rot:0.8, src:'https://picturesbyrajj.b-cdn.net/an%20art%20village22019raj.jpg'},
+  {x:780, y:-200, w:220, h:220, rot:-1.5, src:'https://picturesbyrajj.b-cdn.net/20230908%20-%20IMG_2116%20-%20Raj%20Kashyap132023raj.jpg'},
 
   // -- LEFT-MID (pushed far left) --
-  {x:-760, y:-20, w:280, h:187, rot:-0.8, src:'https://picturesbyraj.b-cdn.net/it\'s%20her52020raj.jpg'},
-  {x:-640, y:160, w:340, h:227, rot:1.2, src:'https://picturesbyraj.b-cdn.net/hault32020raj.jpg'},
+  {x:-760, y:-20, w:280, h:187, rot:-0.8, src:'https://picturesbyrajj.b-cdn.net/it\'s%20her52020raj.jpg'},
+  {x:-640, y:160, w:340, h:227, rot:1.2, src:'https://picturesbyrajj.b-cdn.net/hault32020raj.jpg'},
 
   // -- RIGHT-MID (pushed far right) --
-  {x:620, y:40, w:300, h:300, rot:-0.5, src:'https://picturesbyraj.b-cdn.net/IMG_1788-Enhanced-NR22022raj62022raj.jpg'},
-  {x:780, y:220, w:200, h:300, rot:1.0, src:'https://picturesbyraj.b-cdn.net/IMG_18822022Raj%20Kashyap72022raj.jpg'},
+  {x:620, y:40, w:300, h:300, rot:-0.5, src:'https://picturesbyrajj.b-cdn.net/IMG_1788-Enhanced-NR22022raj62022raj.jpg'},
+  {x:780, y:220, w:200, h:300, rot:1.0, src:'https://picturesbyrajj.b-cdn.net/IMG_18822022Raj%20Kashyap72022raj.jpg'},
 
   // -- BOTTOM-LEFT (far, bleeds edge) --
-  {x:-720, y:340, w:380, h:380, rot:1.0, src:'https://picturesbyraj.b-cdn.net/IMG_2252-Enhanced-NR32023raj142023raj.jpg'},
-  {x:-430, y:400, w:220, h:147, rot:-1.5, src:'https://picturesbyraj.b-cdn.net/IMG_25282022Raj%20Kashyap82022raj.jpg'},
+  {x:-720, y:340, w:380, h:380, rot:1.0, src:'https://picturesbyrajj.b-cdn.net/IMG_2252-Enhanced-NR32023raj142023raj.jpg'},
+  {x:-430, y:400, w:220, h:147, rot:-1.5, src:'https://picturesbyrajj.b-cdn.net/IMG_25282022Raj%20Kashyap82022raj.jpg'},
 
   // -- BOTTOM-CENTRE --
-  {x:-40, y:380, w:340, h:227, rot:-0.6, src:'https://picturesbyraj.b-cdn.net/green%20is%20the%20color42020raj.jpg'},
-  {x:240, y:460, w:260, h:260, rot:1.4, src:'https://picturesbyraj.b-cdn.net/IMG_9371152026raj.jpg'},
+  {x:-40, y:380, w:340, h:227, rot:-0.6, src:'https://picturesbyrajj.b-cdn.net/green%20is%20the%20color42020raj.jpg'},
+  {x:240, y:460, w:260, h:260, rot:1.4, src:'https://picturesbyrajj.b-cdn.net/IMG_9371152026raj.jpg'},
 
   // -- BOTTOM-RIGHT (far, bleeds edge) --
-  {x:500, y:340, w:420, h:280, rot:0.8, src:'https://picturesbyraj.b-cdn.net/IMG_29022019raj%20kashyap12019raj.jpg'}
+  {x:500, y:340, w:420, h:280, rot:0.8, src:'https://picturesbyrajj.b-cdn.net/IMG_29022019raj%20kashyap12019raj.jpg'}
 ];
 
 var videoCards = [
-  {x:-380, y:-100, w:280, h:210, rot:0.7, src:'https://vz-e64eb025-1b9.b-cdn.net/c83992da-4cdf-4a84-967f-28d9fccb3132/playlist.m3u8'},
-  {x:380, y:-60, w:250, h:188, rot:-1.1, src:'https://vz-e64eb025-1b9.b-cdn.net/e81a6c0d-4c93-443f-a656-22b9ded34e64/playlist.m3u8'},
-  {x:-200, y:440, w:300, h:225, rot:-0.4, src:'https://vz-e64eb025-1b9.b-cdn.net/f90ef4e1-501f-4f0f-9558-d6be051f11f0/playlist.m3u8'}
+  {x:-380, y:-100, w:280, h:210, rot:0.7, src:'https://vz-6f9a60bb-593.b-cdn.net/a8317bc8-6c30-4e9a-a4c9-45afce91f3f1/playlist.m3u8'},
+  {x:380, y:-60, w:250, h:188, rot:-1.1, src:'https://vz-6f9a60bb-593.b-cdn.net/b9ccf117-6681-4d1e-8015-9fbf6cec778e/playlist.m3u8'},
+  {x:-200, y:440, w:300, h:225, rot:-0.4, src:'https://vz-6f9a60bb-593.b-cdn.net/3c36aee0-bec7-4b61-bd69-9b1a07f04676/playlist.m3u8'}
 ];
 
 var textCards = [
