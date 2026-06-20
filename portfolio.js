@@ -195,515 +195,253 @@ var projects = [
   }
 ];
 
-// Placeholder colors for empty src
-var placeholderColors = [
-  '#d4c5b4', '#c2b3a0', '#bfad98', '#d0c0ae', '#c8b8a4',
-  '#b8a892', '#d6c8b8', '#c4b6a2', '#ccbdab', '#daced0'
-];
+// ============================================================
+// PORTFOLIO REEL — full-screen vertical scroll, warm paper.
+// Each piece autoplays muted in view; tap any piece for sound.
+// ES5 syntax to match site convention.
+// ============================================================
 
-// ---- State ----
-var openWin = null;
-var openWinId = null;
-var carouselState = null;
-var zTop = 800;
-var hlsInstances = [];
+var SPK_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><line x1="16.5" y1="9.5" x2="21.5" y2="14.5"/><line x1="21.5" y1="9.5" x2="16.5" y2="14.5"/></svg>';
+var SPK_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.6a5 5 0 0 1 0 6.8"/><path d="M18.6 6a8 8 0 0 1 0 12"/></svg>';
 
-// ---- Init ----
-function initPortfolio() {
-  buildMosaic();
-  staggerReveal();
-  bindOverlay();
-  bindKeyboard();
-  initLens();
-}
-
-// ---- Glass sphere cursor ----
-function initLens() {
-  var lens = document.getElementById('port-lens');
-  var mosaic = document.getElementById('port-mosaic');
-  if (!lens || !mosaic) return;
-
-  var lensX = 0, lensY = 0, targetX = 0, targetY = 0;
-  var isActive = false;
-  var rafId = null;
-  var hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-
-  // Spring-like lerp for smooth follow
-  function tick() {
-    lensX += (targetX - lensX) * 0.15;
-    lensY += (targetY - lensY) * 0.15;
-    lens.style.left = lensX + 'px';
-    lens.style.top = lensY + 'px';
-    rafId = requestAnimationFrame(tick);
-  }
-
-  function showLens() {
-    if (isActive) return;
-    isActive = true;
-    lens.classList.add('active');
-    rafId = requestAnimationFrame(tick);
-  }
-
-  function hideLens() {
-    if (!isActive) return;
-    isActive = false;
-    lens.classList.remove('active');
-    cancelAnimationFrame(rafId);
-  }
-
-  if (hasFinePointer) {
-    // Desktop: follow mouse
-    var screen = document.getElementById('screen-port');
-    screen.addEventListener('mousemove', function(e) {
-      targetX = e.clientX;
-      targetY = e.clientY;
-      if (!isActive) {
-        lensX = e.clientX;
-        lensY = e.clientY;
-        lens.style.left = lensX + 'px';
-        lens.style.top = lensY + 'px';
-      }
-      showLens();
-    });
-    screen.addEventListener('mouseleave', function() {
-      hideLens();
-    });
-    // Hide lens when window is open
-  } else {
-    // Mobile: show on touch, follow finger
-    mosaic.addEventListener('touchstart', function(e) {
-      var t = e.touches[0];
-      targetX = t.clientX; targetY = t.clientY;
-      lensX = t.clientX; lensY = t.clientY;
-      lens.style.left = lensX + 'px';
-      lens.style.top = lensY + 'px';
-      showLens();
-    }, { passive: true });
-    mosaic.addEventListener('touchmove', function(e) {
-      var t = e.touches[0];
-      targetX = t.clientX; targetY = t.clientY;
-    }, { passive: true });
-    mosaic.addEventListener('touchend', function() {
-      hideLens();
-    });
-  }
-}
-
-// ---- Build Mosaic Grid ----
-function buildMosaic() {
-  var mosaic = document.getElementById('port-mosaic');
-  if (!mosaic) return;
-
-  // Flatten all project items into grid cells
-  var cells = [];
+// Flatten projects (in order) into slides; skip empty placeholders.
+function buildSlideData() {
+  var out = [];
   for (var p = 0; p < projects.length; p++) {
     var proj = projects[p];
     for (var i = 0; i < proj.items.length; i++) {
-      cells.push({
-        project: proj,
-        item: proj.items[i],
-        itemIndex: i
+      var it = proj.items[i];
+      if (!it.src) continue;
+      out.push({
+        type: it.type,
+        src: it.src,
+        name: proj.name,
+        sub: proj.subtitle,
+        cat: proj.category,
+        playground: !!proj.playgroundLink
       });
     }
   }
+  return out;
+}
 
-  // Shuffle cells for organic mix (deterministic seed for consistency)
-  var shuffled = shuffleWithSeed(cells, 42);
+var SLIDES = [];
+var slideObjs = [];   // { el, video, src, inited, hls }
+var activeIdx = -1;
+var audioOn = false;
+var hintHidden = false;
 
-  for (var c = 0; c < shuffled.length; c++) {
-    var cell = shuffled[c];
-    var el = document.createElement('div');
-    el.className = 'mo-cell';
-    if (cell.item.size === 'wide') el.className += ' mo-cell--wide';
-    else if (cell.item.size === 'tall') el.className += ' mo-cell--tall';
-    else if (cell.item.size === 'big') el.className += ' mo-cell--big';
+function catLabel(cat) {
+  if (cat === 'content') return 'content';
+  if (cat === 'fnb') return 'food & beverage';
+  if (cat === 'events') return 'events';
+  return 'personal';
+}
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
 
-    el.setAttribute('data-name', cell.project.name);
-    el.setAttribute('data-project', cell.project.id);
-    el.setAttribute('data-item-index', cell.itemIndex);
+// ---- Build DOM ----
+function initPortfolio() {
+  var reel = document.getElementById('reel');
+  if (!reel) return;
+  SLIDES = buildSlideData();
+  var total = SLIDES.length;
 
-    if (cell.item.src) {
-      if (cell.item.type === 'video') {
-        var vid = document.createElement('video');
-        vid.muted = true;
-        vid.loop = true;
-        vid.playsInline = true;
-        vid.setAttribute('playsinline', '');
-        vid.setAttribute('webkit-playsinline', '');
-        vid.draggable = false;
-        el.appendChild(vid);
-        el.setAttribute('data-hls', cell.item.src);
-      } else {
-        var img = document.createElement('img');
-        img.loading = 'lazy';
-        img.draggable = false;
-        img.alt = cell.project.name;
-        img.src = cell.item.src;
-        el.appendChild(img);
-      }
+  // Intro slide
+  var intro = document.createElement('section');
+  intro.className = 'reel-slide reel-intro seen';
+  intro.innerHTML =
+    '<div class="reel-intro-inner">' +
+      '<div class="reel-intro-eyebrow">portfolio</div>' +
+      '<h1 class="reel-intro-title">things i’ve<br><em>made.</em></h1>' +
+      '<p class="reel-intro-sub">' + total + ' pieces · scroll through · tap any one for sound</p>' +
+    '</div>' +
+    '<div class="reel-cue" aria-hidden="true"><span></span></div>';
+  reel.appendChild(intro);
+
+  // Media slides
+  for (var i = 0; i < total; i++) {
+    var s = SLIDES[i];
+    var sec = document.createElement('section');
+    sec.className = 'reel-slide reel-piece';
+    sec.setAttribute('data-idx', i);
+
+    var media = document.createElement('div');
+    media.className = 'reel-media';
+
+    var videoEl = null;
+    if (s.type === 'video') {
+      var poster = s.src.replace('playlist.m3u8', 'thumbnail.jpg');
+      videoEl = document.createElement('video');
+      videoEl.muted = true;
+      videoEl.loop = true;
+      videoEl.playsInline = true;
+      videoEl.setAttribute('playsinline', '');
+      videoEl.setAttribute('webkit-playsinline', '');
+      videoEl.setAttribute('poster', poster);
+      videoEl.setAttribute('preload', 'none');
+      videoEl.draggable = false;
+      media.className += ' is-video';
+      media.appendChild(videoEl);
+
+      var chip = document.createElement('div');
+      chip.className = 'reel-audio';
+      chip.innerHTML = SPK_OFF;
+      media.appendChild(chip);
     } else {
-      // Placeholder for empty src
-      el.style.backgroundColor = placeholderColors[c % placeholderColors.length];
+      var img = document.createElement('img');
+      img.loading = 'lazy';
+      img.draggable = false;
+      img.alt = s.name;
+      img.src = s.src;
+      media.appendChild(img);
     }
 
-    el.addEventListener('click', (function(projId, clickedEl) {
-      return function() { openProjectWindow(projId, clickedEl); };
-    })(cell.project.id, el));
-
-    mosaic.appendChild(el);
-  }
-
-  // Set up IntersectionObserver for video autoplay
-  setupVideoObserver();
-}
-
-// Deterministic shuffle (Fisher-Yates with seeded random)
-function shuffleWithSeed(arr, seed) {
-  var a = arr.slice();
-  var s = seed;
-  function rand() {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
-  }
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(rand() * (i + 1));
-    var tmp = a[i];
-    a[i] = a[j];
-    a[j] = tmp;
-  }
-  return a;
-}
-
-// ---- Video Observer (play/pause on visibility) ----
-function setupVideoObserver() {
-  if (!('IntersectionObserver' in window)) return;
-  var observer = new IntersectionObserver(function(entries) {
-    for (var i = 0; i < entries.length; i++) {
-      var vid = entries[i].target.querySelector('video');
-      if (!vid) continue;
-      if (entries[i].isIntersecting) {
-        var hlsSrc = entries[i].target.getAttribute('data-hls');
-        if (hlsSrc && !vid.src && !vid._hlsInit) {
-          initHls(vid, hlsSrc);
-          vid._hlsInit = true;
-        }
-        vid.play().catch(function(){});
-      } else {
-        vid.pause();
-      }
-    }
-  }, { threshold: 0.3 });
-
-  var cells = document.querySelectorAll('.mo-cell[data-hls]');
-  for (var i = 0; i < cells.length; i++) {
-    observer.observe(cells[i]);
-  }
-}
-
-// ---- HLS Init ----
-function initHls(videoEl, src) {
-  if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
-    videoEl.src = src;
-    videoEl.play().catch(function(){});
-  } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-    var hls = new Hls({ enableWorker: true, startLevel: -1, maxBufferLength: 10 });
-    hls.loadSource(src);
-    hls.attachMedia(videoEl);
-    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-      videoEl.play().catch(function(){});
-    });
-    hlsInstances.push(hls);
-    videoEl._hls = hls;
-  }
-}
-
-// ---- Stagger Reveal ----
-function staggerReveal() {
-  // Header elements
-  var objs = document.querySelectorAll('.port-obj');
-  for (var i = 0; i < objs.length; i++) {
-    (function(el, delay) {
-      setTimeout(function() { el.classList.add('in'); }, delay);
-    })(objs[i], 180 + i * 140);
-  }
-
-  // Grid cells — IntersectionObserver for scroll-based reveal
-  if ('IntersectionObserver' in window) {
-    var cellObserver = new IntersectionObserver(function(entries) {
-      for (var i = 0; i < entries.length; i++) {
-        if (entries[i].isIntersecting) {
-          entries[i].target.classList.add('in');
-          cellObserver.unobserve(entries[i].target);
-        }
-      }
-    }, { threshold: 0.1, rootMargin: '0px 0px 60px 0px' });
-
-    var cells = document.querySelectorAll('.mo-cell');
-    for (var i = 0; i < cells.length; i++) {
-      (function(el, idx) {
-        setTimeout(function() { cellObserver.observe(el); }, idx * 30);
-      })(cells[i], i);
-    }
-  } else {
-    var fallbackCells = document.querySelectorAll('.mo-cell');
-    for (var i = 0; i < fallbackCells.length; i++) { fallbackCells[i].classList.add('in'); }
-  }
-}
-
-// ---- Open Project Window ----
-function openProjectWindow(projectId, clickedEl) {
-  if (openWin) closeProjectWindow();
-
-  var proj = null;
-  for (var i = 0; i < projects.length; i++) {
-    if (projects[i].id === projectId) { proj = projects[i]; break; }
-  }
-  if (!proj) return;
-
-  var delay = openWin ? 80 : 0;
-  setTimeout(function() {
-    var win = document.createElement('div');
-    win.className = 'window';
-    win.id = 'win-' + proj.id;
-    win.style.zIndex = ++zTop;
-
-    // Transform origin from clicked cell
-    if (window.innerWidth >= 640 && clickedEl) {
-      var r = clickedEl.getBoundingClientRect();
-      var cx = r.left + r.width / 2;
-      var cy = r.top + r.height / 2;
-      var ox = Math.max(20, Math.min(80, (cx / window.innerWidth * 100)));
-      var oy = Math.max(20, Math.min(80, (cy / window.innerHeight * 100)));
-      win.style.setProperty('--origin-x', ox + '%');
-      win.style.setProperty('--origin-y', oy + '%');
-    }
-
-    win.style.left = '50%';
-    win.style.top = '50%';
-
-    var categoryLabel = proj.category === 'content' ? 'content' :
-                        proj.category === 'fnb' ? 'f&amp;b' :
-                        proj.category === 'events' ? 'events' : 'personal';
-
-    var slidesHtml = '';
-    var hasItems = false;
-    for (var s = 0; s < proj.items.length; s++) {
-      var item = proj.items[s];
-      hasItems = true;
-      if (item.src) {
-        if (item.type === 'video') {
-          slidesHtml += '<div class="wcarousel-slide" data-hls-src="' + item.src + '"><video muted loop playsinline webkit-playsinline></video></div>';
-        } else {
-          slidesHtml += '<div class="wcarousel-slide"><img src="' + item.src + '" alt="' + proj.name + '" draggable="false"></div>';
-        }
-      } else {
-        slidesHtml += '<div class="wcarousel-slide wcarousel-slide--placeholder" style="background:' + placeholderColors[s % placeholderColors.length] + ';"><span class="wcarousel-placeholder-text">' + proj.name + '</span></div>';
-      }
-    }
-
-    var playgroundLinkHtml = proj.playgroundLink ?
-      '<a href="playground.html" class="w-next" style="text-decoration:none;">visit playground &rarr;</a>' : '';
-
-    var escHint = window.innerWidth >= 640 ? '<div class="esc-hint"><kbd>esc</kbd> to close</div>' : '';
-
-    win.innerHTML =
-      '<div class="winbar" id="tb-' + proj.id + '">' +
-        '<div class="traffic"><div class="td td-x" data-close="' + proj.id + '"></div><div class="td td-m" data-close="' + proj.id + '"></div><div class="td td-z"></div></div>' +
-        '<div style="display:flex;align-items:center;gap:8px;flex:1;">' +
-          '<div class="wmeta"><strong>' + proj.name + '</strong><span>' + proj.subtitle + '</span></div>' +
-        '</div>' +
-        '<span class="wtag-top">' + categoryLabel + '</span>' +
+    var label = document.createElement('div');
+    label.className = 'reel-label';
+    var pl = s.playground ? '<a href="playground.html" class="reel-pglink">from the playground →</a>' : '';
+    label.innerHTML =
+      '<div class="reel-label-l">' +
+        '<div class="reel-name">' + s.name + '</div>' +
+        '<div class="reel-sub">' + (s.sub || '') + '</div>' +
+        pl +
       '</div>' +
-      '<div class="wbody">' +
-        '<p class="w-p" style="margin-bottom:16px;">' + proj.description + '</p>' +
-        (hasItems ? (
-          '<div class="wcarousel">' +
-            '<div class="wcarousel-track">' + slidesHtml + '</div>' +
-            '<button class="wcarousel-arrow wcarousel-arrow--l" aria-label="Previous">&#8249;</button>' +
-            '<button class="wcarousel-arrow wcarousel-arrow--r" aria-label="Next">&#8250;</button>' +
-          '</div>' +
-          '<div class="wcarousel-counter">1 / ' + proj.items.length + '</div>'
-        ) : '') +
-        playgroundLinkHtml +
-        '<button class="w-close-btn" data-close="' + proj.id + '">\u2715 Close</button>' +
-        escHint +
+      '<div class="reel-label-r">' +
+        '<div class="reel-cat">' + catLabel(s.cat) + '</div>' +
+        '<div class="reel-index">' + pad2(i + 1) + ' / ' + pad2(total) + '</div>' +
       '</div>';
 
-    var screen = document.getElementById('screen-port');
-    screen.appendChild(win);
-    openWin = win;
-    openWinId = proj.id;
+    sec.appendChild(media);
+    sec.appendChild(label);
+    reel.appendChild(sec);
 
-    document.getElementById('win-overlay').classList.add('active');
-    // Hide lens while window is open
-    var lens = document.getElementById('port-lens');
-    if (lens) lens.classList.remove('active');
+    var obj = { el: sec, video: videoEl, src: s.src, inited: false, hls: null };
+    slideObjs.push(obj);
 
-    var closeEls = win.querySelectorAll('[data-close]');
-    for (var ci = 0; ci < closeEls.length; ci++) {
-      closeEls[ci].addEventListener('click', function(e) {
-        e.stopPropagation();
-        closeProjectWindow();
-      });
-    }
-
-    win.addEventListener('mousedown', function(e) {
-      e.stopPropagation();
-      win.style.zIndex = ++zTop;
-    });
-    win.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
-
-    if (window.innerWidth >= 640) {
-      attachWinDrag(win, win.querySelector('#tb-' + proj.id));
-    }
-
-    var carousel = win.querySelector('.wcarousel');
-    if (carousel) {
-      initCarousel(carousel, win);
-    }
-  }, delay);
-}
-
-// ---- Close Window ----
-function closeProjectWindow() {
-  if (!openWin) return;
-  openWin.classList.add('closing');
-
-  var vids = openWin.querySelectorAll('video');
-  for (var i = 0; i < vids.length; i++) {
-    if (vids[i]._hls) {
-      vids[i]._hls.destroy();
-      vids[i]._hls = null;
+    if (videoEl) {
+      (function(o) {
+        var toggle = function(e) { e.stopPropagation(); setAudio(!audioOn); };
+        o.video.addEventListener('click', toggle);
+        o.el.querySelector('.reel-audio').addEventListener('click', toggle);
+      })(obj);
     }
   }
 
-  var w = openWin;
-  setTimeout(function() { w.remove(); }, 120);
-  openWin = null;
-  openWinId = null;
-  carouselState = null;
-  document.getElementById('win-overlay').classList.remove('active');
+  setupObserver();
+  setupProgress();
 }
 
-// ---- Window Drag ----
-function attachWinDrag(win, handle) {
-  var sX, sY, sL, sT;
-  handle.addEventListener('mousedown', function(e) {
-    if (e.target.classList.contains('td')) return;
-    e.preventDefault();
-    sX = e.clientX; sY = e.clientY;
-    sL = parseFloat(win.style.left) || 0;
-    sT = parseFloat(win.style.top) || 0;
-    win.style.zIndex = ++zTop;
-    function mv(e) {
-      win.style.left = (sL + e.clientX - sX) + 'px';
-      win.style.top = Math.max(0, (sT + e.clientY - sY)) + 'px';
-    }
-    function up() {
-      document.removeEventListener('mousemove', mv);
-      document.removeEventListener('mouseup', up);
-    }
-    document.addEventListener('mousemove', mv);
-    document.addEventListener('mouseup', up);
-  });
-}
-
-// ---- Carousel ----
-function initCarousel(wrapEl, winEl) {
-  var track = wrapEl.querySelector('.wcarousel-track');
-  var slides = wrapEl.querySelectorAll('.wcarousel-slide');
-  var counter = winEl.querySelector('.wcarousel-counter');
-  var arrowL = wrapEl.querySelector('.wcarousel-arrow--l');
-  var arrowR = wrapEl.querySelector('.wcarousel-arrow--r');
-  var current = 0;
-  var total = slides.length;
-
-  carouselState = { goTo: goTo, current: current, total: total };
-
-  function goTo(idx) {
-    if (idx < 0) idx = 0;
-    if (idx >= total) idx = total - 1;
-    current = idx;
-    carouselState.current = current;
-    track.style.transform = 'translateX(-' + (current * 100) + '%)';
-    if (counter) counter.textContent = (current + 1) + ' / ' + total;
-
-    for (var i = 0; i < slides.length; i++) {
-      var vid = slides[i].querySelector('video');
-      if (!vid) continue;
-      if (i === current) {
-        var hlsSrc = slides[i].getAttribute('data-hls-src');
-        if (hlsSrc && !vid._hlsInit) {
-          initHls(vid, hlsSrc);
-          vid._hlsInit = true;
-        }
-        vid.play().catch(function(){});
-      } else {
-        vid.pause();
+// ---- IntersectionObserver: reveal + which piece is centered ----
+function setupObserver() {
+  if (!('IntersectionObserver' in window)) {
+    for (var k = 0; k < slideObjs.length; k++) slideObjs[k].el.classList.add('seen');
+    if (slideObjs[0]) activate(0);
+    return;
+  }
+  var io = new IntersectionObserver(function(entries) {
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('seen');
+      if (e.intersectionRatio >= 0.55) {
+        var idx = parseInt(e.target.getAttribute('data-idx'), 10);
+        if (!isNaN(idx)) activate(idx);
       }
     }
-  }
+  }, { root: document.getElementById('screen-port'), threshold: [0.12, 0.55, 0.8] });
+  for (var j = 0; j < slideObjs.length; j++) io.observe(slideObjs[j].el);
+}
 
-  // Init first slide video
-  if (slides[0]) {
-    var firstVid = slides[0].querySelector('video');
-    var firstHls = slides[0].getAttribute('data-hls-src');
-    if (firstVid && firstHls && !firstVid._hlsInit) {
-      initHls(firstVid, firstHls);
-      firstVid._hlsInit = true;
-      firstVid.play().catch(function(){});
+function activate(idx) {
+  if (idx === activeIdx) return;
+  activeIdx = idx;
+  for (var i = 0; i < slideObjs.length; i++) {
+    var o = slideObjs[i];
+    if (!o.video) continue;
+    if (i === idx) {
+      ensureVideo(o);
+      o.video.muted = !audioOn;
+      var pr = o.video.play();
+      if (pr && pr.catch) pr.catch(function(){});
+    } else {
+      o.video.pause();
+      o.video.muted = true;
+      if (Math.abs(i - idx) > 1) teardownVideo(o);
     }
   }
-
-  arrowL.addEventListener('click', function(e) { e.stopPropagation(); goTo(current - 1); });
-  arrowR.addEventListener('click', function(e) { e.stopPropagation(); goTo(current + 1); });
-
-  // Touch swipe
-  var startX = 0, startY = 0, dx = 0, swiping = false;
-  track.addEventListener('touchstart', function(e) {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    dx = 0; swiping = true;
-    track.style.transition = 'none';
-  }, { passive: true });
-
-  track.addEventListener('touchmove', function(e) {
-    if (!swiping) return;
-    dx = e.touches[0].clientX - startX;
-    var dy = Math.abs(e.touches[0].clientY - startY);
-    if (dy > Math.abs(dx)) { swiping = false; return; }
-    var offset = -(current * 100) + (dx / track.offsetWidth * 100);
-    track.style.transform = 'translateX(' + offset + '%)';
-  }, { passive: true });
-
-  track.addEventListener('touchend', function() {
-    track.style.transition = '';
-    if (!swiping) { goTo(current); return; }
-    if (dx < -40) goTo(current + 1);
-    else if (dx > 40) goTo(current - 1);
-    else goTo(current);
-    swiping = false;
-  });
+  if (idx >= 2) hideHint();
+  updateAudioChips();
 }
 
-// ---- Overlay + Keyboard ----
-function bindOverlay() {
-  var overlay = document.getElementById('win-overlay');
-  if (overlay) {
-    overlay.addEventListener('click', function() { closeProjectWindow(); });
+function ensureVideo(o) {
+  if (o.inited || !o.video) return;
+  o.inited = true;
+  var v = o.video, src = o.src;
+  if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = src;
+  } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+    var hls = new Hls({ enableWorker: true, startLevel: -1, maxBufferLength: 12 });
+    hls.loadSource(src);
+    hls.attachMedia(v);
+    o.hls = hls;
+  } else {
+    v.src = src;
   }
 }
 
-function bindKeyboard() {
-  document.addEventListener('keydown', function(e) {
-    if (!openWin) return;
-    if (e.key === 'Escape') { closeProjectWindow(); return; }
-    if (carouselState) {
-      if (e.key === 'ArrowLeft') { carouselState.goTo(carouselState.current - 1); e.preventDefault(); }
-      if (e.key === 'ArrowRight') { carouselState.goTo(carouselState.current + 1); e.preventDefault(); }
-    }
-  });
+function teardownVideo(o) {
+  if (!o.inited || !o.video) return;
+  o.inited = false;
+  if (o.hls) { try { o.hls.destroy(); } catch (e) {} o.hls = null; }
+  o.video.removeAttribute('src');
+  try { o.video.load(); } catch (e) {}
 }
 
-// ---- Boot ----
+// ---- Audio ----
+function setAudio(on) {
+  audioOn = on;
+  for (var i = 0; i < slideObjs.length; i++) {
+    if (!slideObjs[i].video) continue;
+    slideObjs[i].video.muted = !(i === activeIdx && on);
+  }
+  hideHint();
+  updateAudioChips();
+}
+
+function updateAudioChips() {
+  for (var i = 0; i < slideObjs.length; i++) {
+    var o = slideObjs[i];
+    if (!o.video) continue;
+    var chip = o.el.querySelector('.reel-audio');
+    if (!chip) continue;
+    var on = (i === activeIdx && audioOn);
+    chip.innerHTML = on ? SPK_ON : SPK_OFF;
+    chip.classList.toggle('on', on);
+  }
+}
+
+function hideHint() {
+  if (hintHidden) return;
+  hintHidden = true;
+  var h = document.getElementById('reel-hint');
+  if (h) h.classList.add('gone');
+}
+
+// ---- Scroll progress ----
+function setupProgress() {
+  var bar = document.getElementById('reel-progress-fill');
+  var sc = document.getElementById('screen-port');
+  if (!bar || !sc) return;
+  var ticking = false;
+  sc.addEventListener('scroll', function() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function() {
+      var max = sc.scrollHeight - sc.clientHeight;
+      var pct = max > 0 ? (sc.scrollTop / max) : 0;
+      bar.style.transform = 'scaleX(' + pct.toFixed(4) + ')';
+      ticking = false;
+    });
+  }, { passive: true });
+}
+
 document.addEventListener('DOMContentLoaded', initPortfolio);
