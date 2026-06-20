@@ -1902,7 +1902,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   #pg-world{ display:none; }
   .pg-recenter{ display:none; }
 
-  #pg-feed{ position:relative; z-index:2; padding:54px 0 22vh; }
+  #pg-feed{ position:relative; z-index:2; padding:90px 0 22vh; }
 
   /* fixed, always-centred hero — blends over the scrolling cards */
   .pgf-hero-fixed{
@@ -1941,12 +1941,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     transform:rotate(var(--rot,0deg));
     opacity:0; animation:pgfIn 0.5s cubic-bezier(0.23,1,0.32,1) both;
   }
-  .pgf-item img, .pgf-item video{ width:100%; display:block; }
-  .pgf-video{ aspect-ratio:9/16; background:#15120f; }
-  .pgf-video video{ height:100%; object-fit:cover; }
+  /* every card sizes to its media's natural ratio */
+  .pgf-item img, .pgf-item video{ width:100%; height:auto; display:block; }
+  .pgf-video{ background:#15120f; }
   .pgf-text{
-    aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
-    padding:18px; text-align:center;
+    display:flex; align-items:center; justify-content:center;
+    padding:30px 20px; text-align:center;
   }
   .pgf-text span{
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;

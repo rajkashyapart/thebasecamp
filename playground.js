@@ -688,27 +688,9 @@ function initPlaygroundFeed() {
     '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>';
   canvas.appendChild(hero);
 
-  // videos show their poster immediately; play only while on screen
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function(entries) {
-      for (var e = 0; e < entries.length; e++) {
-        var rec = null;
-        for (var k = 0; k < videoEls.length; k++) {
-          if (videoEls[k].el === entries[e].target) { rec = videoEls[k]; break; }
-        }
-        if (!rec) continue;
-        if (entries[e].isIntersecting) {
-          if (!rec.inited) { initFeedVideo(rec); rec.inited = true; }
-          rec.el.play().catch(function(){});
-        } else {
-          rec.el.pause();
-        }
-      }
-    }, { root: canvas, threshold: 0.4 });
-    for (var q = 0; q < videoEls.length; q++) io.observe(videoEls[q].el);
-  } else {
-    for (var z = 0; z < videoEls.length; z++) { initFeedVideo(videoEls[z]); videoEls[z].inited = true; }
-  }
+  // only 3 videos — autoplay all of them immediately, muted, looping.
+  // playing from the start means iOS never shows its paused play-button.
+  for (var z = 0; z < videoEls.length; z++) { initFeedVideo(videoEls[z]); videoEls[z].inited = true; }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
