@@ -327,7 +327,7 @@ const folders=[
         <div>
           <div class="w-tname">Raj Kashyap</div>
           <div class="w-trole">strategy · positioning · direction · editing</div>
-          <p class="w-tbio">every client i&rsquo;ve ever had came through word of mouth. not ads, not cold outreach &mdash; people telling other people. that only happens when you genuinely want the person you&rsquo;re working with to win. i care about whether your content makes you money. not just whether it looks good.<br><br>i understand the psychology of why content works &mdash; not from a textbook but from years of being deep in it. i also build my own presence at <em>raj.uncurated</em>, testing what works in real time. i&rsquo;m not advising you on something i don&rsquo;t do myself.</p>
+          <p class="w-tbio">every client i&rsquo;ve ever had came through word of mouth. not ads, not cold outreach &mdash; people telling other people. that only happens when you genuinely want the person you&rsquo;re working with to win. i care about whether your content makes you money. not just whether it looks good.<br><br>i understand the psychology of why content works &mdash; not from a textbook but from years of being deep in it. i also build my own presence at <em>uncurated.raj</em>, testing what works in real time. i&rsquo;m not advising you on something i don&rsquo;t do myself.</p>
         </div>
       </div>
       <div class="w-team-member">

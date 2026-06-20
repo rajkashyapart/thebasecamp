@@ -107,7 +107,7 @@ After every visible change:
 
 **Playground reference:** `ref-emmi-playground.png` in project folder. Scatter should feel organic — tight clusters, dramatic size variety, edge bleed, clear centre. If it looks "placed" instead of "scattered", it's wrong.
 
-**Raj's identity:** raj.uncurated. Intentional living, aesthetics, the gap between performing a life and living one. Audience is inward-looking creatives, not metrics chasers.
+**Raj's identity:** uncurated.raj. Intentional living, aesthetics, the gap between performing a life and living one. Audience is inward-looking creatives, not metrics chasers.
 
 ---
 

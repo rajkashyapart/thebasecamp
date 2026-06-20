@@ -40,9 +40,9 @@ var videoCards = [
 ];
 
 var textCards = [
-  {x:-440, y:-200, w:200, h:110, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
-  {x:480, y:-140, w:190, h:100, rot:0.8, bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
-  {x:340, y:340, w:180, h:100, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
+  {x:-440, y:-200, w:200, h:110, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", dark:true},
+  {x:480, y:-140, w:190, h:100, rot:0.8, bg:'#6098a3', headline:'why do you think in the ways you think?', dark:true},
+  {x:340, y:340, w:180, h:100, rot:-0.6, bg:'#ff7bac', headline:"🍡 i hope you win", dark:true}
 ];
 
 var G_STICK = '<svg width="14" height="20" viewBox="0 0 14 20" fill="none"><circle cx="7" cy="3.2" r="2.2" stroke="currentColor" stroke-width="1"/><line x1="7" y1="5.4" x2="7" y2="11.2" stroke="currentColor" stroke-width="1"/><line x1="2.5" y1="8" x2="7" y2="10.2" stroke="currentColor" stroke-width="1"/><line x1="11.5" y1="8" x2="7" y2="10.2" stroke="currentColor" stroke-width="1"/><line x1="7" y1="11.2" x2="4.5" y2="17.5" stroke="currentColor" stroke-width="1"/><line x1="7" y1="11.2" x2="9.5" y2="17.5" stroke="currentColor" stroke-width="1"/></svg>';
@@ -85,9 +85,9 @@ if (isMobile) {
   ];
   // Text cards -- no card overlaps more than 8% with any photo card
   textCards = [
-    {x:35,   y:-225, w:135, h:78, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", tag:'raj.uncurated', dark:true},
-    {x:150,  y:228,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'are you better today than you were yesterday?', tag:'the question', dark:true},
-    {x:-155, y:315,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"i wish to die knowing i had fun! :')", tag:'raj.uncurated', dark:true}
+    {x:35,   y:-225, w:135, h:78, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", dark:true},
+    {x:150,  y:228,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'why do you think in the ways you think?', dark:true},
+    {x:-155, y:315,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"🍡 i hope you win", dark:true}
   ];
   // Glyphs -- organically scattered. Near-hero glyphs at y:+-118-132 (just outside hero zone).
   // Far glyphs reach toward canvas edges for depth.
@@ -420,11 +420,15 @@ function initPlayground() {
     h.className = 'pg-text-h';
     h.textContent = c.headline;
     if (c.dark) h.style.color = '#f5f2ee';
-    var t = document.createElement('div');
-    t.className = 'pg-text-tag';
-    t.textContent = c.tag;
-    if (c.dark) t.style.color = 'rgba(245,242,238,0.4)';
-    inner.appendChild(h); inner.appendChild(t); el.appendChild(inner);
+    inner.appendChild(h);
+    if (c.tag) {
+      var t = document.createElement('div');
+      t.className = 'pg-text-tag';
+      t.textContent = c.tag;
+      if (c.dark) t.style.color = 'rgba(245,242,238,0.4)';
+      inner.appendChild(t);
+    }
+    el.appendChild(inner);
     world.appendChild(el);
   });
 

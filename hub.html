@@ -85,11 +85,11 @@
       </a>
     </div>
 
-    <!-- TESTIMONIAL -->
+    <!-- TESTIMONIAL (rotating — pulled from "the word on the street") -->
     <div class="hub-testi">
       <div class="hub-testi-mark">&ldquo;</div>
-      <p class="hub-testi-text">he has an incredible talent for taking a moodboard and turning it into something even better than expected.</p>
-      <div class="hub-testi-attr">Sakshee &amp; Aditya &mdash; Stamp &amp; Seal Co.</div>
+      <p class="hub-testi-text" id="hub-testi-text">loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.</p>
+      <div class="hub-testi-attr" id="hub-testi-attr">Sarah Edwards &mdash; Copper + Cloves</div>
     </div>
   </div>
 </div>
@@ -127,6 +127,29 @@ document.addEventListener('DOMContentLoaded', function() {
       el.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
     });
   });
+  // Rotating testimonials -- pulled from "the word on the street" (ciad)
+  var hubTesti = [
+    {t:'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', a:'Sarah Edwards &mdash; Copper + Cloves'},
+    {t:'i enjoy working with raj, he is very focused and motivated, which makes it a smooth experience. the results of his work are great without too much back and forth.', a:'Patricia Cosma &mdash; Indian Cacao &amp; Craft Chocolate Festival'},
+    {t:'his first draft was excellent and exactly what i was looking for. he is easy to work with and truly understands what is required.', a:'Kavya Peerbhoy &mdash; &amp;Shine'},
+    {t:'he has an incredible talent for taking a moodboard and turning it into something even better than expected. what surprised me most was how he elevated the project with his creative ideas.', a:'Sakshee &amp; Aditya &mdash; Stamp &amp; Seal Co.'}
+  ];
+  var htText = document.getElementById('hub-testi-text');
+  var htAttr = document.getElementById('hub-testi-attr');
+  if (htText && htAttr) {
+    var htIdx = 0;
+    setInterval(function() {
+      htText.style.opacity = '0';
+      htAttr.style.opacity = '0';
+      setTimeout(function() {
+        htIdx = (htIdx + 1) % hubTesti.length;
+        htText.innerHTML = hubTesti[htIdx].t;
+        htAttr.innerHTML = hubTesti[htIdx].a;
+        htText.style.opacity = '1';
+        htAttr.style.opacity = '1';
+      }, 500);
+    }, 5000);
+  }
   // Spring entrance for hub content items
   var items = document.querySelectorAll('.hub-eyebrow,.hub-title,.hub-sub,.hub-proof-strip,.hub-options,.hub-testi');
   items.forEach(function(el, i) {
