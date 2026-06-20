@@ -586,38 +586,42 @@ function initPlaygroundFeed() {
   var feed = document.createElement('div');
   feed.id = 'pg-feed';
 
-  var hero = document.createElement('div');
-  hero.className = 'pgf-hero';
-  hero.innerHTML =
-    '<h1 class="pgf-title">never stop playing &lt;3</h1>' +
-    '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>' +
-    '<div class="pgf-cue" aria-hidden="true"><span></span></div>';
-  feed.appendChild(hero);
-
   var grid = document.createElement('div');
   grid.className = 'pgf-grid';
 
-  // weave photos + videos + text cards into a feed order
+  // weave photos + videos + text cards (+ scattered glyphs) into the feed
   var photos = photoCards.slice();
   var vids = videoCards.slice();
   var texts = textCards.slice();
   var items = [];
-  var pi = 0, vi = 0, ti = 0, n = 0;
+  var pi = 0, vi = 0, ti = 0, n = 0, photoSeen = 0;
   while (pi < photos.length || vi < vids.length || ti < texts.length) {
-    if (pi < photos.length) items.push({ kind: 'photo', data: photos[pi++] });
-    if (pi < photos.length) items.push({ kind: 'photo', data: photos[pi++] });
+    if (pi < photos.length) { items.push({ kind: 'photo', data: photos[pi++], span: (photoSeen % 4 === 0) }); photoSeen++; }
+    if (pi < photos.length) { items.push({ kind: 'photo', data: photos[pi++], span: false }); photoSeen++; }
     if (n % 2 === 0 && ti < texts.length) items.push({ kind: 'text', data: texts[ti++] });
     else if (vi < vids.length) items.push({ kind: 'video', data: vids[vi++] });
     else if (ti < texts.length) items.push({ kind: 'text', data: texts[ti++] });
+    if (n === 1 || n === 3 || n === 5 || n === 7) items.push({ kind: 'glyph', svg: (n % 2 ? G_EYE : G_STICK) });
     n++;
   }
 
   var videoEls = [];
   for (var i = 0; i < items.length; i++) {
     var it = items[i];
+
+    if (it.kind === 'glyph') {
+      var gl = document.createElement('div');
+      gl.className = 'pgf-glyph';
+      gl.style.setProperty('--rot', (((i % 2) ? -1 : 1) * (5 + (i % 5))) + 'deg');
+      gl.innerHTML = it.svg;
+      grid.appendChild(gl);
+      continue;
+    }
+
     var card = document.createElement('div');
-    var rot = ((i % 2 === 0) ? 1 : -1) * (0.7 + (i % 3) * 0.35);
+    var rot = it.span ? 0 : (((i % 2 === 0) ? 1 : -1) * (0.7 + (i % 3) * 0.35));
     card.className = 'pgf-item';
+    if (it.span) card.className += ' pgf-span';
     card.style.setProperty('--rot', rot.toFixed(2) + 'deg');
     card.style.animationDelay = (Math.min(i, 12) * 0.04) + 's';
 
@@ -630,9 +634,12 @@ function initPlaygroundFeed() {
     } else if (it.kind === 'video') {
       card.className += ' pgf-video';
       var v = document.createElement('video');
-      v.muted = true; v.loop = true; v.playsInline = true;
+      v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
       v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
-      v.setAttribute('preload', 'none'); v.draggable = false;
+      v.setAttribute('muted', ''); v.setAttribute('autoplay', '');
+      v.setAttribute('preload', 'metadata');
+      v.setAttribute('poster', it.data.src.replace('playlist.m3u8', 'thumbnail.jpg'));
+      v.draggable = false;
       card.appendChild(v);
       videoEls.push({ el: v, src: it.data.src, inited: false });
     } else {
@@ -645,17 +652,17 @@ function initPlaygroundFeed() {
     grid.appendChild(card);
   }
   feed.appendChild(grid);
-
-  var foot = document.createElement('div');
-  foot.className = 'pgf-foot';
-  foot.innerHTML =
-    '<div class="pgf-foot-line">that’s the playground.</div>' +
-    '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>';
-  feed.appendChild(foot);
-
   canvas.appendChild(feed);
 
-  // play videos only while they're on screen
+  // fixed, always-centred hero that blends over the cards as they scroll
+  var hero = document.createElement('div');
+  hero.className = 'pgf-hero-fixed';
+  hero.innerHTML =
+    '<h1 class="pgf-title">never stop playing &lt;3</h1>' +
+    '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>';
+  canvas.appendChild(hero);
+
+  // videos show their poster immediately; play only while on screen
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries) {
       for (var e = 0; e < entries.length; e++) {
