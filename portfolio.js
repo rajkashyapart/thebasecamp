@@ -204,67 +204,119 @@ var projects = [
 var SPK_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><line x1="16.5" y1="9.5" x2="21.5" y2="14.5"/><line x1="21.5" y1="9.5" x2="16.5" y2="14.5"/></svg>';
 var SPK_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.6a5 5 0 0 1 0 6.8"/><path d="M18.6 6a8 8 0 0 1 0 12"/></svg>';
 
-// Build the reel sequence: interleave pieces across clients (no long
-// single-client runs) with the personal work sprinkled throughout.
-// Deterministic — each client's pieces are spread evenly across [0,1).
+// Pinned opener — the first 14 pieces, in this exact order (by video id).
+var FIXED_HEAD = [
+  '2b6ecca6-96e1-4890-9170-1f60ef2ad41b', // Kaheen
+  '4c09e742-2c9f-4c7d-918a-4b05c8e30f53', // The Fresh Factory
+  'a900299f-5c7c-45ea-9f2f-5d076c4a019f', // Insanely Good Coffee
+  '98cf5a99-3e54-4e29-add8-c3cbd0967426', // Upsurge Labs
+  '46151b93-4758-4055-ab4d-944a470f7c17', // Upsurge Labs
+  'fddf2783-d99b-440c-b433-0dbcbad3a07c', // Copper + Cloves
+  'f7b91a7c-a8b3-46d1-8465-bd9b134db124', // Insanely Good Coffee
+  '7c61d479-6e79-4c32-be60-4d43444bc460', // Copper + Cloves
+  'a0bd786e-b67c-4c1f-b53a-2a25e3542227', // Upsurge Labs
+  '6f7637de-1352-4010-b03d-9c22c6975142', // The Fresh Factory
+  'fb502bdb-185e-4356-89f0-b9be31eb77cf', // Kaheen
+  'e163b28d-cddf-4db6-8b01-de14a2bd00f3', // Indian Cacao Festival
+  '3be08a4b-12b5-429c-81b5-3d7f037274d3', // The Fresh Factory
+  'bbdcdb02-5fba-4216-8c3b-3f4b21d27e6c'  // Indian Cacao Festival
+];
+
+function slideGuid(s) {
+  var m = s.src.match(/\/([0-9a-f-]{36})\/playlist/);
+  return m ? m[1] : null;
+}
+
+function shuffle(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
+}
+
+// Arrange pieces so no two same-client pieces sit adjacent (most-frequent
+// -first greedy — guarantees no adjacency when no client exceeds half).
+// Randomised: groups shuffled, ties broken at random. `avoidFirst` keeps
+// the opening piece off a given client (e.g. the last pinned piece).
+function weave(items, avoidFirst) {
+  var groups = {}, keys = [];
+  for (var i = 0; i < items.length; i++) {
+    var n = items[i].name;
+    if (!groups[n]) { groups[n] = []; keys.push(n); }
+    groups[n].push(items[i]);
+  }
+  for (var g = 0; g < keys.length; g++) shuffle(groups[keys[g]]);
+
+  var result = [], last = avoidFirst || null;
+  while (result.length < items.length) {
+    var best = -1, cands = [];
+    for (var k = 0; k < keys.length; k++) {
+      var len = groups[keys[k]].length;
+      if (!len || keys[k] === last) continue;
+      if (len > best) { best = len; cands = [keys[k]]; }
+      else if (len === best) cands.push(keys[k]);
+    }
+    var pick;
+    if (cands.length) {
+      pick = cands[Math.floor(Math.random() * cands.length)];
+    } else {
+      for (var k2 = 0; k2 < keys.length; k2++) {
+        if (groups[keys[k2]].length) { pick = keys[k2]; break; }
+      }
+    }
+    result.push(groups[pick].pop());
+    last = pick;
+  }
+  return result;
+}
+
+// Reel sequence: a pinned 14-piece opener, then the remaining client work
+// shuffled (randomised each load), with the personal work held mostly until
+// after client work is over — only a few pieces subtly scattered into it.
 function buildSlideData() {
-  // one bucket per project (skip empty placeholders)
-  var buckets = [];
+  var all = [];
   for (var p = 0; p < projects.length; p++) {
     var proj = projects[p];
-    var items = [];
     for (var i = 0; i < proj.items.length; i++) {
       var it = proj.items[i];
       if (!it.src) continue;
-      items.push({
-        type: it.type,
-        src: it.src,
-        name: proj.name,
-        sub: proj.subtitle,
-        cat: proj.category,
+      all.push({
+        type: it.type, src: it.src, name: proj.name,
+        sub: proj.subtitle, cat: proj.category,
         playground: !!proj.playgroundLink
       });
     }
-    if (items.length) buckets.push(items);
   }
 
-  // spread each bucket evenly, then merge by position
-  var weighted = [];
-  for (var b = 0; b < buckets.length; b++) {
-    var bk = buckets[b];
-    for (var j = 0; j < bk.length; j++) {
-      weighted.push({ key: (j + 0.5) / bk.length, bk: b, slide: bk[j] });
-    }
-  }
-  weighted.sort(function(a, c) {
-    if (a.key !== c.key) return a.key - c.key;
-    return a.bk - c.bk;
-  });
-
-  var seq = [];
-  for (var w = 0; w < weighted.length; w++) seq.push(weighted[w].slide);
-
-  // open on client work, not a personal frame
-  if (seq.length && seq[0].cat === 'personal') {
-    for (var f = 1; f < seq.length; f++) {
-      if (seq[f].cat !== 'personal') {
-        seq.unshift(seq.splice(f, 1)[0]);
-        break;
+  // pinned opener, in requested order
+  var head = [], used = {};
+  for (var h = 0; h < FIXED_HEAD.length; h++) {
+    for (var a = 0; a < all.length; a++) {
+      if (!used[a] && slideGuid(all[a]) === FIXED_HEAD[h]) {
+        head.push(all[a]); used[a] = true; break;
       }
     }
   }
 
-  // nudge apart any same-client neighbours the spread left adjacent
-  for (var k = 1; k < seq.length; k++) {
-    if (seq[k].name === seq[k - 1].name &&
-        k + 1 < seq.length &&
-        seq[k + 1].name !== seq[k].name &&
-        seq[k + 1].name !== seq[k - 1].name) {
-      var tmp = seq[k]; seq[k] = seq[k + 1]; seq[k + 1] = tmp;
-    }
+  // everything else, split client vs personal
+  var restClient = [], restPersonal = [];
+  for (var r = 0; r < all.length; r++) {
+    if (used[r]) continue;
+    if (all[r].cat === 'personal') restPersonal.push(all[r]);
+    else restClient.push(all[r]);
   }
 
-  return seq;
+  shuffle(restPersonal);
+
+  // subtly scatter a few personal pieces into the client run; the rest
+  // (the majority) come after client work is over.
+  var scatterN = Math.min(3, restPersonal.length);
+  var scatter = restPersonal.splice(0, scatterN);
+  var headLast = head.length ? head[head.length - 1].name : null;
+  var clientRun = weave(restClient.concat(scatter), headLast);
+
+  return head.concat(clientRun, restPersonal);
 }
 
 var SLIDES = [];
