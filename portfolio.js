@@ -204,15 +204,19 @@ var projects = [
 var SPK_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><line x1="16.5" y1="9.5" x2="21.5" y2="14.5"/><line x1="21.5" y1="9.5" x2="16.5" y2="14.5"/></svg>';
 var SPK_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.6a5 5 0 0 1 0 6.8"/><path d="M18.6 6a8 8 0 0 1 0 12"/></svg>';
 
-// Flatten projects (in order) into slides; skip empty placeholders.
+// Build the reel sequence: interleave pieces across clients (no long
+// single-client runs) with the personal work sprinkled throughout.
+// Deterministic — each client's pieces are spread evenly across [0,1).
 function buildSlideData() {
-  var out = [];
+  // one bucket per project (skip empty placeholders)
+  var buckets = [];
   for (var p = 0; p < projects.length; p++) {
     var proj = projects[p];
+    var items = [];
     for (var i = 0; i < proj.items.length; i++) {
       var it = proj.items[i];
       if (!it.src) continue;
-      out.push({
+      items.push({
         type: it.type,
         src: it.src,
         name: proj.name,
@@ -221,8 +225,46 @@ function buildSlideData() {
         playground: !!proj.playgroundLink
       });
     }
+    if (items.length) buckets.push(items);
   }
-  return out;
+
+  // spread each bucket evenly, then merge by position
+  var weighted = [];
+  for (var b = 0; b < buckets.length; b++) {
+    var bk = buckets[b];
+    for (var j = 0; j < bk.length; j++) {
+      weighted.push({ key: (j + 0.5) / bk.length, bk: b, slide: bk[j] });
+    }
+  }
+  weighted.sort(function(a, c) {
+    if (a.key !== c.key) return a.key - c.key;
+    return a.bk - c.bk;
+  });
+
+  var seq = [];
+  for (var w = 0; w < weighted.length; w++) seq.push(weighted[w].slide);
+
+  // open on client work, not a personal frame
+  if (seq.length && seq[0].cat === 'personal') {
+    for (var f = 1; f < seq.length; f++) {
+      if (seq[f].cat !== 'personal') {
+        seq.unshift(seq.splice(f, 1)[0]);
+        break;
+      }
+    }
+  }
+
+  // nudge apart any same-client neighbours the spread left adjacent
+  for (var k = 1; k < seq.length; k++) {
+    if (seq[k].name === seq[k - 1].name &&
+        k + 1 < seq.length &&
+        seq[k + 1].name !== seq[k].name &&
+        seq[k + 1].name !== seq[k - 1].name) {
+      var tmp = seq[k]; seq[k] = seq[k + 1]; seq[k + 1] = tmp;
+    }
+  }
+
+  return seq;
 }
 
 var SLIDES = [];
