@@ -688,9 +688,28 @@ function initPlaygroundFeed() {
     '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>';
   canvas.appendChild(hero);
 
-  // only 3 videos — autoplay all of them immediately, muted, looping.
-  // playing from the start means iOS never shows its paused play-button.
-  for (var z = 0; z < videoEls.length; z++) { initFeedVideo(videoEls[z]); videoEls[z].inited = true; }
+  // Autoplay muted+looping as each video scrolls into view. iOS won't start
+  // an off-screen muted video, so play on intersection (a touch early via
+  // rootMargin) rather than all-at-once on load.
+  if ('IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(function(entries) {
+      for (var e = 0; e < entries.length; e++) {
+        var tgt = entries[e].target, rec = null;
+        for (var k = 0; k < videoEls.length; k++) { if (videoEls[k].el === tgt) { rec = videoEls[k]; break; } }
+        if (!rec) continue;
+        if (entries[e].isIntersecting) {
+          if (!rec.inited) { initFeedVideo(rec); rec.inited = true; }
+          var p = rec.el.play();
+          if (p && p.catch) p.catch(function(){});
+        } else {
+          rec.el.pause();
+        }
+      }
+    }, { root: canvas, threshold: 0.2, rootMargin: '0px 0px 300px 0px' });
+    for (var q = 0; q < videoEls.length; q++) vio.observe(videoEls[q].el);
+  } else {
+    for (var z = 0; z < videoEls.length; z++) { initFeedVideo(videoEls[z]); videoEls[z].inited = true; }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

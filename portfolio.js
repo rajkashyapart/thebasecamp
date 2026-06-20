@@ -451,15 +451,20 @@ function activate(idx) {
   for (var i = 0; i < slideObjs.length; i++) {
     var o = slideObjs[i];
     if (!o.video) continue;
+    var dist = Math.abs(i - idx);
     if (i === idx) {
       ensureVideo(o);
       o.video.muted = !audioOn;
       var pr = o.video.play();
       if (pr && pr.catch) pr.catch(function(){});
+    } else if (dist === 1) {
+      ensureVideo(o);          // preload neighbour so it's buffered before you land
+      o.video.pause();
+      o.video.muted = true;
     } else {
       o.video.pause();
       o.video.muted = true;
-      if (Math.abs(i - idx) > 1) teardownVideo(o);
+      teardownVideo(o);
     }
   }
   if (idx >= 2) hideHint();
@@ -470,8 +475,10 @@ function ensureVideo(o) {
   if (o.inited || !o.video) return;
   o.inited = true;
   var v = o.video, src = o.src;
+  v.preload = 'auto';
   if (v.canPlayType('application/vnd.apple.mpegurl')) {
     v.src = src;
+    try { v.load(); } catch (e) {}
   } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
     var hls = new Hls({ enableWorker: true, startLevel: -1, maxBufferLength: 12 });
     hls.loadSource(src);
