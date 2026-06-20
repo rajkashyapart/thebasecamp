@@ -40,7 +40,7 @@ var videoCards = [
 ];
 
 var textCards = [
-  {x:-440, y:-200, w:200, h:110, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", dark:true},
+  {x:-440, y:-200, w:200, h:110, rot:-1.0, bg:'#3a8597', headline:"i guess you can't defeat someone who's just having fun :')", dark:true},
   {x:480, y:-140, w:190, h:100, rot:0.8, bg:'#6098a3', headline:'why do you think in the ways you think?', dark:true},
   {x:340, y:340, w:180, h:100, rot:-0.6, bg:'#ff7bac', headline:"🍡 i hope you win", dark:true}
 ];
