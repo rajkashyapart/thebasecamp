@@ -61,43 +61,7 @@ var pgGlyphs = [
 // Mobile: replace card positions with viewport-friendly layout (fits 390px wide phone)
 var isMobile = window.innerWidth < 640;
 
-if (isMobile) {
-  // Photo cards -- two vertical zones, max ~8% overlap between any two cards.
-  // Top zone (y < -148): cards staggered horizontally across 390px viewport.
-  // Bottom zone (y > 148): mirrored logic below hero.
-  photoCards = [
-    {x:-150, y:-385, w:145, h:145, rot:-1.0, src:photoCards[0].src},
-    {x:28,   y:-360, w:110, h:110, rot:1.5,  src:photoCards[1].src},
-    {x:155,  y:-310, w:125, h:83,  rot:-0.8, src:photoCards[2].src},
-    {x:-195, y:-232, w:90,  h:60,  rot:-1.2, src:photoCards[3].src},
-    {x:168,  y:-222, w:110, h:72,  rot:0.8,  src:photoCards[4].src},
-    {x:-195, y:152,  w:90,  h:60,  rot:-0.8, src:photoCards[5].src},
-    {x:162,  y:148,  w:110, h:72,  rot:2.0,  src:photoCards[6].src},
-    {x:-148, y:222,  w:130, h:87,  rot:-0.5, src:photoCards[7].src},
-    {x:25,   y:235,  w:90,  h:60,  rot:1.0,  src:photoCards[8].src},
-    {x:145,  y:295,  w:115, h:115, rot:-1.8, src:photoCards[9].src},
-    {x:-60,  y:370,  w:100, h:100, rot:1.4,  src:photoCards[13].src}
-  ];
-  videoCards = [
-    {x:-170, y:-158, w:120, h:90,  rot:0.7, src:videoCards[0].src},
-    {x:170,  y:168,  w:110, h:82,  rot:-1.1, src:videoCards[1].src},
-    {x:-10,  y:420,  w:130, h:98,  rot:-0.4, src:videoCards[2].src}
-  ];
-  // Text cards -- no card overlaps more than 8% with any photo card
-  textCards = [
-    {x:35,   y:-225, w:135, h:78, rot:-1.0, bg:'#3a8597', headline:"you can't defeat someone who's just having fun :')", dark:true},
-    {x:150,  y:228,  w:130, h:70, rot:0.8,  bg:'#6098a3', headline:'why do you think in the ways you think?', dark:true},
-    {x:-155, y:315,  w:130, h:70, rot:-0.6, bg:'#ff7bac', headline:"🍡 i hope you win", dark:true}
-  ];
-  // Glyphs -- organically scattered. Near-hero glyphs at y:+-118-132 (just outside hero zone).
-  // Far glyphs reach toward canvas edges for depth.
-  pgGlyphs = [
-    {svg:G_STICK, cls:'', pos:[[-78,-122],[82,-118],[-164,126],[134,132],[-90,-328],[74,305]]},
-    {svg:G_EYE,   cls:'g', pos:[[-48,-345],[98,-302],[-190,110],[200,100],[-18,328],[112,368]]},
-    {svg:G_STICK, cls:'b', pos:[[212,-160],[-220,-182],[210,188],[-214,200]]},
-    {svg:G_EYE,   cls:'',  pos:[[-238,-190],[232,-114],[-50,372],[80,-405]]}
-  ];
-}
+// Mobile uses a vertical scroll feed (see initPlaygroundFeed) — no canvas reposition.
 
 // Float animation index assignment (cycles 0-7)
 var pgFloatIdx = 0;
@@ -597,4 +561,124 @@ function initPlayground() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() { initPlayground(); });
+// ============================================================
+// MOBILE: vertical scroll feed (no drag/pan world).
+// Hero on top, then a 2-column scrapbook feed of photos, videos
+// and text cards, closing on a CTA. Desktop is untouched.
+// ============================================================
+function initFeedVideo(rec) {
+  var v = rec.el, src = rec.src;
+  if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = src; v.play().catch(function(){});
+  } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+    var hls = new Hls({ enableWorker: true, startLevel: -1, maxBufferLength: 10 });
+    hls.loadSource(src); hls.attachMedia(v);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() { v.play().catch(function(){}); });
+  } else {
+    v.src = src;
+  }
+}
+
+function initPlaygroundFeed() {
+  var canvas = document.getElementById('pg-canvas');
+  if (!canvas || document.getElementById('pg-feed')) return;
+
+  var feed = document.createElement('div');
+  feed.id = 'pg-feed';
+
+  var hero = document.createElement('div');
+  hero.className = 'pgf-hero';
+  hero.innerHTML =
+    '<h1 class="pgf-title">never stop playing &lt;3</h1>' +
+    '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>' +
+    '<div class="pgf-cue" aria-hidden="true"><span></span></div>';
+  feed.appendChild(hero);
+
+  var grid = document.createElement('div');
+  grid.className = 'pgf-grid';
+
+  // weave photos + videos + text cards into a feed order
+  var photos = photoCards.slice();
+  var vids = videoCards.slice();
+  var texts = textCards.slice();
+  var items = [];
+  var pi = 0, vi = 0, ti = 0, n = 0;
+  while (pi < photos.length || vi < vids.length || ti < texts.length) {
+    if (pi < photos.length) items.push({ kind: 'photo', data: photos[pi++] });
+    if (pi < photos.length) items.push({ kind: 'photo', data: photos[pi++] });
+    if (n % 2 === 0 && ti < texts.length) items.push({ kind: 'text', data: texts[ti++] });
+    else if (vi < vids.length) items.push({ kind: 'video', data: vids[vi++] });
+    else if (ti < texts.length) items.push({ kind: 'text', data: texts[ti++] });
+    n++;
+  }
+
+  var videoEls = [];
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    var card = document.createElement('div');
+    var rot = ((i % 2 === 0) ? 1 : -1) * (0.7 + (i % 3) * 0.35);
+    card.className = 'pgf-item';
+    card.style.setProperty('--rot', rot.toFixed(2) + 'deg');
+    card.style.animationDelay = (Math.min(i, 12) * 0.04) + 's';
+
+    if (it.kind === 'photo') {
+      card.className += ' pgf-photo';
+      var img = document.createElement('img');
+      img.loading = 'lazy'; img.draggable = false; img.alt = '';
+      img.src = it.data.src;
+      card.appendChild(img);
+    } else if (it.kind === 'video') {
+      card.className += ' pgf-video';
+      var v = document.createElement('video');
+      v.muted = true; v.loop = true; v.playsInline = true;
+      v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('preload', 'none'); v.draggable = false;
+      card.appendChild(v);
+      videoEls.push({ el: v, src: it.data.src, inited: false });
+    } else {
+      card.className += ' pgf-text';
+      card.style.background = it.data.bg;
+      var sp = document.createElement('span');
+      sp.textContent = it.data.headline;
+      card.appendChild(sp);
+    }
+    grid.appendChild(card);
+  }
+  feed.appendChild(grid);
+
+  var foot = document.createElement('div');
+  foot.className = 'pgf-foot';
+  foot.innerHTML =
+    '<div class="pgf-foot-line">that’s the playground.</div>' +
+    '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>';
+  feed.appendChild(foot);
+
+  canvas.appendChild(feed);
+
+  // play videos only while they're on screen
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      for (var e = 0; e < entries.length; e++) {
+        var rec = null;
+        for (var k = 0; k < videoEls.length; k++) {
+          if (videoEls[k].el === entries[e].target) { rec = videoEls[k]; break; }
+        }
+        if (!rec) continue;
+        if (entries[e].isIntersecting) {
+          if (!rec.inited) { initFeedVideo(rec); rec.inited = true; }
+          rec.el.play().catch(function(){});
+        } else {
+          rec.el.pause();
+        }
+      }
+    }, { root: canvas, threshold: 0.4 });
+    for (var q = 0; q < videoEls.length; q++) io.observe(videoEls[q].el);
+  } else {
+    for (var z = 0; z < videoEls.length; z++) { initFeedVideo(videoEls[z]); videoEls[z].inited = true; }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (isMobile) initPlaygroundFeed();
+  else initPlayground();
+});
