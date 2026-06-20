@@ -88,11 +88,13 @@
     logo.classList.add('waiting');
   }, 150);
 
-  // Absolute fallback: shorter on mobile where autoplay may need a tap
-  var isMobile = window.innerWidth < 768;
+  // Absolute fallback (last-resort safety only) — same on every device so the
+  // intro plays through and transitions on its real 'ended' event, like desktop.
+  // Phones buffer the HLS for a few seconds before playback, so a short mobile
+  // timer used to cut the video off early.
   var absoluteFallback = setTimeout(function() {
     if (!videoEnded) { videoEnded = true; doEndTransition(); }
-  }, isMobile ? 8000 : 15000);
+  }, 15000);
 
   // Schedule end based on real video duration + current playback position
   function scheduleEnd(currentTime, duration) {
