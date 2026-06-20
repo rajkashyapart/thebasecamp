@@ -1913,21 +1913,21 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   }
   .pgf-hero-fixed .pgf-title{
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
-    font-size:clamp(38px,13vw,60px); line-height:1.02; letter-spacing:0.01em;
+    font-size:clamp(24px,7vw,36px); line-height:1.04; letter-spacing:0.01em;
     margin:0; color:#fff;
   }
   .pgf-hero-fixed .pgf-cta{
-    display:inline-block; margin-top:18px; pointer-events:auto;
+    display:inline-block; margin-top:13px; pointer-events:auto;
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-    font-size:21px; color:#fff; text-decoration:none;
+    font-size:17px; color:#fff; text-decoration:none;
     border-bottom:1px solid rgba(255,255,255,0.55); padding-bottom:2px;
   }
   .pgf-hero-fixed .pgf-cta:active{ transform:scale(0.97); }
 
   /* feed grid — 2-col masonry with full-bleed breaks */
-  .pgf-grid{ column-count:2; column-gap:10px; padding:60px 12px 24vh; }
+  .pgf-grid{ column-count:2; column-gap:5px; padding:54px 8px 22vh; }
   .pgf-item{
-    break-inside:avoid; margin:0 0 10px; border-radius:7px; overflow:hidden;
+    break-inside:avoid; margin:0 0 -6px; border-radius:7px; overflow:hidden;
     box-shadow:3px 6px 22px rgba(30,25,20,0.13), 0 1px 4px rgba(30,25,20,0.05);
     transform:rotate(var(--rot,0deg));
     opacity:0; animation:pgfIn 0.5s cubic-bezier(0.23,1,0.32,1) both;
@@ -1945,11 +1945,11 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   }
   /* full-bleed wide moments that break the grid */
   .pgf-span{
-    column-span:all; margin:4px -12px 14px; border-radius:0; box-shadow:none;
+    column-span:all; margin:0 -8px 4px; border-radius:0; box-shadow:none;
   }
   /* scattered doodle glyphs (eyes + stick figures, like desktop) */
   .pgf-glyph{
-    break-inside:avoid; margin:0 0 10px; padding:12px 0;
+    break-inside:avoid; margin:0 0 -4px; padding:8px 0;
     display:flex; align-items:center; justify-content:center;
     color:var(--ink); opacity:0.3; transform:rotate(var(--rot,0deg));
   }
