@@ -1902,7 +1902,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   #pg-world{ display:none; }
   .pg-recenter{ display:none; }
 
-  #pg-feed{ position:relative; z-index:2; }
+  #pg-feed{ position:relative; z-index:2; padding:54px 0 22vh; }
 
   /* fixed, always-centred hero — blends over the scrolling cards */
   .pgf-hero-fixed{
@@ -1924,11 +1924,20 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   }
   .pgf-hero-fixed .pgf-cta:active{ transform:scale(0.97); }
 
-  /* feed grid — 2-col masonry with full-bleed breaks */
-  .pgf-grid{ column-count:2; column-gap:5px; padding:54px 8px 22vh; }
+  /* editorial rows — varied width, everything floats, comfortable gaps */
+  .pgf-row{ display:flex; align-items:flex-start; margin-bottom:22px; }
+  .pgf-solo-l{ justify-content:flex-start; padding-left:20px; }
+  .pgf-solo-r{ justify-content:flex-end; padding-right:20px; }
+  .pgf-solo-c, .pgf-wide, .pgf-glyphrow{ justify-content:center; }
+  .pgf-pair{ justify-content:center; gap:16px; padding:0 20px; }
+  .pgf-solo-l .pgf-item, .pgf-solo-r .pgf-item{ width:64%; }
+  .pgf-solo-c .pgf-item{ width:70%; }
+  .pgf-wide .pgf-item{ width:86%; }
+  .pgf-pair .pgf-item{ flex:1 1 0; min-width:0; }
+
   .pgf-item{
-    break-inside:avoid; margin:0 0 -6px; border-radius:7px; overflow:hidden;
-    box-shadow:3px 6px 22px rgba(30,25,20,0.13), 0 1px 4px rgba(30,25,20,0.05);
+    border-radius:7px; overflow:hidden;
+    box-shadow:4px 8px 26px rgba(30,25,20,0.14), 0 1px 5px rgba(30,25,20,0.06);
     transform:rotate(var(--rot,0deg));
     opacity:0; animation:pgfIn 0.5s cubic-bezier(0.23,1,0.32,1) both;
   }
@@ -1937,23 +1946,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .pgf-video video{ height:100%; object-fit:cover; }
   .pgf-text{
     aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
-    padding:16px; text-align:center;
+    padding:18px; text-align:center;
   }
   .pgf-text span{
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
     font-size:clamp(15px,4.6vw,20px); line-height:1.22; color:#f5f2ee;
   }
-  /* full-bleed wide moments that break the grid */
-  .pgf-span{
-    column-span:all; margin:0 -8px 4px; border-radius:0; box-shadow:none;
-  }
   /* scattered doodle glyphs (eyes + stick figures, like desktop) */
   .pgf-glyph{
-    break-inside:avoid; margin:0 0 -4px; padding:8px 0;
-    display:flex; align-items:center; justify-content:center;
+    display:flex; align-items:center; justify-content:center; padding:6px 0;
     color:var(--ink); opacity:0.3; transform:rotate(var(--rot,0deg));
   }
-  .pgf-glyph svg{ width:26px; height:auto; }
+  .pgf-glyph svg{ width:28px; height:auto; }
   @keyframes pgfIn{
     from{ opacity:0; transform:rotate(var(--rot,0deg)) translateY(14px); }
     to{ opacity:1; transform:rotate(var(--rot,0deg)) translateY(0); }

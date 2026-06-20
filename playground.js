@@ -586,72 +586,98 @@ function initPlaygroundFeed() {
   var feed = document.createElement('div');
   feed.id = 'pg-feed';
 
-  var grid = document.createElement('div');
-  grid.className = 'pgf-grid';
-
-  // weave photos + videos + text cards (+ scattered glyphs) into the feed
+  // weave photos + videos + text cards into a single ordered stream
   var photos = photoCards.slice();
   var vids = videoCards.slice();
   var texts = textCards.slice();
-  var items = [];
-  var pi = 0, vi = 0, ti = 0, n = 0, photoSeen = 0;
+  var order = [];
+  var pi = 0, vi = 0, ti = 0, n = 0;
   while (pi < photos.length || vi < vids.length || ti < texts.length) {
-    if (pi < photos.length) { items.push({ kind: 'photo', data: photos[pi++], span: (photoSeen % 4 === 0) }); photoSeen++; }
-    if (pi < photos.length) { items.push({ kind: 'photo', data: photos[pi++], span: false }); photoSeen++; }
-    if (n % 2 === 0 && ti < texts.length) items.push({ kind: 'text', data: texts[ti++] });
-    else if (vi < vids.length) items.push({ kind: 'video', data: vids[vi++] });
-    else if (ti < texts.length) items.push({ kind: 'text', data: texts[ti++] });
-    if (n === 1 || n === 3 || n === 5 || n === 7) items.push({ kind: 'glyph', svg: (n % 2 ? G_EYE : G_STICK) });
+    if (pi < photos.length) order.push({ kind: 'photo', data: photos[pi++] });
+    if (pi < photos.length) order.push({ kind: 'photo', data: photos[pi++] });
+    if (n % 2 === 0 && ti < texts.length) order.push({ kind: 'text', data: texts[ti++] });
+    else if (vi < vids.length) order.push({ kind: 'video', data: vids[vi++] });
+    else if (ti < texts.length) order.push({ kind: 'text', data: texts[ti++] });
     n++;
   }
 
-  var videoEls = [];
-  for (var i = 0; i < items.length; i++) {
-    var it = items[i];
+  // editorial rows: mostly single cards (varied width + offset), the odd pair/wide.
+  // everything floats with margins; tall videos never go full-width.
+  var pattern = ['solo-l', 'pair', 'solo-r', 'wide', 'solo-c', 'pair', 'solo-r', 'solo-l', 'wide', 'pair', 'solo-c'];
+  var rows = [];
+  var oi = 0, pc = 0;
+  while (oi < order.length) {
+    var t = pattern[pc % pattern.length]; pc++;
+    if (t === 'pair' && oi + 1 < order.length) {
+      rows.push({ type: 'pair', items: [order[oi], order[oi + 1]] }); oi += 2;
+    } else if (t === 'wide') {
+      rows.push({ type: order[oi].kind === 'video' ? 'solo-c' : 'wide', items: [order[oi]] }); oi += 1;
+    } else {
+      rows.push({ type: (t === 'pair' ? 'solo-c' : t), items: [order[oi]] }); oi += 1;
+    }
+  }
 
-    if (it.kind === 'glyph') {
+  // scatter a few glyph rows between the cards
+  var glyphAt = { 2: G_EYE, 5: G_STICK, 8: G_EYE, 11: G_STICK };
+  var stream = [];
+  for (var ri = 0; ri < rows.length; ri++) {
+    stream.push(rows[ri]);
+    if (glyphAt[ri]) stream.push({ type: 'glyph', svg: glyphAt[ri] });
+  }
+
+  var videoEls = [];
+  var ci = 0;
+  for (var r = 0; r < stream.length; r++) {
+    var row = stream[r];
+
+    if (row.type === 'glyph') {
+      var gr = document.createElement('div');
+      gr.className = 'pgf-row pgf-glyphrow';
       var gl = document.createElement('div');
       gl.className = 'pgf-glyph';
-      gl.style.setProperty('--rot', (((i % 2) ? -1 : 1) * (5 + (i % 5))) + 'deg');
-      gl.innerHTML = it.svg;
-      grid.appendChild(gl);
+      gl.style.setProperty('--rot', (((r % 2) ? -1 : 1) * (6 + (r % 5))) + 'deg');
+      gl.innerHTML = row.svg;
+      gr.appendChild(gl);
+      feed.appendChild(gr);
       continue;
     }
 
-    var card = document.createElement('div');
-    var rot = it.span ? 0 : (((i % 2 === 0) ? 1 : -1) * (0.7 + (i % 3) * 0.35));
-    card.className = 'pgf-item';
-    if (it.span) card.className += ' pgf-span';
-    card.style.setProperty('--rot', rot.toFixed(2) + 'deg');
-    card.style.animationDelay = (Math.min(i, 12) * 0.04) + 's';
+    var rowEl = document.createElement('div');
+    rowEl.className = 'pgf-row pgf-' + row.type;
+    for (var k = 0; k < row.items.length; k++) {
+      var it = row.items[k];
+      var card = document.createElement('div');
+      var rot = ((ci % 2 === 0) ? 1 : -1) * (0.7 + (ci % 3) * 0.35);
+      card.className = 'pgf-item pgf-' + it.kind;
+      card.style.setProperty('--rot', rot.toFixed(2) + 'deg');
+      card.style.animationDelay = (Math.min(ci, 12) * 0.04) + 's';
+      ci++;
 
-    if (it.kind === 'photo') {
-      card.className += ' pgf-photo';
-      var img = document.createElement('img');
-      img.loading = 'lazy'; img.draggable = false; img.alt = '';
-      img.src = it.data.src;
-      card.appendChild(img);
-    } else if (it.kind === 'video') {
-      card.className += ' pgf-video';
-      var v = document.createElement('video');
-      v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
-      v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
-      v.setAttribute('muted', ''); v.setAttribute('autoplay', '');
-      v.setAttribute('preload', 'metadata');
-      v.setAttribute('poster', it.data.src.replace('playlist.m3u8', 'thumbnail.jpg'));
-      v.draggable = false;
-      card.appendChild(v);
-      videoEls.push({ el: v, src: it.data.src, inited: false });
-    } else {
-      card.className += ' pgf-text';
-      card.style.background = it.data.bg;
-      var sp = document.createElement('span');
-      sp.textContent = it.data.headline;
-      card.appendChild(sp);
+      if (it.kind === 'photo') {
+        var img = document.createElement('img');
+        img.loading = 'lazy'; img.draggable = false; img.alt = '';
+        img.src = it.data.src;
+        card.appendChild(img);
+      } else if (it.kind === 'video') {
+        var v = document.createElement('video');
+        v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+        v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
+        v.setAttribute('muted', ''); v.setAttribute('autoplay', '');
+        v.setAttribute('preload', 'metadata');
+        v.setAttribute('poster', it.data.src.replace('playlist.m3u8', 'thumbnail.jpg'));
+        v.draggable = false;
+        card.appendChild(v);
+        videoEls.push({ el: v, src: it.data.src, inited: false });
+      } else {
+        card.style.background = it.data.bg;
+        var sp = document.createElement('span');
+        sp.textContent = it.data.headline;
+        card.appendChild(sp);
+      }
+      rowEl.appendChild(card);
     }
-    grid.appendChild(card);
+    feed.appendChild(rowEl);
   }
-  feed.appendChild(grid);
   canvas.appendChild(feed);
 
   // fixed, always-centred hero that blends over the cards as they scroll
