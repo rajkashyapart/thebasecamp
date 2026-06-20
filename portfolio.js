@@ -1,49 +1,79 @@
 // portfolio.js — mosaic grid + project windows
 // ES5 syntax to match site convention
 
+var VZ = 'https://vz-6f9a60bb-593.b-cdn.net/';
+var PB = 'https://picturesbyrajj.b-cdn.net/';
+function vid(id) { return VZ + id + '/playlist.m3u8'; }
+
 var projects = [
-  // --- CONTENT & PERSONAL BRANDING ---
+  // --- CLIENT WORK ---
   {
     id: 'sarah-edwards',
-    name: 'Sarah Edwards',
-    subtitle: 'Copper + Cloves',
+    name: 'Copper + Cloves',
+    subtitle: 'Sarah Edwards',
     category: 'content',
-    description: 'Content direction and personal branding for Sarah Edwards of Copper + Cloves \u2014 building a voice that feels as warm as the brand itself.',
+    description: 'Content direction and personal branding for Sarah Edwards of Copper + Cloves \u2014 a voice as warm as the brand itself.',
     items: [
-      { type: 'photo', src: '', size: 'big' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'tall' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'wide' },
-      { type: 'photo', src: '', size: 'reg' }
+      { type: 'video', src: vid('fddf2783-d99b-440c-b433-0dbcbad3a07c'), size: 'big' },
+      { type: 'video', src: vid('7c61d479-6e79-4c32-be60-4d43444bc460'), size: 'tall' },
+      { type: 'video', src: vid('45b55665-fbc0-40a2-b107-8cc2392df7d5'), size: 'reg' }
     ]
   },
   {
     id: 'upsurge-labs',
     name: 'Upsurge Labs',
-    subtitle: 'Tech Content',
+    subtitle: 'Sowmay Jain',
     category: 'content',
-    description: 'Content strategy and production for Upsurge Labs \u2014 making tech feel human.',
+    description: 'Founder-led content for Sowmay Jain of Upsurge Labs \u2014 a consistent reel series built around positioning, authority, and inbound.',
     items: [
-      { type: 'photo', src: '', size: 'wide' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'tall' },
-      { type: 'photo', src: '', size: 'reg' }
+      { type: 'video', src: vid('46151b93-4758-4055-ab4d-944a470f7c17'), size: 'tall' },
+      { type: 'video', src: vid('eb2d2262-f579-4b69-9ea3-5b4db0bcac2c'), size: 'reg' },
+      { type: 'video', src: vid('94a35c54-1a17-4274-9db2-1077df921326'), size: 'tall' },
+      { type: 'video', src: vid('88d0078a-ec67-4871-87a7-0d4904ef56cf'), size: 'reg' },
+      { type: 'video', src: vid('71f04e11-d2eb-485a-85cb-6c0dbf02bb61'), size: 'big' },
+      { type: 'video', src: vid('70f608a1-a634-41cd-ab5d-73abba65b553'), size: 'tall' },
+      { type: 'video', src: vid('98cf5a99-3e54-4e29-add8-c3cbd0967426'), size: 'reg' },
+      { type: 'video', src: vid('a0bd786e-b67c-4c1f-b53a-2a25e3542227'), size: 'tall' },
+      { type: 'video', src: vid('f356a125-b8c7-4c72-8606-2fe40fe09a00'), size: 'reg' },
+      { type: 'video', src: vid('11a08b41-13fa-400f-9e9d-7d0bf2052acc'), size: 'tall' },
+      { type: 'video', src: vid('0eed0697-3383-40bf-a7a9-5891cb5f6fee'), size: 'wide' },
+      { type: 'video', src: vid('43c7b527-b655-42dc-8424-7826d3505517'), size: 'reg' }
     ]
   },
   {
     id: 'fresh-factory',
     name: 'The Fresh Factory',
-    subtitle: 'F&B Content',
-    category: 'content',
-    description: 'Brand content for The Fresh Factory \u2014 fresh produce, honest storytelling.',
+    subtitle: 'Prabhjot Dhami',
+    category: 'fnb',
+    description: 'F&amp;B content for Prabhjot Dhami of The Fresh Factory \u2014 fresh produce, honest storytelling.',
     items: [
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'wide' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'tall' }
+      { type: 'video', src: vid('253d1a6a-6912-4c6b-ad40-8371dfcb829e'), size: 'tall' },
+      { type: 'video', src: vid('4c09e742-2c9f-4c7d-918a-4b05c8e30f53'), size: 'reg' },
+      { type: 'video', src: vid('6f7637de-1352-4010-b03d-9c22c6975142'), size: 'wide' },
+      { type: 'video', src: vid('3be08a4b-12b5-429c-81b5-3d7f037274d3'), size: 'tall' }
+    ]
+  },
+  {
+    id: 'insanely-good-coffee',
+    name: 'Insanely Good Coffee',
+    subtitle: 'Aditya Kumar',
+    category: 'fnb',
+    description: 'Brand and product content for Aditya Kumar of Insanely Good Coffee.',
+    items: [
+      { type: 'video', src: vid('48daa49e-172d-4934-9c0d-1136cf223339'), size: 'tall' },
+      { type: 'video', src: vid('a900299f-5c7c-45ea-9f2f-5d076c4a019f'), size: 'reg' },
+      { type: 'video', src: vid('f7b91a7c-a8b3-46d1-8465-bd9b134db124'), size: 'wide' }
+    ]
+  },
+  {
+    id: 'kaheen',
+    name: 'Kaheen',
+    subtitle: 'Shashank Arora',
+    category: 'content',
+    description: 'Content and direction for Shashank Arora of Kaheen.',
+    items: [
+      { type: 'video', src: vid('2b6ecca6-96e1-4890-9170-1f60ef2ad41b'), size: 'tall' },
+      { type: 'video', src: vid('fb502bdb-185e-4356-89f0-b9be31eb77cf'), size: 'reg' }
     ]
   },
   // --- FOOD & BEVERAGE ---
@@ -91,6 +121,21 @@ var projects = [
   },
   // --- EVENTS ---
   {
+    id: 'indian-cacao',
+    name: 'Indian Cacao Festival',
+    subtitle: 'Patricia · Ketaki · Sneha',
+    category: 'events',
+    description: 'Festival content for Patricia, Ketaki &amp; Sneha — the Indian Cacao &amp; Craft Chocolate Festival.',
+    items: [
+      { type: 'video', src: vid('7badd2e0-7d8c-42db-98a1-57c78b3e29fb'), size: 'wide' },
+      { type: 'video', src: vid('af9add4d-4c87-4f42-99d3-49cc3837dd55'), size: 'reg' },
+      { type: 'video', src: vid('1a64e8e7-878c-43d7-a676-701aeb25bcea'), size: 'tall' },
+      { type: 'video', src: vid('bbdcdb02-5fba-4216-8c3b-3f4b21d27e6c'), size: 'reg' },
+      { type: 'video', src: vid('e163b28d-cddf-4db6-8b01-de14a2bd00f3'), size: 'big' },
+      { type: 'video', src: vid('c9daca30-8e21-4d64-9eeb-e1b54cf97447'), size: 'tall' }
+    ]
+  },
+  {
     id: 'ame-pashm',
     name: 'AME',
     subtitle: 'Pashm',
@@ -118,21 +163,34 @@ var projects = [
       { type: 'photo', src: '', size: 'wide' }
     ]
   },
-  // --- PERSONAL ---
+  // --- PERSONAL (uncurated.raj) ---
   {
     id: 'personal',
-    name: 'Personal',
-    subtitle: 'Photos',
+    name: 'uncurated.raj',
+    subtitle: 'Personal',
     category: 'personal',
     playgroundLink: true,
-    description: 'Photographs from life, wandering, and the in-between.',
+    description: 'Photographs and frames from life, wandering, and the in-between. this is uncurated.raj.',
     items: [
-      { type: 'photo', src: '', size: 'tall' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'wide' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'reg' },
-      { type: 'photo', src: '', size: 'big' }
+      { type: 'video', src: vid('8033cbca-5209-4e8f-b446-89f668359e16'), size: 'big' },
+      { type: 'photo', src: PB + '20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.jpg', size: 'tall' },
+      { type: 'photo', src: PB + '20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap102023raj.jpg', size: 'wide' },
+      { type: 'photo', src: PB + '20230907%20-%20IMG_1747%20-%20Raj%20Kashyap112023raj.jpg', size: 'reg' },
+      { type: 'photo', src: PB + '20230908%20-%20IMG_2075%20-%20Raj%20Kashyap122023raj.jpg', size: 'reg' },
+      { type: 'video', src: vid('a8317bc8-6c30-4e9a-a4c9-45afce91f3f1'), size: 'tall' },
+      { type: 'photo', src: PB + '20230908%20-%20IMG_2116%20-%20Raj%20Kashyap132023raj.jpg', size: 'tall' },
+      { type: 'photo', src: PB + 'an%20art%20village22019raj.jpg', size: 'wide' },
+      { type: 'photo', src: PB + 'green%20is%20the%20color42020raj.jpg', size: 'reg' },
+      { type: 'photo', src: PB + 'hault32020raj.jpg', size: 'big' },
+      { type: 'photo', src: PB + 'IMG_1788-Enhanced-NR22022raj62022raj.jpg', size: 'reg' },
+      { type: 'video', src: vid('b9ccf117-6681-4d1e-8015-9fbf6cec778e'), size: 'reg' },
+      { type: 'photo', src: PB + 'IMG_18822022Raj%20Kashyap72022raj.jpg', size: 'tall' },
+      { type: 'photo', src: PB + 'IMG_2252-Enhanced-NR32023raj142023raj.jpg', size: 'reg' },
+      { type: 'photo', src: PB + 'IMG_25282022Raj%20Kashyap82022raj.jpg', size: 'wide' },
+      { type: 'photo', src: PB + 'IMG_29022019raj%20kashyap12019raj.jpg', size: 'reg' },
+      { type: 'video', src: vid('3c36aee0-bec7-4b61-bd69-9b1a07f04676'), size: 'tall' },
+      { type: 'photo', src: PB + 'IMG_9371152026raj.jpg', size: 'reg' },
+      { type: 'photo', src: 'https://picturesbyrajj.b-cdn.net/it\'s%20her52020raj.jpg', size: 'big' }
     ]
   }
 ];

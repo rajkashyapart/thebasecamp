@@ -30,19 +30,19 @@ const G={
 // --- GALLERY ------------------------------------------------
 // --- GALLERY HLS STREAMS -------------------------------------------------
 const galleryIds=[
-  'https://vz-466dc643-be5.b-cdn.net/07762875-5f7d-4b12-9fb6-db7eeb9b80fa/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/e8e19d6f-d12e-449a-be7c-6c69bb852cbf/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/9f0348d6-000d-4a2d-8ff4-6f98092114d9/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/116842f8-5134-413d-8f7b-a9e3ec0e2c0e/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/6ad21f7a-14b3-4227-afb2-fabdfbba1f28/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/4aebdac6-1388-4476-abf6-2e0983174b80/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/938206ed-5c43-4cc3-98ce-515d5b290e86/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/435c71ed-b735-4b87-8ade-f7a7477e1bc9/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/614e3e2f-c031-47f9-b5ca-f51061f02a22/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/30ee8a76-a3dd-44e5-b808-72a6d146c785/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/77764055-fbdf-454b-91d7-82ebfbdeed2f/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/d7d48fc9-b0f6-407e-a8c0-5283aa12665a/playlist.m3u8',
-  'https://vz-466dc643-be5.b-cdn.net/ccf7889d-3372-4abc-9ddb-1e1e2b00fabc/playlist.m3u8'
+  'https://vz-6f9a60bb-593.b-cdn.net/46151b93-4758-4055-ab4d-944a470f7c17/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/eb2d2262-f579-4b69-9ea3-5b4db0bcac2c/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/94a35c54-1a17-4274-9db2-1077df921326/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/88d0078a-ec67-4871-87a7-0d4904ef56cf/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/253d1a6a-6912-4c6b-ad40-8371dfcb829e/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/4c09e742-2c9f-4c7d-918a-4b05c8e30f53/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/fddf2783-d99b-440c-b433-0dbcbad3a07c/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/7c61d479-6e79-4c32-be60-4d43444bc460/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/48daa49e-172d-4934-9c0d-1136cf223339/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/7badd2e0-7d8c-42db-98a1-57c78b3e29fb/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/af9add4d-4c87-4f42-99d3-49cc3837dd55/playlist.m3u8',
+  'https://vz-6f9a60bb-593.b-cdn.net/1a64e8e7-878c-43d7-a676-701aeb25bcea/playlist.m3u8'
 ];
 function buildGalleryRow(el, ids, offset){
   [...ids,...ids].forEach(function(src, i){
@@ -106,19 +106,12 @@ function setCurrency(c){
 
 // --- PORTFOLIO WORK ITEMS (Bunny HLS) ------------------------------------
 const workItems=[
-  {id:'w1',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/07762875-5f7d-4b12-9fb6-db7eeb9b80fa/playlist.m3u8',title:'Client \u2014 Project',desc:'Founder content series. Positioning, authority, and inbound lead generation.',tags:['Founder','Reels']},
-  {id:'w2',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/e8e19d6f-d12e-449a-be7c-6c69bb852cbf/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Coach','LinkedIn']},
-  {id:'w3',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/9f0348d6-000d-4a2d-8ff4-6f98092114d9/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Brand','Campaign']},
-  {id:'w4',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/116842f8-5134-413d-8f7b-a9e3ec0e2c0e/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Founder','Podcast']},
-  {id:'w5',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/6ad21f7a-14b3-4227-afb2-fabdfbba1f28/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Creator','Reels']},
-  {id:'w6',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/4aebdac6-1388-4476-abf6-2e0983174b80/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Brand','B-Roll']},
-  {id:'w7',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/938206ed-5c43-4cc3-98ce-515d5b290e86/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Founder','Authority']},
-  {id:'w8',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/435c71ed-b735-4b87-8ade-f7a7477e1bc9/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Founder','Reels']},
-  {id:'w9',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/614e3e2f-c031-47f9-b5ca-f51061f02a22/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Brand','Campaign']},
-  {id:'w10',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/30ee8a76-a3dd-44e5-b808-72a6d146c785/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Coach','LinkedIn']},
-  {id:'w11',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/77764055-fbdf-454b-91d7-82ebfbdeed2f/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Creator','Reels']},
-  {id:'w12',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/d7d48fc9-b0f6-407e-a8c0-5283aa12665a/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Founder','Authority']},
-  {id:'w13',hlsSrc:'https://vz-466dc643-be5.b-cdn.net/ccf7889d-3372-4abc-9ddb-1e1e2b00fabc/playlist.m3u8',title:'Client \u2014 Project',desc:'Short description of the project and what was produced.',tags:['Brand','B-Roll']},
+  {id:'w1',hlsSrc:'https://vz-6f9a60bb-593.b-cdn.net/46151b93-4758-4055-ab4d-944a470f7c17/playlist.m3u8',title:'Upsurge Labs \u2014 Sowmay Jain',desc:'Founder-led content for Sowmay Jain. Positioning, scripting, and a steady reel cadence.',tags:['Founder','Reels']},
+  {id:'w2',hlsSrc:'https://vz-6f9a60bb-593.b-cdn.net/253d1a6a-6912-4c6b-ad40-8371dfcb829e/playlist.m3u8',title:'The Fresh Factory \u2014 Prabhjot Dhami',desc:'F&amp;B content for Prabhjot Dhami\u2019s The Fresh Factory \u2014 fresh produce, honest storytelling.',tags:['Food','Reels']},
+  {id:'w3',hlsSrc:'https://vz-6f9a60bb-593.b-cdn.net/fddf2783-d99b-440c-b433-0dbcbad3a07c/playlist.m3u8',title:'Copper + Cloves \u2014 Sarah Edwards',desc:'Personal branding and content for Sarah Edwards of Copper + Cloves.',tags:['Founder','Brand']},
+  {id:'w4',hlsSrc:'https://vz-6f9a60bb-593.b-cdn.net/48daa49e-172d-4934-9c0d-1136cf223339/playlist.m3u8',title:'Insanely Good Coffee \u2014 Aditya Kumar',desc:'Brand and product content for Aditya Kumar\u2019s Insanely Good Coffee.',tags:['Coffee','Brand']},
+  {id:'w5',hlsSrc:'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8',title:'Kaheen \u2014 Shashank Arora',desc:'Content and direction for Shashank Arora\u2019s Kaheen.',tags:['Brand','Story']},
+  {id:'w6',hlsSrc:'https://vz-6f9a60bb-593.b-cdn.net/7badd2e0-7d8c-42db-98a1-57c78b3e29fb/playlist.m3u8',title:'Indian Cacao Festival',desc:'Festival content for Patricia, Ketaki &amp; Sneha \u2014 the Indian Cacao &amp; Craft Chocolate Festival.',tags:['Festival','Campaign']},
 ];
 function buildWorkContent(){return workItems.map(function(item){var thumb=item.hlsSrc.replace('playlist.m3u8','thumbnail.jpg');var tags=item.tags.map(function(t){return '<span class="work-tag">'+t+'</span>';}).join('');return '<div class="work-item" id="wi-'+item.id+'" onclick="toggleWork(\''+item.id+'\',\''+item.hlsSrc+'\')"><div class="work-thumb-row"><div class="work-thumb"><img src="'+thumb+'" alt="'+item.title+'" loading="lazy" onerror="this.style.display=\'none\'"><div class="play-badge"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></div></div><div><div class="work-title">'+item.title+'</div><p class="work-desc">'+item.desc+'</p><div class="work-meta-row">'+tags+'</div></div></div><div class="work-embed" id="we-'+item.id+'" style="display:none;"></div></div>';}).join('');}
 
@@ -346,11 +339,11 @@ const folders=[
   },
 
   // 8 RECENT WORK
-  { id:'work', preview:'every frame from one day.', label:'Recent Work', glyph:'film', color:'fi-indigo',
-    eyebrow:'Portfolio', title:'Recent Work', subtitle:'every frame you&rsquo;re about to see came from a single shoot day.',
+  { id:'work', preview:'recent client work.', label:'Recent Work', glyph:'film', color:'fi-indigo',
+    eyebrow:'Portfolio', title:'Recent Work', subtitle:'a few of the brands and founders i&rsquo;ve made content with.',
     content:`
       <div class="w-eye">in the wild</div>
-      <div class="w-h"><em>every frame from one day.</em></div>
+      <div class="w-h"><em>the work speaks first.</em></div>
       <p class="w-p" style="font-size:12px;color:var(--muted);margin-bottom:14px;">tap any project to watch.</p>
       ${buildWorkContent()}
 
