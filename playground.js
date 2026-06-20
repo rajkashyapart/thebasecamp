@@ -2,35 +2,35 @@ var WCX = 1800, WCY = 1400;
 
 var photoCards = [
   // -- TOP-LEFT (far, bleeds edge) --
-  {x:-740, y:-380, w:320, h:320, rot:-1.0, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.jpg'},
-  {x:-520, y:-320, w:200, h:200, rot:1.5, src:'https://picturesbyrajj.b-cdn.net/20230908%20-%20IMG_2075%20-%20Raj%20Kashyap122023raj.jpg'},
+  {x:-740, y:-380, w:320, h:320, rot:-1.0, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.webp'},
+  {x:-520, y:-320, w:200, h:200, rot:1.5, src:'https://picturesbyrajj.b-cdn.net/20230908%20-%20IMG_2075%20-%20Raj%20Kashyap122023raj.webp'},
 
   // -- TOP-CENTRE (above hero, pushed up) --
-  {x:-120, y:-500, w:380, h:253, rot:0.6, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap102023raj.jpg'},
-  {x:220, y:-440, w:180, h:180, rot:-1.2, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1747%20-%20Raj%20Kashyap112023raj.jpg'},
+  {x:-120, y:-500, w:380, h:253, rot:0.6, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1737-Enhanced-NR%20-%20Raj%20Kashyap102023raj.webp'},
+  {x:220, y:-440, w:180, h:180, rot:-1.2, src:'https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1747%20-%20Raj%20Kashyap112023raj.webp'},
 
   // -- TOP-RIGHT (far, bleeds edge) --
-  {x:540, y:-360, w:420, h:298, rot:0.8, src:'https://picturesbyrajj.b-cdn.net/an%20art%20village22019raj.jpg'},
-  {x:780, y:-200, w:220, h:220, rot:-1.5, src:'https://picturesbyrajj.b-cdn.net/20230908%20-%20IMG_2116%20-%20Raj%20Kashyap132023raj.jpg'},
+  {x:540, y:-360, w:420, h:298, rot:0.8, src:'https://picturesbyrajj.b-cdn.net/an%20art%20village22019raj.webp'},
+  {x:780, y:-200, w:220, h:220, rot:-1.5, src:'https://picturesbyrajj.b-cdn.net/20230908%20-%20IMG_2116%20-%20Raj%20Kashyap132023raj.webp'},
 
   // -- LEFT-MID (pushed far left) --
-  {x:-760, y:-20, w:280, h:187, rot:-0.8, src:'https://picturesbyrajj.b-cdn.net/it\'s%20her52020raj.jpg'},
-  {x:-640, y:160, w:340, h:227, rot:1.2, src:'https://picturesbyrajj.b-cdn.net/hault32020raj.jpg'},
+  {x:-760, y:-20, w:280, h:187, rot:-0.8, src:'https://picturesbyrajj.b-cdn.net/it\'s%20her52020raj.webp'},
+  {x:-640, y:160, w:340, h:227, rot:1.2, src:'https://picturesbyrajj.b-cdn.net/hault32020raj.webp'},
 
   // -- RIGHT-MID (pushed far right) --
-  {x:620, y:40, w:300, h:300, rot:-0.5, src:'https://picturesbyrajj.b-cdn.net/IMG_1788-Enhanced-NR22022raj62022raj.jpg'},
-  {x:780, y:220, w:200, h:300, rot:1.0, src:'https://picturesbyrajj.b-cdn.net/IMG_18822022Raj%20Kashyap72022raj.jpg'},
+  {x:620, y:40, w:300, h:300, rot:-0.5, src:'https://picturesbyrajj.b-cdn.net/IMG_1788-Enhanced-NR22022raj62022raj.webp'},
+  {x:780, y:220, w:200, h:300, rot:1.0, src:'https://picturesbyrajj.b-cdn.net/IMG_18822022Raj%20Kashyap72022raj.webp'},
 
   // -- BOTTOM-LEFT (far, bleeds edge) --
-  {x:-720, y:340, w:380, h:380, rot:1.0, src:'https://picturesbyrajj.b-cdn.net/IMG_2252-Enhanced-NR32023raj142023raj.jpg'},
-  {x:-430, y:400, w:220, h:147, rot:-1.5, src:'https://picturesbyrajj.b-cdn.net/IMG_25282022Raj%20Kashyap82022raj.jpg'},
+  {x:-720, y:340, w:380, h:380, rot:1.0, src:'https://picturesbyrajj.b-cdn.net/IMG_2252-Enhanced-NR32023raj142023raj.webp'},
+  {x:-430, y:400, w:220, h:147, rot:-1.5, src:'https://picturesbyrajj.b-cdn.net/IMG_25282022Raj%20Kashyap82022raj.webp'},
 
   // -- BOTTOM-CENTRE --
-  {x:-40, y:380, w:340, h:227, rot:-0.6, src:'https://picturesbyrajj.b-cdn.net/green%20is%20the%20color42020raj.jpg'},
-  {x:240, y:460, w:260, h:260, rot:1.4, src:'https://picturesbyrajj.b-cdn.net/IMG_9371152026raj.jpg'},
+  {x:-40, y:380, w:340, h:227, rot:-0.6, src:'https://picturesbyrajj.b-cdn.net/green%20is%20the%20color42020raj.webp'},
+  {x:240, y:460, w:260, h:260, rot:1.4, src:'https://picturesbyrajj.b-cdn.net/IMG_9371152026raj.webp'},
 
   // -- BOTTOM-RIGHT (far, bleeds edge) --
-  {x:500, y:340, w:420, h:280, rot:0.8, src:'https://picturesbyrajj.b-cdn.net/IMG_29022019raj%20kashyap12019raj.jpg'}
+  {x:500, y:340, w:420, h:280, rot:0.8, src:'https://picturesbyrajj.b-cdn.net/IMG_29022019raj%20kashyap12019raj.webp'}
 ];
 
 var videoCards = [
