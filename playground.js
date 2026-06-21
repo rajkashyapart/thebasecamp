@@ -689,12 +689,6 @@ function initPlaygroundFeed() {
 
   canvas.appendChild(feed);
 
-  // soft scrim behind the centred hero so the blend stays legible over busy photos
-  var heroScrim = document.createElement('div');
-  heroScrim.className = 'pgf-hero-scrim';
-  heroScrim.setAttribute('aria-hidden', 'true');
-  canvas.appendChild(heroScrim);
-
   // fixed, always-centred hero that blends over the cards as they scroll
   var hero = document.createElement('div');
   hero.className = 'pgf-hero-fixed';

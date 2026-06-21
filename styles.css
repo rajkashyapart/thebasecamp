@@ -1923,13 +1923,6 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     border-bottom:1px solid rgba(255,255,255,0.55); padding-bottom:2px;
   }
   .pgf-hero-fixed .pgf-cta:active{ transform:scale(0.97); }
-  /* soft darkening behind the hero so the exclusion blend stays legible */
-  .pgf-hero-scrim{
-    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-    z-index:38; pointer-events:none;
-    width:min(150vw,900px); height:46vh;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0.36) 0%, rgba(0,0,0,0.16) 42%, rgba(0,0,0,0) 70%);
-  }
   /* closing moment at the end of the feed */
   .pgf-outro{ position:relative; z-index:2; text-align:center; padding:48px 24px 32px; }
   .pgf-outro-line{
