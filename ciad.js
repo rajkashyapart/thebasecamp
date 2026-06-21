@@ -1104,13 +1104,12 @@ function bookCall() { window.open('https://calendly.com/shootwraj/content-in-a-d
   var folderCloseCount = 0;
   var barDismissed = false;
   var barShown = false;
-  try { barDismissed = sessionStorage.getItem('ciad_bar_dismissed') === '1'; } catch(e){}
   var _origClose = closeWindow;
   closeWindow = function(id) {
     _origClose(id);
     if (barDismissed || barShown) return;
     folderCloseCount++;
-    if (folderCloseCount >= 2) {
+    if (folderCloseCount >= 1) {
       barShown = true;
       var bar = document.getElementById('email-bar');
       if (bar) bar.classList.add('visible');
@@ -1120,7 +1119,6 @@ function bookCall() { window.open('https://calendly.com/shootwraj/content-in-a-d
     barDismissed = true; barShown = true;
     var bar = document.getElementById('email-bar');
     if (bar) bar.classList.remove('visible');
-    try { sessionStorage.setItem('ciad_bar_dismissed', '1'); } catch(e){}
   };
   window.submitEmail = function() {
     var input = document.getElementById('eb-email');
