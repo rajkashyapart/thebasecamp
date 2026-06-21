@@ -121,14 +121,9 @@
     if (videoDuration > 0) {
       scheduleEnd(0, videoDuration);
     }
-    // Safety net: if no duration data arrives within 1.5s of reveal,
-    // use a conservative 4s play window (video is ~3.5s)
-    setTimeout(function() {
-      if (videoDuration === 0 && !videoEnded) {
-        videoEnded = true;
-        doEndTransition();
-      }
-    }, 4000);
+    // No premature safety net here — let the video play to its real 'ended'
+    // event (or the 15s absolute fallback). A short net was cutting the intro
+    // off on phones that buffer for a few seconds before playback.
   }
 
   // Retry playback on first user interaction (mobile autoplay policy)

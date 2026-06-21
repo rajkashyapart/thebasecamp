@@ -678,7 +678,22 @@ function initPlaygroundFeed() {
     }
     feed.appendChild(rowEl);
   }
+
+  // closing moment at the end of the feed
+  var outro = document.createElement('div');
+  outro.className = 'pgf-outro';
+  outro.innerHTML =
+    '<div class="pgf-outro-line">that’s the playground.</div>' +
+    '<a href="hub.html" class="pgf-outro-cta">work with me &#8594;</a>';
+  feed.appendChild(outro);
+
   canvas.appendChild(feed);
+
+  // soft scrim behind the centred hero so the blend stays legible over busy photos
+  var heroScrim = document.createElement('div');
+  heroScrim.className = 'pgf-hero-scrim';
+  heroScrim.setAttribute('aria-hidden', 'true');
+  canvas.appendChild(heroScrim);
 
   // fixed, always-centred hero that blends over the cards as they scroll
   var hero = document.createElement('div');

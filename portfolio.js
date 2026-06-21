@@ -369,8 +369,11 @@ function initPortfolio() {
       videoEl.muted = true;
       videoEl.loop = true;
       videoEl.playsInline = true;
+      videoEl.autoplay = true;
       videoEl.setAttribute('playsinline', '');
       videoEl.setAttribute('webkit-playsinline', '');
+      videoEl.setAttribute('muted', '');
+      videoEl.setAttribute('autoplay', '');
       videoEl.setAttribute('poster', poster);
       videoEl.setAttribute('preload', 'none');
       videoEl.draggable = false;
@@ -394,18 +397,18 @@ function initPortfolio() {
     label.className = 'reel-label';
     var pl = s.playground ? '<a href="playground.html" class="reel-pglink">from the playground →</a>' : '';
     label.innerHTML =
-      '<div class="reel-label-l">' +
-        '<div class="reel-name">' + s.name + '</div>' +
-        '<div class="reel-sub">' + (s.sub || '') + '</div>' +
-        pl +
-      '</div>' +
-      '<div class="reel-label-r">' +
-        '<div class="reel-cat">' + catLabel(s.cat) + '</div>' +
-        '<div class="reel-index">' + pad2(i + 1) + ' / ' + pad2(total) + '</div>' +
-      '</div>';
+      '<div class="reel-cat">' + catLabel(s.cat) + '</div>' +
+      '<div class="reel-name">' + s.name + '</div>' +
+      '<div class="reel-sub">' + (s.sub || '') + '</div>' +
+      pl;
 
-    sec.appendChild(media);
-    sec.appendChild(label);
+    // media + label share a frame sized to the video, so the title sits on
+    // the video's bottom-left edge (not the far screen edge)
+    var frame = document.createElement('div');
+    frame.className = 'reel-frame';
+    frame.appendChild(media);
+    frame.appendChild(label);
+    sec.appendChild(frame);
     reel.appendChild(sec);
 
     var obj = { el: sec, video: videoEl, src: s.src, inited: false, hls: null };
@@ -445,6 +448,22 @@ function setupObserver() {
   for (var j = 0; j < slideObjs.length; j++) io.observe(slideObjs[j].el);
 }
 
+// force muted autoplay to start on first scroll even on slow connections:
+// try now, then retry when the media can play and on the first touch.
+function forcePlay(v) {
+  var attempt = function() { var p = v.play(); if (p && p.catch) p.catch(function(){}); };
+  attempt();
+  v.addEventListener('canplay', attempt, { once: true });
+  v.addEventListener('loadeddata', attempt, { once: true });
+  if (!forcePlay._bound) {
+    forcePlay._bound = true;
+    document.addEventListener('touchstart', function() {
+      var a = slideObjs[activeIdx];
+      if (a && a.video) { var p = a.video.play(); if (p && p.catch) p.catch(function(){}); }
+    }, { passive: true });
+  }
+}
+
 function activate(idx) {
   if (idx === activeIdx) return;
   activeIdx = idx;
@@ -455,8 +474,7 @@ function activate(idx) {
     if (i === idx) {
       ensureVideo(o);
       o.video.muted = !audioOn;
-      var pr = o.video.play();
-      if (pr && pr.catch) pr.catch(function(){});
+      forcePlay(o.video);
     } else if (dist === 1) {
       ensureVideo(o);          // preload neighbour so it's buffered before you land
       o.video.pause();
