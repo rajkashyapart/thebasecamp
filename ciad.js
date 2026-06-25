@@ -47,35 +47,38 @@ const galleryIds=[
 function buildGalleryRow(el, ids, offset){
   [...ids,...ids].forEach(function(src, i){
     var cell=document.createElement('div');cell.className='gcell';
-    if(i < ids.length){
-      // First set: real HLS stream (loads on CIAD open)
-      cell.dataset.hlsSrc=src;
-    } else {
-      // Second set: static thumbnail only (seamless loop visual, no extra stream)
-      var thumb=src.replace('playlist.m3u8','thumbnail.jpg');
-      var img=document.createElement('img');
-      img.src=thumb;img.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;';
-      img.loading='lazy';
-      cell.appendChild(img);
-    }
+    // every cell shows a static thumbnail immediately (instant wall, no blank cells)
+    var thumb=src.replace('playlist.m3u8','thumbnail.jpg');
+    var img=document.createElement('img');
+    img.src=thumb;img.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;';
+    img.loading='lazy';
+    cell.appendChild(img);
+    // first set additionally upgrades to a live HLS video, lazy-loaded on idle
+    if(i < ids.length){ cell.dataset.hlsSrc=src; }
     el.appendChild(cell);
   });
 }
 buildGalleryRow(document.getElementById('row1'),galleryIds.slice(0,7),0);
 buildGalleryRow(document.getElementById('row2'),galleryIds.slice(7),0);
 
-// Inject HLS video elements lazily when CIAD screen opens
+// Upgrade gallery cells from poster -> live HLS video, ONE AT A TIME on idle.
+// Posters already show, so the wall is instant; videos fill in progressively
+// instead of firing 13 concurrent streams the moment CIAD opens.
 function loadGalleryIframes(){
-  document.querySelectorAll('.gcell[data-hls-src]').forEach(function(cell){
-    var src=cell.dataset.hlsSrc;
+  var cells = [].slice.call(document.querySelectorAll('.gcell[data-hls-src]'));
+  var i = 0;
+  var ric = window.requestIdleCallback || function(cb){ return setTimeout(cb, 250); };
+  function loadOne(){
+    if(i >= cells.length) return;
+    var cell = cells[i++];
+    var src = cell.dataset.hlsSrc;
+    delete cell.dataset.hlsSrc;
     var vid=document.createElement('video');
-    vid.muted=true;
-    vid.autoplay=true;
-    vid.loop=true;
-    vid.playsInline=true;
-    vid.setAttribute('playsinline','');
+    vid.muted=true; vid.autoplay=true; vid.loop=true; vid.playsInline=true;
+    vid.setAttribute('playsinline',''); vid.setAttribute('muted','');
     if(window.Hls&&Hls.isSupported()){
-      var hls=new Hls({lowLatencyMode:false,startLevel:-1,maxBufferLength:10});
+      // small cells -> cap to player size + short buffer = much lighter streams
+      var hls=new Hls({lowLatencyMode:false,startLevel:-1,maxBufferLength:6,capLevelToPlayerSize:true});
       hls.loadSource(src);
       hls.attachMedia(vid);
       hls.on(Hls.Events.MANIFEST_PARSED,function(){vid.play().catch(function(){});});
@@ -84,8 +87,9 @@ function loadGalleryIframes(){
       vid.play().catch(function(){});
     }
     cell.appendChild(vid);
-    delete cell.dataset.hlsSrc;
-  });
+    ric(loadOne); // queue the next one for the next idle slot
+  }
+  ric(loadOne);
 }
 // requestIdleCallback fires when browser is idle after first paint
 // fallback to setTimeout for Safari which doesn&rsquo;t support it
