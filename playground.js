@@ -74,7 +74,7 @@ function initPlayground() {
   ct.className = 'pg-center';
   ct.style.left = WCX + 'px';
   ct.style.top = WCY + 'px';
-  ct.innerHTML = '<span class="pg-headline">never stop playing &lt;3</span><div class="pg-sub">drag to move</div><a href="hub.html" class="pg-cta">work with me &#8594;</a>';
+  ct.innerHTML = '<span class="pg-headline">never stop playing &lt;3</span><div class="pg-sub">drag to move</div><a href="portfolio.html" class="pg-cta">see the work &#8594;</a>';
   world.appendChild(ct);
 
   var isDragging = false;
@@ -193,7 +193,7 @@ function initPlayground() {
       // Coast to rest with spring settle instead of hard stop
       targetX = springX; targetY = springY;
       cardRafId = requestAnimationFrame(cardSettleTick);
-      if (!cardMoved) window.location.href='hub.html';
+      if (!cardMoved) window.location.href='portfolio.html';
     }
     // Mouse events
     el.addEventListener('mousedown', function(e) {
@@ -339,7 +339,7 @@ function initPlayground() {
       el.style.boxShadow = '';
       targetX = springX; targetY = springY;
       cardRafId = requestAnimationFrame(cardSettleTick);
-      if (!cardMoved) window.location.href='hub.html';
+      if (!cardMoved) window.location.href='portfolio.html';
     }
     el.addEventListener('mousedown', function(e) { e.stopPropagation(); e.preventDefault(); cardDragStart(e.clientX, e.clientY); });
     window.addEventListener('mousemove', function(e) { cardDragMove(e.clientX, e.clientY); });
@@ -684,7 +684,7 @@ function initPlaygroundFeed() {
   outro.className = 'pgf-outro';
   outro.innerHTML =
     '<div class="pgf-outro-line">that’s the playground.</div>' +
-    '<a href="hub.html" class="pgf-outro-cta">work with me &#8594;</a>';
+    '<a href="portfolio.html" class="pgf-outro-cta">see the work &#8594;</a>';
   feed.appendChild(outro);
 
   canvas.appendChild(feed);
@@ -694,7 +694,7 @@ function initPlaygroundFeed() {
   hero.className = 'pgf-hero-fixed';
   hero.innerHTML =
     '<h1 class="pgf-title">never stop playing &lt;3</h1>' +
-    '<a href="hub.html" class="pgf-cta">work with me &#8594;</a>';
+    '<a href="portfolio.html" class="pgf-cta">see the work &#8594;</a>';
   canvas.appendChild(hero);
 
   // Autoplay muted+looping as each video scrolls into view. iOS won't start

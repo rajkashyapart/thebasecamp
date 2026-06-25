@@ -4,49 +4,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#f5f2ee">
-<meta name="description" content="Raj Kashyap &mdash; selected work. Brand films, photo essays, strategy, and events for brands that wanted to feel like something.">
+<meta name="description" content="Case studies — the strategy, the work, and the results behind Raj Kashyap's client content.">
 <meta name="author" content="Raj Kashyap">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://rajkashyap.studio/portfolio.html">
-<meta property="og:title" content="things i&rsquo;ve made &mdash; Raj Kashyap">
-<meta property="og:description" content="Content strategist, photographer, creator. Building things that feel real.">
+<meta property="og:url" content="https://rajkashyap.studio/case-studies.html">
+<meta property="og:title" content="Case Studies — Raj Kashyap">
+<meta property="og:description" content="The strategy, the work, and the results behind the client content.">
 <meta property="og:image" content="https://rajkashyap.studio/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Raj Kashyap">
+<meta name="twitter:title" content="Case Studies — Raj Kashyap">
 <meta name="twitter:image" content="https://rajkashyap.studio/og.jpg">
-<link rel="canonical" href="https://rajkashyap.studio/portfolio.html">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://rajkashyap.studio/case-studies.html">
 <script defer data-domain="rajkashyap.studio" src="https://plausible.io/js/script.js"></script>
+<link rel="preconnect" href="https://vz-6f9a60bb-593.b-cdn.net">
+<link rel="dns-prefetch" href="https://vz-6f9a60bb-593.b-cdn.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<title>things i&rsquo;ve made &mdash; Raj Kashyap</title>
+<title>Case Studies — Raj Kashyap</title>
 <link rel="stylesheet" href="styles.css">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js"></script>
 </head>
 <body>
 
 <nav id="pg-nav">
-  <div class="pg-brand">raj!</div>
+  <div class="pg-brand"><a href="playground.html">raj!</a></div>
   <div class="pg-links">
     <a href="playground.html" class="pg-home-link">Playground</a>
-    <a href="portfolio.html" id="pg-port-link" class="active">Portfolio</a>
-    <a href="case-studies.html" id="pg-cs-link">Case Studies</a>
+    <a href="portfolio.html" id="pg-port-link">Portfolio</a>
+    <a href="case-studies.html" id="pg-cs-link" class="active">Case Studies</a>
     <a href="hub.html" id="pg-hub-link"><span class="nav-full">Work With Me</span><span class="nav-short">Work</span></a>
     <a href="about.html" id="pg-about-link">About</a>
   </div>
 </nav>
 
-<div id="screen-port" class="screen">
+<div id="cs-screen" class="screen">
 
-  <div id="reel-progress" aria-hidden="true"><div id="reel-progress-fill"></div></div>
-  <div id="reel"></div>
-  <div id="reel-hint" aria-hidden="true">tap any piece for sound</div>
+  <div id="cs-listwrap">
+    <header class="cs-head">
+      <div class="cs-eyebrow">case studies</div>
+      <h1 class="cs-title">the work, <em>in depth.</em></h1>
+      <p class="cs-sub">six clients. the strategy, the work, and what it actually moved.</p>
+    </header>
+    <div id="cs-list"></div>
+    <div class="cs-foot">
+      <div class="cs-foot-line">seen enough?</div>
+      <a href="hub.html" class="cs-cta">work with me &#8594;</a>
+    </div>
+  </div>
+
+  <div id="cs-detail" style="display:none;"></div>
 
 </div>
 
 <script src="shared.js"></script>
-<script src="portfolio.js"></script>
+<script src="case-studies.js"></script>
 </body>
 </html>
