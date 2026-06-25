@@ -51,7 +51,7 @@ function buildGalleryRow(el, ids, offset){
     var thumb=src.replace('playlist.m3u8','thumbnail.jpg');
     var img=document.createElement('img');
     img.src=thumb;img.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;pointer-events:none;';
-    img.loading='lazy';
+    img.loading='lazy';img.alt='';
     cell.appendChild(img);
     // first set additionally upgrades to a live HLS video, lazy-loaded on idle
     if(i < ids.length){ cell.dataset.hlsSrc=src; }
@@ -1128,6 +1128,7 @@ function bookCall() { window.open('https://calendly.com/shootwraj/content-in-a-d
     var input = document.getElementById('eb-email');
     var form = document.getElementById('eb-form');
     var btn = document.getElementById('eb-submit');
+    var hp = document.getElementById('eb-website');
     var email = input ? input.value.trim() : '';
     var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRe.test(email)) {
@@ -1138,7 +1139,7 @@ function bookCall() { window.open('https://calendly.com/shootwraj/content-in-a-d
     fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email })
+      body: JSON.stringify({ email: email, website: hp ? hp.value : '' })
     })
     .then(function(r){ return r.json(); })
     .then(function(data){

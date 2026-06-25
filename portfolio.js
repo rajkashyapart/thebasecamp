@@ -382,6 +382,9 @@ function initPortfolio() {
 
       var chip = document.createElement('div');
       chip.className = 'reel-audio';
+      chip.setAttribute('role', 'button');
+      chip.setAttribute('tabindex', '0');
+      chip.setAttribute('aria-label', 'toggle sound');
       chip.innerHTML = SPK_OFF;
       media.appendChild(chip);
     } else {
@@ -418,7 +421,11 @@ function initPortfolio() {
       (function(o) {
         var toggle = function(e) { e.stopPropagation(); setAudio(!audioOn); };
         o.video.addEventListener('click', toggle);
-        o.el.querySelector('.reel-audio').addEventListener('click', toggle);
+        var chipEl = o.el.querySelector('.reel-audio');
+        chipEl.addEventListener('click', toggle);
+        chipEl.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); }
+        });
       })(obj);
     }
   }

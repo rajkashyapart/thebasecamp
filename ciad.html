@@ -102,9 +102,11 @@
   <button class="eb-close" onclick="dismissEmailBar()" aria-label="Close">✕</button>
   <div class="eb-copy"><em>the brief</em> &mdash; what's working in founder content this week. free.</div>
   <div class="eb-form" id="eb-form">
-    <input type="email" class="eb-input" id="eb-email" placeholder="your@email.com" autocomplete="email" required>
+    <input type="text" id="eb-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="eb-hp">
+    <input type="email" class="eb-input" id="eb-email" placeholder="your@email.com" aria-label="your email address" autocomplete="email" required>
     <button class="eb-btn" id="eb-submit" onclick="submitEmail()">send it</button>
   </div>
+  <div class="eb-fine">no spam. unsubscribe anytime.</div>
 </div>
 
 <div id="trusted">
@@ -160,7 +162,7 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js"></script>
 <script src="shared.js"></script>
 <script src="ciad.js"></script>
 </body>

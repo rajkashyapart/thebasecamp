@@ -8,6 +8,21 @@ var ALLOWED_ORIGINS = [
 // RFC-5321-compatible email regex
 var EMAIL_RE = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
+// Best-effort in-memory rate limit, per warm edge isolate. Blocks naive floods
+// cheaply; for distributed limiting add Upstash / Vercel KV.
+var RL = new Map();
+var RL_MAX = 6;             // max requests
+var RL_WINDOW = 60 * 1000;  // per minute, per IP
+function rateLimited(ip) {
+  if (!ip) return false;
+  var now = Date.now();
+  if (RL.size > 5000) RL.clear(); // crude memory guard
+  var hits = (RL.get(ip) || []).filter(function (t) { return now - t < RL_WINDOW; });
+  hits.push(now);
+  RL.set(ip, hits);
+  return hits.length > RL_MAX;
+}
+
 function respond(body, status, allowedOrigin) {
   var headers = { 'Content-Type': 'application/json' };
   if (allowedOrigin) {
@@ -44,11 +59,23 @@ export default async function handler(request) {
     return respond({ error: 'Forbidden' }, 403, null);
   }
 
+  // Rate limit by client IP (best-effort)
+  var ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim();
+  if (rateLimited(ip)) {
+    return respond({ error: 'Too many requests' }, 429, allowedOrigin);
+  }
+
   var body;
   try {
     body = await request.json();
   } catch (e) {
     return respond({ error: 'Invalid request' }, 400, allowedOrigin);
+  }
+
+  // Honeypot — real users never fill this hidden field; bots do.
+  // Pretend success so the bot moves on, but don't subscribe anything.
+  if (body && typeof body.website === 'string' && body.website.trim() !== '') {
+    return respond({ ok: true }, 200, allowedOrigin);
   }
 
   var email = typeof body.email === 'string'
