@@ -3,8 +3,25 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Always Do First
-- **Invoke the `emil-design-eng` skill** before writing any frontend code, every session, no exceptions. For anything involving animation or transitions, also invoke `design-motion-principles`. (These two are the only design skills installed. There is no `frontend-design` skill — do not try to invoke it.)
-- **Then read "The subtraction rule" below.** Both installed skills only know how to *add* polish. Nothing in them will ever tell you to cut. That job is yours, and it is the job this site keeps failing.
+- **Invoke the `emil-design-eng` skill** before writing any frontend code, every session, no exceptions.
+- **Then read "The subtraction rule" below.** Almost every skill below only knows how to *add* polish. Nothing in them will ever tell you to cut. That job is yours, and it is the job this site keeps failing.
+
+There is no `frontend-design` skill — do not try to invoke it. Installed design skills, all at `~/.claude/skills/`:
+
+| Skill | Reach for it when |
+|---|---|
+| `emil-design-eng` | Any frontend work. The default. |
+| `design-motion-principles` | Auditing motion against multiple designers' perspectives |
+| `review-animations` | You just wrote animation code and want it torn apart. Defaults to flagging; approval is earned — the one skill here that subtracts. |
+| `apple-design` | Gesture-driven UI, springs, interruptible transitions, translucency, optical type |
+| `animation-vocabulary` | You can describe a motion but don't know its name |
+| `pick-ui-library` | Only when explicitly asked. Note this site has **no npm and no build step** — most of what it recommends cannot be used here. |
+| `prototype` | Only when explicitly asked. Builds several genuinely different versions to flip through. |
+
+Three more exist in `emilkowalski/skills` but are not installed, deliberately: `animate`, `improve-animations`, `find-animation-opportunities`. All three hunt for *more* things to animate. Install one only if the specific job calls for it:
+```bash
+npx skills@latest add emilkowalski/skills --global -a claude-code -s <name> -y
+```
 
 Personal portfolio for Raj Kashyap (rajkashyap.studio). Content strategist, photographer, creator. The site should feel like opening someone's sketchbook — warm, intentional, slightly irreverent. Not a corporation. Not a template.
 
