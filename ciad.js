@@ -135,7 +135,7 @@ const folders=[
 
       <div class="w-div"></div>
       <p class="w-p">no daily decisions. no wondering what to post. no agency keeping your page active while your business stands still.</p>
-      <div class="w-closer"><em>one shoot day. a month sorted. that&rsquo;s genuinely it.</em></div>
+      <div class="w-closer"><em>one shoot day. a month sorted. that&rsquo;s it.</em></div>
       <button class="w-cta" onclick="bookCall()">Book a Call &rarr;</button>
 
       <div class="w-next" onclick="openNextFolder('problem')">next: the problem &#8594;</div>
@@ -184,9 +184,9 @@ const folders=[
       <div class="w-eye">what changes</div>
       <div class="w-h">you show up once a month.<br><em>everything else is handled.</em></div>
       <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your ideal customer stops scrolling. because the content was built to make them stop &mdash; not just to look good in the feed.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your message feels coherent. people understand what you do and why it&rsquo;s for them before they&rsquo;ve had a single conversation with you.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your content works when you&rsquo;re not. the system runs. you focus on the actual business.</div></div>
-      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">you stop gambling on content. every piece has a reason to exist. you stop pouring in and hoping.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">people understand what you do and why it&rsquo;s for them before they&rsquo;ve had a single conversation with you.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">your content works when you&rsquo;re not. you focus on the actual business.</div></div>
+      <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">every piece has a reason to exist. you stop pouring money in and hoping.</div></div>
       <div class="w-outcome"><div class="w-dot"></div><div class="w-outcome-text">content stops being the thing you&rsquo;re always behind on. after one shoot day, you&rsquo;re ahead for the entire month.</div></div>
 
       <button class="w-cta" onclick="bookCall()">Book a Call &#8594;</button>
@@ -319,14 +319,14 @@ const folders=[
     content:`
       <div class="w-eye">meet the team</div>
       <div class="w-h">two people.<br><em>no fluff.</em></div>
-      <p class="w-p">we&rsquo;re not an agency. we&rsquo;re two people who understand social at a level most agencies don&rsquo;t &mdash; because we grew up on it, study it obsessively, and build our own presence too. between the two of us, your entire content pipeline is covered. you show up for the shoot. we handle everything else.</p>
+      <p class="w-p">we&rsquo;re not an agency. we&rsquo;re two people who grew up on social and still build our own presence on it &mdash; you can go and look. between the two of us, your entire content pipeline is covered. you show up for the shoot. we handle everything else.</p>
       <div class="w-div"></div>
       <div class="w-team-member">
         <div class="w-avatar" id="photo-raj"><!-- SWAP: <img src="raj.jpg" alt="Raj"> -->R</div>
         <div>
           <div class="w-tname">Raj Kashyap</div>
           <div class="w-trole">strategy · positioning · direction · editing</div>
-          <p class="w-tbio">every client i&rsquo;ve ever had came through word of mouth. not ads, not cold outreach &mdash; people telling other people. that only happens when you genuinely want the person you&rsquo;re working with to win. i care about whether your content makes you money. not just whether it looks good.<br><br>i understand the psychology of why content works &mdash; not from a textbook but from years of being deep in it. i also build my own presence at <em>uncurated.raj</em>, testing what works in real time. i&rsquo;m not advising you on something i don&rsquo;t do myself.</p>
+          <p class="w-tbio">every client i&rsquo;ve ever had came through word of mouth. not ads, not cold outreach &mdash; people telling other people. that only happens when you want the person you&rsquo;re working with to win. i care about whether your content makes you money. not just whether it looks good.<br><br>i understand the psychology of why content works &mdash; not from a textbook but from years of being deep in it. i also build my own presence at <em>uncurated.raj</em>, testing what works in real time. i&rsquo;m not advising you on something i don&rsquo;t do myself.</p>
         </div>
       </div>
       <div class="w-team-member">
@@ -334,7 +334,7 @@ const folders=[
         <div>
           <div class="w-tname">Dhiman</div>
           <div class="w-trole">editing · post-production · execution</div>
-          <p class="w-tbio">dhiman is the reason the work ships clean and on time. where i&rsquo;m ideas and instinct, dhiman is precision and patience &mdash; the kind of editor who notices what most people skip.<br><br>one of northeast india&rsquo;s fastest growing streamers &mdash; he understands social-first content not as a language he follows but as one he already speaks fluently.</p>
+          <p class="w-tbio">dhiman is the reason the work ships clean and on time. where i&rsquo;m ideas and instinct, dhiman is precision and patience &mdash; the kind of editor who notices what most people skip.<br><br>one of northeast india&rsquo;s fastest growing streamers &mdash; social-first content isn&rsquo;t a language he follows. it&rsquo;s one he already speaks.</p>
         </div>
       </div>
       <div class="w-note"><span class="w-note-icon">note</span><span class="w-note-text">between the two of us: strategy, ideation, shoot direction, editing, colour grading, distribution. everything your content needs &mdash; without the agency overhead or the agency indifference.</span></div>

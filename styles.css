@@ -334,7 +334,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   color:var(--ink-muted);opacity:0.7;margin-bottom:9px;
 }
 .hub-opt-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--ink);margin-bottom:9px;line-height:1.14;letter-spacing:-0.012em;}
-.hub-opt-desc{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:var(--t-prose);letter-spacing:0.005em;color:var(--ink-body);line-height:var(--lh-serif);max-width:34em;text-wrap:pretty;}
+/* Mono, tuned — not serif. The readability problem here was never the face:
+   it was 12px at positive tracking, in 3.2:1 grey, with no measure. */
+.hub-opt-desc{font-family:'DM Mono',monospace;font-weight:400;font-size:13px;letter-spacing:0;color:var(--ink-body);line-height:var(--lh-prose);max-width:58ch;text-wrap:pretty;}
 
 /* Facts row — the three things a client needs before clicking anything */
 .hub-facts{
@@ -404,21 +406,18 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .hub-steps li{
   counter-increment:hs;position:relative;
   padding-left:26px;margin-bottom:10px;
-  font-family:'Cormorant Garamond',serif;font-weight:400;
-  font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;
-  color:var(--ink-body);text-wrap:pretty;max-width:36em;
+  font-family:'DM Mono',monospace;
+  font-size:12px;line-height:var(--lh-prose);letter-spacing:0;
+  color:var(--ink-body);text-wrap:pretty;max-width:58ch;
 }
-/* the counter is data, so it stays mono */
 .hub-steps li::before{
   content:counter(hs,decimal-leading-zero);
-  position:absolute;left:0;top:0.42em;
+  position:absolute;left:0;top:0.3em;
   font-family:'DM Mono',monospace;
   font-size:9px;letter-spacing:0.08em;color:var(--accent-r);
 }
-/* Cormorant roman only ships 300/400 here, so a bold lead-in would be
-   synthesised — and faux bold on a garalde looks smeared. Italic does the
-   same scanning job and is a real cut. */
-.hub-steps b,.hub-done b{font-style:italic;font-weight:400;color:var(--ink);}
+/* DM Mono ships 500, so this is a real weight, not a synthesised bold */
+.hub-steps b,.hub-done b{font-weight:500;color:var(--ink);}
 
 .hub-caps{
   display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;
@@ -436,20 +435,20 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .hub-done li{
   position:relative;padding-left:17px;margin-bottom:8px;
-  font-family:'Cormorant Garamond',serif;font-weight:400;
-  font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;
-  color:var(--ink-body);text-wrap:pretty;max-width:36em;
+  font-family:'DM Mono',monospace;
+  font-size:12px;line-height:var(--lh-prose);letter-spacing:0;
+  color:var(--ink-body);text-wrap:pretty;max-width:58ch;
 }
 .hub-done li::before{
-  content:'';position:absolute;left:0;top:0.58em;
+  content:'';position:absolute;left:0;top:0.62em;
   width:5px;height:5px;border-radius:50%;background:var(--accent-b);opacity:0.55;
 }
 .hub-opt-forwho{
   margin:15px 0 0;padding-top:13px;
   border-top:1px solid rgba(30,25,20,0.08);
-  font-family:'Cormorant Garamond',serif;font-weight:400;
-  font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;
-  color:var(--ink-body);text-wrap:pretty;max-width:36em;
+  font-family:'DM Mono',monospace;
+  font-size:12px;line-height:var(--lh-prose);letter-spacing:0;
+  color:var(--ink-body);text-wrap:pretty;max-width:58ch;
 }
 /* the parent is serif now, so this label has to name mono explicitly */
 .hub-opt-forwho span{
@@ -2251,8 +2250,6 @@ html.vt-folder::view-transition-new(folder-morph){
   .about-h1{ font-size:clamp(44px,13vw,68px); margin-bottom:16px; letter-spacing:-0.02em; }
   .about-lead{ font-size:18px !important; line-height:1.5; }
   .hang-desc,.cv-points li{ font-size:15px; }
-  .hub-opt-desc{ font-size:16px; }
-  .hub-steps li,.hub-done li,.hub-opt-forwho{ font-size:15px; }
   .hub-caps span{ font-size:10px; }
   /* Hang section: stack vertically on narrow screens */
   .about-hang-section{
