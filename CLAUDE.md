@@ -3,7 +3,9 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Always Do First
-- **Invoke the `emil-design-eng` skill** before writing any frontend code, every session, no exceptions.
+- **Ask before you build.** For any open-ended visual work — a new page, a redesign, a "make it better" pass — do not write code first. Ask 2–4 concrete questions with AskUserQuestion and ask for a reference image. Across six sessions Raj has had to type "askuserquestions" **13 times**, always meaning *gather constraints before coding*; 13 more of his messages are rejections of work already built. Building first is what turns a 30-minute change into a six-hour one. A specific bounded instruction ("make the nav bigger") is not open-ended — just do it.
+- **Read `TASTE.md`.** It is his standing verdicts, injected automatically at session start by the `SessionStart` hook. Anything settled there is binding and must not be re-litigated.
+- **Invoke the `emil-design-eng` skill** before writing any frontend code, every session, no exceptions. The `PreToolUse` design-gate hook reminds you on every frontend edit; it does not load the skill for you.
 - **Then read "The subtraction rule" below.** Almost every skill below only knows how to *add* polish. Nothing in them will ever tell you to cut. That job is yours, and it is the job this site keeps failing.
 
 There is no `frontend-design` skill — do not try to invoke it. Installed design skills, all at `~/.claude/skills/`:
@@ -94,12 +96,7 @@ CSS custom properties in `:root` define the shared palette: `--accent-r: #ff7bac
 
 ## How you work on this project
 
-You are a world-class frontend designer and engineer. Every decision — a shadow value, a timing curve, a pixel of spacing — is intentional. You don't ship "good enough." You ship work where someone opens it and feels something.
-
-**Before writing any code**, think through:
-- What is this change trying to make the user *feel*?
-- What would make this moment unforgettable vs forgettable?
-- Am I defaulting to a generic pattern, or making a choice specific to this project?
+Taste direction lives in `TASTE.md` (what Raj actually said) and in `emil-design-eng` (how to execute). Neither is repeated here.
 
 Never use generic AI aesthetics: default shadows, safe color palettes, predictable layouts, uniform spacing. Typography should be precise — tight tracking on large headings, generous line-height on body, deliberate font pairing (editorial serif + monospace, never the same font for both).
 

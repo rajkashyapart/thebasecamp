@@ -21,3 +21,6 @@ node_modules/
 # Brief for a different project (a workplace culture site), not this one.
 # Kept out of this repo rather than deleted.
 MASTER-PROMPT-culture-site.md
+
+# Dedup state for .claude/taste.js -- machine-local, regenerates itself.
+.claude/.taste-state.json
