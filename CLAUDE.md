@@ -3,7 +3,8 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Always Do First
-- **Invoke the `frontend-design` skill** before writing any frontend code, every session, no exceptions.
+- **Invoke the `emil-design-eng` skill** before writing any frontend code, every session, no exceptions. For anything involving animation or transitions, also invoke `design-motion-principles`. (These two are the only design skills installed. There is no `frontend-design` skill — do not try to invoke it.)
+- **Then read "The subtraction rule" below.** Both installed skills only know how to *add* polish. Nothing in them will ever tell you to cut. That job is yours, and it is the job this site keeps failing.
 
 Personal portfolio for Raj Kashyap (rajkashyap.studio). Content strategist, photographer, creator. The site should feel like opening someone's sketchbook — warm, intentional, slightly irreverent. Not a corporation. Not a template.
 
@@ -83,11 +84,42 @@ You are a world-class frontend designer and engineer. Every decision — a shado
 - What would make this moment unforgettable vs forgettable?
 - Am I defaulting to a generic pattern, or making a choice specific to this project?
 
-Never use generic AI aesthetics: default shadows, safe color palettes, predictable layouts, uniform spacing. Every surface should have depth. Every transition should have character. Typography should be precise — tight tracking on large headings, generous line-height on body, deliberate font pairing (editorial serif + monospace, never the same font for both).
+Never use generic AI aesthetics: default shadows, safe color palettes, predictable layouts, uniform spacing. Typography should be precise — tight tracking on large headings, generous line-height on body, deliberate font pairing (editorial serif + monospace, never the same font for both).
+
+**One focal point per screen.** Give it depth, weight, and character; then make everything else actively recede. Uniform emphasis is mathematically identical to no emphasis — a page where every surface has depth reads as a page where nothing does. Decoration is earned by one element at a time, not distributed evenly.
 
 Animations: only `transform` and `opacity`. Spring-style easing, not linear. Every interactive element needs hover, focus, and active states.
 
-When you're unsure between two approaches, pick the one with more craft.
+When you're unsure between two approaches, pick the one with more craft — and note that removing something is usually the higher-craft option. More stuff is not more craft.
+
+---
+
+## The subtraction rule
+
+This site's recurring failure is accumulation. Four separate passes were made at Work With Me and About — copy passes, type passes, motion passes — and every single one made the page *bigger*. `hub.html` went 8.6KB → 13.9KB in a commit whose message was "hub clarity." Clutter never arrives in one bad decision; it arrives as twenty reasonable additions with nothing ever removed.
+
+So:
+
+- **Every design commit must name what it removes.** If a change adds a block, a type size, a color, or a metaphor and removes nothing, justify it explicitly or don't ship it.
+- **Say each fact once.** Before adding a stat, claim, or credential, grep for it. "Word of mouth" was on About four times; the work history was listed twice under two headings that both said EXPERIENCE.
+- **Never ship a placeholder.** No `[bracketed template text]` reaches a committed file. Delete the section or fill it.
+- **One physical-object metaphor per page.** Hang tags, receipts, wristbands, folders, barcodes — pick one. Three competing skeuomorphs is not charm, it's noise.
+- **Ornament is not hierarchy.** If you're reaching for a divider, rule, label, or chapter break to show structure, the spacing is wrong. Fix the spacing and delete the ornament.
+
+### Hard budgets (per page)
+
+| Budget | Limit |
+|---|---|
+| Distinct font sizes | 5 |
+| Accent colors | 1, with a stated job |
+| Spacing values | 3 tiers only: `8px` inside a unit, `32px` between units, `128px` between sections |
+| Physical-object metaphors | 1 |
+
+Nothing between the spacing tiers. The whole point is that the jump from 32 to 128 is what tells the eye a new section began. An 11-value scale running 2px→36px (what About had) communicates nothing.
+
+**Proximity beats decoration.** The gap *between* two things must always exceed the padding *inside* them. Hub violated this — 16px between the two offer cards, 26px of padding within each — so the two choices visually fused into one blob.
+
+**Comparison requires adjacency.** If a page asks the user to choose between options, those options must be visible simultaneously. Stacked vertically, they can't be compared, only remembered.
 
 ---
 
@@ -99,7 +131,24 @@ After every visible change:
 1. Screenshot your output.
 2. Compare against reference (Emmi screenshot for playground, previous state for everything else).
 3. Be specific about mismatches: "cards weighted left, right side empty" not "looks off."
-4. Fix and re-screenshot. Do at least 2 rounds. Stop only when no visible differences remain or Raj says so.
+4. **Run the squint test** (below). A diff against the previous state only catches regressions — it can never catch clutter, because clutter arrives a little at a time and every individual step looks fine.
+5. Fix and re-screenshot. Do at least 2 rounds. Stop only when no visible differences remain or Raj says so.
+
+### The squint test
+
+Blur the screenshot until text is illegible. Then ask:
+- **How many things still compete for attention?** More than 3 = fail. Cut or demote until 3.
+- **Where does the eye land first?** If the answer is "nowhere in particular" or "the decoration," the hierarchy is broken.
+- **Can you see the page's structure with the text gone?** If sections are only distinguishable by their labels, the spacing isn't doing its job.
+
+Also verify with measurement, not vibes — count computed values in the real browser, since CSS source undercounts what actually renders:
+
+```bash
+node -e "..." # or playwright: getComputedStyle over every text-bearing element,
+              # collect distinct fontSize + color. Compare against the hard budgets above.
+```
+
+Check both 1440px and 390px wide. Note that pages using `.screen` are internally-scrolling containers, so `fullPage` screenshots capture only the first viewport — scroll the container in steps (which also triggers the IntersectionObserver reveals) and capture slices.
 
 ---
 

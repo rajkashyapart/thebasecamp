@@ -50,26 +50,10 @@
   </div>
   <a id="hub-back" href="playground.html">&#8592; back</a>
   <div id="hub-content">
-    <div class="hub-eyebrow">the basecamp &mdash; bangalore</div>
-    <h1 class="hub-title">let&rsquo;s make something<br><em>people actually might wanna watch.</em></h1>
-    <p class="hub-sub">two ways in. pick what fits.</p>
-
-    <!-- SOCIAL PROOF STRIP -->
-    <div class="hub-proof-strip">
-      <div class="hub-proof-item">
-        <div class="hub-proof-num">25+</div>
-        <div class="hub-proof-label">brands trusted</div>
-      </div>
-      <div class="hub-proof-div"></div>
-      <div class="hub-proof-item">
-        <div class="hub-proof-num">100%</div>
-        <div class="hub-proof-label">word of mouth</div>
-      </div>
-      <div class="hub-proof-div"></div>
-      <div class="hub-proof-item">
-        <div class="hub-proof-num">2020</div>
-        <div class="hub-proof-label">in the field</div>
-      </div>
+    <div class="hub-head">
+      <div class="hub-eyebrow">the basecamp &mdash; bangalore</div>
+      <h1 class="hub-title">let&rsquo;s make something<br><em>people actually might wanna watch.</em></h1>
+      <p class="hub-sub">two ways in. pick what fits.</p>
     </div>
 
     <div class="hub-options">
@@ -84,15 +68,15 @@
         <dl class="hub-facts">
           <div class="hub-fact">
             <dt>you show up</dt>
-            <dd>1 day <span>/ month</span></dd>
+            <dd>1 day / mo</dd>
           </div>
           <div class="hub-fact">
             <dt>you get</dt>
-            <dd>6&ndash;20 <span>videos / mo</span></dd>
+            <dd>6&ndash;20 videos</dd>
           </div>
           <div class="hub-fact">
             <dt>from</dt>
-            <dd>&#8377;36,995 <span>/ month</span></dd>
+            <dd>&#8377;36,995 / mo</dd>
           </div>
         </dl>
 
@@ -113,7 +97,7 @@
           </div>
         </div>
 
-        <a class="hub-opt-btn" href="ciad.html">see the full system, pricing &amp; work &rarr;</a>
+        <a class="hub-opt-btn" href="ciad.html"><span class="hub-opt-btn-inner">see the full system &rarr;</span></a>
       </div>
 
       <!-- ── PERSONALISED (bespoke) ── -->
@@ -125,15 +109,15 @@
         <dl class="hub-facts">
           <div class="hub-fact">
             <dt>working since</dt>
-            <dd>2020 <span>&middot; 25+ brands</span></dd>
+            <dd>2020 &middot; 25+ brands</dd>
           </div>
           <div class="hub-fact">
             <dt>i cover</dt>
-            <dd>strategy <span>&rarr; shoot &rarr; edit</span></dd>
+            <dd>strategy &rarr; edit</dd>
           </div>
           <div class="hub-fact">
             <dt>pricing</dt>
-            <dd>scoped <span>after a call</span></dd>
+            <dd>scoped per brief</dd>
           </div>
         </dl>
 
@@ -164,13 +148,14 @@
           </div>
         </div>
 
-        <a class="hub-opt-btn" href="mailto:hello@rajkashyap.studio">tell me what you&rsquo;re imagining &rarr;</a>
+        <a class="hub-opt-btn" href="mailto:hello@rajkashyap.studio"><span class="hub-opt-btn-inner">tell me what you&rsquo;re imagining &rarr;</span></a>
       </div>
     </div>
 
-    <!-- TESTIMONIAL (rotating — pulled from "the word on the street") -->
+    <!-- TESTIMONIAL (rotating — pulled from "the word on the street").
+         This replaced the 25+/100%/2020 strip: one specific named voice
+         beats three round numbers that also appear on About. -->
     <div class="hub-testi">
-      <div class="hub-testi-mark">&ldquo;</div>
       <p class="hub-testi-text" id="hub-testi-text">loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.</p>
       <div class="hub-testi-attr" id="hub-testi-attr">Sarah Edwards &mdash; Copper + Cloves</div>
     </div>
@@ -182,54 +167,24 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Expand/collapse the detail on each offer card
   document.querySelectorAll('.hub-opt-more').forEach(function(btn) {
-    var card = btn.closest('.hub-option');
     var panel = document.getElementById(btn.getAttribute('aria-controls'));
     if (!panel) return;
     btn.addEventListener('click', function() {
       var open = btn.getAttribute('aria-expanded') === 'true';
       btn.setAttribute('aria-expanded', open ? 'false' : 'true');
       panel.classList.toggle('open', !open);
-      // tilt on a tall expanded card feels seasick — park it while open
-      card.classList.toggle('no-tilt', !open);
-      if (open) { card.style.transform = ''; }
     });
   });
 
-  // 3D tilt on hub option cards (pointer devices only, collapsed only)
-  if (fine) {
-    document.querySelectorAll('.hub-option').forEach(function(el) {
-      el.addEventListener('mousemove', function(e) {
-        if (el.classList.contains('no-tilt')) return;
-        var r = el.getBoundingClientRect();
-        var x = (e.clientX - r.left) / r.width - 0.5;
-        var y = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = 'translateY(-2px) perspective(600px) rotateX('+(-y*5)+'deg) rotateY('+(x*5)+'deg) scale(1.005)';
-        el.style.transition = 'none';
-      });
-      el.addEventListener('mouseleave', function() {
-        el.style.transform = '';
-        el.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s, background 0.2s, box-shadow 0.2s';
-      });
-    });
-    // Magnetic CTA buttons
-    document.querySelectorAll('.hub-opt-btn').forEach(function(el) {
-      el.addEventListener('mousemove', function(e) {
-        var r = el.getBoundingClientRect();
-        var dx = (e.clientX - (r.left + r.width/2)) * 0.12;
-        var dy = (e.clientY - (r.top + r.height/2)) * 0.12;
-        el.style.transform = 'translate('+dx+'px,'+dy+'px)';
-        el.style.transition = 'none';
-      });
-      el.addEventListener('mouseleave', function() {
-        el.style.transform = '';
-        el.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
-      });
-    });
-  }
+  // The card tilt and the magnetic CTAs are gone. Two cards side by side
+  // are a comparison; making each one wobble independently made them
+  // harder to read against each other, and the magnetic pull fought the
+  // full-width button it was applied to. Hover state does the work now.
+
   // Rotating testimonials -- pulled from "the word on the street" (ciad)
   var hubTesti = [
     {t:'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', a:'Sarah Edwards &mdash; Copper + Cloves'},
@@ -253,18 +208,20 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     }, 5000);
   }
-  // Spring entrance for hub content items
-  var items = document.querySelectorAll('.hub-eyebrow,.hub-title,.hub-sub,.hub-proof-strip,.hub-options,.hub-testi');
-  items.forEach(function(el, i) {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px) scale(0.97)';
-    el.style.transition = 'none';
-    setTimeout(function() {
-      el.style.transition = 'opacity 0.55s cubic-bezier(0.34,1.56,0.64,1) '+((i*0.07)+0.3)+'s, transform 0.55s cubic-bezier(0.34,1.56,0.64,1) '+((i*0.07)+0.3)+'s';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0) scale(1)';
-    }, 80);
-  });
+  // Spring entrance -- three blocks now, staggered as three, not as six.
+  if (!reduced) {
+    var items = document.querySelectorAll('.hub-head,.hub-options,.hub-testi');
+    items.forEach(function(el, i) {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px) scale(0.97)';
+      el.style.transition = 'none';
+      setTimeout(function() {
+        el.style.transition = 'opacity 0.55s cubic-bezier(0.34,1.56,0.64,1) '+((i*0.09)+0.3)+'s, transform 0.55s cubic-bezier(0.34,1.56,0.64,1) '+((i*0.09)+0.3)+'s';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0) scale(1)';
+      }, 80);
+    });
+  }
 });
 </script>
 </body>
