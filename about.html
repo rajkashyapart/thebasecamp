@@ -26,7 +26,7 @@
 <link rel="dns-prefetch" href="https://vz-6f9a60bb-593.b-cdn.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <title>Raj Kashyap — About</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -47,184 +47,114 @@
 <div id="screen-about" class="screen">
   <a id="about-back" href="playground.html">&#8592; back</a>
   <div id="about-inner">
-    <div class="desk">
 
-    <!-- Overlapping collage. Cards are absolutely placed on a ratio-locked
-         stage on desktop so they genuinely overlap and layer; below 860px the
-         stage unlocks and the whole thing becomes a plain readable stack.
-         Each card owns ONE material and ONE fastener. -->
+    <!-- Text left, photographs right and bled to the edge. No cards, no
+         tape, no tilt: the pictures carry the personality now and the
+         writing stays quiet underneath them. -->
 
-    <!-- PORTRAIT POLAROID -- Raj, holding a camera. Photos on this page are
-         downscaled copies committed to the repo: the CDN serves these at
-         capture size (3024x4032 and up, 14MB for the six) and its image
-         optimiser is off, so ?width= is ignored. 620px wide covers a ~230px
-         card at retina and the whole set is now 268KB. -->
-    <figure class="obj card polaroid c-portrait" style="--rot:-4deg;--z:2">
-      <span class="pin" aria-hidden="true"></span>
-      <img src="/about-raj.webp" alt="Raj Kashyap with a camera" loading="lazy" decoding="async">
-      <figcaption class="hand">that&rsquo;s me &mdash; bangalore</figcaption>
-    </figure>
+    <div class="col">
+      <h1 class="name">Hi there, I&rsquo;m Raj.</h1>
 
-    <!-- HERO -->
-    <div class="obj card paper-plain c-hero" style="--rot:-1deg;--z:6">
-      <span class="clip" aria-hidden="true"></span>
-      <div class="eyebrow">raj kashyap &mdash; bangalore</div>
-      <h1 class="display">hi, i&rsquo;m raj.</h1>
-      <p class="body">one part internet videos, one part strategist, one part person who thinks too much about the whys of everything.</p>
-      <p class="hand hand-note">i make content for a living.<br>i also make content about living.</p>
-      <svg class="doodle doodle-underline" viewBox="0 0 190 12" fill="none" aria-hidden="true">
-        <path d="M3 8C34 3 78 2 112 5c22 2 48 1 74-2" stroke="var(--accent-r)" stroke-width="2.2" stroke-linecap="round"/>
-      </svg>
-    </div>
+      <p class="lede">I&rsquo;m a content strategist, filmmaker and photographer in Bangalore. I run <a href="ciad.html">The Basecamp</a>, where one shoot day becomes a month of content &mdash; built strategy-first, not just pretty.</p>
 
-    <!-- STATS -->
-    <div class="obj card paper-index c-stub" style="--rot:2.2deg;--z:6">
-      <span class="clip clip-r" aria-hidden="true"></span>
-      <div class="eyebrow">the short version</div>
-      <dl class="stub">
-        <div><dt>brands</dt><dd>25+</dd></div>
-        <div><dt>word of mouth</dt><dd>100%</dd></div>
-        <div><dt>in the field</dt><dd>since 2020</dd></div>
-      </dl>
-      <span class="hand hand-scribble">no ads. ever.</span>
-    </div>
-
-    <!-- STUDIO -->
-    <div class="obj card paper-kraft c-studio" style="--rot:1.4deg;--z:5">
-      <span class="staple" aria-hidden="true"></span>
-      <h2 class="h2">the basecamp</h2>
-      <p class="body">content strategist, filmmaker &amp; photographer. i turn <em>one shoot day</em> into a month of content built strategy-first, not just pretty.</p>
-      <p class="meta">for founders, coaches and creators done paying agencies for videos nobody watches twice.</p>
-    </div>
-
-    <!-- TAPED PRINT -->
-    <figure class="obj card print c-print1" style="--rot:3.4deg;--z:2">
-      <span class="tape tape-b" aria-hidden="true"></span>
-      <img src="/about-redphone.webp" alt="Raj Kashyap, at home" loading="lazy" decoding="async">
-    </figure>
-
-    <!-- CV -->
-    <div class="obj card paper-torn c-cv" style="--rot:-0.8deg;--z:6">
-      <span class="clip" aria-hidden="true"></span>
-      <h2 class="h2">experience</h2>
-      <div class="role">
-        <div class="role-top"><span class="role-t">the basecamp &mdash; founder</span><span class="role-d">2024 &mdash; now</span></div>
-        <ul class="pts">
-          <li>built a productized content studio: one shoot day &rarr; a month of content</li>
-          <li>strategy, positioning, direction, shooting, editing, distribution</li>
-        </ul>
-      </div>
-      <div class="role">
-        <div class="role-top"><span class="role-t">freelance &mdash; cinematographer, editor, strategist</span><span class="role-d">2020 &mdash; now</span></div>
-        <ul class="pts">
-          <li>brand films and campaigns for founders, f&amp;b, events and lifestyle</li>
-          <li>concept &rarr; shoot &rarr; edit &rarr; colour &rarr; delivery</li>
-        </ul>
-      </div>
-      <div class="role">
-        <div class="role-top"><span class="role-t">the form co. &mdash; editor, photographer, filmmaker</span><span class="role-d">2020 &mdash; 2022</span></div>
-        <ul class="pts"><li>shot, cut and produced content inside a creative firm</li></ul>
-      </div>
-      <span class="hand hand-margin">a team of one, mostly</span>
-    </div>
-
-    <!-- EDUCATION -->
-    <div class="obj card paper-ruled c-school" style="--rot:-2.6deg;--z:6">
-      <span class="pin pin-b" aria-hidden="true"></span>
-      <h2 class="h2">education</h2>
-      <div class="role">
-        <div class="role-t">st joseph&rsquo;s</div>
-        <p class="meta">b.a. visual communication<br>bangalore, karnataka</p>
-      </div>
-      <div class="role">
-        <div class="role-t">don bosco</div>
-        <p class="meta">school<br>guwahati, assam</p>
-      </div>
-    </div>
-
-    <!-- SKILLS -->
-    <div class="obj card paper-graph c-skills" style="--rot:1.8deg;--z:5">
-      <span class="staple" aria-hidden="true"></span>
-      <h2 class="h2">a team of one</h2>
-      <p class="meta">couldn&rsquo;t afford specialists, so i learned to be all of them.</p>
-      <div class="stickers">
-        <span>strategy</span><span>direction</span><span>cinematography</span>
-        <span>photography</span><span>editing</span><span>colour</span>
-        <span>motion</span><span>scripting</span><span>music</span><span>distribution</span>
-      </div>
-    </div>
-
-    <!-- POLAROID 2 -->
-    <figure class="obj card polaroid c-poly2" style="--rot:5deg;--z:3">
-      <img src="/about-child.webp" alt="Raj as a child in Guwahati" loading="lazy" decoding="async">
-      <figcaption class="hand">guwahati, before all this</figcaption>
-    </figure>
-
-    <!-- UNCURATED -->
-    <div class="obj card band c-band" style="--rot:-3deg;--z:6">
-      <div class="cuff" aria-hidden="true"><i></i><i></i></div>
-      <div class="band-in">
-        <div class="eyebrow">the other half</div>
-        <h2 class="h2">uncurated.raj</h2>
-        <p class="meta">content about the things i actually think about. which turns out to be a lot of things.</p>
-      </div>
-    </div>
-
-    <!-- TAPED PRINT 2 -->
-    <figure class="obj card print c-print2" style="--rot:-5.5deg;--z:2">
-      <span class="tape" aria-hidden="true"></span>
-      <img src="/about-ride.webp" alt="Riding out at dusk" loading="lazy" decoding="async">
-    </figure>
-
-    <!-- OUTSIDE OF WORK -->
-    <div class="obj card paper-plain c-outside" style="--rot:2.6deg;--z:5">
-      <span class="clip clip-r" aria-hidden="true"></span>
-      <div class="eyebrow">outside of work i&rsquo;m</div>
-      <ul class="dots">
-        <li>playing football</li><li>making music</li>
-        <li>learning to draw <span class="hand">(i&rsquo;m bad at it)</span></li>
-        <li>watching ghibli, anime, too much youtube</li>
-        <li>tastemaxxxing</li><li>petting mifi</li>
-        <li>keeping plants alive <span class="hand">(mostly)</span></li>
+      <p class="lede">Outside of work I&rsquo;m:</p>
+      <ul class="list">
+        <li>Playing football</li>
+        <li>Making music</li>
+        <li>Learning to draw (badly)</li>
+        <li>Watching Ghibli, anime, and too much YouTube</li>
+        <li>Petting Mifi</li>
+        <li>Keeping plants alive, mostly</li>
       </ul>
+
+      <p class="lede">I post my work on <a href="https://instagram.com/uncurated.raj" target="_blank" rel="noopener">Instagram</a> and my clients&rsquo; on <a href="portfolio.html">the portfolio</a>. Say hello at <a href="mailto:hello@rajkashyap.studio">hello@rajkashyap.studio</a>.</p>
+
+      <h2 class="sec">Experience</h2>
+      <ul class="rows">
+        <li class="row">
+          <span class="row-name">The Basecamp</span>
+          <span class="row-role">Founder</span>
+          <span class="row-year">2024 &mdash; now</span>
+        </li>
+        <li class="row">
+          <span class="row-name">Freelance</span>
+          <span class="row-role">Film &amp; Photography</span>
+          <span class="row-year">2020 &mdash; now</span>
+        </li>
+        <li class="row">
+          <span class="row-name">The Form Co.</span>
+          <span class="row-role">Editing &amp; Photography</span>
+          <span class="row-year">2020 &mdash; 2022</span>
+        </li>
+      </ul>
+
+      <h2 class="sec">Education</h2>
+      <ul class="rows">
+        <li class="row">
+          <span class="row-name">St Joseph&rsquo;s, Bangalore</span>
+          <span class="row-role">Visual Communication</span>
+          <span class="row-year">2025</span>
+        </li>
+        <li class="row">
+          <span class="row-name">Don Bosco, Guwahati</span>
+          <span class="row-role">School</span>
+          <span class="row-year">2021</span>
+        </li>
+      </ul>
+
+      <h2 class="sec">Selected clients</h2>
+      <p class="clients">Copper + Cloves &middot; Cult.fit &middot; Bira 91 &middot; Bangalore Football League Academy &middot; Nicobar &middot; Thabisa &middot; Amintiri &middot; Stamp &amp; Seal Co. &middot; Nomada &middot; Ember Cookware &middot; Insanely Good Coffee &middot; Indian Music Experience &middot; Upsurge Labs &middot; The Fresh Factory</p>
+
+      <p class="note">25+ brands since 2020, every one of them through word of mouth. Never sent a cold email. Still haven&rsquo;t.</p>
     </div>
 
-    <!-- TRUSTED -->
-    <div class="obj card paper-kraft c-trusted" style="--rot:-1.2deg;--z:6">
-      <span class="tape tape-b" aria-hidden="true"></span>
-      <div class="eyebrow">trusted by</div>
-      <p class="trusted">copper + cloves &middot; cultfit &middot; bira 91 &middot; bangalore football league academy &middot; nicobar &middot; thabisa &middot; amintiri &middot; stamp &amp; seal co. &middot; nomada &middot; ember cookware &middot; insanely good coffee &middot; indian music experience</p>
-    </div>
-
-    <!-- POLAROID 3 -->
-    <figure class="obj card polaroid c-poly3" style="--rot:-6deg;--z:3">
-      <span class="pin" aria-hidden="true"></span>
-      <img src="/about-draw.webp" alt="A drawing in progress" loading="lazy" decoding="async">
-      <figcaption class="hand">getting there</figcaption>
-    </figure>
-
-    <!-- CONTACT -->
-    <div class="obj card paper-plain c-contact" style="--rot:1.6deg;--z:6">
-      <span class="staple" aria-hidden="true"></span>
-      <div class="eyebrow">find me at</div>
-      <a href="https://instagram.com/uncurated.raj" class="link" target="_blank" rel="noopener">@uncurated.raj</a>
-      <a href="mailto:hello@rajkashyap.studio" class="link">hello@rajkashyap.studio</a>
-      <p class="hand hand-note">never sent a cold email.<br>still haven&rsquo;t.</p>
-      <svg class="doodle doodle-arrow" viewBox="0 0 64 40" fill="none" aria-hidden="true">
-        <path d="M4 4c14 16 28 24 52 27" stroke="var(--accent-b)" stroke-width="2" stroke-linecap="round"/>
-        <path d="M46 27l10 4-6 8" stroke="var(--accent-b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-
-    <!-- PRINT 3 -->
-    <figure class="obj card print c-print3" style="--rot:4.2deg;--z:2">
-      <span class="tape" aria-hidden="true"></span>
-      <img src="/about-overlook.webp" alt="Raj Kashyap on an overlook" loading="lazy" decoding="async">
-    </figure>
-
-    </div>
-
-    <p class="signoff">never stop playing. &lt;3</p>
+    <div class="shots">
+      <figure class="tile tall">
+        <img src="/ab-01-raj.webp" alt="Raj Kashyap with a camera" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-02-redphone.webp" alt="At home, Bangalore" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-03-field.webp" alt="Under a tree, in the green" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-04-bar.webp" alt="A night out" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile tall">
+        <img src="/ab-05-overlook.webp" alt="On an overlook" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-06-child.webp" alt="Guwahati, a long time ago" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-07-draw.webp" alt="A drawing in progress" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-08-sketch.webp" alt="Sketchbook and plants" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile tall">
+        <img src="/ab-09-towers.webp" alt="Petronas Towers, Kuala Lumpur" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-10-beach.webp" alt="A figure on the shoreline" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-11-dogs.webp" alt="Street dogs in the sun" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-12-desk.webp" alt="The desk everything gets cut on" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-13-fog.webp" alt="Riders in the fog" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile">
+        <img src="/ab-14-park.webp" alt="Trees and open sky" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile tall">
+        <img src="/ab-15-ride.webp" alt="Riding out at dusk" loading="lazy" decoding="async">
+      </figure>
+    </div><!-- /.shots -->
 
   </div><!-- /#about-inner -->
 </div><!-- /#screen-about -->
@@ -233,34 +163,9 @@
 <script src="about.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  var objs = document.querySelectorAll('.obj');
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Opacity only. Every card carries its tilt in an inline --rot and gets its
-  // transform from CSS, so writing an inline transform here would flatten the
-  // whole collage -- and the hover lift needs that transform slot free.
-  if (reduced || !('IntersectionObserver' in window)) {
-    objs.forEach(function(el) { el.classList.add('in'); });
-    return;
-  }
-
-  var io = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (!entry.isIntersecting) return;
-      var el = entry.target;
-      setTimeout(function() { el.classList.add('in'); }, parseFloat(el.dataset.delay || 0));
-      io.unobserve(el);
-    });
-  }, {threshold: 0.08});
-
-  objs.forEach(function(el, i) {
-    // On the desktop collage the cards are absolutely placed, so DOM order is
-    // not reading order -- stagger by how far down the page each one sits.
-    el.dataset.delay = Math.min(i, 8) * 55;
-    io.observe(el);
-  });
-});
+// The About page has no entrance animation any more: it is a page of
+// photographs, and fading a photo grid in on scroll just delays the work.
+// Caveat is no longer requested either -- nothing here is handwritten.
 </script>
 </body>
 </html>
