@@ -7,5 +7,20 @@
   },
   "attribution": {
     "commit": "Co-Authored-By: claude-flow <ruv@ruv.net>"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d).on(\"end\",()=>{try{const t=JSON.parse(s),i=t.tool_input||{},q=String(i.file_path||\"\").toLowerCase().replace(/\\\\/g,\"/\");if(!/\\.(html|css|js)$/.test(q)||q.indexOf(\"/api/\")>=0)return;const b=String(i.new_string||i.content||\"\"),m=[\"DESIGN GATE (CLAUDE.md): emil-design-eng must be loaded this session before any frontend edit -- refinement and polish passes count. If this edit ADDS a block, type size, color, or metaphor, say what it removes. Budgets per page: 5 font sizes, 1 accent (About=2), spacing only 8/32/128, 1 physical-object metaphor.\"];if(/@keyframes|animation|transition|transform|cubic-bezier/i.test(b))m.push(\"This edit touches motion -- run review-animations before committing, whether or not you wrote that animation.\");console.log(JSON.stringify({hookSpecificOutput:{hookEventName:\"PreToolUse\",additionalContext:m.join(\" \")}}));}catch(e){}});'",
+            "timeout": 10,
+            "statusMessage": "Design gate"
+          }
+        ]
+      }
+    ]
   }
 }
