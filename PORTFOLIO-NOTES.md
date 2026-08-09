@@ -1,69 +1,85 @@
-# Portfolio credits — fill these in
+# Portfolio credits
 
-Two lines per client. They render on every piece of that client's work in the
+Two lines per client, rendered on every piece of that client's work in the
 reel, under the client name:
 
 ```
 CONTENT
 Copper + Cloves
 SARAH EDWARDS
-MY PART      strategy, shoot direction, edit
-WHAT IT DID  <the outcome>
+MY PART      counter-positioning, ideation, direction, shoot, edit — all of it mine
+WHAT IT DID  first video hit 22× the reach of their average post
 ```
 
-## Rules
+Written 2026-08-09. All six clients with live media are done.
 
-- **One line each.** Roughly 90 characters max, or it wraps three deep over the
-  video and starts fighting the film for attention.
-- **`role` = your exact inputs.** Not "content" — the verbs. `positioning calls,
-  scripting, shoot direction, edit, posting cadence`.
-- **`outcome` = what it did for them.** A number if you have one. If you don't,
-  a concrete qualitative result beats a vague one: "went from posting ad-hoc to
-  a weekly series they still run" beats "improved their content."
-- Lowercase, no full stop at the end — matches the rest of the site's voice.
-- Skip a client and nothing renders for them. No broken layout, no placeholder.
-  Filling them in one at a time is fine.
+## What's written
 
-## Where they go
+| Client | My part | What it did |
+|---|---|---|
+| Copper + Cloves | counter-positioning, ideation, direction, shoot, edit | first video hit 22× their average post |
+| Upsurge Labs | edit — 48 videos, 48-hour turnaround | first edit 20× their average; run averaged up to 3× |
+| The Fresh Factory | concept, direction, shoot, edit | one video hit 20× their average post |
+| Insanely Good Coffee | positioning, ideation, concept, edit — fully remote | 2.5–3× above their average across the set |
+| Kaheen | positioning, concept, direction, shoot, edit | first reel hit 20× their average post |
+| Indian Cacao Festival | content direction, on-ground coverage, edit | content that helped sell the festival out |
 
-`portfolio.js`, top of the file. Each project has an empty `role` and `outcome`
-waiting:
+**uncurated.raj** is intentionally blank — role and outcome are client
+language and don't apply to personal work. Those pieces carry the playground
+link instead.
+
+## Conventions in use
+
+- **Outliers spell out what they're measured against.** "22× the reach of
+  their average post", not "22× outlier". If a client ever asks "22× what?",
+  the line already answers it. Keep this if you add more.
+- **"counter-positioning"** on Copper + Cloves is deliberate — the strategy
+  term, hyphenated so it doesn't read as a typo for "content positioning".
+- **The Cacao line claims contribution, not causation** — "content that helped
+  sell the festival out". Their sellout, your contribution.
+- **Upsurge says 48 videos, the reel shows 12.** That's fine: the credit
+  describes the engagement, the reel is a selection. If you ever want the two
+  to match, send the remaining video IDs and I'll add them.
+- One line each, ~90 characters max, or it wraps three deep over the video and
+  starts competing with the film. All six currently sit between 31 and 70.
+- Lowercase, no full stop. Use HTML entities — `&mdash;` `&times;` `&ndash;` —
+  never raw unicode; `portfolio.js` has a known corruption problem with
+  non-ASCII.
+
+## Still open — the five with no media
+
+These have no `src` on any item, so they're invisible in both portfolio views
+and have no credits written:
+
+| id | client |
+|---|---|
+| `fifty50-menu` | Fifty 50 |
+| `christmas-cc` | Copper + Cloves — holiday campaign |
+| `cc-menu` | Copper + Cloves — menu |
+| `ame-pashm` | AME by Pashm |
+| `cultfit-release` | Cult.fit release event |
+
+Upload photos to Bunny, drop the URLs into their `items` arrays, and they
+appear. Credits can be written at the same time — the empty `role`/`outcome`
+slots are already there.
+
+## Adding or editing a credit
+
+`portfolio.js`, top of file. Each project carries the two fields:
 
 ```js
 {
-  id: 'sarah-edwards',
-  name: 'Copper + Cloves',
+  id: 'kaheen',
   ...
-  role: '',      // <- your inputs
-  outcome: '',   // <- what it did
+  role: 'positioning, concept, direction, shoot, edit',
+  outcome: 'first reel hit 20&times; the reach of their average post',
   items: [ ... ]
 }
 ```
 
-To see the empty slots on the page while you write, open
-`localhost:8080/portfolio.html?slots=1` — they show in pink. Without the flag
-(i.e. for any client looking at the live site) empty slots render nothing.
+Empty slots render nothing at all — no placeholder, no gap. Open
+`localhost:8080/portfolio.html?slots=1` to see where the empty ones sit while
+you write.
 
-If a single piece needs its own credit that differs from the client's, add
-`role`/`outcome` directly to that item in `items: [...]` — it overrides the
-project-level one.
-
-## The 12 to fill
-
-| # | id | client |
-|---|---|---|
-| 1 | `sarah-edwards` | Copper + Cloves — Sarah Edwards |
-| 2 | `upsurge-labs` | Upsurge Labs — Sowmay Jain |
-| 3 | `fresh-factory` | The Fresh Factory — Prabhjot Dhami |
-| 4 | `insanely-good-coffee` | Insanely Good Coffee — Aditya Kumar |
-| 5 | `kaheen` | Kaheen — Shashank Arora |
-| 6 | `fifty50` | Fifty 50 |
-| 7 | (holiday campaign) | Copper + Cloves |
-| 8 | (menu) | Copper + Cloves |
-| 9 | (cacao festival) | Patricia · Ketaki · Sneha |
-| 10 | (ame) | Pashm |
-| 11 | (cult.fit) | Cult.fit |
-| 12 | `personal` | uncurated.raj — personal |
-
-For #12, `role`/`outcome` don't really apply. Either leave both empty or use
-`role` alone for a one-line note about the work.
+For a single piece that needs its own credit, put `role`/`outcome` directly on
+that item in `items: [...]` — it overrides the project-level one.
