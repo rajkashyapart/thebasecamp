@@ -644,11 +644,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 /* ── the writing ───────────────────────────────────── */
 .col{
-  padding:44px 40px 26px clamp(22px,3.4vw,52px);
+  padding:40px 38px 20px clamp(20px,3.2vw,48px);
   max-width:640px;
 }
 .name{
-  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
   font-size:var(--name);line-height:1.1;letter-spacing:-0.01em;
   color:var(--ink);margin:0 0 11px;
 }
@@ -677,9 +677,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .col a:focus-visible{outline:2px solid var(--accent-r);outline-offset:3px;border-radius:2px;}
 
 .sec{
-  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
   font-size:var(--sec);color:var(--ink);
-  margin:18px 0 2px;letter-spacing:-0.005em;
+  margin:15px 0 2px;letter-spacing:-0.005em;
 }
 
 /* ── ruled records ─────────────────────────────────── */
@@ -747,10 +747,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   font-family:'DM Mono',monospace;font-size:var(--small);
   line-height:1.6;color:var(--ink-muted);margin:7px 0 0;text-wrap:pretty;
 }
-.note{
-  font-family:'DM Mono',monospace;font-size:var(--small);
-  line-height:1.6;color:var(--ink-muted);margin:14px 0 0;
-  padding-top:11px;border-top:1px solid rgba(30,25,20,0.11);
+.brag{
+  font-family:'DM Mono',monospace;font-size:var(--text);
+  line-height:1.85;color:var(--ink);margin:13px 0 2px;text-wrap:pretty;
+}
+.brag b{font-weight:500;color:var(--ink);}
+.mark-strong{
+  background-image:linear-gradient(103deg,
+    rgba(255,123,172,0) 0.4%,
+    rgba(255,123,172,0.55) 2.4%,
+    rgba(255,123,172,0.50) 95%,
+    rgba(255,123,172,0) 99%);
+  background-size:100% 74%;
+  background-position:0 74%;
 }
 
 /* ── the photographs ───────────────────────────────── */
@@ -762,6 +771,18 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   column-count:6;column-gap:7px;
   padding:6px 6px 6px 0;
 }
+/* Once the gallery script has run, the mosaic is justified rows instead of
+   masonry columns: row height is continuous where a column count is
+   quantised, so the grid can fill the viewport exactly at any window size
+   without cropping a single photograph. */
+.shots.justified{
+  column-count:auto;
+  display:flex;flex-direction:column;justify-content:center;
+  gap:7px;padding:0 6px 0 0;
+}
+.shots.justified .srow{display:flex;gap:7px;}
+.shots.justified .tile{margin:0;flex:0 0 auto;}
+.shots.justified .tile img{height:100%;object-fit:cover;}
 .tile{
   margin:0 0 7px;
   break-inside:avoid;-webkit-column-break-inside:avoid;
@@ -791,6 +812,22 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 @media(max-width:1100px){
   #about-inner{grid-template-columns:minmax(300px,38%) 1fr;}
   .col{padding:88px 30px 80px clamp(20px,3.5vw,40px);}
+}
+
+/* Short viewports (1366x768, 13" airs). The writing, not the photographs,
+   is what overflows there. Tighten the rhythm rather than delete a section
+   -- the education history and the client list both earn their place. */
+@media(min-width:821px) and (max-height:840px){
+  #about-inner{--name:clamp(27px,2.2vw,32px);--sec:19px;--text:14px;--small:13px;--hand:18px;}
+  .col{padding:26px 34px 14px clamp(18px,3vw,42px);}
+  .name{margin-bottom:8px;}
+  .lede{line-height:1.45;margin-bottom:9px;}
+  .list{margin-bottom:9px;}
+  .list li{line-height:1.45;}
+  .sec{margin:11px 0 1px;}
+  .row{padding:5px 0;}
+  .brag{line-height:1.7;margin:10px 0 2px;}
+  .clients{line-height:1.5;margin-top:5px;}
 }
 
 /* ── stacked ───────────────────────────────────────── */
