@@ -636,7 +636,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   --hand:20px;
 
   display:grid;
-  grid-template-columns:minmax(360px,35%) 1fr;
+  grid-template-columns:minmax(380px,43%) 1fr;
   align-items:start;
   min-height:100%;
 }
@@ -644,19 +644,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 /* ── the writing ───────────────────────────────────── */
 .col{
-  padding:96px 44px 96px clamp(24px,4vw,64px);
-  max-width:560px;
+  padding:44px 40px 26px clamp(22px,3.4vw,52px);
+  max-width:640px;
 }
 .name{
   font-family:'Cormorant Garamond',serif;font-weight:400;
   font-size:var(--name);line-height:1.1;letter-spacing:-0.01em;
-  color:var(--ink);margin:0 0 22px;
+  color:var(--ink);margin:0 0 11px;
 }
 .lede{
   font-family:'DM Mono',monospace;font-size:var(--text);
-  line-height:1.6;color:var(--ink-body);margin:0 0 16px;text-wrap:pretty;
+  line-height:1.55;color:var(--ink-body);margin:0 0 12px;text-wrap:pretty;
 }
-.list{list-style:none;padding:0;margin:0 0 16px;}
+.list{list-style:none;padding:0;margin:0 0 12px;}
 .list li{
   font-family:'DM Mono',monospace;font-size:var(--text);
   line-height:1.6;color:var(--ink-body);
@@ -679,7 +679,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .sec{
   font-family:'Cormorant Garamond',serif;font-weight:400;
   font-size:var(--sec);color:var(--ink);
-  margin:40px 0 6px;letter-spacing:-0.005em;
+  margin:18px 0 2px;letter-spacing:-0.005em;
 }
 
 /* ── ruled records ─────────────────────────────────── */
@@ -690,7 +690,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .row{
   display:flex;align-items:baseline;flex-wrap:wrap;
   column-gap:5px;
-  padding:11px 0;
+  padding:7px 0;
   border-bottom:1px solid rgba(30,25,20,0.11);
   font-family:'DM Mono',monospace;font-size:var(--small);
 }
@@ -745,12 +745,12 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 .clients{
   font-family:'DM Mono',monospace;font-size:var(--small);
-  line-height:1.75;color:var(--ink-muted);margin:10px 0 0;text-wrap:pretty;
+  line-height:1.6;color:var(--ink-muted);margin:7px 0 0;text-wrap:pretty;
 }
 .note{
   font-family:'DM Mono',monospace;font-size:var(--small);
-  line-height:1.7;color:var(--ink-muted);margin:26px 0 0;
-  padding-top:18px;border-top:1px solid rgba(30,25,20,0.11);
+  line-height:1.6;color:var(--ink-muted);margin:14px 0 0;
+  padding-top:11px;border-top:1px solid rgba(30,25,20,0.11);
 }
 
 /* ── the photographs ───────────────────────────────── */
@@ -759,18 +759,18 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    and the tiles were landscape. Columns let each keep its own shape, so
    nothing is cropped and there is no letterboxing either. */
 .shots{
-  column-count:3;column-gap:8px;
-  padding:8px 8px 8px 0;
+  column-count:6;column-gap:7px;
+  padding:6px 6px 6px 0;
 }
 .tile{
-  margin:0 0 8px;
+  margin:0 0 7px;
   break-inside:avoid;-webkit-column-break-inside:avoid;
-  overflow:hidden;border-radius:10px;background:#e8e3db;
+  overflow:hidden;border-radius:7px;background:#e8e3db;
   box-shadow:0 1px 3px rgba(45,33,22,0.07);
   transition:transform .4s cubic-bezier(0.23,1,0.32,1),
              box-shadow .4s cubic-bezier(0.23,1,0.32,1);
 }
-.tile img{width:100%;height:auto;display:block;border-radius:10px;}
+.tile img{width:100%;height:auto;display:block;border-radius:7px;}
 @media(hover:hover) and (pointer:fine){
   .tile:hover{
     transform:translateY(-3px);
@@ -786,9 +786,8 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .obj{opacity:1;}
 
 /* ── narrower desktops ─────────────────────────────── */
-@media(max-width:1240px){
-  .shots{column-count:2;}
-}
+@media(max-width:1160px){ .shots{column-count:5;} }
+@media(max-width:1000px){ .shots{column-count:4;} }
 @media(max-width:1100px){
   #about-inner{grid-template-columns:minmax(300px,38%) 1fr;}
   .col{padding:88px 30px 80px clamp(20px,3.5vw,40px);}
@@ -801,7 +800,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
     padding:86px 20px 40px;
     max-width:640px;margin:0 auto;
   }
-  .shots{column-count:2;padding:0 14px 20px;}
+  .shots{column-count:3;padding:0 14px 18px;}
 }
 @media(max-width:430px){
   #about-inner{--name:30px;--sec:19px;--text:14.5px;--small:13px;--hand:19px;}
