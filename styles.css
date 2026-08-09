@@ -11,6 +11,9 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
 
 :root{
   --bg-warm:#f5f2ee;--ink:#1a1814;--ink-muted:#8a8580;--ink-faint:#c8c3bc;
+  /* --ink-muted is 3.2:1 on --bg-warm — under the 4.5:1 floor, so it is for
+     tracked labels and eyebrows only. Anything set as a sentence uses this. */
+  --ink-body:#5a544c;   /* 6.6:1 on --bg-warm */
   --accent-r:#ff7bac;--accent-g:#3a8c52;--accent-b:#0d8aaf;
   --shadow:rgba(30,25,20,0.12);
 
@@ -31,6 +34,15 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
   --t-h3:22px;
   --t-h2:24px;
   --t-h1:28px;      /* above this, use a clamp() — display type is fluid */
+
+  /* ---- Prose ----
+     Sentences are set in the serif; mono is for labels, data and controls.
+     Cormorant has a small x-height, so its reading sizes run ~4px larger than
+     a sans would to land at the same optical size. */
+  --t-prose:18px;
+  --t-prose-sm:16px;  /* prose inside a narrow card or list */
+  --t-prose-lead:21px;
+  --lh-serif:1.55;
 
   /* ---- Line-height, by role ---- */
   --lh-display:1.05;  /* big serif, set tight */
@@ -53,10 +65,16 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
    Applies across both design systems (warm paper + iOS dark).
    Everything here is a default the section rules can still override.
 ====================================================== */
+/* Subpixel smoothing (the default) renders dark-on-light text heavier and
+   crisper. `antialiased` thins it — wrong for a light serif at reading size on
+   warm paper, which is most of this site. The dark CIAD screen is the
+   exception: light-on-dark genuinely wants the thinner rendering. */
 body{
+  text-rendering:optimizeLegibility;
+}
+#screen-ciad,#screen-video{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  text-rendering:optimizeLegibility;
 }
 /* Headings hold together instead of dropping a single orphan word. */
 h1,h2,h3,h4,h5,h6,
@@ -316,7 +334,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   color:var(--ink-muted);opacity:0.7;margin-bottom:9px;
 }
 .hub-opt-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--ink);margin-bottom:9px;line-height:1.14;letter-spacing:-0.012em;}
-.hub-opt-desc{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.02em;color:var(--ink-muted);line-height:1.66;max-width:44ch;text-wrap:pretty;}
+.hub-opt-desc{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:var(--t-prose);letter-spacing:0.005em;color:var(--ink-body);line-height:var(--lh-serif);max-width:34em;text-wrap:pretty;}
 
 /* Facts row — the three things a client needs before clicking anything */
 .hub-facts{
@@ -385,46 +403,58 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .hub-steps li{
   counter-increment:hs;position:relative;
-  padding-left:26px;margin-bottom:11px;
-  font-family:'DM Mono',monospace;font-size:12px;line-height:1.66;
-  color:var(--ink-muted);text-wrap:pretty;
+  padding-left:26px;margin-bottom:10px;
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;
+  color:var(--ink-body);text-wrap:pretty;max-width:36em;
 }
+/* the counter is data, so it stays mono */
 .hub-steps li::before{
   content:counter(hs,decimal-leading-zero);
-  position:absolute;left:0;top:0.1em;
+  position:absolute;left:0;top:0.42em;
+  font-family:'DM Mono',monospace;
   font-size:9px;letter-spacing:0.08em;color:var(--accent-r);
 }
-.hub-steps b,.hub-done b{font-weight:500;color:var(--ink);}
+/* Cormorant roman only ships 300/400 here, so a bold lead-in would be
+   synthesised — and faux bold on a garalde looks smeared. Italic does the
+   same scanning job and is a real cut. */
+.hub-steps b,.hub-done b{font-style:italic;font-weight:400;color:var(--ink);}
 
 .hub-caps{
   display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;
 }
+/* chips stay mono — they're labels — but at 9px they were holding whole
+   phrases like "content strategy & positioning" at eyebrow size */
 .hub-caps span{
-  font-family:'DM Mono',monospace;font-size:9px;
-  letter-spacing:0.09em;color:var(--ink-muted);
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:0.02em;color:var(--ink-body);line-height:1.4;
   border:1px solid rgba(30,25,20,0.11);border-radius:100px;
-  padding:4px 10px;background:rgba(255,255,255,0.4);
+  padding:5px 11px;background:rgba(255,255,255,0.4);
 }
 .hub-done{
   list-style:none;margin:16px 0 0;padding:0;
 }
 .hub-done li{
-  position:relative;padding-left:16px;margin-bottom:9px;
-  font-family:'DM Mono',monospace;font-size:12px;line-height:1.66;
-  color:var(--ink-muted);text-wrap:pretty;
+  position:relative;padding-left:17px;margin-bottom:8px;
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;
+  color:var(--ink-body);text-wrap:pretty;max-width:36em;
 }
 .hub-done li::before{
-  content:'';position:absolute;left:0;top:0.62em;
+  content:'';position:absolute;left:0;top:0.58em;
   width:5px;height:5px;border-radius:50%;background:var(--accent-b);opacity:0.55;
 }
 .hub-opt-forwho{
-  margin:14px 0 0;padding-top:13px;
+  margin:15px 0 0;padding-top:13px;
   border-top:1px solid rgba(30,25,20,0.08);
-  font-family:'DM Mono',monospace;font-size:12px;line-height:1.66;
-  color:var(--ink-muted);text-wrap:pretty;
+  font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;
+  color:var(--ink-body);text-wrap:pretty;max-width:36em;
 }
+/* the parent is serif now, so this label has to name mono explicitly */
 .hub-opt-forwho span{
-  display:block;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
+  display:block;font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:0.16em;text-transform:uppercase;
   color:var(--ink);opacity:0.65;margin-bottom:5px;
 }
 .hub-opt-sublink{
@@ -517,7 +547,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .hub-testi-text{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:18px;line-height:1.66;
+  font-size:18px;line-height:1.55;
   color:var(--ink);margin:0 0 14px;letter-spacing:0.005em;
   transition:opacity 0.5s ease;
 }
@@ -556,7 +586,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .about-intro{text-align:center;transform:translateY(22px);}
 .about-intro.in{transform:translateY(0);}
 .about-h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(52px,10vw,88px);line-height:0.95;letter-spacing:-0.02em;color:var(--ink);margin-bottom:24px;}
-.about-lead{font-family:'DM Mono',monospace;font-size:14px;line-height:2.0;color:var(--ink-muted);max-width:480px;margin:0 auto;}
+/* was 14px mono at line-height 2.0 — at that leading the lines drift apart
+   and the paragraph stops holding together as one block */
+.about-lead{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:var(--t-prose-lead);line-height:var(--lh-serif);letter-spacing:0.005em;color:var(--ink-body);max-width:27em;margin:0 auto;text-wrap:pretty;}
 
 .about-hang-section{display:flex;align-items:flex-start;gap:44px;transform:rotate(-5deg) translateY(22px);transform-origin:top center;}
 .about-hang-section.in{transform:rotate(-5deg) translateY(0);}
@@ -591,7 +623,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .hang-body{padding:8px 22px 22px;}
 .hang-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent-b);opacity:0.75;margin-bottom:7px;}
 .hang-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--accent-b);margin-bottom:10px;line-height:1.1;}
-.hang-desc{font-family:'DM Mono',monospace;font-size:12px;line-height:1.85;color:var(--ink-muted);margin-bottom:14px;}
+.hang-desc{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:var(--t-prose-sm);line-height:1.5;letter-spacing:0.005em;color:var(--ink-body);margin-bottom:14px;text-wrap:pretty;}
 .hang-icons{font-size:14px;letter-spacing:10px;color:var(--ink-muted);margin-bottom:14px;opacity:0.55;}
 .hang-bc-bars{
   height:30px;width:100%;
@@ -609,7 +641,8 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 .about-trusted{padding-top:90px;flex:1;min-width:0;}
 .trusted-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;opacity:0.65;}
-.trusted-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--accent-r);line-height:2.3;display:block;transition:color 0.18s, letter-spacing 0.22s cubic-bezier(0.23,1,0.32,1);}
+/* leading and list spacing are different jobs — 2.3 was doing both badly */
+.trusted-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--accent-r);line-height:1.35;display:block;margin-bottom:9px;transition:color 0.18s, letter-spacing 0.22s cubic-bezier(0.23,1,0.32,1);}
 @media(hover:hover) and (pointer:fine){.trusted-name:hover{color:var(--ink);letter-spacing:0.03em;}}
 
 /* About page new elements */
@@ -667,7 +700,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 .about-outside{margin-top:16px;padding-left:76px;}
 .ao-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;}
-.ao-items{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink-muted);line-height:2.1;}
+.ao-items{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-prose-sm);color:var(--ink-body);line-height:1.7;}
 .ao-dot{color:var(--accent-r);margin-right:5px;}
 
 .about-receipt-wrap{transform:rotate(-2deg) translateY(22px);max-width:420px;margin:0 auto;}
@@ -2216,7 +2249,11 @@ html.vt-folder::view-transition-new(folder-morph){
     gap:36px !important;
   }
   .about-h1{ font-size:clamp(44px,13vw,68px); margin-bottom:16px; letter-spacing:-0.02em; }
-  .about-lead{ font-size:13px !important; line-height:2.0; }
+  .about-lead{ font-size:18px !important; line-height:1.5; }
+  .hang-desc,.cv-points li{ font-size:15px; }
+  .hub-opt-desc{ font-size:16px; }
+  .hub-steps li,.hub-done li,.hub-opt-forwho{ font-size:15px; }
+  .hub-caps span{ font-size:10px; }
   /* Hang section: stack vertically on narrow screens */
   .about-hang-section{
     flex-direction:column !important;
@@ -2674,8 +2711,8 @@ html.vt-folder::view-transition-new(folder-morph){
 .cv-role-title{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(17px,2.6vw,21px); color:var(--ink); line-height:1.2; }
 .cv-role-date{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.08em; color:var(--ink-muted); white-space:nowrap; flex-shrink:0; }
 .cv-points{ list-style:none; margin:0; padding:0; }
-.cv-points li{ position:relative; padding-left:18px; font-family:'DM Mono',monospace; font-size:12px; line-height:1.66; color:var(--ink-muted); margin-bottom:5px; }
-.cv-points li::before{ content:'\2014'; position:absolute; left:0; color:var(--accent-r); }
+.cv-points li{ position:relative; padding-left:20px; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:var(--t-prose-sm); line-height:1.5; letter-spacing:0.005em; color:var(--ink-body); margin-bottom:7px; text-wrap:pretty; max-width:38em; }
+.cv-points li::before{ content:'\2014'; position:absolute; left:0; color:var(--accent-r); font-family:'DM Mono',monospace; font-size:10px; top:0.34em; }
 .cv-skills{ display:flex; flex-wrap:wrap; gap:8px; }
 .cv-skill{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.03em; color:var(--ink); background:rgba(255,255,255,0.55); border:1px solid rgba(30,25,20,0.1); border-radius:100px; padding:6px 14px; }
 .cv-fill{ color:var(--ink-faint); font-style:italic; }
