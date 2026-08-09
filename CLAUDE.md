@@ -128,13 +128,15 @@ So:
 | Budget | Limit |
 |---|---|
 | Distinct font sizes | 5 |
-| Accent colors | 1, with a stated job |
+| Accent colors | 1, with a stated job — **except About**, which runs pink *and* blue on purpose: blue marks the work, pink marks the person. Two accents are fine when the split carries meaning; two accents used interchangeably are not. |
 | Spacing values | 3 tiers only: `8px` inside a unit, `32px` between units, `128px` between sections |
 | Physical-object metaphors | 1 |
 
 Nothing between the spacing tiers. The whole point is that the jump from 32 to 128 is what tells the eye a new section began. An 11-value scale running 2px→36px (what About had) communicates nothing.
 
 **Proximity beats decoration.** The gap *between* two things must always exceed the padding *inside* them. Hub violated this — 16px between the two offer cards, 26px of padding within each — so the two choices visually fused into one blob.
+
+**About is the scatter page.** It deliberately breaks the tidy-grid instinct: every cell carries its own `--rot`, a stagger margin, and its own drift animation on its own clock, matching the playground canvas. Don't straighten it. Do keep the tilt and drift off below 640px — at one column wide they read as broken alignment and jitter respectively.
 
 **Comparison requires adjacency.** If a page asks the user to choose between options, those options must be visible simultaneously. Stacked vertically, they can't be compared, only remembered.
 
