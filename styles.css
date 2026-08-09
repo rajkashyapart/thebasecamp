@@ -125,7 +125,7 @@ p,li,dd,figcaption,
 .pg-brand{font-family:'DM Mono',monospace;font-size:16px;font-weight:400;letter-spacing:0.1em;color:var(--ink);pointer-events:all;cursor:pointer;}
 .pg-brand a{color:inherit;text-decoration:none;cursor:pointer;}
 .pg-links{display:flex;gap:26px;pointer-events:all;}
-.pg-links a{font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:0.11em;text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.58;transition:opacity 0.2s;cursor:pointer;white-space:nowrap;}
+.pg-links a{font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:0.11em;text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.58;transition:opacity 0.2s;cursor:pointer;white-space:nowrap;position:relative;}
 .nav-short{display:none;}
 /* Mobile: compact nav */
 @media(max-width:639px){
@@ -133,12 +133,30 @@ p,li,dd,figcaption,
   .pg-brand{font-size:11px !important;}
   .pg-links{gap:16px;}
   .pg-links a{font-size:10px !important;letter-spacing:0.07em;white-space:nowrap;}
+  .nav-ink{bottom:-3px;}
   .nav-full{display:none;}
   .nav-short{display:inline;}
   .pg-headline{font-size:28px;}
 }
 .pg-links a:hover{opacity:1;}
-.pg-links a.active{opacity:1;text-decoration:underline;text-underline-offset:3px;}
+.pg-links a.active{opacity:1;text-decoration:none;}
+
+/* Nav ink — the active-page marker. One per document, same
+   view-transition-name on every page, so a cross-document navigation slides it
+   from the old link to the new one instead of cutting. Has to be a real
+   element: view-transition-name doesn't apply to ::after. */
+.nav-ink{
+  position:absolute;left:0;right:0;bottom:-5px;height:1.5px;
+  background:var(--accent-r);border-radius:2px;
+  view-transition-name:nav-ink;
+}
+::view-transition-group(nav-ink){
+  animation-duration:0.42s;
+  animation-timing-function:cubic-bezier(0.23,1,0.32,1);
+}
+::view-transition-old(nav-ink),::view-transition-new(nav-ink){
+  animation-duration:0.42s;
+}
 
 #pg-canvas{position:absolute;inset:0;overflow:hidden;cursor:grab;touch-action:none;background:var(--bg-warm);}
 #pg-canvas::before{content:'';position:absolute;inset:0;z-index:0;background-image:radial-gradient(circle, rgba(180,175,168,0.25) 1px, transparent 1px);background-size:24px 24px;pointer-events:none;}
@@ -188,8 +206,13 @@ p,li,dd,figcaption,
 .pg-glyph.f{color:var(--ink-faint);}
 
 @keyframes pgFadeIn{from{opacity:0;}to{opacity:1;}}
-#pg-nav{opacity:0;pointer-events:none;visibility:hidden;transition:opacity 0.5s ease,visibility 0.5s ease;}
-#pg-nav.nav-visible{opacity:1;pointer-events:all;visibility:visible;}
+/* The nav starts visible everywhere. It used to start hidden and be revealed
+   by JS on DOMContentLoaded, which meant the incoming page's nav was still
+   visibility:hidden when a cross-document view transition took its snapshot —
+   the nav ink had nothing to morph into. Only the video intro hides it now. */
+#pg-nav{opacity:1;pointer-events:all;visibility:visible;transition:opacity 0.5s ease,visibility 0.5s ease;}
+body:has(#screen-video) #pg-nav{opacity:0;pointer-events:none;visibility:hidden;}
+body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibility:visible;}
 .pg-card,.pg-text-card{animation:pgFadeIn 0.5s ease both;}
 
 /* Ambient float — 8 unique drift paths for playground cards */
@@ -1140,6 +1163,26 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 @media(max-width:639px){
   @keyframes winOpen{from{opacity:0;transform:translate(-50%,-50%) scale(.88);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
 }
+/* Folder -> window morph. The titlebar icon and the desktop folder icon share
+   a view-transition-name, so the icon flies into the titlebar while the window
+   materialises around it. `.no-open-anim` is set on windows opened this way —
+   the morph is the entrance, winOpen would double it. */
+.window.no-open-anim{animation:none;}
+html.vt-folder::view-transition-old(root),
+html.vt-folder::view-transition-new(root){
+  animation-duration:0.26s;
+}
+html.vt-folder::view-transition-group(folder-morph){
+  animation-duration:0.42s;
+  animation-timing-function:cubic-bezier(0.32,0.72,0,1);
+  z-index:10;
+}
+html.vt-folder::view-transition-old(folder-morph),
+html.vt-folder::view-transition-new(folder-morph){
+  animation-duration:0.30s;
+  animation-timing-function:cubic-bezier(0.23,1,0.32,1);
+}
+
 .window.closing{animation:winClose .10s ease-out both;}
 @keyframes winClose{to{opacity:0;transform:translate(-50%,-50%) scale(.92);}}
 @media(max-width:639px){
@@ -2271,7 +2314,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 /* View toggle — shuffled / by client. Sits under the nav, top-right. */
 #reel-view{
   position:fixed; top:calc(var(--nav-h,54px) + 14px); right:22px; z-index:70;
-  display:flex; align-items:center; gap:2px;
+  display:grid; grid-template-columns:1fr 1fr;
   padding:3px;
   background:rgba(245,242,238,0.76);
   backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
@@ -2279,17 +2322,27 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   border-radius:100px;
   box-shadow:0 2px 10px -4px rgba(45,33,22,0.14);
 }
+/* The selected pill is one element that slides, not two backgrounds that
+   swap. Equal grid columns mean it travels on translateX alone — scaling a
+   100px-radius pill to fit a different width visibly deforms the ends. */
+.reel-view-ink{
+  position:absolute; left:3px; top:3px;
+  width:calc((100% - 6px) / 2); height:calc(100% - 6px);
+  background:var(--ink); border-radius:100px; z-index:0;
+  transition:transform 0.32s cubic-bezier(0.23,1,0.32,1);
+}
+#reel-view[data-mode="client"] .reel-view-ink{ transform:translateX(100%); }
+#reel-view.no-anim .reel-view-ink{ transition:none; }
 .reel-view-btn{
+  position:relative; z-index:1;
   appearance:none; border:0; background:transparent; cursor:pointer;
   font-family:'DM Mono',monospace; font-size:10px;
-  letter-spacing:0.13em; text-transform:lowercase;
+  letter-spacing:0.13em; text-transform:lowercase; white-space:nowrap;
   color:var(--ink-muted);
   padding:7px 15px; border-radius:100px;
-  transition:color 0.2s ease, background 0.22s cubic-bezier(0.23,1,0.32,1), transform 0.16s ease-out;
+  transition:color 0.24s ease, transform 0.16s ease-out;
 }
-.reel-view-btn.on{
-  background:var(--ink); color:var(--bg-warm);
-}
+.reel-view-btn.on{ color:var(--bg-warm); }
 .reel-view-btn:active{ transform:scale(0.96); }
 .reel-view-btn:focus-visible{ outline:2px solid var(--accent-b); outline-offset:2px; }
 @media(hover:hover) and (pointer:fine){
@@ -2498,7 +2551,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .reel-credit{ max-width:100%; margin-top:10px; padding-top:9px; }
   .reel-credit-row{ font-size:11px; line-height:1.66; }
   #reel-view{ right:12px; top:calc(var(--nav-h,36px) + 10px); }
-  .reel-view-btn{ font-size:9px; padding:6px 11px; letter-spacing:0.1em; }
+  .reel-view-btn{ font-size:9px; padding:6px 10px; letter-spacing:0.08em; }
   .reel-groupmark{ padding:14px 18px; gap:8px; }
 }
 
@@ -2510,6 +2563,15 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     animation-duration:0.01ms !important;
     animation-iteration-count:1 !important;
     transition-duration:0.01ms !important;
+  }
+  /* The view-transition pseudo tree lives outside normal selector matching —
+     `*` never reaches it, so page morphs ran at full speed for people who
+     asked for less motion. Cut them here explicitly. */
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){
+    animation:none !important;
   }
   .about-obj,.hub-content,.pg-card,.pg-text-card{
     transition:opacity 0.2s ease !important;

@@ -557,13 +557,21 @@ function setupViewToggle() {
   var sc = document.getElementById('screen-port');
   var btns = wrap.querySelectorAll('.reel-view-btn');
 
-  function paint() {
+  function paint(instant) {
+    // On load the markup starts on "shuffled"; if localStorage says otherwise
+    // the pill must be placed, not slide across on its own.
+    if (instant) wrap.classList.add('no-anim');
     for (var i = 0; i < btns.length; i++) {
       var on = btns[i].getAttribute('data-mode') === viewMode;
       btns[i].classList.toggle('on', on);
       btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
     }
     wrap.setAttribute('data-mode', viewMode);
+    if (instant) {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { wrap.classList.remove('no-anim'); });
+      });
+    }
   }
 
   for (var b = 0; b < btns.length; b++) {
@@ -585,7 +593,7 @@ function setupViewToggle() {
       }, 180);
     });
   }
-  paint();
+  paint(true);
 }
 
 // ---- IntersectionObserver: reveal + which piece is centered ----

@@ -595,67 +595,112 @@ function attachInteraction(el, f) {
 }
 
 // --- OPEN WINDOW - centred, auto-closes previous --------------
+// The folder icon is the same element in the grid and in the window titlebar,
+// so a view transition can fly it from one to the other: the window doesn't
+// appear *near* the folder any more, it *is* the folder, opened.
+// Everything below degrades to the original scale-from-origin animation when
+// view transitions aren't available, on mobile, or under reduced motion.
+let folderMorphing = false;
+
+function canMorphFolder(folderEl) {
+  return !!document.startViewTransition
+    && !folderMorphing
+    && window.innerWidth >= 640
+    && !!folderEl
+    && !!folderEl.classList && folderEl.classList.contains('folder')
+    && !!folderEl.querySelector('.ficon')
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 function openWindow(f, folderEl) {
   const prev = Object.keys(openWindows);
   prev.forEach(id => closeWindow(id));
   const delay = prev.length > 0 ? 80 : 0;
   setTimeout(() => {
-    const win = document.createElement('div');
-    win.className = 'window'; win.id = 'win-' + f.id;
-    win.style.zIndex = ++zTop;
-    // Set transform-origin based on folder position relative to viewport centre
-    // so the window appears to expand from where the folder was
-    if (window.innerWidth >= 640) {
-      const fr2 = folderEl.getBoundingClientRect();
-      const fcx = fr2.left + fr2.width  / 2;
-      const fcy = fr2.top  + fr2.height / 2;
-      // Express as percentage relative to the window's own centre (50%,50%)
-      // We shift origin toward the folder: clamp to 20-80% so it never looks extreme
-      const ox = Math.max(20, Math.min(80, ((fcx / window.innerWidth)  * 100).toFixed(1)));
-      const oy = Math.max(20, Math.min(80, ((fcy / window.innerHeight) * 100).toFixed(1)));
-      win.style.setProperty('--origin-x', ox + '%');
-      win.style.setProperty('--origin-y', oy + '%');
-    }
-    // Position is handled entirely by CSS (top:50% left:50% transform)
-    // Just set an initial left/top so mobile bottom-sheet override works
-    win.style.left = '50%';
-    win.style.top  = '50%';
-    win.innerHTML = `
-      <div class="winbar" id="tb-${f.id}">
-        <div class="traffic"><div class="td td-x" data-close="${f.id}"></div><div class="td td-m" data-close="${f.id}"></div><div class="td td-z"></div></div>
-        <div style="display:flex;align-items:center;gap:8px;flex:1;">
-          <div class="ficon ${f.color}" style="width:26px;height:26px;border-radius:7px;"><div class="fglyph" style="width:13px;height:13px;">${G[f.glyph]||G.square}</div></div>
-          <div class="wmeta"><strong>${f.title}</strong><span>${f.subtitle}</span></div>
-        </div>
-        <span class="wtag-top">${f.eyebrow}</span>
-      </div>
-      <div class="wbody">${f.content}
-        <button class="w-close-btn" data-close="${f.id}">✕ Close</button>
-        ${shouldShowEscHint() ? '<div class="esc-hint"><kbd>esc</kbd> to close</div>' : ''}
-      </div>`;
-    (document.getElementById('screen-ciad') || document.body).appendChild(win);
-    openWindows[f.id] = win;
-    // Show overlay
-    document.getElementById('win-overlay').classList.add('active');
-    var sc = document.getElementById('screen-ciad'); if(sc) sc.classList.add('has-open-window');
-    markEscSeen();
-    win.querySelectorAll('[data-close]').forEach(d => d.addEventListener('click', e => {
-      e.stopPropagation();
-      const id = d.dataset.close;
-      if(window.innerWidth < 640 && document.getElementById('mob-panel')?.classList.contains('open')){
-        // Mobile + panel open: close only this window, keep panel
-        closeWindow(id);
-        // Re-show panel overlay if needed
-        document.getElementById('win-overlay').classList.remove('active');
-      } else {
-        closeAllWindows();
-      }
-    }));
-    win.addEventListener('mousedown', e => { e.stopPropagation(); win.style.zIndex = ++zTop; });
-    win.addEventListener('touchstart', e => { e.stopPropagation(); }, { passive:true });
-    // Desktop: drag via titlebar
-    if (window.innerWidth >= 640) attachWinDrag(win, win.querySelector('#tb-' + f.id));
+    if (!canMorphFolder(folderEl)) { mountWindow(f, folderEl, false); return; }
+
+    const srcIcon = folderEl.querySelector('.ficon');
+    folderMorphing = true;
+    srcIcon.style.viewTransitionName = 'folder-morph';
+    document.documentElement.classList.add('vt-folder');
+
+    const vt = document.startViewTransition(() => mountWindow(f, folderEl, true));
+    const cleanup = () => {
+      srcIcon.style.viewTransitionName = '';
+      document.documentElement.classList.remove('vt-folder');
+      const w = openWindows[f.id];
+      const winIcon = w && w.querySelector('.winbar .ficon');
+      if (winIcon) winIcon.style.viewTransitionName = '';
+      folderMorphing = false;
+    };
+    if (vt.finished && vt.finished.finally) vt.finished.finally(cleanup);
+    else setTimeout(cleanup, 600);
   }, delay);
+}
+
+function mountWindow(f, folderEl, morphed) {
+  const win = document.createElement('div');
+  win.className = 'window'; win.id = 'win-' + f.id;
+  // The morph *is* the entrance; winOpen would fight it (and would replay
+  // from opacity 0 the moment the transition class came off).
+  if (morphed) win.classList.add('no-open-anim');
+  win.style.zIndex = ++zTop;
+  // Set transform-origin based on folder position relative to viewport centre
+  // so the window appears to expand from where the folder was
+  if (window.innerWidth >= 640) {
+    const fr2 = folderEl.getBoundingClientRect();
+    const fcx = fr2.left + fr2.width  / 2;
+    const fcy = fr2.top  + fr2.height / 2;
+    // Express as percentage relative to the window's own centre (50%,50%)
+    // We shift origin toward the folder: clamp to 20-80% so it never looks extreme
+    const ox = Math.max(20, Math.min(80, ((fcx / window.innerWidth)  * 100).toFixed(1)));
+    const oy = Math.max(20, Math.min(80, ((fcy / window.innerHeight) * 100).toFixed(1)));
+    win.style.setProperty('--origin-x', ox + '%');
+    win.style.setProperty('--origin-y', oy + '%');
+  }
+  // Position is handled entirely by CSS (top:50% left:50% transform)
+  // Just set an initial left/top so mobile bottom-sheet override works
+  win.style.left = '50%';
+  win.style.top  = '50%';
+  win.innerHTML = `
+    <div class="winbar" id="tb-${f.id}">
+      <div class="traffic"><div class="td td-x" data-close="${f.id}"></div><div class="td td-m" data-close="${f.id}"></div><div class="td td-z"></div></div>
+      <div style="display:flex;align-items:center;gap:8px;flex:1;">
+        <div class="ficon ${f.color}" style="width:26px;height:26px;border-radius:7px;"><div class="fglyph" style="width:13px;height:13px;">${G[f.glyph]||G.square}</div></div>
+        <div class="wmeta"><strong>${f.title}</strong><span>${f.subtitle}</span></div>
+      </div>
+      <span class="wtag-top">${f.eyebrow}</span>
+    </div>
+    <div class="wbody">${f.content}
+      <button class="w-close-btn" data-close="${f.id}">✕ Close</button>
+      ${shouldShowEscHint() ? '<div class="esc-hint"><kbd>esc</kbd> to close</div>' : ''}
+    </div>`;
+  (document.getElementById('screen-ciad') || document.body).appendChild(win);
+  openWindows[f.id] = win;
+  if (morphed) {
+    const winIcon = win.querySelector('.winbar .ficon');
+    if (winIcon) winIcon.style.viewTransitionName = 'folder-morph';
+  }
+  // Show overlay
+  document.getElementById('win-overlay').classList.add('active');
+  var sc = document.getElementById('screen-ciad'); if(sc) sc.classList.add('has-open-window');
+  markEscSeen();
+  win.querySelectorAll('[data-close]').forEach(d => d.addEventListener('click', e => {
+    e.stopPropagation();
+    const id = d.dataset.close;
+    if(window.innerWidth < 640 && document.getElementById('mob-panel')?.classList.contains('open')){
+      // Mobile + panel open: close only this window, keep panel
+      closeWindow(id);
+      // Re-show panel overlay if needed
+      document.getElementById('win-overlay').classList.remove('active');
+    } else {
+      closeAllWindows();
+    }
+  }));
+  win.addEventListener('mousedown', e => { e.stopPropagation(); win.style.zIndex = ++zTop; });
+  win.addEventListener('touchstart', e => { e.stopPropagation(); }, { passive:true });
+  // Desktop: drag via titlebar
+  if (window.innerWidth >= 640) attachWinDrag(win, win.querySelector('#tb-' + f.id));
 }
 
 function handleOverlayClick() {
