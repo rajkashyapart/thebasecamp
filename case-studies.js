@@ -1,6 +1,10 @@
-// case-studies.js — case study folders + detail view with section sidebar.
-// ES5 to match site convention. Content is a SCAFFOLD: real drafts where they
-// could be derived; guiding prompts (marked) where Raj needs to fill the truth.
+// case-studies.js -- case study folders + detail view with section sidebar.
+// ES5 to match site convention.
+//
+// Content is Raj's, from the writing sessions of 2026-08-09. Anything still
+// unwritten is simply an empty string: empty sections don't render, don't
+// appear in the sidebar, and leave no gap. Nothing internal is ever shown to
+// a visitor -- the old p() prompt placeholders were visible on the live site.
 
 var VZ = 'https://vz-6f9a60bb-593.b-cdn.net/';
 function csVid(id) { return VZ + id + '/playlist.m3u8'; }
@@ -15,98 +19,98 @@ var CS_SECTIONS = [
   { key: 'outcome', label: 'The Outcome' }
 ];
 
-// p() = a prompt placeholder (styled muted) for content Raj still needs to write.
-function p(text) { return '<span class="cs-prompt">' + text + '</span>'; }
-
 var CASE_STUDIES = [
   {
-    id: 'upsurge-labs', client: 'Upsurge Labs', person: 'Sowmay Jain', sector: 'Tech · Founder content',
-    teaser: 'Positioning a tech founder through a consistent reel series.',
+    id: 'copper-cloves', client: 'Copper + Cloves', person: 'Sarah Edwards', sector: 'Food brand &middot; Founder',
+    teaser: 'Saying the things only she could say.',
+    vid: csVid('fddf2783-d99b-440c-b433-0dbcbad3a07c'),
+    metrics: [{ v: '22&times;', l: 'first video vs their average' }],
+    quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'Sarah Edwards', role: 'Founder, Copper + Cloves' },
+    content: {
+      overview: 'Counter-positioning, ideation, direction, shoot and edit for Sarah Edwards of Copper + Cloves &mdash; all of it handled here.',
+      context: 'A warm brand in a category where everyone already had good photography and roughly the same things to say.',
+      insights: 'Everyone is different, and that difference is the one thing a competitor cannot copy. The way out of a red ocean isn&rsquo;t better execution &mdash; it&rsquo;s saying the things only you can say.',
+      problem: 'She was competing in the same water as everyone else, on things anyone could have said.',
+      solution: 'Counter-positioning first &mdash; finding the things only she could say &mdash; then ideation, direction, shoot and edit.',
+      outcome: 'The first video hit 22&times; the reach of their average post.'
+    }
+  },
+  {
+    id: 'upsurge-labs', client: 'Upsurge Labs', person: 'Sowmay Jain', sector: 'Tech &middot; Company content',
+    teaser: 'A company building in public, at volume, on a 48-hour clock.',
     vid: csVid('46151b93-4758-4055-ab4d-944a470f7c17'),
-    metrics: [{ v: '—', l: 'views' }, { v: '—', l: 'follower growth' }, { v: '—', l: 'inbound' }],
+    metrics: [{ v: '48', l: 'videos' }, { v: '20&times;', l: 'first edit vs average' }, { v: '3&times;', l: 'run average' }],
     quote: null,
     content: {
-      overview: 'Founder-led content for Sowmay Jain — a consistent reel series built to position a tech founder for authority and inbound.',
-      context: p('Where was Upsurge before? (founder invisible on social, posting inconsistently, no system to sustain it)'),
-      insights: p('What did you learn about Sowmay&rsquo;s audience and what actually makes a tech founder&rsquo;s content stop the scroll?'),
-      problem: p('The core problem in one line — what wasn&rsquo;t working, and why?'),
-      solution: 'Strategy-first positioning, one focused shoot day, and a steady monthly reel cadence built around founder authority and inbound — not vanity volume.',
-      outcome: p('What changed? Drop the real numbers — views, watch-time, followers gained, inbound conversations / calls booked.')
+      overview: 'Editing across everything Upsurge Labs was building &mdash; Sowmay, the product, the team, the progress. 48 videos, every cut back inside a 48-hour window.',
+      context: 'Upsurge was building fast and wanted all of it on camera &mdash; the founder, the product, the team, the milestones. Someone had to turn a constant stream of raw footage into things people would actually watch.',
+      insights: 'A company posting about itself is boring unless every cut has a reason to exist. A product demo, a team moment and a founder take each need their own edit logic &mdash; not one template.',
+      problem: 'They were generating more raw material than they could turn into content.',
+      solution: 'Edit only, at volume and on a clock. 48 videos, each one back inside 48 hours, cut to whatever that particular piece of footage needed rather than to a house format.',
+      outcome: 'The first edit hit 20&times; their average post, and the run settled at up to 3&times; &mdash; with nothing ever waiting on the edit.'
     }
   },
   {
     id: 'fresh-factory', client: 'The Fresh Factory', person: 'Prabhjot Dhami', sector: 'F&amp;B',
-    teaser: 'Fresh produce, honest storytelling — content that sells without shouting.',
+    teaser: 'Honest beats styled, when freshness is the whole pitch.',
     vid: csVid('253d1a6a-6912-4c6b-ad40-8371dfcb829e'),
-    metrics: [{ v: '—', l: 'reach' }, { v: '—', l: 'engagement' }, { v: '—', l: 'sales lift' }],
+    metrics: [{ v: '20&times;', l: 'best video vs their average' }],
     quote: null,
     content: {
-      overview: 'F&amp;B content for Prabhjot Dhami&rsquo;s The Fresh Factory — built around fresh produce and honest, appetite-led storytelling.',
-      context: p('What was the brand&rsquo;s situation / goal before the work?'),
-      insights: p('What did you notice about how F&amp;B audiences actually decide — and where most food content fails?'),
-      problem: p('The core problem in one line.'),
-      solution: 'Appetite-first direction, a single shoot day, and a content system tuned to make the right buyer stop — not just look good in the grid.',
-      outcome: p('Real outcome + numbers — reach, saves, footfall/orders, whatever you have.')
+      overview: 'Concept, direction, shoot and edit for Prabhjot Dhami&rsquo;s The Fresh Factory.',
+      context: 'A produce business whose entire pitch is freshness, selling into a feed full of styled food that never resembles what actually arrives.',
+      insights: 'People have been trained to distrust food photography. For a brand selling real produce, honest outperforms perfect.',
+      problem: 'Their content looked like everyone else&rsquo;s, so it carried none of the thing that made them different.',
+      solution: 'Concept, direction, shoot and edit built to show the produce as it is &mdash; because for this brand, that was the whole argument.',
+      outcome: 'One video hit 20&times; the reach of their average post.'
     }
   },
   {
-    id: 'copper-cloves', client: 'Copper + Cloves', person: 'Sarah Edwards', sector: 'Food brand · Founder',
-    teaser: 'A voice as warm as the brand itself.',
-    vid: csVid('fddf2783-d99b-440c-b433-0dbcbad3a07c'),
-    metrics: [{ v: '—', l: 'views' }, { v: '—', l: 'growth' }, { v: '—', l: 'enquiries' }],
-    quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'Sarah Edwards', role: 'Founder, Copper + Cloves' },
-    content: {
-      overview: 'Content direction and personal branding for Sarah Edwards of Copper + Cloves — finding a voice as warm as the brand itself.',
-      context: p('Where was Copper + Cloves / Sarah before? What did she want her content to do?'),
-      insights: p('What did you learn about her audience and her on-camera strengths?'),
-      problem: p('The core problem in one line.'),
-      solution: 'Personal-brand positioning for the founder, then content directed and edited to feel direct and impactful — her words, sharpened.',
-      outcome: p('Real outcome + numbers.')
-    }
-  },
-  {
-    id: 'insanely-good-coffee', client: 'Insanely Good Coffee', person: 'Aditya Kumar', sector: 'Coffee · Product',
-    teaser: 'Brand and product content for a coffee that earns its name.',
+    id: 'insanely-good-coffee', client: 'Insanely Good Coffee', person: 'Aditya Kumar', sector: 'Coffee &middot; Product',
+    teaser: 'A full brand content run, without ever being in the room.',
     vid: csVid('48daa49e-172d-4934-9c0d-1136cf223339'),
-    metrics: [{ v: '—', l: 'views' }, { v: '—', l: 'engagement' }, { v: '—', l: 'conversions' }],
+    metrics: [{ v: '2.5&ndash;3&times;', l: 'above their average' }],
     quote: null,
     content: {
-      overview: 'Brand and product content for Aditya Kumar&rsquo;s Insanely Good Coffee.',
-      context: p('Stage of the brand and the goal of the work?'),
-      insights: p('What makes coffee/product content actually convert vs just look premium?'),
-      problem: p('The core problem in one line.'),
-      solution: 'Product-led direction and a content system designed to make the coffee feel as good as it is — built to convert, not just decorate.',
-      outcome: p('Real outcome + numbers — orders, repeat, reach.')
+      overview: 'Positioning, ideation, concept and edit for Aditya Kumar&rsquo;s Insanely Good Coffee &mdash; handled entirely remotely.',
+      context: 'A coffee brand and a content lead who were never once in the same room.',
+      insights: 'Remote only fails when the brief is thin. Lock positioning and concept before anyone picks up a camera and the footage comes back usable the first time.',
+      problem: 'Making brand content carry a product I was never physically near.',
+      solution: 'Positioning, ideation, concept and edit, run remotely end to end, with the thinking locked before anything was shot.',
+      outcome: 'The set ran 2.5&ndash;3&times; above their average.'
     }
   },
   {
-    id: 'kaheen', client: 'Kaheen', person: 'Shashank Arora', sector: 'Brand · Story',
-    teaser: 'Content and direction with a point of view.',
+    id: 'kaheen', client: 'Kaheen', person: 'Shashank Arora', sector: 'Brand &middot; Story',
+    teaser: 'Positioning, concept, direction, shoot and edit.',
     vid: csVid('2b6ecca6-96e1-4890-9170-1f60ef2ad41b'),
-    metrics: [{ v: '—', l: 'reach' }, { v: '—', l: 'growth' }, { v: '—', l: 'impact' }],
+    metrics: [{ v: '20&times;', l: 'first reel vs their average' }],
     quote: null,
     content: {
-      overview: 'Content and direction for Shashank Arora&rsquo;s Kaheen.',
-      context: p('What is Kaheen, and where was it before the work?'),
-      insights: p('The audience insight that shaped the direction.'),
-      problem: p('The core problem in one line.'),
-      solution: 'Story-first direction that gave the brand a clear point of view people could actually feel.',
-      outcome: p('Real outcome + numbers.')
+      overview: 'Positioning, concept, direction, shoot and edit for Shashank Arora&rsquo;s Kaheen.',
+      // TODO(raj): context, insights and problem still need what Kaheen
+      // actually is, who it is for, and where it was before the work.
+      // Empty strings render nothing at all, so the page stays clean until then.
+      context: '',
+      insights: '',
+      problem: '',
+      solution: 'Positioning, concept, direction, shoot and edit &mdash; all of it handled here.',
+      outcome: 'The first reel hit 20&times; the reach of their average post.'
     }
   },
   {
-    id: 'indian-cacao', client: 'Indian Cacao Festival', person: 'Patricia · Ketaki · Sneha', sector: 'Event · Campaign',
-    teaser: 'Festival content for India&rsquo;s craft chocolate scene.',
+    id: 'indian-cacao', client: 'Indian Cacao Festival', person: 'Patricia &middot; Ketaki &middot; Sneha', sector: 'Event &middot; Campaign',
+    teaser: 'Making a niche category feel like a room you had to be in.',
     vid: csVid('7badd2e0-7d8c-42db-98a1-57c78b3e29fb'),
-    metrics: [{ v: '—', l: 'reach' }, { v: '—', l: 'attendance' }, { v: '—', l: 'engagement' }],
+    metrics: [{ v: 'sold out', l: 'the festival' }],
     quote: { text: 'i enjoy working with raj, he is very focused and motivated, which makes it a smooth experience. the results of his work are great without too much back and forth.', name: 'Patricia Cosma', role: 'Co-founder, Indian Cacao &amp; Craft Chocolate Festival' },
     content: {
-      overview: 'Festival content for Patricia, Ketaki &amp; Sneha — the Indian Cacao &amp; Craft Chocolate Festival.',
-      context: p('What did the festival need content to do — awareness, ticket sales, vendor pull?'),
-      insights: p('What did you learn about the audience for a niche craft-chocolate event?'),
-      problem: p('The core problem in one line.'),
-      solution: 'A campaign built to make a niche festival feel essential — direction and edits that carried the craft and the energy.',
-      outcome: p('Real outcome + numbers — reach, footfall, ticket movement.')
+      overview: 'Content direction, on-ground coverage and edit for Patricia, Ketaki &amp; Sneha &mdash; the Indian Cacao &amp; Craft Chocolate Festival.',
+      context: 'A craft chocolate festival in a country where craft chocolate is still a new idea, with a room to fill.',
+      insights: 'Niche events don&rsquo;t sell on explanation, they sell on atmosphere. People buy the feeling of being in the room and learn what cacao is once they&rsquo;re in it.',
+      problem: 'Selling a category most people didn&rsquo;t know they cared about yet.',
+      solution: 'Content direction across the festival, on-ground coverage, and an edit that carried the craft and the energy rather than explaining them.',
+      outcome: 'Content that helped sell the festival out.'
     }
   }
 ];
@@ -140,15 +144,22 @@ function openCase(cs) {
   var detail = document.getElementById('cs-detail');
   var listWrap = document.getElementById('cs-listwrap');
 
+  // Only sections with real copy get rendered, and the numbering counts what
+  // is actually shown -- so an unwritten section leaves no gap and no orphan
+  // sidebar link pointing at nothing.
   var nav = '';
   var sections = '';
+  var n = 0;
   for (var s = 0; s < CS_SECTIONS.length; s++) {
     var sec = CS_SECTIONS[s];
+    var body = cs.content[sec.key];
+    if (!body) continue;
+    n++;
     nav += '<a href="#cs-' + sec.key + '" class="cs-navlink" data-sec="' + sec.key + '">' +
-             '<span class="cs-navnum">' + (s + 1) + '</span>' + sec.label + '</a>';
+             '<span class="cs-navnum">' + n + '</span>' + sec.label + '</a>';
     sections += '<section id="cs-' + sec.key + '" class="cs-section">' +
-                  '<div class="cs-section-label">' + (s + 1) + ' &middot; ' + sec.label + '</div>' +
-                  '<div class="cs-section-body">' + (cs.content[sec.key] || '') + '</div>' +
+                  '<div class="cs-section-label">' + n + ' &middot; ' + sec.label + '</div>' +
+                  '<div class="cs-section-body">' + body + '</div>' +
                 '</section>';
   }
 
@@ -162,10 +173,11 @@ function openCase(cs) {
     metrics += '</div>';
   }
 
+  // No quote means no quote block. An empty bordered box reads as broken.
   var quote = cs.quote
     ? '<figure class="cs-quote"><blockquote>&ldquo;' + cs.quote.text + '&rdquo;</blockquote>' +
       '<figcaption>' + cs.quote.name + ' &mdash; ' + cs.quote.role + '</figcaption></figure>'
-    : '<figure class="cs-quote cs-quote-empty">' + p('client quote — pending') + '</figure>';
+    : '';
 
   detail.innerHTML =
     '<button class="cs-back" id="cs-back">&#8592; all case studies</button>' +
@@ -192,7 +204,7 @@ function openCase(cs) {
 
   document.getElementById('cs-back').addEventListener('click', closeCase);
 
-  // hero video — lazy load + play
+  // hero video -- lazy load + play
   var v = detail.querySelector('.cs-media video');
   if (v) {
     var src = cs.vid;
