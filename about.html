@@ -26,7 +26,7 @@
 <link rel="dns-prefetch" href="https://vz-6f9a60bb-593.b-cdn.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <title>Raj Kashyap — About</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -47,90 +47,104 @@
 <div id="screen-about" class="screen">
   <a id="about-back" href="playground.html">&#8592; back</a>
   <div id="about-inner">
+    <div class="desk">
 
-    <!-- Bento grid of scrapbook cells. The grid keeps the order the old
-         single column was missing; each cell gets exactly ONE tactile idea
-         (tape, ruled paper, a perforated edge) so the page reads as made by
-         hand without turning back into the pile it was. -->
+    <!-- Overlapping collage. Cards are absolutely placed on a ratio-locked
+         stage on desktop so they genuinely overlap and layer; below 860px the
+         stage unlocks and the whole thing becomes a plain readable stack.
+         Each card owns ONE material and ONE fastener. -->
+
+    <!-- PORTRAIT POLAROID
+         STAND-IN IMAGE: Raj still owes a portrait. Swap the src below and
+         the alt; everything else about this card already works. -->
+    <figure class="obj card polaroid c-portrait" style="--rot:-4deg;--z:2">
+      <span class="pin" aria-hidden="true"></span>
+      <img src="https://picturesbyrajj.b-cdn.net/20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.webp" alt="Raj Kashyap" loading="lazy" decoding="async">
+      <figcaption class="hand">that&rsquo;s me &mdash; bangalore</figcaption>
+    </figure>
 
     <!-- HERO -->
-    <div class="bx bx-hero c4 obj">
-      <span class="tape tape-tl" aria-hidden="true"></span>
-      <div class="ab-eyebrow">raj kashyap &mdash; bangalore</div>
-      <h1 class="ab-display">hi, i&rsquo;m raj.</h1>
-      <p class="ab-body">one part internet videos, one part strategist, one part person who thinks too much about the whys of everything. i make content for a living. i also make content about living.</p>
+    <div class="obj card paper-plain c-hero" style="--rot:-1deg;--z:6">
+      <span class="clip" aria-hidden="true"></span>
+      <div class="eyebrow">raj kashyap &mdash; bangalore</div>
+      <h1 class="display">hi, i&rsquo;m raj.</h1>
+      <p class="body">one part internet videos, one part strategist, one part person who thinks too much about the whys of everything.</p>
+      <p class="hand hand-note">i make content for a living.<br>i also make content about living.</p>
+      <svg class="doodle doodle-underline" viewBox="0 0 190 12" fill="none" aria-hidden="true">
+        <path d="M3 8C34 3 78 2 112 5c22 2 48 1 74-2" stroke="var(--accent-r)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
     </div>
 
-    <!-- STATS — ticket stub -->
-    <div class="bx bx-stub c2 obj">
-      <div class="ab-eyebrow">the short version</div>
-      <dl class="stub-list">
+    <!-- STATS -->
+    <div class="obj card paper-index c-stub" style="--rot:2.2deg;--z:6">
+      <span class="clip clip-r" aria-hidden="true"></span>
+      <div class="eyebrow">the short version</div>
+      <dl class="stub">
         <div><dt>brands</dt><dd>25+</dd></div>
         <div><dt>word of mouth</dt><dd>100%</dd></div>
         <div><dt>in the field</dt><dd>since 2020</dd></div>
       </dl>
+      <span class="hand hand-scribble">no ads. ever.</span>
     </div>
 
-    <!-- THE STUDIO -->
-    <div class="bx bx-studio c3 obj">
-      <h2 class="ab-h2">the basecamp</h2>
-      <p class="ab-body">content strategist, filmmaker &amp; photographer. i help founders and brands turn <em>one shoot day</em> into a month of content built strategy-first, not just pretty.</p>
-      <p class="ab-meta">for founders, coaches and creators who are done paying agencies for videos nobody watches twice.</p>
+    <!-- STUDIO -->
+    <div class="obj card paper-kraft c-studio" style="--rot:1.4deg;--z:5">
+      <span class="staple" aria-hidden="true"></span>
+      <h2 class="h2">the basecamp</h2>
+      <p class="body">content strategist, filmmaker &amp; photographer. i turn <em>one shoot day</em> into a month of content built strategy-first, not just pretty.</p>
+      <p class="meta">for founders, coaches and creators done paying agencies for videos nobody watches twice.</p>
     </div>
 
-    <!-- UNCURATED — the wristband -->
-    <div class="bx bx-band c3 obj">
-      <div class="band-cuff" aria-hidden="true"><i></i><i></i></div>
-      <div class="band-body">
-        <div class="ab-eyebrow">the other half</div>
-        <h2 class="ab-h2">uncurated.raj</h2>
-        <p class="ab-meta">where i make content about the things i actually think about. which turns out to be a lot of things.</p>
-      </div>
-    </div>
+    <!-- TAPED PRINT -->
+    <figure class="obj card print c-print1" style="--rot:3.4deg;--z:2">
+      <span class="tape tape-b" aria-hidden="true"></span>
+      <img src="https://picturesbyrajj.b-cdn.net/an%20art%20village22019raj.webp" alt="An art village" loading="lazy" decoding="async">
+    </figure>
 
-    <!-- EXPERIENCE — the tall one -->
-    <div class="bx bx-cv c4 obj">
-      <span class="tape tape-tr tape-b" aria-hidden="true"></span>
-      <h2 class="ab-h2">experience</h2>
-      <div class="cv-role">
-        <div class="cv-top"><span class="cv-title">the basecamp &mdash; founder</span><span class="cv-date">2024 &mdash; now</span></div>
-        <ul class="cv-points">
-          <li>built a productized content studio (content in a day): one shoot day &rarr; a month of content</li>
-          <li>own the full pipeline: strategy, positioning, direction, shooting, editing, distribution</li>
+    <!-- CV -->
+    <div class="obj card paper-torn c-cv" style="--rot:-0.8deg;--z:6">
+      <span class="clip" aria-hidden="true"></span>
+      <h2 class="h2">experience</h2>
+      <div class="role">
+        <div class="role-top"><span class="role-t">the basecamp &mdash; founder</span><span class="role-d">2024 &mdash; now</span></div>
+        <ul class="pts">
+          <li>built a productized content studio: one shoot day &rarr; a month of content</li>
+          <li>strategy, positioning, direction, shooting, editing, distribution</li>
         </ul>
       </div>
-      <div class="cv-role">
-        <div class="cv-top"><span class="cv-title">freelance &mdash; cinematographer, editor, strategist</span><span class="cv-date">2020 &mdash; now</span></div>
-        <ul class="cv-points">
-          <li>content, brand films and campaigns for founders, f&amp;b, events and lifestyle brands</li>
-          <li>end-to-end: concept &rarr; shoot &rarr; edit &rarr; colour &rarr; delivery</li>
+      <div class="role">
+        <div class="role-top"><span class="role-t">freelance &mdash; cinematographer, editor, strategist</span><span class="role-d">2020 &mdash; now</span></div>
+        <ul class="pts">
+          <li>brand films and campaigns for founders, f&amp;b, events and lifestyle</li>
+          <li>concept &rarr; shoot &rarr; edit &rarr; colour &rarr; delivery</li>
         </ul>
       </div>
-      <div class="cv-role">
-        <div class="cv-top"><span class="cv-title">the form co. &mdash; part-time editor, photographer, filmmaker</span><span class="cv-date">2020 &mdash; 2022</span></div>
-        <ul class="cv-points">
-          <li>shot, cut and produced content inside a creative firm</li>
-        </ul>
+      <div class="role">
+        <div class="role-top"><span class="role-t">the form co. &mdash; editor, photographer, filmmaker</span><span class="role-d">2020 &mdash; 2022</span></div>
+        <ul class="pts"><li>shot, cut and produced content inside a creative firm</li></ul>
+      </div>
+      <span class="hand hand-margin">a team of one, mostly</span>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="obj card paper-ruled c-school" style="--rot:-2.6deg;--z:6">
+      <span class="pin pin-b" aria-hidden="true"></span>
+      <h2 class="h2">education</h2>
+      <div class="role">
+        <div class="role-t">st joseph&rsquo;s</div>
+        <p class="meta">b.a. visual communication<br>bangalore, karnataka</p>
+      </div>
+      <div class="role">
+        <div class="role-t">don bosco</div>
+        <p class="meta">school<br>guwahati, assam</p>
       </div>
     </div>
 
-    <!-- EDUCATION — ruled notebook paper, because it is school -->
-    <div class="bx bx-school c2 obj">
-      <h2 class="ab-h2">education</h2>
-      <div class="cv-role">
-        <div class="cv-top"><span class="cv-title">st joseph&rsquo;s</span></div>
-        <p class="ab-meta">b.a. visual communication<br>bangalore, karnataka</p>
-      </div>
-      <div class="cv-role">
-        <div class="cv-top"><span class="cv-title">don bosco</span></div>
-        <p class="ab-meta">school<br>guwahati, assam</p>
-      </div>
-    </div>
-
-    <!-- SKILLS — stickers -->
-    <div class="bx bx-skills c3 obj">
-      <h2 class="ab-h2">a team of one</h2>
-      <p class="ab-meta">couldn&rsquo;t afford specialists, so i learned to be all of them.</p>
+    <!-- SKILLS -->
+    <div class="obj card paper-graph c-skills" style="--rot:1.8deg;--z:5">
+      <span class="staple" aria-hidden="true"></span>
+      <h2 class="h2">a team of one</h2>
+      <p class="meta">couldn&rsquo;t afford specialists, so i learned to be all of them.</p>
       <div class="stickers">
         <span>strategy</span><span>direction</span><span>cinematography</span>
         <span>photography</span><span>editing</span><span>colour</span>
@@ -138,40 +152,80 @@
       </div>
     </div>
 
-    <!-- TRUSTED BY — taped-down strip -->
-    <div class="bx bx-trusted c3 obj">
-      <span class="tape tape-tc" aria-hidden="true"></span>
-      <div class="ab-eyebrow">trusted by</div>
-      <p class="trusted-list">copper + cloves &middot; cultfit &middot; bira 91 &middot; bangalore football league academy &middot; nicobar &middot; thabisa &middot; amintiri &middot; stamp &amp; seal co. &middot; nomada &middot; ember cookware &middot; insanely good coffee &middot; indian music experience &middot; &amp; many more</p>
+    <!-- POLAROID 2 -->
+    <figure class="obj card polaroid c-poly2" style="--rot:5deg;--z:3">
+      <img src="https://picturesbyrajj.b-cdn.net/green%20is%20the%20color42020raj.webp" alt="Green is the colour" loading="lazy" decoding="async">
+      <figcaption class="hand">green is the colour</figcaption>
+    </figure>
+
+    <!-- UNCURATED -->
+    <div class="obj card band c-band" style="--rot:-3deg;--z:6">
+      <div class="cuff" aria-hidden="true"><i></i><i></i></div>
+      <div class="band-in">
+        <div class="eyebrow">the other half</div>
+        <h2 class="h2">uncurated.raj</h2>
+        <p class="meta">content about the things i actually think about. which turns out to be a lot of things.</p>
+      </div>
     </div>
 
+    <!-- TAPED PRINT 2 -->
+    <figure class="obj card print c-print2" style="--rot:-5.5deg;--z:2">
+      <span class="tape" aria-hidden="true"></span>
+      <img src="https://picturesbyrajj.b-cdn.net/hault32020raj.webp" alt="Hault" loading="lazy" decoding="async">
+    </figure>
+
     <!-- OUTSIDE OF WORK -->
-    <div class="bx bx-outside c3 obj">
-      <div class="ab-eyebrow">outside of work i&rsquo;m</div>
-      <ul class="dot-list">
-        <li>playing football</li>
-        <li>making music</li>
-        <li>learning to draw (i&rsquo;m bad at it)</li>
-        <li>watching ghibli, anime, and too much youtube</li>
-        <li>tastemaxxxing</li>
-        <li>petting mifi</li>
-        <li>keeping plants alive (mostly)</li>
+    <div class="obj card paper-plain c-outside" style="--rot:2.6deg;--z:5">
+      <span class="clip clip-r" aria-hidden="true"></span>
+      <div class="eyebrow">outside of work i&rsquo;m</div>
+      <ul class="dots">
+        <li>playing football</li><li>making music</li>
+        <li>learning to draw <span class="hand">(i&rsquo;m bad at it)</span></li>
+        <li>watching ghibli, anime, too much youtube</li>
+        <li>tastemaxxxing</li><li>petting mifi</li>
+        <li>keeping plants alive <span class="hand">(mostly)</span></li>
       </ul>
     </div>
 
-    <!-- CONTACT — the exit -->
-    <div class="bx bx-contact c3 obj">
-      <div class="ab-eyebrow">find me at</div>
-      <a href="https://instagram.com/uncurated.raj" class="ac-link" target="_blank" rel="noopener">@uncurated.raj</a>
-      <a href="mailto:hello@rajkashyap.studio" class="ac-link">hello@rajkashyap.studio</a>
-      <p class="ab-meta">grew entirely through referrals. never sent a cold email. still haven&rsquo;t.</p>
+    <!-- TRUSTED -->
+    <div class="obj card paper-kraft c-trusted" style="--rot:-1.2deg;--z:6">
+      <span class="tape tape-b" aria-hidden="true"></span>
+      <div class="eyebrow">trusted by</div>
+      <p class="trusted">copper + cloves &middot; cultfit &middot; bira 91 &middot; bangalore football league academy &middot; nicobar &middot; thabisa &middot; amintiri &middot; stamp &amp; seal co. &middot; nomada &middot; ember cookware &middot; insanely good coffee &middot; indian music experience</p>
     </div>
 
-    <!-- SIGN-OFF — deliberately not a box; it closes the page -->
-    <p class="ab-signoff obj">never stop playing. &lt;3</p>
+    <!-- POLAROID 3 -->
+    <figure class="obj card polaroid c-poly3" style="--rot:-6deg;--z:3">
+      <span class="pin" aria-hidden="true"></span>
+      <img src="https://picturesbyrajj.b-cdn.net/it%27s%20her52020raj.webp" alt="It&rsquo;s her" loading="lazy" decoding="async">
+      <figcaption class="hand">it&rsquo;s her</figcaption>
+    </figure>
 
-  </div>
-</div>
+    <!-- CONTACT -->
+    <div class="obj card paper-plain c-contact" style="--rot:1.6deg;--z:6">
+      <span class="staple" aria-hidden="true"></span>
+      <div class="eyebrow">find me at</div>
+      <a href="https://instagram.com/uncurated.raj" class="link" target="_blank" rel="noopener">@uncurated.raj</a>
+      <a href="mailto:hello@rajkashyap.studio" class="link">hello@rajkashyap.studio</a>
+      <p class="hand hand-note">never sent a cold email.<br>still haven&rsquo;t.</p>
+      <svg class="doodle doodle-arrow" viewBox="0 0 64 40" fill="none" aria-hidden="true">
+        <path d="M4 4c14 16 28 24 52 27" stroke="var(--accent-b)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M46 27l10 4-6 8" stroke="var(--accent-b)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- PRINT 3 -->
+    <figure class="obj card print c-print3" style="--rot:4.2deg;--z:2">
+      <span class="tape" aria-hidden="true"></span>
+      <img src="https://picturesbyrajj.b-cdn.net/IMG_29022019raj%20kashyap12019raj.webp" alt="Street, 2019" loading="lazy" decoding="async">
+    </figure>
+
+    </div>
+
+    <p class="signoff">never stop playing. &lt;3</p>
+
+  </div><!-- /#about-inner -->
+</div><!-- /#screen-about -->
 
 <script src="shared.js"></script>
 <script src="about.js"></script>
@@ -180,56 +234,30 @@
 document.addEventListener('DOMContentLoaded', function() {
   var objs = document.querySelectorAll('.obj');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  // Reveal on scroll. If motion is off, or IntersectionObserver is missing,
-  // show everything immediately -- a blank page is never the safe fallback.
+  // Opacity only. Every card carries its tilt in an inline --rot and gets its
+  // transform from CSS, so writing an inline transform here would flatten the
+  // whole collage -- and the hover lift needs that transform slot free.
   if (reduced || !('IntersectionObserver' in window)) {
     objs.forEach(function(el) { el.classList.add('in'); });
-  } else {
-    objs.forEach(function(el, i) {
-      el.style.opacity = '0';
-      el.style.transform = (el.style.transform || '') + ' translateY(18px)';
-      el.style.transition = 'none';
-    });
-    var io = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var delay = parseFloat(el.dataset.delay || 0);
-        setTimeout(function() {
-          el.style.transition = 'opacity 0.6s cubic-bezier(0.34,1.56,0.64,1), transform 0.6s cubic-bezier(0.34,1.56,0.64,1)';
-          el.style.opacity = '1';
-          // preserve existing rotations -- only clear the added translateY
-          var cur = el.style.transform || '';
-          el.style.transform = cur.replace(/translateY([^)]*)/g, 'translateY(0)');
-        }, delay);
-        io.unobserve(el);
-      });
-    }, {threshold:0.1});
-    objs.forEach(function(el, i) {
-      el.dataset.delay = i * 70;
-      io.observe(el);
-    });
+    return;
   }
 
-  // One flourish, on the page's exit. The tilt that used to run on the
-  // hang tag and the receipt went with them.
-  if (fine && !reduced) {
-    document.querySelectorAll('.ac-link').forEach(function(el) {
-      el.addEventListener('mousemove', function(e) {
-        var r = el.getBoundingClientRect();
-        var dx = (e.clientX - (r.left + r.width/2)) * 0.15;
-        var dy = (e.clientY - (r.top + r.height/2)) * 0.15;
-        el.style.transform = 'translate('+dx+'px,'+dy+'px)';
-        el.style.transition = 'transform 0.1s';
-      });
-      el.addEventListener('mouseleave', function() {
-        el.style.transform = '';
-        el.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
-      });
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      setTimeout(function() { el.classList.add('in'); }, parseFloat(el.dataset.delay || 0));
+      io.unobserve(el);
     });
-  }
+  }, {threshold: 0.08});
+
+  objs.forEach(function(el, i) {
+    // On the desktop collage the cards are absolutely placed, so DOM order is
+    // not reading order -- stagger by how far down the page each one sits.
+    el.dataset.delay = Math.min(i, 8) * 55;
+    io.observe(el);
+  });
 });
 </script>
 </body>
