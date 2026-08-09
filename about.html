@@ -48,91 +48,127 @@
   <a id="about-back" href="playground.html">&#8592; back</a>
   <div id="about-inner">
 
-    <!-- 1. HERO — intro + what-i-do + proof, as ONE centred block.
-         The page switches from centred to left-aligned exactly once,
-         here, at the end of the hero. Two switches read as no system. -->
-    <div class="about-hero about-obj">
-      <div class="about-intro">
-        <div class="about-eyebrow">raj kashyap &mdash; bangalore</div>
-        <h1 class="about-h1">hi, i&rsquo;m raj.</h1>
-        <p class="about-lead">one part internet videos, one part strategist, one part person who thinks too much about the whys of everything. i make content for a living. i also make content about living.</p>
-      </div>
-      <div class="about-pro">
-        <p class="about-pro-line">content strategist, filmmaker &amp; photographer. i help founders and brands turn <em>one shoot day</em> into a month of content built strategy-first, not just pretty.</p>
-        <div class="about-pro-stats">
-          <span><strong>25+</strong> brands</span>
-          <span><strong>100%</strong> word of mouth</span>
-          <span><strong>since 2020</strong></span>
-        </div>
+    <!-- Bento grid of scrapbook cells. The grid keeps the order the old
+         single column was missing; each cell gets exactly ONE tactile idea
+         (tape, ruled paper, a perforated edge) so the page reads as made by
+         hand without turning back into the pile it was. -->
+
+    <!-- HERO -->
+    <div class="bx bx-hero c4 obj">
+      <span class="tape tape-tl" aria-hidden="true"></span>
+      <div class="ab-eyebrow">raj kashyap &mdash; bangalore</div>
+      <h1 class="ab-display">hi, i&rsquo;m raj.</h1>
+      <p class="ab-body">one part internet videos, one part strategist, one part person who thinks too much about the whys of everything. i make content for a living. i also make content about living.</p>
+    </div>
+
+    <!-- STATS — ticket stub -->
+    <div class="bx bx-stub c2 obj">
+      <div class="ab-eyebrow">the short version</div>
+      <dl class="stub-list">
+        <div><dt>brands</dt><dd>25+</dd></div>
+        <div><dt>word of mouth</dt><dd>100%</dd></div>
+        <div><dt>in the field</dt><dd>since 2020</dd></div>
+      </dl>
+    </div>
+
+    <!-- THE STUDIO -->
+    <div class="bx bx-studio c3 obj">
+      <h2 class="ab-h2">the basecamp</h2>
+      <p class="ab-body">content strategist, filmmaker &amp; photographer. i help founders and brands turn <em>one shoot day</em> into a month of content built strategy-first, not just pretty.</p>
+      <p class="ab-meta">for founders, coaches and creators who are done paying agencies for videos nobody watches twice.</p>
+    </div>
+
+    <!-- UNCURATED — the wristband -->
+    <div class="bx bx-band c3 obj">
+      <div class="band-cuff" aria-hidden="true"><i></i><i></i></div>
+      <div class="band-body">
+        <div class="ab-eyebrow">the other half</div>
+        <h2 class="ab-h2">uncurated.raj</h2>
+        <p class="ab-meta">where i make content about the things i actually think about. which turns out to be a lot of things.</p>
       </div>
     </div>
 
-    <!-- 3. THE STUDIO — prose at real measure, not trapped in a hang tag -->
-    <div class="about-studio about-obj">
-      <h2 class="about-h2">the basecamp</h2>
-      <p class="about-body">for founders, coaches, and creators who are done paying agencies for videos nobody watches twice. strategy-first. one shoot day. a month handled.</p>
-      <div class="about-trusted">
-        <div class="trusted-label">trusted by</div>
-        <p class="trusted-list">copper + cloves &middot; cultfit &middot; bira 91 &middot; bangalore football league academy &middot; nicobar &middot; thabisa &middot; amintiri &middot; stamp &amp; seal co. &middot; nomada &middot; ember cookware &middot; insanely good coffee &middot; indian music experience &middot; &amp; many more</p>
-      </div>
-    </div>
-
-    <!-- 4. THE CV — stated once, here, and nowhere else on this page -->
-    <div class="about-cv about-obj">
-      <h2 class="about-h2">experience</h2>
+    <!-- EXPERIENCE — the tall one -->
+    <div class="bx bx-cv c4 obj">
+      <span class="tape tape-tr" aria-hidden="true"></span>
+      <h2 class="ab-h2">experience</h2>
       <div class="cv-role">
-        <div class="cv-role-top"><span class="cv-role-title">the basecamp &mdash; founder</span><span class="cv-role-date">2024 &mdash; now</span></div>
+        <div class="cv-top"><span class="cv-title">the basecamp &mdash; founder</span><span class="cv-date">2024 &mdash; now</span></div>
         <ul class="cv-points">
           <li>built a productized content studio (content in a day): one shoot day &rarr; a month of content</li>
           <li>own the full pipeline: strategy, positioning, direction, shooting, editing, distribution</li>
         </ul>
       </div>
       <div class="cv-role">
-        <div class="cv-role-top"><span class="cv-role-title">freelance &mdash; cinematographer, editor, strategist</span><span class="cv-role-date">2020 &mdash; now</span></div>
+        <div class="cv-top"><span class="cv-title">freelance &mdash; cinematographer, editor, strategist</span><span class="cv-date">2020 &mdash; now</span></div>
         <ul class="cv-points">
           <li>content, brand films and campaigns for founders, f&amp;b, events and lifestyle brands</li>
           <li>end-to-end: concept &rarr; shoot &rarr; edit &rarr; colour &rarr; delivery</li>
         </ul>
       </div>
       <div class="cv-role">
-        <div class="cv-role-top"><span class="cv-role-title">the form co. &mdash; part-time editor, photographer, filmmaker</span><span class="cv-role-date">2020 &mdash; 2022</span></div>
+        <div class="cv-top"><span class="cv-title">the form co. &mdash; part-time editor, photographer, filmmaker</span><span class="cv-date">2020 &mdash; 2022</span></div>
         <ul class="cv-points">
           <li>shot, cut and produced content inside a creative firm</li>
         </ul>
       </div>
-      <p class="cv-note">couldn&rsquo;t afford specialists, so i learned to be all of them &mdash; strategy, direction, cinematography, photography, editing, colour, motion, scripting, music, distribution.</p>
     </div>
 
-    <!-- 5. THE PERSON — the one physical object on this page -->
-    <div class="about-wristband-wrap about-obj">
-      <div class="about-wristband">
-        <div class="wb-left">
-          <div class="wb-hole-dot"></div>
-          <div class="wb-hole-dot"></div>
-        </div>
-        <div class="wb-right">
-          <div class="wb-name">uncurated.raj</div>
-          <div class="wb-tagline">where i make content about the things i actually think about.<br>which turns out to be a lot of things.</div>
-        </div>
+    <!-- EDUCATION — ruled notebook paper, because it is school -->
+    <div class="bx bx-school c2 obj">
+      <h2 class="ab-h2">education</h2>
+      <div class="cv-role">
+        <div class="cv-top"><span class="cv-title">st joseph&rsquo;s</span></div>
+        <p class="ab-meta">b.a. visual communication<br>bangalore, karnataka</p>
       </div>
-      <div class="about-outside">
-        <div class="ao-label">outside of work i&rsquo;m</div>
-        <p class="ao-items">playing football &middot; making music &middot; learning to draw (i&rsquo;m bad at it) &middot; watching ghibli, anime, and too much youtube &middot; tastemaxxxing &middot; petting mifi &middot; keeping plants alive (mostly)</p>
+      <div class="cv-role">
+        <div class="cv-top"><span class="cv-title">don bosco</span></div>
+        <p class="ab-meta">school<br>guwahati, assam</p>
       </div>
     </div>
 
-    <!-- 6. CONTACT — the page's exit, given real weight -->
-    <div class="about-contact about-obj">
-      <div class="ac-label">find me at</div>
+    <!-- SKILLS — stickers -->
+    <div class="bx bx-skills c3 obj">
+      <h2 class="ab-h2">a team of one</h2>
+      <p class="ab-meta">couldn&rsquo;t afford specialists, so i learned to be all of them.</p>
+      <div class="stickers">
+        <span>strategy</span><span>direction</span><span>cinematography</span>
+        <span>photography</span><span>editing</span><span>colour</span>
+        <span>motion</span><span>scripting</span><span>music</span><span>distribution</span>
+      </div>
+    </div>
+
+    <!-- TRUSTED BY — taped-down strip -->
+    <div class="bx bx-trusted c3 obj">
+      <span class="tape tape-tc" aria-hidden="true"></span>
+      <div class="ab-eyebrow">trusted by</div>
+      <p class="trusted-list">copper + cloves &middot; cultfit &middot; bira 91 &middot; bangalore football league academy &middot; nicobar &middot; thabisa &middot; amintiri &middot; stamp &amp; seal co. &middot; nomada &middot; ember cookware &middot; insanely good coffee &middot; indian music experience &middot; &amp; many more</p>
+    </div>
+
+    <!-- OUTSIDE OF WORK -->
+    <div class="bx bx-outside c3 obj">
+      <div class="ab-eyebrow">outside of work i&rsquo;m</div>
+      <ul class="dot-list">
+        <li>playing football</li>
+        <li>making music</li>
+        <li>learning to draw (i&rsquo;m bad at it)</li>
+        <li>watching ghibli, anime, and too much youtube</li>
+        <li>tastemaxxxing</li>
+        <li>petting mifi</li>
+        <li>keeping plants alive (mostly)</li>
+      </ul>
+    </div>
+
+    <!-- CONTACT — the exit -->
+    <div class="bx bx-contact c3 obj">
+      <div class="ab-eyebrow">find me at</div>
       <a href="https://instagram.com/uncurated.raj" class="ac-link" target="_blank" rel="noopener">@uncurated.raj</a>
       <a href="mailto:hello@rajkashyap.studio" class="ac-link">hello@rajkashyap.studio</a>
-      <p class="ac-note">grew entirely through referrals. never sent a cold email. still haven&rsquo;t.</p>
+      <p class="ab-meta">grew entirely through referrals. never sent a cold email. still haven&rsquo;t.</p>
     </div>
 
-    <!-- 7. SIGN-OFF — bookends the h1; never on screen at the same time as it -->
-    <div class="about-signoff about-obj">
-      <p class="about-signoff-text">never stop playing. &lt;3</p>
-    </div>
+    <!-- SIGN-OFF — deliberately not a box; it closes the page -->
+    <p class="ab-signoff obj">never stop playing. &lt;3</p>
 
   </div>
 </div>
@@ -142,7 +178,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var objs = document.querySelectorAll('.about-obj');
+  var objs = document.querySelectorAll('.obj');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 

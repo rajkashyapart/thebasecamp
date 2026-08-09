@@ -616,193 +616,279 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 #screen-ciad{z-index:40;overflow:hidden;}
 
 /* ======================================================
-   SCREEN 4: ABOUT
+   SCREEN 4: ABOUT  —  scrapbook in a bento box
 
-   Budgets (see CLAUDE.md "The subtraction rule"):
-     type    5 sizes  — display / h2 / body / meta / label
-     accent  1 colour — pink, and its job is: things you can click
-     spacing 3 tiers  — 8 inside a unit, 32 between units, 128 between sections
-     objects 1        — the wristband. No hang tag, no receipt.
+   The grid is the discipline; the cells are the personality. Every cell
+   is the same paper on the same 6-column grid with one gap value, so the
+   page can carry tape, ruled paper and a wristband cuff without going
+   back to the pile of competing objects it used to be.
 
-   Emphasis here comes from WEIGHT and SPACE, not from hue. The stat
-   numbers and role titles are full-strength ink; everything secondary
-   actively recedes. That is what lets the eye find the page's one
-   focal point (the h1) instead of triaging nine equal-weight blocks.
+   Rule per cell: ONE tactile idea. Not three.
+
+   Type is deliberately larger than the rest of the site — the old scale
+   (11/13/18) was unreadable here. Floor is now 15px, labels 13px.
 ====================================================== */
 #screen-about{z-index:45;background:var(--bg-warm);overflow-y:auto;overflow-x:hidden;}
 
 #about-inner{
-  --ab-display:clamp(44px,8vw,72px);
-  --ab-h2:24px;
-  --ab-body:18px;
-  --ab-meta:13px;
-  --ab-label:11px;
+  --ab-display:clamp(46px,7vw,76px);
+  --ab-h2:28px;
+  --ab-body:19px;
+  --ab-meta:16px;
+  --ab-label:13px;
 
-  --ab-tight:8px;
-  --ab-unit:32px;
-  --ab-section:128px;
+  --gap:16px;
+  --pad:30px;
+  --tight:10px;
 
-  max-width:680px;margin:0 auto;
-  padding:120px 32px 160px;
-  display:flex;flex-direction:column;
-  gap:var(--ab-section);
+  --paper:rgba(255,255,255,0.62);
+  --edge:rgba(30,25,20,0.09);
+  --lift:0 1px 2px rgba(45,33,22,0.05), 0 10px 26px -14px rgba(45,33,22,0.18);
+
+  max-width:1140px;margin:0 auto;
+  padding:104px 28px 132px;
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:var(--gap);
+  align-items:start;
 }
 
 #about-back{display:none;}
 
-.about-obj{opacity:0;transition:opacity 0.65s cubic-bezier(0.23,1,0.32,1),transform 0.65s cubic-bezier(0.23,1,0.32,1);}
-.about-obj.in{opacity:1;}
-/* If motion is off — or the observer never fires — the page must still be readable. */
-@media(prefers-reduced-motion:reduce){
-  .about-obj{opacity:1 !important;transform:none !important;transition:none !important;}
+/* ── the paper ─────────────────────────────────────── */
+.bx{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--edge);
+  border-radius:4px;
+  padding:var(--pad);
+  box-shadow:var(--lift);
+  min-width:0;
+  height:100%;
 }
+.c2{grid-column:span 2;}
+.c3{grid-column:span 3;}
+.c4{grid-column:span 4;}
+.c6{grid-column:span 6;}
+.r2{grid-row:span 2;}
 
-/* ── shared type roles ─────────────────────────────── */
-.about-eyebrow,.trusted-label,.ao-label,.ac-label{
+/* Hand-placed, but barely. Two cells tilt; the rest hold the grid, which
+   is what keeps this a bento and not a pile. */
+.bx-school{transform:rotate(-0.5deg);}
+.bx-band{transform:rotate(0.5deg);}
+
+/* ── washi tape ────────────────────────────────────── */
+.tape{
+  position:absolute;z-index:3;
+  width:104px;height:28px;
+  background:
+    linear-gradient(90deg,
+      rgba(255,123,172,0.34) 0%,
+      rgba(255,123,172,0.24) 12%,
+      rgba(255,123,172,0.24) 88%,
+      rgba(255,123,172,0.34) 100%);
+  border-top:1px solid rgba(255,255,255,0.45);
+  border-bottom:1px solid rgba(255,123,172,0.20);
+  box-shadow:0 2px 5px -1px rgba(45,33,22,0.13);
+  /* torn ends rather than a clean rectangle */
+  clip-path:polygon(0 8%,6px 0,14px 10%,22px 2%,100% 0,100% 92%,94% 100%,86% 90%,74% 100%,0 100%);
+}
+.tape-tl{top:-12px;left:24px;transform:rotate(-4deg);}
+.tape-tr{top:-12px;right:24px;transform:rotate(3.5deg);}
+.tape-tc{top:-13px;left:50%;transform:translateX(-50%) rotate(-1.5deg);}
+
+/* ── type roles: five sizes, nothing between ───────── */
+.ab-eyebrow{
   font-family:'DM Mono',monospace;font-size:var(--ab-label);
-  letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--ink-muted);
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--ink-muted);margin-bottom:var(--tight);
 }
-.about-h2{
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
-  font-size:var(--ab-h2);line-height:1.2;letter-spacing:-0.01em;
-  color:var(--ink);margin-bottom:var(--ab-unit);
-}
-.about-body,.about-pro-line,.cv-points li,.ao-items,.trusted-list{
-  font-family:'Cormorant Garamond',serif;font-weight:400;
-  font-size:var(--ab-body);line-height:var(--lh-serif);letter-spacing:0.005em;
-  color:var(--ink-body);text-wrap:pretty;
-}
-
-/* ── 1. hero — the page's single focal point ───────── */
-.about-hero{text-align:center;transform:translateY(22px);}
-.about-hero.in{transform:translateY(0);}
-/* intro and summary are one unit, so they get the unit gap, not the
-   section gap — otherwise they read as two competing openings */
-.about-pro{margin-top:var(--ab-unit);}
-.about-eyebrow{margin-bottom:var(--ab-unit);opacity:0.7;}
-.about-h1{
+.ab-display{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:var(--ab-display);line-height:0.95;letter-spacing:-0.02em;
-  color:var(--ink);margin-bottom:var(--ab-unit);
+  font-size:var(--ab-display);line-height:0.96;letter-spacing:-0.02em;
+  color:var(--ink);margin:0 0 18px;
 }
-.about-lead{
+.ab-h2{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
+  font-size:var(--ab-h2);line-height:1.15;letter-spacing:-0.01em;
+  color:var(--ink);margin:0 0 var(--tight);
+}
+.ab-body{
   font-family:'Cormorant Garamond',serif;font-weight:400;
-  font-size:var(--ab-body);line-height:var(--lh-serif);letter-spacing:0.005em;
-  color:var(--ink-body);max-width:30em;margin:0 auto;text-wrap:pretty;
+  font-size:var(--ab-body);line-height:1.55;letter-spacing:0.005em;
+  color:var(--ink-body);margin:0;text-wrap:pretty;
 }
-
-/* ── 2. what i do + proof (inside the hero) ────────── */
-.about-pro-line{max-width:32em;margin:0 auto var(--ab-unit);}
-.about-pro-line em{font-style:italic;color:var(--ink);}
-.about-pro-stats{
-  display:flex;justify-content:center;flex-wrap:wrap;
-  gap:var(--ab-unit);
+.ab-body em{font-style:italic;color:var(--ink);}
+.ab-meta{
   font-family:'DM Mono',monospace;font-size:var(--ab-meta);
-  color:var(--ink-muted);letter-spacing:0.04em;
+  line-height:1.62;color:var(--ink-body);margin:14px 0 0;text-wrap:pretty;
 }
-/* weight, not hue — these read as fact, not decoration */
-.about-pro-stats strong{font-weight:500;color:var(--ink);}
 
-/* ── 3. the studio ─────────────────────────────────── */
-.about-body{max-width:34em;}
-.about-trusted{margin-top:var(--ab-unit);}
-.trusted-label{display:block;margin-bottom:var(--ab-tight);opacity:0.65;}
-/* one flowing line of quiet names. Was 13 stacked pink italics that
-   shouted louder than the studio they were vouching for. */
-.trusted-list{font-size:var(--ab-meta);line-height:1.7;color:var(--ink-muted);max-width:38em;}
+/* ── hero ──────────────────────────────────────────── */
+.bx-hero{padding:38px var(--pad) 34px;}
 
-/* ── 4. the cv ─────────────────────────────────────── */
-.cv-role{margin-bottom:var(--ab-unit);}
-.cv-role:last-of-type{margin-bottom:0;}
-.cv-role-top{
-  display:flex;justify-content:space-between;align-items:baseline;
-  gap:var(--ab-unit);margin-bottom:var(--ab-tight);
+/* ── stats: a perforated stub ──────────────────────── */
+.bx-stub{
+  padding-left:38px;
+  background:
+    radial-gradient(circle at 10px 50%, transparent 4px, var(--paper) 4.5px) 0 0/100% 14px repeat-y,
+    var(--paper);
 }
-.cv-role-title{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:var(--ab-body);color:var(--ink);line-height:1.3;
-}
-.cv-role-date{
+.stub-list{margin:0;padding:0;display:flex;flex-direction:column;gap:16px;}
+.stub-list div{display:flex;flex-direction:column-reverse;gap:2px;}
+.stub-list dt{
   font-family:'DM Mono',monospace;font-size:var(--ab-label);
-  color:var(--ink-muted);white-space:nowrap;flex-shrink:0;
+  letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-muted);
+}
+.stub-list dd{
+  margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:var(--ab-h2);line-height:1;color:var(--ink);
+}
+
+/* ── the wristband cuff ────────────────────────────── */
+.bx-band{display:flex;gap:0;padding:0;overflow:hidden;}
+.band-cuff{
+  flex:0 0 40px;background:var(--accent-r);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+}
+.band-cuff i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.6);}
+.band-body{padding:var(--pad);min-width:0;}
+
+/* ── cv + education share the record layout ────────── */
+.cv-role{margin-top:22px;}
+.cv-role:first-of-type{margin-top:16px;}
+.cv-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:16px;margin-bottom:6px;flex-wrap:wrap;
+}
+.cv-title{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:var(--ab-body);color:var(--ink);line-height:1.25;
+}
+.cv-date{
+  font-family:'DM Mono',monospace;font-size:var(--ab-label);
+  color:var(--ink-muted);white-space:nowrap;
 }
 .cv-points{list-style:none;padding:0;margin:0;}
 .cv-points li{
-  font-size:var(--ab-meta);line-height:1.6;
-  padding-left:16px;position:relative;margin-bottom:var(--ab-tight);
+  font-family:'DM Mono',monospace;font-size:var(--ab-meta);
+  line-height:1.6;color:var(--ink-body);
+  padding-left:18px;position:relative;margin-bottom:7px;text-wrap:pretty;
 }
 .cv-points li:last-child{margin-bottom:0;}
 .cv-points li::before{
   content:'';position:absolute;left:0;top:0.72em;
-  width:7px;height:1px;background:var(--ink-faint);
-}
-.cv-note{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:var(--ab-meta);line-height:1.7;color:var(--ink-muted);
-  margin-top:var(--ab-unit);max-width:38em;
+  width:9px;height:1px;background:var(--ink-faint);
 }
 
-/* ── 5. the person — the one object on this page ───── */
-/* The tilt lives on the band itself, not the wrapper: the reveal script
-   writes translateY into the wrapper's inline transform, which silently
-   overwrote a rotate declared there. That is why it always rendered flat. */
-.about-wristband{
-  display:flex;align-items:stretch;
-  max-width:440px;
-  transform:rotate(-1.5deg);
-  border-radius:6px;overflow:hidden;
-  background:rgba(255,255,255,0.5);
-  border:1px solid rgba(30,25,20,0.08);
-  box-shadow:0 2px 14px rgba(30,25,20,0.05);
+/* ── education: ruled notebook paper ───────────────── */
+.bx-school{
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 30px,
+      rgba(13,138,175,0.10) 30px 31px
+    ),
+    var(--paper);
+  background-position:0 8px;
 }
-.wb-left{
-  width:44px;flex-shrink:0;background:var(--accent-r);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:var(--ab-tight);
-}
-.wb-hole-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.55);}
-.wb-right{padding:var(--ab-unit);}
-.wb-name{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:var(--ab-h2);color:var(--ink);margin-bottom:var(--ab-tight);
-}
-.wb-tagline{
+.bx-school .ab-meta{margin-top:6px;}
+/* stretched by a taller neighbour: lined paper filling its cell is the
+   point of lined paper, so let it run rather than centring the content. */
+.bx-school,.bx-skills{display:flex;flex-direction:column;}
+
+/* ── skills: stickers ──────────────────────────────── */
+.stickers{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;}
+.stickers span{
   font-family:'DM Mono',monospace;font-size:var(--ab-label);
-  line-height:1.7;color:var(--ink-muted);
+  letter-spacing:0.02em;color:var(--ink);
+  background:rgba(255,255,255,0.85);
+  border:1px solid var(--edge);
+  border-radius:100px;padding:6px 13px;
+  box-shadow:0 1px 1px rgba(45,33,22,0.05);
 }
-.about-outside{margin-top:var(--ab-unit);}
-.ao-label{display:block;margin-bottom:var(--ab-tight);}
-.ao-items{font-style:italic;font-size:var(--ab-meta);line-height:1.8;max-width:38em;}
 
-/* ── 6. contact — the page's exit ──────────────────── */
-.about-contact{text-align:center;}
-.ac-label{display:block;margin-bottom:var(--ab-unit);opacity:0.7;}
-/* pink lives here: the one colour, doing the one job — click this */
+/* ── trusted strip ─────────────────────────────────── */
+.bx-trusted{transform:rotate(-0.2deg);}
+.trusted-list{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:var(--ab-body);line-height:1.7;color:var(--ink-body);
+  margin:0;text-wrap:pretty;
+}
+
+/* ── outside of work ───────────────────────────────── */
+.dot-list{list-style:none;padding:0;margin:14px 0 0;}
+.dot-list li{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:var(--ab-body);line-height:1.5;color:var(--ink-body);
+  padding-left:19px;position:relative;margin-bottom:9px;
+}
+.dot-list li:last-child{margin-bottom:0;}
+.dot-list li::before{
+  content:'';position:absolute;left:1px;top:0.62em;
+  width:6px;height:6px;border-radius:50%;background:var(--accent-r);opacity:0.75;
+}
+
+/* ── contact: the exit, and the only pink type ─────── */
+.bx-contact{display:flex;flex-direction:column;align-items:flex-start;}
 .ac-link{
-  display:inline-block;
   font-family:'Cormorant Garamond',serif;font-style:italic;
   font-size:var(--ab-h2);color:var(--accent-r);
-  text-decoration:none;line-height:1.4;
-  transition:color 0.2s,transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  text-decoration:none;line-height:1.35;margin-top:4px;
+  border-bottom:1px solid rgba(255,123,172,0.32);
+  transition:color 0.2s ease,border-color 0.2s ease,transform 0.16s cubic-bezier(0.23,1,0.32,1);
 }
-.ac-link + .ac-link{margin-left:var(--ab-unit);}
-.ac-link:hover,.ac-link:focus-visible{color:var(--ink);}
-.ac-link:active{transform:scale(0.97);}
-.ac-note{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:var(--ab-meta);color:var(--ink-muted);
-  margin-top:var(--ab-unit);
+@media(hover:hover) and (pointer:fine){
+  .ac-link:hover{color:var(--ink);border-bottom-color:var(--ink);}
 }
+.ac-link:focus-visible{outline:2px solid var(--accent-r);outline-offset:3px;border-radius:2px;}
+.ac-link:active{transform:scale(0.985);}
 
-/* ── 7. sign-off — bookends the h1 ─────────────────── */
-.about-signoff{text-align:center;}
-.about-signoff-text{
+/* ── sign-off: not a box. It closes the page. ──────── */
+.ab-signoff{
+  grid-column:span 6;
+  text-align:center;margin:52px 0 0;
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:var(--ab-display);line-height:1;letter-spacing:-0.02em;
-  color:var(--ink);
+  font-size:var(--ab-display);line-height:1;letter-spacing:-0.02em;color:var(--ink);
 }
 
+/* ── entrance ──────────────────────────────────────── */
+.obj{opacity:0;transition:opacity 0.55s cubic-bezier(0.23,1,0.32,1),transform 0.55s cubic-bezier(0.23,1,0.32,1);}
+.obj.in{opacity:1;}
+@media(prefers-reduced-motion:reduce){
+  .obj{opacity:1 !important;transform:none !important;transition:none !important;}
+  .bx-school{transform:rotate(-0.5deg) !important;}
+  .bx-band{transform:rotate(0.5deg) !important;}
+  .bx-trusted{transform:rotate(-0.2deg) !important;}
+}
+
+/* ── 2-up ──────────────────────────────────────────── */
+@media(max-width:1000px){
+  #about-inner{grid-template-columns:repeat(4,1fr);padding:96px 24px 112px;}
+  .c4,.c6{grid-column:span 4;}
+  .c3{grid-column:span 2;}
+  .c2{grid-column:span 2;}
+  .r2{grid-row:auto;}
+  .ab-signoff{grid-column:span 4;}
+}
+
+/* ── single column ─────────────────────────────────── */
+@media(max-width:639px){
+  #about-inner{
+    --ab-h2:25px;
+    --ab-body:18px;
+    --ab-meta:15px;
+    --pad:22px;
+    grid-template-columns:1fr;
+    padding:88px 18px 96px;
+  }
+  .c2,.c3,.c4,.c6,.ab-signoff{grid-column:span 1;}
+  /* tilts read as broken alignment when everything is one column wide */
+  .bx-school,.bx-band,.bx-trusted{transform:none;}
+  .bx-hero{padding:30px 22px 26px;}
+  .cv-top{gap:4px;}
+  .ab-signoff{margin-top:34px;}
+  .tape{width:78px;height:22px;}
+}
 
 /* ======================================================
    TOKENS
@@ -2331,16 +2417,7 @@ html.vt-folder::view-transition-new(folder-morph){
     to{ opacity:1; transform:rotate(var(--rot,0deg)) translateY(0); }
   }
 
-  /* ---- ABOUT: same 3 tiers, scaled down. Section gap stays the
-     dominant one so structure survives on a small screen. ---- */
-  #about-inner{
-    --ab-section:80px;
-    --ab-unit:24px;
-    padding:88px 22px 104px;
-  }
-  .about-wristband{ min-height:58px; max-width:100%; transform:rotate(-1deg); }
-  .cv-role-top{ flex-wrap:wrap; gap:4px; }
-  .ac-link + .ac-link{ margin-left:0; display:block; margin-top:var(--ab-tight); }
+  /* About's mobile rules live with the bento grid in SCREEN 4, not here. */
 
   /* ---- HUB: three facts side by side get too cramped under ~400px.
      Sizes come from the tokens on #hub-content -- nothing new here. ---- */
@@ -2666,7 +2743,7 @@ html.vt-folder::view-transition-new(folder-morph){
   ::view-transition-new(*){
     animation:none !important;
   }
-  .about-obj,.hub-content,.pg-card,.pg-text-card{
+  .obj,.hub-content,.pg-card,.pg-text-card{
     transition:opacity 0.2s ease !important;
     transform:none !important;
     animation:none !important;
@@ -2745,8 +2822,13 @@ html.vt-folder::view-transition-new(folder-morph){
 
 @media(max-width:760px){
   .cs-layout{ grid-template-columns:1fr; gap:18px; }
-  .cs-sidebar{ position:sticky; top:50px; z-index:5; margin:0 -18px; padding:0 18px; background:rgba(245,242,238,0.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
-  .cs-nav{ flex-direction:row; gap:4px; overflow-x:auto; padding:10px 0; -webkit-overflow-scrolling:touch; }
+  /* min-width:0 is load-bearing. A grid item defaults to min-width:auto, so
+     the nowrap nav links forced this track to their full 654px and the whole
+     detail view overflowed -- invisibly, because #cs-screen clips overflow-x.
+     Zeroing it lets .cs-nav actually scroll instead of pushing the column. */
+  .cs-sidebar{ position:sticky; top:50px; z-index:5; min-width:0; margin:0 -18px; padding:0 18px; background:rgba(245,242,238,0.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+  .cs-nav{ flex-direction:row; gap:4px; overflow-x:auto; padding:10px 18px; margin:0 -18px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .cs-nav::-webkit-scrollbar{ display:none; }
   .cs-navlink{ flex-shrink:0; border-left:none; border-bottom:2px solid transparent; border-radius:6px; padding:7px 11px; white-space:nowrap; }
   .cs-navlink.active{ border-left:none; border-bottom-color:var(--accent-r); background:rgba(255,123,172,0.07); }
   #cs-listwrap{ padding:78px 18px 60px; }
