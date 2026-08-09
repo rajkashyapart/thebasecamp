@@ -146,7 +146,7 @@ p,li,dd,figcaption,
 #screen-playground{z-index:100;background:var(--bg-warm);font-family:'DM Mono',monospace;cursor:crosshair;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;}
 
 #pg-nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:13px 28px;pointer-events:none;background:rgba(245,242,238,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(30,25,20,0.06);}
-/* On CIAD page, nav adapts to dark/light theme */
+/* index.html is the only dark page left -- CIAD is light, always. */
 [data-theme="dark"] #pg-nav{background:rgba(13,13,15,0.88);border-bottom-color:rgba(255,255,255,0.07);}
 [data-theme="light"] #pg-nav{background:rgba(245,237,225,0.90);border-bottom-color:rgba(120,80,40,0.10);}
 .pg-brand{font-family:'DM Mono',monospace;font-size:16px;font-weight:400;letter-spacing:0.1em;color:var(--ink);pointer-events:all;cursor:pointer;}
@@ -815,7 +815,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   --win:rgba(18,18,22,0.97); --winb:rgba(255,255,255,0.09);
   --blob1:rgba(13,138,175,0.055); --blob2:rgba(255,123,172,0.042);
   --tgl-bg:rgba(255,255,255,0.10); --tgl-border:rgba(255,255,255,0.16); --tgl-text:rgba(240,240,242,0.55);
-  --trust-slot:rgba(255,255,255,0.09); --trust-op:0.65; --trust-filter:grayscale(1) brightness(3.0);
+  /* no --trust-* here: the trusted strip is CIAD-only, and CIAD is light. */
   --gal-op:0.92; --photo-bg:rgba(255,255,255,0.05); --photo-border:rgba(255,255,255,0.09);
   --cur-bg:rgba(255,255,255,0.06); --cur-active:rgba(13,138,175,0.18);
 }

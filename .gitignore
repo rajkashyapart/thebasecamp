@@ -3,3 +3,21 @@
 .vercel
 node_modules/
 *.log
+
+# Machine-specific Claude Code permission grants. settings.json (shared
+# project config) is tracked; this one is per-machine noise.
+.claude/settings.local.json
+
+# Vendored copy of a globally-installed skill — the real ones live in
+# ~/.claude/skills/. See CLAUDE.md for the installed roster.
+.agents/
+
+# CLAUDE.md's "Do not recreate" list names .mcp.json. This one is
+# context-mode rather than the claude-flow config that rule was written
+# for, so it's ignored rather than deleted — commit it deliberately if
+# you want it shared.
+.mcp.json
+
+# Brief for a different project (a workplace culture site), not this one.
+# Kept out of this repo rather than deleted.
+MASTER-PROMPT-culture-site.md

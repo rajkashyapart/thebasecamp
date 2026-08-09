@@ -767,15 +767,9 @@ function toggleWork(itemId, hlsSrc) {
   }
 }
 
-function toggleTheme() {
-  const html=document.documentElement;
-  const isDark=html.getAttribute('data-theme')==='dark';
-  html.setAttribute('data-theme',isDark?'light':'dark');
-  document.getElementById('tgl-icon').textContent  = isDark ? '🌙' : '☀️';
-  document.getElementById('tgl-label').textContent = isDark ? 'Dark mode' : 'Light mode';
-  // Update browser chrome colour
-  document.querySelector('meta[name="theme-color"]').content = isDark ? '#0d0d0f' : '#F5EDE1';
-}
+// CIAD has no theme toggle -- the page is light, always. The toggle
+// function that used to live here referenced #tgl-icon/#tgl-label, which
+// exist only on index.html, so nothing could ever call it.
 
 // --- HERO SEQUENCE -----------------------------------------
 function runHeroSequence(onComplete) {
@@ -1203,9 +1197,9 @@ function bookCall() { window.open('https://calendly.com/shootwraj/content-in-a-d
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
-  var tc = document.querySelector('meta[name="theme-color"]');
-  if (tc) tc.content = '#0d0d0f';
-  var tglEl = document.getElementById('theme-toggle');
-  if (tglEl) tglEl.style.display = 'flex';
+  // ciad.html declares data-theme="light" and theme-color #f5f2ee. This used
+  // to overwrite it with #0d0d0f on load, so mobile browser chrome went
+  // near-black around a warm-paper page. The markup is already right.
+  
   ciadInit();
 });

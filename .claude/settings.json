@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  },
+  "attribution": {
+    "commit": "Co-Authored-By: claude-flow <ruv@ruv.net>"
+  }
+}
