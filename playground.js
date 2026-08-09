@@ -176,7 +176,9 @@ function initPlayground() {
     }
     function cardDragMove(cx, cy) {
       if (!cardDragging) return;
-      var dx = cx - csx, dy = cy - csy;
+      // Screen px -> world px: the world is scaled, so an unscaled delta
+      // makes the card lag the cursor on any fitted (sub-1) viewport.
+      var dx = (cx - csx) / scale, dy = (cy - csy) / scale;
       if (Math.abs(dx) + Math.abs(dy) > 4) cardMoved = true;
       if (cardMoved) {
         targetX = dx;
@@ -326,7 +328,7 @@ function initPlayground() {
     }
     function cardDragMove(cx, cy) {
       if (!cardDragging) return;
-      var dx = cx - csx, dy = cy - csy;
+      var dx = (cx - csx) / scale, dy = (cy - csy) / scale;
       if (Math.abs(dx) + Math.abs(dy) > 4) cardMoved = true;
       if (cardMoved) { targetX = dx; targetY = dy; }
     }
@@ -410,14 +412,62 @@ function initPlayground() {
   var canvas = document.getElementById('pg-canvas');
   var pgWorld = document.getElementById('pg-world');
   var dragging=false, startX, startY, offX=0, offY=0, velX=0, velY=0, lastX, lastY, rafId;
-  var scale = 1, minScale = 1, maxScale = 3;
+  var scale = 1, minScale = 1, maxScale = 3, fitScale = 1;
   var homeX = 0, homeY = 0;
 
-  function applyTransform() { pgWorld.style.transform = 'translate('+offX+'px,'+offY+'px) scale('+scale+')'; }
+  // --- Composition bounds (world coords, relative to WCX/WCY) ---
+  // Measured from the card data so it stays correct if cards move.
+  var bounds = (function() {
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    [photoCards, videoCards, textCards].forEach(function(set) {
+      set.forEach(function(c) {
+        if (c.x < minX) minX = c.x;
+        if (c.y < minY) minY = c.y;
+        if (c.x + c.w > maxX) maxX = c.x + c.w;
+        if (c.y + c.h > maxY) maxY = c.y + c.h;
+      });
+    });
+    return { x: minX, y: minY, w: maxX - minX, h: maxY - minY, cx: (minX+maxX)/2, cy: (minY+maxY)/2 };
+  })();
+
+  // Scale so the whole scatter reads on one screen. BLEED lets the outer ring
+  // run off the edges on purpose — a fully-contained scatter looks "placed",
+  // and edge bleed is the point. Never scales past 1 (big displays unchanged).
+  var BLEED_X = 1.06, BLEED_Y = 1.10, MIN_FIT = 0.52;
   function getNavHeight() { var n = document.getElementById('pg-nav'); return n ? n.offsetHeight : 0; }
-  function centerView() { var nh = getNavHeight(); offX = window.innerWidth/2 - WCX; offY = (window.innerHeight + nh)/2 - WCY; homeX = offX; homeY = offY; applyTransform(); }
-  centerView();
-  window.addEventListener('resize', function() { centerView(); scale = 1; applyTransform(); hideRecenter(); });
+  function computeFit() {
+    var vw = window.innerWidth;
+    var vh = window.innerHeight - getNavHeight();
+    var s = Math.min((vw * BLEED_X) / bounds.w, (vh * BLEED_Y) / bounds.h);
+    return Math.max(MIN_FIT, Math.min(1, s));
+  }
+
+  function applyTransform() { pgWorld.style.transform = 'translate('+offX+'px,'+offY+'px) scale('+scale+')'; }
+
+  // transform-origin is 0 0, so world point p maps to screen (off + p*scale).
+  // Centre on the composition's centre of mass, not on WCX/WCY — the scatter
+  // isn't symmetrical around it.
+  function centerView() {
+    var nh = getNavHeight();
+    offX = window.innerWidth/2 - (WCX + bounds.cx) * scale;
+    offY = (window.innerHeight + nh)/2 - (WCY + bounds.cy) * scale;
+    homeX = offX; homeY = offY;
+    applyTransform();
+  }
+  function resetToFit() {
+    fitScale = computeFit();
+    minScale = fitScale;
+    maxScale = Math.max(3, fitScale * 3);
+    scale = fitScale;
+    centerView();
+  }
+  resetToFit();
+
+  var resizeTimer = null;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() { resetToFit(); hideRecenter(); }, 120);
+  });
 
   // Re-center button
   var recenterBtn = document.createElement('button');
@@ -436,7 +486,7 @@ function initPlayground() {
     return false;
   }
   function checkRecenter() {
-    var drifted = Math.abs(offX - homeX) > 30 || Math.abs(offY - homeY) > 30 || scale > 1.05 || cardsDrifted();
+    var drifted = Math.abs(offX - homeX) > 30 || Math.abs(offY - homeY) > 30 || scale > fitScale * 1.05 || cardsDrifted();
     if (drifted && !recenterVisible) {
       recenterVisible = true;
       recenterBtn.style.opacity = '1';
@@ -454,10 +504,9 @@ function initPlayground() {
     e.stopPropagation();
     cancelAnimationFrame(rafId);
     velX = velY = 0;
-    scale = 1;
+    scale = fitScale;
     pgWorld.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
-    offX = homeX; offY = homeY;
-    applyTransform();
+    centerView();
     // Tidy up: spring all cards back to original positions
     allCardEls.forEach(function(entry, idx) {
       var ce = entry.el, cd = entry.data;

@@ -73,17 +73,99 @@
     </div>
 
     <div class="hub-options">
-      <div class="hub-option hub-option-primary" onclick="window.location.href='ciad.html'">
+
+      <!-- ── CONTENT IN A DAY (productised) ── -->
+      <div class="hub-option hub-option-primary">
         <div class="hub-opt-tag">most popular</div>
+        <div class="hub-opt-kind">the productised one &mdash; monthly retainer</div>
         <div class="hub-opt-title">content in a day</div>
-        <div class="hub-opt-desc">one shoot day. a month of content. i&rsquo;ve tried to build a system that actually works.</div>
-        <div class="hub-opt-btn">explore the system &rarr;</div>
+        <div class="hub-opt-desc">you show up for one shoot day. i hand you a month of content. strategy, direction, shooting, editing and scheduling &mdash; all of it handled.</div>
+
+        <dl class="hub-facts">
+          <div class="hub-fact">
+            <dt>you show up</dt>
+            <dd>1 day <span>/ month</span></dd>
+          </div>
+          <div class="hub-fact">
+            <dt>you get</dt>
+            <dd>6&ndash;20 <span>videos / mo</span></dd>
+          </div>
+          <div class="hub-fact">
+            <dt>from</dt>
+            <dd>&#8377;36,995 <span>/ month</span></dd>
+          </div>
+        </dl>
+
+        <button type="button" class="hub-opt-more" aria-expanded="false" aria-controls="hub-detail-ciad">
+          <span class="hub-opt-more-label">what&rsquo;s actually in it</span>
+          <svg class="hub-chev" width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1L5.5 5.5L10 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="hub-opt-detail" id="hub-detail-ciad">
+          <div class="hub-opt-detail-inner">
+            <ol class="hub-steps">
+              <li><b>positioning first.</b> strategy calls and a proper brief &mdash; who you&rsquo;re talking to and what makes them stop. before a camera comes out.</li>
+              <li><b>one shoot day.</b> i direct, shoot and handle the day. that&rsquo;s your whole monthly commitment.</li>
+              <li><b>you don&rsquo;t touch it again.</b> editing handled, unlimited revisions on frame.io, everything scheduled for the month.</li>
+              <li><b>we read what worked</b> and adjust next month. the system compounds.</li>
+            </ol>
+            <p class="hub-opt-forwho"><span>best for</span> founders who need to stay visible without content eating their week.</p>
+          </div>
+        </div>
+
+        <a class="hub-opt-btn" href="ciad.html">see the full system, pricing &amp; work &rarr;</a>
       </div>
-      <a class="hub-option" href="mailto:hello@rajkashyap.studio">
+
+      <!-- ── PERSONALISED (bespoke) ── -->
+      <div class="hub-option">
+        <div class="hub-opt-kind">the bespoke one &mdash; scoped per project</div>
         <div class="hub-opt-title">personalised projects</div>
-        <div class="hub-opt-desc">weddings, events, brand shoots, something entirely yours. tell me what you&rsquo;re imagining.</div>
-        <div class="hub-opt-btn">say hello &rarr;</div>
-      </a>
+        <div class="hub-opt-desc">one brief, built from scratch. brand films, campaigns, product and menu photography, events, weddings &mdash; whatever the thing actually needs.</div>
+
+        <dl class="hub-facts">
+          <div class="hub-fact">
+            <dt>working since</dt>
+            <dd>2020 <span>&middot; 25+ brands</span></dd>
+          </div>
+          <div class="hub-fact">
+            <dt>i cover</dt>
+            <dd>strategy <span>&rarr; shoot &rarr; edit</span></dd>
+          </div>
+          <div class="hub-fact">
+            <dt>pricing</dt>
+            <dd>scoped <span>after a call</span></dd>
+          </div>
+        </dl>
+
+        <button type="button" class="hub-opt-more" aria-expanded="false" aria-controls="hub-detail-custom">
+          <span class="hub-opt-more-label">what i do &amp; what i&rsquo;ve pulled off</span>
+          <svg class="hub-chev" width="11" height="7" viewBox="0 0 11 7" fill="none" aria-hidden="true"><path d="M1 1L5.5 5.5L10 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="hub-opt-detail" id="hub-detail-custom">
+          <div class="hub-opt-detail-inner">
+            <div class="hub-caps">
+              <span>content strategy &amp; positioning</span>
+              <span>direction</span>
+              <span>photography</span>
+              <span>video &amp; edit</span>
+              <span>brand &amp; product shoots</span>
+              <span>menu design</span>
+              <span>event &amp; festival coverage</span>
+            </div>
+            <ul class="hub-done">
+              <li>a founder reel series for <b>Upsurge Labs</b> &mdash; built for positioning, authority and inbound.</li>
+              <li>personal branding and content direction for <b>Sarah Edwards</b>, Copper + Cloves.</li>
+              <li>menu design and food photography for <b>Fifty 50</b> and <b>Copper + Cloves</b>.</li>
+              <li>festival coverage for the <b>Indian Cacao &amp; Craft Chocolate Festival</b>, plus events for <b>Pashm</b> and <b>Cult.fit</b>.</li>
+            </ul>
+            <p class="hub-opt-forwho"><span>what to expect</span> a call, then a brief we both agree on before anything is shot. revisions until it&rsquo;s right &mdash; not until the hours run out.</p>
+            <a class="hub-opt-sublink" href="case-studies.html">read the case studies &rarr;</a>
+          </div>
+        </div>
+
+        <a class="hub-opt-btn" href="mailto:hello@rajkashyap.studio">tell me what you&rsquo;re imagining &rarr;</a>
+      </div>
     </div>
 
     <!-- TESTIMONIAL (rotating — pulled from "the word on the street") -->
@@ -100,34 +182,54 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // 3D tilt on hub option cards
-  document.querySelectorAll('.hub-option').forEach(function(el) {
-    el.addEventListener('mousemove', function(e) {
-      var r = el.getBoundingClientRect();
-      var x = (e.clientX - r.left) / r.width - 0.5;
-      var y = (e.clientY - r.top) / r.height - 0.5;
-      el.style.transform = 'translateY(-2px) perspective(600px) rotateX('+(-y*8)+'deg) rotateY('+(x*8)+'deg) scale(1.01)';
-      el.style.transition = 'none';
-    });
-    el.addEventListener('mouseleave', function() {
-      el.style.transform = '';
-      el.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s, background 0.2s, box-shadow 0.2s';
-    });
-  });
-  // Magnetic CTA buttons
-  document.querySelectorAll('a[href]').forEach(function(el) {
-    if (!el.classList.contains('hub-option') && !el.classList.contains('hub-opt-btn')) return;
-    el.addEventListener('mousemove', function(e) {
-      var r = el.getBoundingClientRect();
-      var dx = (e.clientX - (r.left + r.width/2)) * 0.18;
-      var dy = (e.clientY - (r.top + r.height/2)) * 0.18;
-      el.style.transform = 'translate('+dx+'px,'+dy+'px)';
-    });
-    el.addEventListener('mouseleave', function() {
-      el.style.transform = '';
-      el.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  // Expand/collapse the detail on each offer card
+  document.querySelectorAll('.hub-opt-more').forEach(function(btn) {
+    var card = btn.closest('.hub-option');
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel) return;
+    btn.addEventListener('click', function() {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      panel.classList.toggle('open', !open);
+      // tilt on a tall expanded card feels seasick — park it while open
+      card.classList.toggle('no-tilt', !open);
+      if (open) { card.style.transform = ''; }
     });
   });
+
+  // 3D tilt on hub option cards (pointer devices only, collapsed only)
+  if (fine) {
+    document.querySelectorAll('.hub-option').forEach(function(el) {
+      el.addEventListener('mousemove', function(e) {
+        if (el.classList.contains('no-tilt')) return;
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5;
+        var y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = 'translateY(-2px) perspective(600px) rotateX('+(-y*5)+'deg) rotateY('+(x*5)+'deg) scale(1.005)';
+        el.style.transition = 'none';
+      });
+      el.addEventListener('mouseleave', function() {
+        el.style.transform = '';
+        el.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s, background 0.2s, box-shadow 0.2s';
+      });
+    });
+    // Magnetic CTA buttons
+    document.querySelectorAll('.hub-opt-btn').forEach(function(el) {
+      el.addEventListener('mousemove', function(e) {
+        var r = el.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width/2)) * 0.12;
+        var dy = (e.clientY - (r.top + r.height/2)) * 0.12;
+        el.style.transform = 'translate('+dx+'px,'+dy+'px)';
+        el.style.transition = 'none';
+      });
+      el.addEventListener('mouseleave', function() {
+        el.style.transform = '';
+        el.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+      });
+    });
+  }
   // Rotating testimonials -- pulled from "the word on the street" (ciad)
   var hubTesti = [
     {t:'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', a:'Sarah Edwards &mdash; Copper + Cloves'},

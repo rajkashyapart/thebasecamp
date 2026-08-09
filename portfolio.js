@@ -13,6 +13,9 @@ var projects = [
     subtitle: 'Sarah Edwards',
     category: 'content',
     description: 'Content direction and personal branding for Sarah Edwards of Copper + Cloves \u2014 a voice as warm as the brand itself.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('fddf2783-d99b-440c-b433-0dbcbad3a07c'), size: 'big' },
       { type: 'video', src: vid('7c61d479-6e79-4c32-be60-4d43444bc460'), size: 'tall' },
@@ -25,6 +28,9 @@ var projects = [
     subtitle: 'Sowmay Jain',
     category: 'content',
     description: 'Founder-led content for Sowmay Jain of Upsurge Labs \u2014 a consistent reel series built around positioning, authority, and inbound.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('46151b93-4758-4055-ab4d-944a470f7c17'), size: 'tall' },
       { type: 'video', src: vid('eb2d2262-f579-4b69-9ea3-5b4db0bcac2c'), size: 'reg' },
@@ -46,6 +52,9 @@ var projects = [
     subtitle: 'Prabhjot Dhami',
     category: 'fnb',
     description: 'F&amp;B content for Prabhjot Dhami of The Fresh Factory \u2014 fresh produce, honest storytelling.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('253d1a6a-6912-4c6b-ad40-8371dfcb829e'), size: 'tall' },
       { type: 'video', src: vid('4c09e742-2c9f-4c7d-918a-4b05c8e30f53'), size: 'reg' },
@@ -59,6 +68,9 @@ var projects = [
     subtitle: 'Aditya Kumar',
     category: 'fnb',
     description: 'Brand and product content for Aditya Kumar of Insanely Good Coffee.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('48daa49e-172d-4934-9c0d-1136cf223339'), size: 'tall' },
       { type: 'video', src: vid('a900299f-5c7c-45ea-9f2f-5d076c4a019f'), size: 'reg' },
@@ -71,6 +83,9 @@ var projects = [
     subtitle: 'Shashank Arora',
     category: 'content',
     description: 'Content and direction for Shashank Arora of Kaheen.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('2b6ecca6-96e1-4890-9170-1f60ef2ad41b'), size: 'tall' },
       { type: 'video', src: vid('fb502bdb-185e-4356-89f0-b9be31eb77cf'), size: 'reg' }
@@ -83,6 +98,9 @@ var projects = [
     subtitle: 'Food & Beverage',
     category: 'fnb',
     description: 'Menu design and food photography for Fifty 50.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'photo', src: '', size: 'tall' },
       { type: 'photo', src: '', size: 'reg' },
@@ -97,6 +115,9 @@ var projects = [
     subtitle: 'Copper + Cloves',
     category: 'fnb',
     description: 'A holiday campaign for Copper + Cloves \u2014 warmth, spice, and everything nice.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'photo', src: '', size: 'big' },
       { type: 'photo', src: '', size: 'reg' },
@@ -111,6 +132,9 @@ var projects = [
     subtitle: 'Copper + Cloves',
     category: 'fnb',
     description: 'Menu photography and layout for Copper + Cloves.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'photo', src: '', size: 'reg' },
       { type: 'photo', src: '', size: 'tall' },
@@ -126,6 +150,9 @@ var projects = [
     subtitle: 'Patricia · Ketaki · Sneha',
     category: 'events',
     description: 'Festival content for Patricia, Ketaki &amp; Sneha — the Indian Cacao &amp; Craft Chocolate Festival.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('7badd2e0-7d8c-42db-98a1-57c78b3e29fb'), size: 'wide' },
       { type: 'video', src: vid('af9add4d-4c87-4f42-99d3-49cc3837dd55'), size: 'reg' },
@@ -141,6 +168,9 @@ var projects = [
     subtitle: 'Pashm',
     category: 'events',
     description: 'Event coverage and content for AME by Pashm.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'photo', src: '', size: 'wide' },
       { type: 'photo', src: '', size: 'reg' },
@@ -155,6 +185,9 @@ var projects = [
     subtitle: 'Cult.fit',
     category: 'events',
     description: 'Event documentation and content for the Cult.fit release.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'photo', src: '', size: 'reg' },
       { type: 'photo', src: '', size: 'big' },
@@ -171,6 +204,9 @@ var projects = [
     category: 'personal',
     playgroundLink: true,
     description: 'Photographs and frames from life, wandering, and the in-between. this is uncurated.raj.',
+    // TODO(raj): fill these two in. keep each to one line.
+    role: '',
+    outcome: '',
     items: [
       { type: 'video', src: vid('8033cbca-5209-4e8f-b446-89f668359e16'), size: 'big' },
       { type: 'photo', src: PB + '20230907%20-%20IMG_1655%20-%20Raj%20Kashyap92023raj.webp', size: 'tall' },
@@ -274,6 +310,18 @@ function weave(items, avoidFirst) {
 // Reel sequence: a pinned 14-piece opener, then the remaining client work
 // shuffled (randomised each load), with the personal work held mostly until
 // after client work is over — only a few pieces subtly scattered into it.
+function slideFrom(proj, it) {
+  return {
+    type: it.type, src: it.src, name: proj.name,
+    sub: proj.subtitle, cat: proj.category,
+    pid: proj.id,
+    // per-item overrides win, else the project-level note
+    role: it.role || proj.role || '',
+    outcome: it.outcome || proj.outcome || '',
+    playground: !!proj.playgroundLink
+  };
+}
+
 function buildSlideData() {
   var all = [];
   for (var p = 0; p < projects.length; p++) {
@@ -281,11 +329,7 @@ function buildSlideData() {
     for (var i = 0; i < proj.items.length; i++) {
       var it = proj.items[i];
       if (!it.src) continue;
-      all.push({
-        type: it.type, src: it.src, name: proj.name,
-        sub: proj.subtitle, cat: proj.category,
-        playground: !!proj.playgroundLink
-      });
+      all.push(slideFrom(proj, it));
     }
   }
 
@@ -319,6 +363,35 @@ function buildSlideData() {
   return head.concat(clientRun, restPersonal);
 }
 
+// Client view: no shuffle. Pieces stay grouped by project, in the order the
+// projects array declares them (client work first, personal last). The first
+// piece of each group carries a marker so the boundary is legible mid-scroll.
+function buildClientData() {
+  var out = [];
+  var order = projects.slice().sort(function(a, b) {
+    return (a.category === 'personal' ? 1 : 0) - (b.category === 'personal' ? 1 : 0);
+  });
+  for (var p = 0; p < order.length; p++) {
+    var proj = order[p], group = [];
+    for (var i = 0; i < proj.items.length; i++) {
+      if (proj.items[i].src) group.push(slideFrom(proj, proj.items[i]));
+    }
+    if (!group.length) continue;
+    group[0].groupStart = true;
+    group[0].groupIdx = out.length ? countGroups(out) + 1 : 1;
+    for (var g = 0; g < group.length; g++) group[g].groupSize = group.length;
+    out = out.concat(group);
+  }
+  return out;
+}
+function countGroups(list) {
+  var n = 0;
+  for (var i = 0; i < list.length; i++) if (list[i].groupStart) n++;
+  return n;
+}
+
+var VIEW_MODES = ['shuffled', 'client'];
+var viewMode = 'shuffled';
 var SLIDES = [];
 var slideObjs = [];   // { el, video, src, inited, hls }
 var activeIdx = -1;
@@ -333,12 +406,36 @@ function catLabel(cat) {
 }
 function pad2(n) { return (n < 10 ? '0' : '') + n; }
 
+// Credit block: what raj actually did, and what it did for the client.
+// Renders nothing until the role/outcome slots in `projects` are filled.
+// Add ?slots=1 to the URL to see the empty slots while writing them.
+var SHOW_EMPTY_SLOTS = /[?&]slots=1/.test(window.location.search);
+function creditBlock(s) {
+  var role = s.role || (SHOW_EMPTY_SLOTS ? '<span class="reel-todo">role — to be written</span>' : '');
+  var out = s.outcome || (SHOW_EMPTY_SLOTS ? '<span class="reel-todo">outcome — to be written</span>' : '');
+  if (!role && !out) return '';
+  return '<div class="reel-credit">' +
+    (role ? '<p class="reel-credit-row"><span class="reel-credit-key">my part</span>' + role + '</p>' : '') +
+    (out ? '<p class="reel-credit-row"><span class="reel-credit-key">what it did</span>' + out + '</p>' : '') +
+  '</div>';
+}
+
 // ---- Build DOM ----
-function initPortfolio() {
+function renderReel(mode) {
   var reel = document.getElementById('reel');
   if (!reel) return;
-  SLIDES = buildSlideData();
+
+  // tear down whatever is currently mounted
+  if (reelObserver) { reelObserver.disconnect(); reelObserver = null; }
+  for (var t = 0; t < slideObjs.length; t++) teardownVideo(slideObjs[t]);
+  slideObjs = [];
+  activeIdx = -1;
+  reel.innerHTML = '';
+
+  viewMode = mode;
+  SLIDES = mode === 'client' ? buildClientData() : buildSlideData();
   var total = SLIDES.length;
+  var clientCount = countGroups(SLIDES);
 
   // Intro slide
   var intro = document.createElement('section');
@@ -347,7 +444,11 @@ function initPortfolio() {
     '<div class="reel-intro-inner">' +
       '<div class="reel-intro-eyebrow">portfolio</div>' +
       '<h1 class="reel-intro-title">things i’ve<br><em>made.</em></h1>' +
-      '<p class="reel-intro-sub">' + total + ' pieces · scroll through · tap any one for sound</p>' +
+      '<p class="reel-intro-sub">' +
+        (mode === 'client'
+          ? total + ' pieces · ' + clientCount + ' clients · grouped'
+          : total + ' pieces · shuffled every visit') +
+        ' · tap any one for sound</p>' +
     '</div>' +
     '<div class="reel-cue" aria-hidden="true"><span></span></div>';
   reel.appendChild(intro);
@@ -403,6 +504,7 @@ function initPortfolio() {
       '<div class="reel-cat">' + catLabel(s.cat) + '</div>' +
       '<div class="reel-name">' + s.name + '</div>' +
       '<div class="reel-sub">' + (s.sub || '') + '</div>' +
+      creditBlock(s) +
       pl;
 
     // media + label share a frame sized to the video, so the title sits on
@@ -411,6 +513,19 @@ function initPortfolio() {
     frame.className = 'reel-frame';
     frame.appendChild(media);
     frame.appendChild(label);
+
+    // client view: mark where each client's run begins
+    if (s.groupStart) {
+      sec.className += ' is-group-start';
+      var mark = document.createElement('div');
+      mark.className = 'reel-groupmark';
+      mark.innerHTML =
+        '<span class="reel-groupmark-n">' + pad2(s.groupIdx) + ' / ' + pad2(clientCount) + '</span>' +
+        '<span class="reel-groupmark-name">' + s.name + '</span>' +
+        '<span class="reel-groupmark-count">' + s.groupSize + ' ' + (s.groupSize === 1 ? 'piece' : 'pieces') + '</span>';
+      frame.appendChild(mark);
+    }
+
     sec.appendChild(frame);
     reel.appendChild(sec);
 
@@ -431,7 +546,46 @@ function initPortfolio() {
   }
 
   setupObserver();
-  setupProgress();
+}
+
+// ---- View toggle: shuffled <-> by client ----
+var reelObserver = null;
+
+function setupViewToggle() {
+  var wrap = document.getElementById('reel-view');
+  if (!wrap) return;
+  var sc = document.getElementById('screen-port');
+  var btns = wrap.querySelectorAll('.reel-view-btn');
+
+  function paint() {
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i].getAttribute('data-mode') === viewMode;
+      btns[i].classList.toggle('on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    wrap.setAttribute('data-mode', viewMode);
+  }
+
+  for (var b = 0; b < btns.length; b++) {
+    btns[b].addEventListener('click', function() {
+      var next = this.getAttribute('data-mode');
+      if (next === viewMode) return;
+      // fade the reel out, swap underneath, fade back — a hard cut on a
+      // full-screen video reel reads as a page break, not a re-sort.
+      sc.classList.add('reel-swapping');
+      setTimeout(function() {
+        renderReel(next);
+        if (sc) sc.scrollTop = 0;
+        paint();
+        // next frame, so the new slides are laid out before we un-fade
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() { sc.classList.remove('reel-swapping'); });
+        });
+        try { localStorage.setItem('reelView', next); } catch (e) {}
+      }, 180);
+    });
+  }
+  paint();
 }
 
 // ---- IntersectionObserver: reveal + which piece is centered ----
@@ -453,6 +607,7 @@ function setupObserver() {
     }
   }, { root: document.getElementById('screen-port'), threshold: [0.12, 0.55, 0.8] });
   for (var j = 0; j < slideObjs.length; j++) io.observe(slideObjs[j].el);
+  reelObserver = io;
 }
 
 // force muted autoplay to start on first scroll even on slow connections:
@@ -568,6 +723,15 @@ function setupProgress() {
       ticking = false;
     });
   }, { passive: true });
+}
+
+function initPortfolio() {
+  var saved = null;
+  try { saved = localStorage.getItem('reelView'); } catch (e) {}
+  if (VIEW_MODES.indexOf(saved) === -1) saved = 'shuffled';
+  renderReel(saved);
+  setupViewToggle();
+  setupProgress();
 }
 
 document.addEventListener('DOMContentLoaded', initPortfolio);
