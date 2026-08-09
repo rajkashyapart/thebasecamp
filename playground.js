@@ -742,7 +742,7 @@ function initPlaygroundFeed() {
   var hero = document.createElement('div');
   hero.className = 'pgf-hero-fixed';
   hero.innerHTML =
-    '<h1 class="pgf-title">never stop playing &lt;3</h1>' +
+    '<p class="pgf-title">never stop playing &lt;3</p>' +
     '<a href="portfolio.html" class="pgf-cta">see the work &#8594;</a>';
   canvas.appendChild(hero);
 
