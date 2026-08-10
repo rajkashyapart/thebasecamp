@@ -1336,7 +1336,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .od-readout > *{grid-column:1;}
   .od-readout .od-cur{grid-column:2;grid-row:1 / span 5;align-self:center;margin-top:0;}
   .od-foot{gap:var(--od-1);}
-  .od-nope li{line-height:1.6;}
+  /* The disqualifier goes on a phone. It is three lines and 88px, and on a
+     390x706 live viewport it was sitting under the bar's gradient where it
+     could be seen but not read -- which is worse than not being there. It
+     still runs on every screen wide enough to hold it. */
+  .od-nope{display:none;}
   /* four stations across a phone: the station names drop to the label size so
      "positioning" stays on one line, and the ring loses the room it does not
      have */
@@ -1347,31 +1351,40 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      -- the gap between them has to beat the gap inside them. */
   .od-step{padding-top:16px;gap:3px;padding-inline:5px;}
   .od-step span{letter-spacing:var(--tr-ui);}
-  .od-path{padding-top:34px;}
-  .od-path-rail{top:34px;}
-  .od-path-out{height:34px;}
-  .od-path-back{height:16px;margin-top:12px;}
-  /* The box has to be square because a circle needs a square, but the drawing
-     does not reach the top and bottom of it -- the negative margin gives back
-     the empty band above "ideation" and below "production" rather than paying
-     for it twice. The bar is two rows on a phone and takes 168 of the 844 on
-     its own, so this screen is the one that runs closest to the edge.
-     The centre is held wide enough for both of its lines to stay single. It
-     is the only thing keeping the two of them clear of the words on the ring:
-     at four lines the block grows into the rows where "distribution" and
-     "strategy" sit, and a narrower ring does not fix that -- it makes it
-     worse. */
-  .od-inner-split{gap:var(--od-2);}
-  /* Everything inside the ring is absolutely positioned, so the square box is
-     reserving 35px of nothing above "ideation" and below "production". Giving
-     almost all of it back is what lands this screen inside 844px; it leaves
-     the topmost word ~34px clear of the paragraph, which is still the gap
-     between two parts. */
-  .od-loop{width:min(100%,276px);margin-block:-27px;}
-  .od-loop-mid{width:160px;}
-  .od-chain li{padding:2px 5px;}
-  .od-bar{flex-direction:column;align-items:stretch;gap:var(--od-3);padding-top:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));}
-  .od-go{width:100%;justify-content:center;text-align:center;}
+  /* the run-up to the line, the return under it and the note after it all
+     come in a step, which is what this screen owed the 706px viewport */
+  .od-path{margin-top:var(--od-2);padding-top:30px;}
+  .od-path-rail{top:30px;}
+  .od-path-out{height:30px;}
+  .od-path-back{height:14px;margin-top:10px;}
+  .od-hand-block{margin-top:var(--od-1);}
+  /* Everything on this screen is sized off one constraint: the centre of the
+     ring has to stay two single lines. At three or four it grows into the rows
+     where "distribution" and "strategy" sit, and a smaller ring does not fix
+     that -- it makes it worse. Dropping the six words and the caption to the
+     label size is what buys those two lines their width back, and it is what
+     lets the ring come down to 240 so this screen lands inside a real 706px
+     Safari viewport rather than the 844 the device claims.
+     The box is square because a circle needs a square, but the drawing does
+     not reach the top or bottom of it -- the negative margin gives back the
+     empty band above "ideation" and below "production" instead of paying for
+     it twice.
+     The ring sits close to the paragraph on purpose: it is that paragraph's
+     six disciplines drawn, not a separate part, and the bar is 110px below
+     it, so the two still read as one block against everything else. */
+  .od-inner-split{gap:var(--od-1);}
+  .od-loop{width:min(100%,240px);margin-block:-29px;}
+  .od-loop-mid{width:142px;font-size:var(--t-micro);}
+  .od-chain li{padding:2px 5px;font-size:var(--t-micro);}
+  /* The bar was two stacked rows here -- rail, 34px, full-width button -- and
+     it came to 168px. A phone in Safari has about 706px of live viewport, not
+     the 844 the device claims, so the bar was taking a quarter of the screen
+     before a word of content landed and every slide but the first overflowed
+     underneath it. One row, as on a desktop. The button keeps a 44px target;
+     it is the width it gives up, not the height. */
+  .od-bar{gap:var(--od-2);padding-top:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));}
+  .od-go{padding:14px 20px;}
+  .od-rail{padding-top:12px;}
   /* only the current stop keeps its label; the rest become tick marks */
   .od-tick{padding:8px 0;}
   .od-tick:not(.is-on){
