@@ -133,9 +133,13 @@ Nothing between the spacing tiers. The whole point is that the jump from 32 to 1
 
 **Proximity beats decoration.** The gap *between* two things must always exceed the padding *inside* them. Hub violated this — 16px between the two offer cards, 26px of padding within each — so the two choices visually fused into one blob.
 
-**About is the scatter page.** It deliberately breaks the tidy-grid instinct: every cell carries its own `--rot`, a stagger margin, and its own drift animation on its own clock, matching the playground canvas. Don't straighten it. Do keep the tilt and drift off below 640px — at one column wide they read as broken alignment and jitter respectively.
+**~~About is the scatter page.~~** Superseded `2026-08-10`. About was the scatter page — every cell tilted, staggered and drifting on its own clock. Commit `94d41ca` rebuilt it against the Emmi reference and Raj confirmed that direction on 2026-08-10, choosing "refine what's there" over "bring back scatter". **About is now the editorial page:** writing on the left, photographs on the right bled to the viewport edge, no cards, no tape, no tilt, no drift. The pictures carry the personality; the type stays out of their way. Don't re-scatter it. The playground canvas is still the scatter north star — that's where tilt and drift belong.
 
-**Comparison requires adjacency.** If a page asks the user to choose between options, those options must be visible simultaneously. Stacked vertically, they can't be compared, only remembered.
+Note: `ref-emmi-playground.png` is referenced below but is not in the repo or in git history. The Emmi reference survives only as that structural rule.
+
+**Comparison requires adjacency.** If a page asks the user to choose between options, those options must be visible simultaneously. Stacked vertically, they can't be compared, only remembered. Adjacency is about *starting* together and sharing a structure, not about ending together — Hub stretched both cards to equal height to align their CTAs and bought a 150px hole above the shorter one. `align-items:start` is the fix.
+
+**Never centre a flex child that can outgrow its scroll container.** `align-items:center` on an `overflow-y:auto` flex parent pushes the overflow *above* the scroll origin, where it can never be reached. On Hub this silently ate the entire masthead on a phone. Use `align-items:flex-start` plus `margin-block:auto` on the child.
 
 ---
 

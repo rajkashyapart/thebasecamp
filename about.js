@@ -18,6 +18,11 @@ function initAbout() {
   if (!tiles.length) return;
 
   var GAP = 7;
+  // The most a row may be squeezed to make an arrangement fit. object-fit
+  // crops from the centre, so 0.86 takes 7% off the top of a photograph and
+  // 7% off the bottom -- a sliver, nowhere near the old bug where portrait
+  // photos in landscape tiles lost people's heads.
+  var MIN_SCALE = 0.86;
 
   var ratios = tiles.map(function (t) {
     var v = parseFloat(t.style.getPropertyValue('--ar'));
@@ -99,28 +104,40 @@ function initAbout() {
     var availH = available();
     if (W <= 0 || availH <= 0) return;
 
-    // Prefer the tallest arrangement that still fits. Landing "closest" is
-    // not good enough -- closest is happy to overshoot by a hair and put the
-    // scrollbar back, which is the whole thing we are trying to remove.
-    var lo = 70, hi = 760, fits = null, smallest = null;
-    for (var k = 0; k < 34; k++) {
-      var mid = (lo + hi) / 2;
-      var p = plan(mid, W);
+    // Sweep the trial height rather than bisecting it. A binary search
+    // converges on the boundary between "fits" and "does not", so it only
+    // ever sees the arrangements either side of that one crossing -- and the
+    // arrangement we want here is usually the one just past it, which the
+    // search then throws away. The scan is 173 iterations of an 18-element
+    // loop, which costs nothing.
+    var fits = null, smallest = null, near = null;
+    for (var trial = 70; trial <= 760; trial += 1) {
+      var p = plan(trial, W);
+      // the tallest arrangement that still fits, uncropped
       if (p.total <= availH) {
         if (!fits || p.total > fits.total) fits = p;
-        lo = mid;
-      } else {
-        hi = mid;
+      } else if (p.total <= availH / MIN_SCALE) {
+        // ...and the shortest that overshoots by little enough to be
+        // squeezed back in. Scaling it down costs a crop of a few per cent,
+        // which is the difference between a mosaic that fills the page and
+        // one that floats in the middle of it.
+        if (!near || p.total < near.total) near = p;
       }
       if (!smallest || p.total < smallest.total) smallest = p;
     }
-    var best = fits || smallest;   // nothing fits only when the pane is tiny
 
-    // 18 photographs at these ratios only partition into about three rows or
-    // about four -- there is no arrangement in between, so on very wide
-    // screens some slack is unavoidable without cropping. Pin the pane to the
-    // full height and centre the rows in it, so whatever is left over reads as
-    // margin above and below rather than a dead band at the bottom.
+    // 18 photographs at these ratios partition into about three rows or about
+    // four and nothing in between: three leaves ~350px of the pane empty,
+    // four spills over by ~30. Take the four and shrink it -- but only ever
+    // by MIN_SCALE, so no photograph loses more than a sliver.
+    var best = fits || smallest;
+    if (near && (!fits || near.total * MIN_SCALE > fits.total)) best = near;
+
+    var scale = best.total > availH ? availH / best.total : 1;
+
+    // Pin the pane to the full height and centre the rows in it, so any
+    // remainder reads as margin above and below, not a dead band at the
+    // bottom.
     shots.style.height = availH + 'px';
 
     // Explicit row elements rather than flex-wrap. Relying on wrapping meant a
@@ -130,12 +147,15 @@ function initAbout() {
     best.rows.forEach(function (r) {
       var rowEl = document.createElement('div');
       rowEl.className = 'srow';
-      var h = Math.floor(r.h), used = 0;
+      // Widths come from the unscaled height so the row still spans W
+      // exactly; only the rendered height shrinks, and object-fit:cover
+      // takes the difference off the top and bottom of each photograph.
+      var hw = Math.floor(r.h), h = Math.floor(r.h * scale), used = 0;
       r.items.forEach(function (ix, idx) {
         var last = idx === r.items.length - 1;
         var w = (last && r.stretch)
           ? Math.max(1, Math.floor(W - used - idx * GAP))   // absorb the rounding
-          : Math.floor(h * ratios[ix]);
+          : Math.floor(hw * ratios[ix]);
         used += w;
         tiles[ix].style.width = w + 'px';
         tiles[ix].style.height = h + 'px';

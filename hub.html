@@ -26,7 +26,7 @@
 <link rel="dns-prefetch" href="https://vz-6f9a60bb-593.b-cdn.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <title>Raj Kashyap — Services</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -50,17 +50,22 @@
   </div>
   <a id="hub-back" href="playground.html">&#8592; back</a>
   <div id="hub-content">
-    <div class="hub-head">
-      <div class="hub-eyebrow">the basecamp &mdash; bangalore</div>
-      <h1 class="hub-title">let&rsquo;s make something<br><em>people actually might wanna watch.</em></h1>
-      <p class="hub-sub">two ways in. pick what fits.</p>
+    <div class="hub-top">
+      <div class="hub-head">
+        <div class="hub-eyebrow">the basecamp &mdash; bangalore</div>
+        <h1 class="hub-title">let&rsquo;s make something<br><em>people actually might wanna watch.</em></h1>
+      </div>
+      <figure class="hub-testi">
+        <blockquote class="hub-testi-text" id="hub-testi-text">loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.</blockquote>
+        <figcaption class="hub-testi-attr" id="hub-testi-attr">Sarah Edwards &mdash; Copper + Cloves</figcaption>
+      </figure>
     </div>
 
     <div class="hub-options">
 
       <!-- ── CONTENT IN A DAY (productised) ── -->
       <div class="hub-option hub-option-primary">
-        <div class="hub-opt-tag">most popular</div>
+        <div class="hub-opt-mark">most people start here</div>
         <div class="hub-opt-kind">the productised one &mdash; monthly retainer</div>
         <div class="hub-opt-title">content in a day</div>
         <div class="hub-opt-desc">you show up for one shoot day. i hand you a month of content. strategy, direction, shooting, editing and scheduling &mdash; all of it handled.</div>
@@ -152,13 +157,6 @@
       </div>
     </div>
 
-    <!-- TESTIMONIAL (rotating — pulled from "the word on the street").
-         This replaced the 25+/100%/2020 strip: one specific named voice
-         beats three round numbers that also appear on About. -->
-    <div class="hub-testi">
-      <p class="hub-testi-text" id="hub-testi-text">loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.</p>
-      <div class="hub-testi-attr" id="hub-testi-attr">Sarah Edwards &mdash; Copper + Cloves</div>
-    </div>
   </div>
 </div>
 
@@ -208,9 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     }, 5000);
   }
-  // Spring entrance -- three blocks now, staggered as three, not as six.
+  // Spring entrance -- two bands now: the masthead, then the choice.
   if (!reduced) {
-    var items = document.querySelectorAll('.hub-head,.hub-options,.hub-testi');
+    var items = document.querySelectorAll('.hub-top,.hub-options');
     items.forEach(function(el, i) {
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px) scale(0.97)';

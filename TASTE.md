@@ -31,6 +31,12 @@ Exception: a specific, bounded instruction ("make the nav bigger", "these 8 vide
 - `2026-06-25` **"the previous version ... had a 'raj' logo which has been switched to the base camp logo. shouldnt happen."** Don't silently substitute brand assets.
 - `2026-06-20` **"there are 3 total dead blank cards."** Empty placeholder cards ship as bugs. Never leave a slot unfilled.
 
+## Settled directions
+
+- `2026-08-10` **About stays editorial, not scatter.** Asked directly whether to bring back the tilt/drift or refine the current two-column page, he chose **"refine what's there"** and said *"for about keep emmi as ref"*. This supersedes the older "make it similar to playground. moving slightly. scattered." — that was said about a version of About that no longer exists. Scatter lives on the playground now. Don't re-tilt About.
+- `2026-08-10` **"a team of one" belongs on About**, as a **stacked list, not chips** — he picked the plain two-column typographic list over pill-shaped tags. Copy: *"couldn't afford specialists, so i learned to be all of them."*
+- `2026-08-10` **What was actually wrong with Work With Me:** he named two things — *dead space / doesn't fill the screen*, and *too plain, reads like a SaaS pricing page*. He explicitly did **not** pick "cards don't line up" or "hidden behind accordions". The accordions are fine; leave them folded.
+
 ## Approved — this landed
 
 - `2026-06-20` **"love what you did!"** — resequencing the portfolio reel.

@@ -93,7 +93,7 @@ h1,h2,h3,h4,h5,h6,
 }
 /* Prose gets even rag and no one-word last line. */
 p,li,dd,figcaption,
-.hub-opt-desc,.hub-sub,.reel-credit-row,.w-p,.w-sb,.w-tier-desc{
+.hub-opt-desc,.reel-credit-row,.w-p,.w-sb,.w-tier-desc{
   text-wrap:pretty;
 }
 /* Numerals line up in columns and tables of figures. */
@@ -296,16 +296,35 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    Budgets (see CLAUDE.md "The subtraction rule"):
      type    5 sizes  — display / title / prose / body / label
      accent  1 colour — pink, and its job is: the recommended path
-     spacing 3 tiers  — 8 inside a unit, 32 between units, 128 between sections
+     spacing 3 tiers  — 8 inside a unit, 32 between units, 96 between sections
      objects 0        — this page is a decision, not a scrapbook
 
    The page asks one question: which of these two. So the two answers sit
-   SIDE BY SIDE, and the gap between them (48px) is deliberately larger
-   than the padding within them (28px) — otherwise they fuse into one blob
+   SIDE BY SIDE, and the gap between them (56px) is deliberately larger
+   than the padding within them (32px) — otherwise they fuse into one blob
    and the choice stops reading as a choice.
+
+   Two things it stopped doing:
+
+   1. It was centred, in a 620px column, on a 1440px screen — a masthead
+      with an empty field either side of it and 128px of nothing under it.
+      Now the headline runs along the left and the quote sits in the right
+      margin beside it, which is one band instead of two and puts the page
+      back inside one viewport.
+
+   2. Both cards had the same border, the same fill and the same radius, so
+      neither was the focal point. Uniform emphasis is identical to none.
+      The recommended one is now a raised sheet of paper; the other is set
+      straight onto the page with a single rule. The recommendation is
+      readable at a squint, before a word of it has been read.
 ====================================================== */
+/* flex-start + auto block margins, NOT align-items:center. Centring a flex
+   child that is taller than its scroll container pushes the overflow above
+   the scroll origin, where it can never be reached -- on a phone that ate
+   the entire masthead. Auto margins centre it when there is room and
+   collapse to nothing when there is not. */
 #screen-hub{z-index:50;background:var(--bg-warm);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
-#screen-hub::after{content:'';position:absolute;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E");pointer-events:none;}
+#screen-hub::after{content:'';position:absolute;inset:0;z-index:1;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.026'/%3E%3C/svg%3E");pointer-events:none;}
 
 #hub-loader{position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg-warm);transition:opacity 0.35s ease,visibility 0.35s ease;}
 #hub-loader.done{opacity:0;visibility:hidden;pointer-events:none;}
@@ -316,7 +335,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 #back-home{display:none !important;}
 
 #hub-content{
-  --hb-display:clamp(32px,5vw,46px);
+  --hb-display:clamp(29px,3.4vw,48px);
   --hb-title:24px;
   --hb-prose:17px;
   --hb-body:14px;
@@ -324,20 +343,28 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
   --hb-tight:8px;
   --hb-unit:32px;
-  --hb-section:128px;
+  --hb-section:clamp(36px,6vh,96px);
 
   position:relative;z-index:10;
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;
-  max-width:1000px;padding:88px 28px 140px;
+  display:flex;flex-direction:column;align-items:stretch;
+  text-align:left;
+  max-width:1160px;padding:76px 32px 48px;
+  margin-top:auto;margin-bottom:auto;
   opacity:0;transition:opacity 0.5s ease;
   width:100%;
   gap:var(--hb-section);
 }
 #hub-content.visible{opacity:1;}
 
-/* ── header ────────────────────────────────────────── */
-.hub-head{max-width:620px;}
+/* ── masthead: the question on the left, a client answering on the right ── */
+.hub-top{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(280px,0.5fr);
+  gap:56px;align-items:end;
+}
+/* the <br> in the markup does the breaking; no measure limit here, or the
+   display type wraps a word per line */
+.hub-head{min-width:0;}
 .hub-eyebrow{
   font-family:'DM Mono',monospace;font-size:var(--hb-label);
   letter-spacing:0.18em;text-transform:uppercase;
@@ -345,65 +372,77 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .hub-title{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:var(--hb-display);line-height:1.15;letter-spacing:-0.01em;
-  color:var(--ink);margin-bottom:var(--hb-unit);
+  font-size:var(--hb-display);line-height:1.08;letter-spacing:-0.018em;
+  color:var(--ink);margin:0;text-wrap:balance;
 }
 .hub-title em{font-style:italic;color:var(--accent-r);}
-.hub-sub{
-  font-family:'DM Mono',monospace;font-size:var(--hb-body);
-  color:var(--ink-muted);letter-spacing:0.06em;line-height:1.66;margin:0;
-}
+/* "two ways in. pick what fits." is gone: there are two cards, side by
+   side, one of them marked. The sentence was narrating the layout. */
 
 /* ── the choice ────────────────────────────────────── */
 /* gap (48) > card padding (28): the two options must read as two things.
    stretch, not start: equal-height cards put both CTAs on the same
    baseline, which is what makes the pair scan as one comparison. */
+/* start, not stretch. Stretching made both columns as tall as the taller
+   one and then pinned each CTA to the bottom, which left 150px of nothing
+   above the second button -- the exact dead band this page was supposed to
+   lose. The two offers are compared by starting together and sharing a
+   structure, not by ending together. */
 .hub-options{
   display:grid;grid-template-columns:1fr 1fr;
-  align-items:stretch;
-  gap:48px;width:100%;
+  align-items:start;
+  gap:56px;width:100%;
 }
 .hub-option{
   display:flex;flex-direction:column;align-items:flex-start;
-  height:100%;
-  padding:28px;border-radius:10px;
-  border:1px solid rgba(30,25,20,0.08);
-  background:rgba(255,255,255,0.48);
   text-align:left;
-  transition:border-color 0.22s cubic-bezier(0.23,1,0.32,1),
-             background 0.22s cubic-bezier(0.23,1,0.32,1),
-             box-shadow 0.22s cubic-bezier(0.23,1,0.32,1);
-}
-@media(hover:hover) and (pointer:fine){
-  .hub-option:hover{
-    border-color:rgba(30,25,20,0.16);
-    background:rgba(255,255,255,0.78);
-    box-shadow:0 6px 28px rgba(30,25,20,0.09),0 1px 4px rgba(30,25,20,0.04);
-  }
 }
 
-/* the recommended path — the one place pink is allowed to mean something */
+/* THE FOCAL POINT. A sheet of paper set down on the page: warmer than the
+   ground it sits on, with a shadow that has direction and a warm cast
+   rather than the grey default. Everything else on this screen is flat. */
 .hub-option-primary{
-  border-color:rgba(255,123,172,0.22);
-  background:rgba(255,123,172,0.05);
+  padding:32px;border-radius:12px;
+  background:#fffdfa;
+  border:1px solid rgba(255,123,172,0.20);
+  box-shadow:0 1px 2px rgba(72,48,30,0.05),
+             0 10px 24px -14px rgba(72,48,30,0.28),
+             0 28px 60px -34px rgba(72,48,30,0.30);
+  transition:transform 0.28s cubic-bezier(0.23,1,0.32,1),
+             box-shadow 0.28s cubic-bezier(0.23,1,0.32,1),
+             border-color 0.28s cubic-bezier(0.23,1,0.32,1);
 }
 @media(hover:hover) and (pointer:fine){
   .hub-option-primary:hover{
-    border-color:rgba(255,123,172,0.38);
-    background:rgba(255,123,172,0.08);
-    box-shadow:0 6px 28px rgba(255,123,172,0.10),0 1px 4px rgba(255,123,172,0.06);
+    transform:translateY(-3px);
+    border-color:rgba(255,123,172,0.34);
+    box-shadow:0 2px 4px rgba(72,48,30,0.05),
+               0 16px 32px -14px rgba(72,48,30,0.30),
+               0 40px 80px -34px rgba(72,48,30,0.34);
   }
 }
-/* Outlined, not filled: exactly one filled-pink element per card, and
-   that budget belongs to the CTA. A filled tag competing with a filled
-   button is two things shouting the same colour at each other. */
-.hub-opt-tag{
-  display:inline-block;
-  font-family:'DM Mono',monospace;
-  font-size:var(--hb-label);letter-spacing:0.16em;text-transform:uppercase;
-  color:var(--accent-r);background:rgba(255,123,172,0.10);
-  border:1px solid rgba(255,123,172,0.30);
-  border-radius:20px;padding:2px 9px;
+@media(prefers-reduced-motion:reduce){
+  .hub-option-primary{transition:box-shadow 0.28s ease,border-color 0.28s ease;}
+  .hub-option-primary:hover{transform:none;}
+}
+
+/* The alternative is set straight onto the page. No box, no fill, no
+   radius, no shadow -- one rule to hold the column. It is not a lesser
+   offer, it is a quieter one, and the quiet is what lets the other card
+   read as the recommendation from across the room. */
+.hub-option:not(.hub-option-primary){
+  padding:4px 0 0 24px;
+  border-left:1px solid rgba(30,25,20,0.13);
+}
+
+/* A note in the margin in Raj's hand, not a SaaS "MOST POPULAR" pill.
+   Removes a border, a radius, a tint and a set of uppercase tracking; adds
+   three words. Caveat replaces the two font families this page was loading
+   and never used (Playfair Display, DM Sans). */
+.hub-opt-mark{
+  font-family:'Caveat',cursive;font-weight:600;
+  font-size:var(--hb-title);line-height:1;color:var(--accent-r);
+  display:inline-block;transform:rotate(-2.2deg);transform-origin:left center;
   margin-bottom:var(--hb-tight);
 }
 .hub-opt-kind{
@@ -577,16 +616,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* ── proof — one signal, not two ───────────────────── */
 /* The 25+/100%/2020 strip said the same thing as this quote, only vaguer,
    and the same three numbers already appear on About. A named client
-   saying a specific thing outranks three round numbers. */
+   saying a specific thing outranks three round numbers.
+   It sits in the headline's right margin rather than in a section of its
+   own below the cards, where it was 128px of gap plus 140px of padding
+   past the fold and nobody ever reached it. */
 .hub-testi{
-  width:100%;max-width:620px;
-  text-align:left;padding:var(--hb-unit);
-  border-left:2px solid rgba(255,123,172,0.45);
+  margin:0;text-align:left;
+  padding:2px 0 2px var(--hb-unit);
+  border-left:2px solid rgba(255,123,172,0.40);
 }
 .hub-testi-text{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:var(--hb-prose);line-height:1.55;
-  color:var(--ink);margin:0 0 var(--hb-unit);letter-spacing:0.005em;
+  font-size:var(--hb-prose);line-height:1.5;
+  color:var(--ink-body);margin:0 0 var(--hb-unit);letter-spacing:0.005em;
   transition:opacity 0.5s ease;
 }
 .hub-testi-attr{
@@ -596,18 +638,34 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   transition:opacity 0.5s ease;
 }
 
+/* Short desktops (1366x768, 1280x800). Same treatment as About: the unit
+   tier contracts and the card's padding with it, so the whole decision
+   still lands inside one viewport without a section being cut. */
+@media(min-width:860px) and (max-height:860px){
+  #hub-content{--hb-unit:22px;padding:64px 32px 36px;}
+  .hub-option-primary{padding:26px;}
+  .hub-top{gap:44px;}
+}
+
+/* Below this the quote can't hold a line beside the headline, so it drops
+   under it and the masthead goes back to one column. */
+@media(max-width:1023px){
+  .hub-top{grid-template-columns:1fr;gap:var(--hb-unit);align-items:start;}
+  .hub-head{max-width:22ch;}
+}
 @media(max-width:859px){
   /* Below this the two cards can't sit side by side and still hold prose,
      so they stack -- and the gap has to stay bigger than the padding. */
-  .hub-options{grid-template-columns:1fr;gap:40px;}
+  .hub-options{grid-template-columns:1fr;gap:44px;}
+  #hub-content{padding-bottom:88px;}
 }
 @media(max-width:639px){
   #hub-content{
-    --hb-section:80px;
     --hb-unit:24px;
-    padding:88px 22px 104px;
+    padding:84px 22px 96px;
   }
-  .hub-testi{max-width:100%;padding:var(--hb-unit) 0 var(--hb-unit) var(--hb-unit);}
+  .hub-option-primary{padding:24px;}
+  .hub-option:not(.hub-option-primary){padding-left:18px;}
 }
 
 /* ======================================================
@@ -620,7 +678,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
    Writing on the left, photographs on the right, bled to the edge of the
    viewport. No cards, no tape, no tilt, no drift — the pictures carry the
-   personality and the type stays out of their way.
+   personality and the type stays out of their way. (Emmi reference.)
+
+   Budgets (see CLAUDE.md "The subtraction rule"):
+     type    5 sizes  — name / section / text / small / hand
+     accent  2 colours, and the split is the whole point:
+               blue  = the work   (the basecamp, the 45+ line, work links)
+               pink  = the person (the handwritten asides, instagram, mailto)
+             Used interchangeably they would be decoration; split like this
+             the colour tells you which half of the page you are reading.
+     spacing 3 tiers  — 8 inside a unit, 32 between units, 64 between bands.
+             Fluid on the section/unit tiers so the writing fits the viewport
+             at 768px tall without deleting a section or tightening leading.
+     objects 0
 
    Cormorant for the name and section heads, DM Mono for everything you
    read -- the site's own pairing, same as every other page. Caveat shows
@@ -629,60 +699,95 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 #screen-about{z-index:45;background:var(--bg-warm);overflow-y:auto;overflow-x:hidden;}
 
 #about-inner{
-  --name:clamp(30px,2.6vw,38px);
+  --name:clamp(30px,3.2vw,46px);
   --sec:21px;
   --text:15px;
   --small:13.5px;
   --hand:20px;
 
+  --t:8px;
+  --u:clamp(18px,2.4vh,30px);
+  --s:clamp(26px,4.4vh,48px);
+
   display:grid;
-  grid-template-columns:minmax(380px,43%) 1fr;
+  grid-template-columns:minmax(380px,48%) 1fr;
   align-items:start;
   min-height:100%;
 }
 #about-back{display:none;}
 
 /* ── the writing ───────────────────────────────────── */
+/* padding-top clears the fixed nav (46px) plus the italic ascenders of
+   Cormorant at display size, which overflow their line box */
 .col{
-  padding:40px 38px 20px clamp(20px,3.2vw,48px);
-  max-width:640px;
+  padding:52px 38px var(--t) clamp(20px,3.2vw,48px);
+  max-width:700px;
 }
 .name{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
-  font-size:var(--name);line-height:1.1;letter-spacing:-0.01em;
-  color:var(--ink);margin:0 0 11px;
+  font-size:var(--name);line-height:1.1;letter-spacing:-0.015em;
+  color:var(--ink);margin:0 0 var(--t);
 }
 .lede{
   font-family:'DM Mono',monospace;font-size:var(--text);
-  line-height:1.55;color:var(--ink-body);margin:0 0 12px;text-wrap:pretty;
-}
-.list{list-style:none;padding:0;margin:0 0 12px;}
-.list li{
-  font-family:'DM Mono',monospace;font-size:var(--text);
-  line-height:1.6;color:var(--ink-body);
-  padding-left:16px;position:relative;
-}
-.list li::before{
-  content:'';position:absolute;left:2px;top:0.72em;
-  width:4px;height:4px;border-radius:50%;background:var(--accent-r);
+  line-height:1.6;color:var(--ink-body);margin:0 0 var(--u);text-wrap:pretty;
 }
 .col a{
   color:var(--ink);text-decoration:none;
-  border-bottom:1px solid rgba(255,123,172,0.55);
+  border-bottom:1px solid rgba(13,138,175,0.45);
   transition:color .18s ease,border-color .18s ease;
 }
 @media(hover:hover) and (pointer:fine){
-  .col a:hover{color:var(--accent-r);border-bottom-color:var(--accent-r);}
+  .col a:hover{color:var(--accent-b);border-bottom-color:var(--accent-b);}
 }
-.col a:focus-visible{outline:2px solid var(--accent-r);outline-offset:3px;border-radius:2px;}
+.col a:focus-visible{outline:2px solid var(--accent-b);outline-offset:3px;border-radius:2px;}
+/* the person's links, not the work's */
+.col a.me{border-bottom-color:rgba(255,123,172,0.55);}
+@media(hover:hover) and (pointer:fine){
+  .col a.me:hover{color:var(--accent-r);border-bottom-color:var(--accent-r);}
+}
 
 .sec{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
   font-size:var(--sec);color:var(--ink);
-  margin:15px 0 2px;letter-spacing:-0.005em;
+  margin:0 0 var(--t);letter-spacing:-0.005em;
+}
+.secsub{
+  font-family:'DM Mono',monospace;font-size:var(--small);
+  line-height:1.55;color:var(--ink-muted);margin:0 0 var(--u);text-wrap:pretty;
+}
+
+/* ── a team of one ─────────────────────────────────── */
+/* A stacked list in two columns, not pills. Ten bordered chips would be ten
+   more boxes on a page whose whole argument is that one person did all of
+   this -- a plain list reads as a range, a chip cloud reads as a CV site. */
+/* Two columns, not three: at three, "strategy & positioning" wrapped onto a
+   second line under a dash that belonged to the line above it, which reads
+   as a wrap bug rather than a list. */
+.skills{
+  list-style:none;padding:0;margin:0;
+  columns:2;column-gap:var(--u);
+}
+.skills li{
+  font-family:'DM Mono',monospace;font-size:var(--small);
+  line-height:1.7;color:var(--ink-body);
+  break-inside:avoid;
+  padding-left:15px;position:relative;
+}
+/* a rule, not a bullet: these are capabilities on a ledger, not a to-do list */
+.skills li::before{
+  content:'';position:absolute;left:0;top:0.92em;
+  width:7px;height:1px;background:rgba(13,138,175,0.5);
 }
 
 /* ── ruled records ─────────────────────────────────── */
+/* Experience and education sit side by side. Stacked they were 242px of a
+   900px column saying very little; paired they read as one ledger and the
+   band below them gets the room back. */
+.recs{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:var(--u);align-items:start;
+}
 .rows{list-style:none;padding:0;margin:0;}
 /* Flex, not grid: name and role have to run together as one phrase and
    wrap as one, with the year pushed to the right edge. Placing them as two
@@ -690,10 +795,13 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .row{
   display:flex;align-items:baseline;flex-wrap:wrap;
   column-gap:5px;
-  padding:7px 0;
+  padding:6px 0;
   border-bottom:1px solid rgba(30,25,20,0.11);
   font-family:'DM Mono',monospace;font-size:var(--small);
 }
+/* the rules separate records; there is nothing after the last one to
+   separate it from, so it is decoration */
+.row:last-child{border-bottom:none;}
 .row-name{color:var(--ink);}
 .row-name::after{content:' /';color:var(--ink-faint);}
 .row-role{color:var(--ink-muted);}
@@ -702,32 +810,27 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   color:var(--ink-muted);white-space:nowrap;
   font-variant-numeric:tabular-nums;
 }
+/* In the paired ledger a column is ~300px, which is not enough for
+   "the form co. / editing & photography  2020 — 2022" on one line. Left to
+   flex-wrap, three of six rows dropped their year to a second line and the
+   other three did not — which reads as a bug, not a layout. So every row in
+   the pair is two lines on purpose: the record and its year on top, the role
+   underneath. No fact is abbreviated away to make a column fit. */
+.recs .row{
+  display:grid;grid-template-columns:1fr auto;
+  column-gap:10px;row-gap:1px;line-height:1.5;
+}
+.recs .row-name{grid-area:1/1;}
+.recs .row-name::after{content:none;}
+.recs .row-year{grid-area:1/2;margin:0;padding:0;}
+.recs .row-role{grid-area:2/1/2/-1;}
 
 /* ── marks made by hand ────────────────────────────── */
-/* Caveat, and only ever on an aside. Nothing you need to read is here. */
+/* Caveat, and only ever on an aside. Nothing you need to read is here.
+   Pink, because every aside on this page is the person talking. */
 .hand{
   font-family:'Caveat',cursive;font-weight:600;
-  font-size:var(--hand);line-height:1;color:var(--accent-b);
-}
-.hand-big{
-  display:inline-block;margin-top:6px;
-  font-size:calc(var(--hand) + 4px);color:var(--accent-r);
-  transform:rotate(-1.2deg);
-}
-
-/* Highlighter: a swipe that starts and ends thin, sits low like a real
-   marker, and rides behind the text rather than boxing it. */
-.mark{
-  background-image:linear-gradient(103deg,
-    rgba(255,123,172,0) 0.4%,
-    rgba(255,123,172,0.38) 2.4%,
-    rgba(255,123,172,0.34) 95%,
-    rgba(255,123,172,0) 99%);
-  background-size:100% 58%;
-  background-position:0 82%;
-  background-repeat:no-repeat;
-  padding:0 3px;
-  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  font-size:var(--hand);line-height:1;color:var(--accent-r);
 }
 
 /* Sketched underline -- a drawn squiggle, not a border. */
@@ -743,24 +846,48 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .col a.sketch:hover{color:var(--accent-b);}
 }
 
-.clients{
-  font-family:'DM Mono',monospace;font-size:var(--small);
-  line-height:1.6;color:var(--ink-muted);margin:7px 0 0;text-wrap:pretty;
-}
+/* ── the one claim that has to land ────────────────── */
+/* Exactly one highlighter on the page. There were two, three lines apart,
+   and two highlights are no highlight -- so the lede's version came off and
+   this one got the ink. Raj: the 45+ stat "needs to be highlighted". */
 .brag{
   font-family:'DM Mono',monospace;font-size:var(--text);
-  line-height:1.85;color:var(--ink);margin:13px 0 2px;text-wrap:pretty;
+  line-height:1.9;color:var(--ink);margin:0 0 var(--t);text-wrap:pretty;
 }
 .brag b{font-weight:500;color:var(--ink);}
-.mark-strong{
+.mark{
   background-image:linear-gradient(103deg,
-    rgba(255,123,172,0) 0.4%,
-    rgba(255,123,172,0.55) 2.4%,
-    rgba(255,123,172,0.50) 95%,
-    rgba(255,123,172,0) 99%);
-  background-size:100% 74%;
-  background-position:0 74%;
+    rgba(13,138,175,0) 0.4%,
+    rgba(13,138,175,0.42) 2.4%,
+    rgba(13,138,175,0.37) 95%,
+    rgba(13,138,175,0) 99%);
+  background-size:100% 72%;
+  background-position:0 78%;
+  background-repeat:no-repeat;
+  padding:0 4px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
 }
+/* The client names are the evidence for the line above them, so they hang
+   off it directly. The "selected clients" heading was a label for something
+   already labelled by the sentence it sits under. */
+.clients{
+  font-family:'DM Mono',monospace;font-size:var(--small);
+  line-height:1.7;color:var(--ink-muted);margin:0 0 var(--s);text-wrap:pretty;
+}
+
+/* the column's own bottom padding closes the page; the last block does not
+   also need a margin under it */
+.col > *:last-child{margin-bottom:0;}
+
+/* ── the bands ─────────────────────────────────────── */
+/* The ledger holds the two credential bands. Which way it folds depends on
+   the shape of the window, not on a breakpoint: on a tall screen it runs
+   down the page and each band splits internally into two; on a short one it
+   turns on its side, skills in one column beside the records. Same content,
+   same order, no section deleted to make a 13" laptop fit. */
+.ledger{display:grid;grid-template-columns:1fr;margin-bottom:var(--u);}
+.band{margin:0 0 var(--s);}
+.band:last-child{margin-bottom:0;}
 
 /* ── the photographs ───────────────────────────────── */
 /* Masonry via columns. A fixed-height grid with object-fit:cover was
@@ -810,24 +937,27 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 @media(max-width:1160px){ .shots{column-count:5;} }
 @media(max-width:1000px){ .shots{column-count:4;} }
 @media(max-width:1100px){
-  #about-inner{grid-template-columns:minmax(300px,38%) 1fr;}
-  .col{padding:88px 30px 80px clamp(20px,3.5vw,40px);}
+  #about-inner{grid-template-columns:minmax(300px,44%) 1fr;}
+  .col{padding:34px 30px 20px clamp(20px,3.5vw,40px);}
+  /* below this the ledger's two columns start breaking "visual
+     communication" onto its own line, which reads as a wrap bug */
+  .recs{grid-template-columns:1fr;gap:var(--u);}
 }
 
 /* Short viewports (1366x768, 13" airs). The writing, not the photographs,
-   is what overflows there. Tighten the rhythm rather than delete a section
-   -- the education history and the client list both earn their place. */
-@media(min-width:821px) and (max-height:840px){
-  #about-inner{--name:clamp(27px,2.2vw,32px);--sec:19px;--text:14px;--small:13px;--hand:18px;}
-  .col{padding:26px 34px 14px clamp(18px,3vw,42px);}
-  .name{margin-bottom:8px;}
-  .lede{line-height:1.45;margin-bottom:9px;}
-  .list{margin-bottom:9px;}
-  .list li{line-height:1.45;}
-  .sec{margin:11px 0 1px;}
+   is what overflows there. Both bands already run in columns of their own,
+   so the only thing left is a single step down in type. */
+@media(min-width:821px) and (max-height:880px){
+  #about-inner{
+    --name:clamp(26px,2.4vw,33px);--sec:18px;--text:13.5px;--small:12.5px;--hand:17px;
+    --u:16px;--s:24px;
+  }
+  .col{padding:52px 34px var(--t) clamp(18px,3vw,42px);}
+  /* at 12.5px the longest skill clears a third-width column, so the list
+     loses a row here without anything wrapping */
+  .skills{columns:3;}
+  .skills li{line-height:1.75;}
   .row{padding:5px 0;}
-  .brag{line-height:1.7;margin:10px 0 2px;}
-  .clients{line-height:1.5;margin-top:5px;}
 }
 
 /* ── stacked ───────────────────────────────────────── */
@@ -837,10 +967,14 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
     padding:86px 20px 40px;
     max-width:640px;margin:0 auto;
   }
+  .recs{grid-template-columns:1fr;}
   .shots{column-count:3;padding:0 14px 18px;}
 }
 @media(max-width:430px){
-  #about-inner{--name:30px;--sec:19px;--text:14.5px;--small:13px;--hand:19px;}
+  #about-inner{--name:32px;--sec:19px;--text:14.5px;--small:13px;--hand:19px;}
+  /* one column of skills, not two: at 350px wide "strategy & positioning"
+     wraps, and a wrapped two-column list reads as broken alignment */
+  .skills{columns:1;}
   .shots{column-count:2;column-gap:7px;padding:0 12px 18px;}
   .tile{margin-bottom:7px;}
   .row-year{margin-left:auto;}
@@ -2283,7 +2417,7 @@ html.vt-folder::view-transition-new(folder-morph){
   .mcard{ display:flex;flex-direction:column;align-items:flex-start; }
 
   /* ---- GLOBAL: body text >= 16px to prevent iOS zoom on tap ---- */
-  .w-p,.w-sb,.w-tbio,.w-tier-desc,.w-testi-text,.work-desc,.hub-sub{
+  .w-p,.w-sb,.w-tbio,.w-tier-desc,.w-testi-text,.work-desc{
     font-size:14px !important;
     line-height:1.66;
   }
