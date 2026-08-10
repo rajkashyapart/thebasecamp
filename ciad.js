@@ -92,6 +92,7 @@ function odGo(next, animate) {
   }
 
   odSetLabel(OD.labels[OD.i], changed);
+  if (OD.refreshCursor) OD.refreshCursor();
   if (OD.i !== 3) odStopReels();
 }
 
@@ -189,6 +190,103 @@ function odAttachDrag() {
 
   OD.deck.addEventListener('pointerup', end);
   OD.deck.addEventListener('pointercancel', end);
+}
+
+// ---- the cursor -------------------------------------------------------
+//
+// Half the screen forward, half back, and the pointer says which and to
+// where -- it carries the name of the section it would take you to, so the
+// question "what's next?" is answered before it gets asked. Clicking the
+// empty half moves the deck; the pink button in the bar stays the explicit
+// control for anyone who wants one.
+//
+// Desktop only. Touch has swipe, and a hover affordance on a touch screen
+// fires on tap, which is worse than nothing.
+
+var OD_ZONES = ['the question', 'the problem', 'how we work', 'the work', 'the month after'];
+
+function odAttachCursor() {
+  if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  var el = document.getElementById('od-cursor');
+  var label = document.getElementById('od-cursor-label');
+  if (!el || !label) return;
+
+  var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+  var dir = 0, shown = false;
+  var downX = 0, downY = 0, moved = false;
+
+  function render() {
+    // Trailing the pointer rather than pinned to it: a value tied straight to
+    // the mouse reads as a sprite, a value easing toward it reads as weight.
+    var k = odReduced() ? 1 : 0.24;
+    cx += (tx - cx) * k;
+    cy += (ty - cy) * k;
+    el.style.transform = 'translate3d(' + cx + 'px,' + cy + 'px,0) translate(-50%,-50%)';
+    raf = window.requestAnimationFrame(render);
+  }
+
+  function show(on, d) {
+    // The label has to be part of the comparison. Moving the deck changes
+    // what "next" points at without changing whether the pill is up or which
+    // way it faces, so guarding on those alone leaves a stale promise on
+    // screen -- it named the section you had just arrived at.
+    var text = on ? (OD_ZONES[OD.i + d] || '') : '';
+    if (on === shown && d === dir && label.innerHTML === text) return;
+    shown = on; dir = d;
+    el.classList.toggle('is-on', on);
+    el.classList.toggle('is-back', on && d < 0);
+    // The native arrow only goes away while the pill is standing in for it,
+    // so the ends of the deck never leave the visitor with no cursor at all.
+    if (OD.screen) OD.screen.classList.toggle('od-hide-native', on);
+    if (on) label.innerHTML = text;
+  }
+
+  // A control owns its own pointer. Over one of those the browser cursor
+  // comes back and the deck's half-screen click is off.
+  function isControl(t) {
+    return !!(t && t.closest && t.closest('button, a, input, select, textarea, label, .od-bar'));
+  }
+
+  function zoneFor(e) {
+    if (isControl(e.target)) return 0;
+    var d = e.clientX > window.innerWidth / 2 ? 1 : -1;
+    var next = OD.i + d;
+    if (next < 0 || next > OD.n - 1) return 0;   // nowhere to go, so promise nothing
+    return d;
+  }
+
+  document.addEventListener('mousemove', function (e) {
+    tx = e.clientX; ty = e.clientY;
+    if (!raf) { cx = tx; cy = ty; render(); }
+    var d = zoneFor(e);
+    show(d !== 0, d);
+  });
+
+  document.addEventListener('mouseleave', function () { show(false, 0); });
+
+  // The deck can move without the mouse moving -- a click, the wheel, a key,
+  // a tick. Re-read what is under the pointer so the promise stays true.
+  OD.refreshCursor = function () {
+    var t = document.elementFromPoint(tx, ty);
+    if (!t) return;
+    var d = zoneFor({ clientX: tx, target: t });
+    show(d !== 0, d);
+  };
+
+  OD.deck.addEventListener('pointerdown', function (e) {
+    downX = e.clientX; downY = e.clientY; moved = false;
+  });
+  OD.deck.addEventListener('pointermove', function (e) {
+    if (Math.abs(e.clientX - downX) > 6 || Math.abs(e.clientY - downY) > 6) moved = true;
+  });
+
+  OD.deck.addEventListener('click', function (e) {
+    if (moved) return;              // that was a drag, not a click
+    if (isControl(e.target)) return;
+    var d = zoneFor(e);
+    if (d !== 0) odGo(OD.i + d, true);
+  });
 }
 
 // ---- the reels --------------------------------------------------------
@@ -394,6 +492,7 @@ function ciadInit() {
   odBuildReels();
   odAttachDrag();
   odAttachWheel();
+  odAttachCursor();
 
   var go = document.getElementById('od-go');
   if (go) go.addEventListener('click', odNext);

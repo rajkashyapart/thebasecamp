@@ -771,8 +771,37 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   --od-4:104px;  /* frame */
 }
 
+/* ---- the cursor ----
+   Half the screen forward, half back, and the pointer carries the name of
+   the section it would take you to. It exists so nobody has to work out how
+   to move, or wonder what is coming. Desktop only -- a hover affordance on
+   a touch screen fires on tap, which is worse than none. */
+.od-cursor{
+  position:fixed;top:0;left:0;z-index:60;
+  pointer-events:none;will-change:transform;
+}
+.od-cursor-pill{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 16px;border-radius:999px;white-space:nowrap;
+  background:var(--ink);color:var(--bg-warm);
+  font-family:'DM Mono',monospace;font-size:var(--t-fine);
+  letter-spacing:var(--tr-ui);text-transform:uppercase;
+  box-shadow:0 6px 22px rgba(30,25,20,0.22);
+  /* nothing in the real world arrives from nothing */
+  opacity:0;transform:scale(0.92);
+  transition:opacity 0.16s ease-out,transform 0.16s cubic-bezier(0.23,1,0.32,1);
+}
+.od-cursor.is-on .od-cursor-pill{opacity:1;transform:scale(1);}
+.od-cursor-arrow{color:var(--accent-r);font-style:normal;line-height:1;}
+.od-cursor-back{display:none;}
+.od-cursor.is-back .od-cursor-back{display:block;}
+.od-cursor.is-back .od-cursor-fwd{display:none;}
+
 /* ---- the deck ---- */
 .od-deck{position:absolute;inset:0;overflow:hidden;touch-action:pan-y;}
+@media(hover:hover) and (pointer:fine){
+  #screen-ciad.od-hide-native .od-deck{cursor:none;}
+}
 .od-track{
   display:flex;height:100%;width:100%;
   will-change:transform;

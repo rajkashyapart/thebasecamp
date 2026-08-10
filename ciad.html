@@ -50,6 +50,16 @@
      the answer, so nothing on screen one may close it. -->
 <div id="screen-ciad" class="screen">
 
+  <!-- The cursor answers "what's next?" before the visitor thinks to ask it.
+       Desktop only; touch already has swipe. -->
+  <div class="od-cursor" id="od-cursor" aria-hidden="true">
+    <span class="od-cursor-pill">
+      <i class="od-cursor-arrow od-cursor-back">&larr;</i>
+      <span class="od-cursor-label" id="od-cursor-label"></span>
+      <i class="od-cursor-arrow od-cursor-fwd">&rarr;</i>
+    </span>
+  </div>
+
   <div class="od-deck" id="od-deck">
     <div class="od-track" id="od-track">
 
