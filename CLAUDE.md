@@ -1,197 +1,233 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Personal portfolio for Raj Kashyap (rajkashyap.studio). Content strategist,
+photographer, creator. It should feel like opening someone's sketchbook —
+warm, intentional, slightly irreverent. Not a corporation. Not a template.
 
-## Always Do First
-- **Ask before you build.** For any open-ended visual work — a new page, a redesign, a "make it better" pass — do not write code first. Ask 2–4 concrete questions with AskUserQuestion and ask for a reference image. Across six sessions Raj has had to type "askuserquestions" **13 times**, always meaning *gather constraints before coding*; 13 more of his messages are rejections of work already built. Building first is what turns a 30-minute change into a six-hour one. A specific bounded instruction ("make the nav bigger") is not open-ended — just do it.
-- **Read `TASTE.md`.** It is his standing verdicts, injected automatically at session start by the `SessionStart` hook. Anything settled there is binding and must not be re-litigated.
-- **Invoke the `emil-design-eng` skill** before writing any frontend code, every session, no exceptions. The `PreToolUse` design-gate hook reminds you on every frontend edit; it does not load the skill for you.
-- **Then read "The subtraction rule" below.** Almost every skill below only knows how to *add* polish. Nothing in them will ever tell you to cut. That job is yours, and it is the job this site keeps failing.
-
-There is no `frontend-design` skill — do not try to invoke it. Installed design skills, all at `~/.claude/skills/`:
-
-| Skill | Reach for it when |
-|---|---|
-| `emil-design-eng` | Any frontend work. The default. |
-| `design-motion-principles` | Auditing motion against multiple designers' perspectives |
-| `review-animations` | You just wrote animation code and want it torn apart. Defaults to flagging; approval is earned — the one skill here that subtracts. |
-| `apple-design` | Gesture-driven UI, springs, interruptible transitions, translucency, optical type |
-| `animation-vocabulary` | You can describe a motion but don't know its name |
-| `pick-ui-library` | Only when explicitly asked. Note this site has **no npm and no build step** — most of what it recommends cannot be used here. |
-| `prototype` | Only when explicitly asked. Builds several genuinely different versions to flip through. |
-
-Three more exist in `emilkowalski/skills` but are not installed, deliberately: `animate`, `improve-animations`, `find-animation-opportunities`. All three hunt for *more* things to animate. Install one only if the specific job calls for it:
-```bash
-npx skills@latest add emilkowalski/skills --global -a claude-code -s <name> -y
-```
-
-Personal portfolio for Raj Kashyap (rajkashyap.studio). Content strategist, photographer, creator. The site should feel like opening someone's sketchbook — warm, intentional, slightly irreverent. Not a corporation. Not a template.
+This file states what is true now. `TASTE.md` holds the record of how it got
+that way — dated, in Raj's own words — and is injected at session start by the
+`SessionStart` hook. Anything settled in `TASTE.md` is binding.
 
 ---
 
-## Development Commands
+## 1. Before you write any frontend code
 
-**Local server:**
-```bash
-python3 -m http.server 8080
-```
+**Ask first.** For open-ended visual work — a new page, a redesign, a "make it
+better" pass — do not write code first. Ask 2–4 concrete questions with
+`AskUserQuestion` and ask for a reference image. Across six sessions Raj typed
+some form of "askuserquestions" **13 times**, always meaning *gather constraints
+before coding*. A bounded instruction ("make the nav bigger", "these 8 videos in
+this order") is not open-ended — just do it.
 
-**Validate JS in HTML files (replace FILENAME):**
-```bash
-node -e "const fs=require('fs'),vm=require('vm'),h=fs.readFileSync('FILENAME.html','utf8'),s=[],r=/<script[^>]*>([\s\S]*?)<\/script>/gi;let m;while((m=r.exec(h))!==null)s.push(m[1]);s.forEach((x,i)=>{try{new vm.Script(x);console.log('Block '+i+': OK')}catch(e){console.log('Block '+i+': ERROR - '+e.message)}})"
-```
+**Load `emil-design-eng`.** Every session, every frontend edit, including
+refinement passes. Raj has had to ask for this by name twice; the `PreToolUse`
+design gate only reminds you, it does not load it.
 
-**Validate standalone JS files (replace FILENAME):**
-```bash
-node -e "const fs=require('fs'),vm=require('vm'); try{new vm.Script(fs.readFileSync('FILENAME.js','utf8'));console.log('OK')}catch(e){console.log('ERROR: '+e.message)}"
-```
-
-Run validation after every JS edit. Known corruption causes: smart quotes in strings, `/* */` comments, Unicode in comments, template literals. Use `//` comments only, `&rsquo;` for HTML contractions.
-
-**Deployment:** Vercel (automatic on push). Edge function in `api/subscribe.js` handles email subscriptions via Resend API. Env vars: `RESEND_API_KEY`, `RESEND_AUDIENCE_ID`.
+**Name what you remove.** If a change adds a block, a type size, a colour or a
+metaphor and removes nothing, justify it in the commit or don't ship it.
 
 ---
 
-## Architecture
+## 2. When Raj rejects something
 
-**No build tools, no npm, no frameworks.** Pure HTML/CSS/JS. Fonts via Google Fonts `<link>` only.
+This is the loop that has cost the most hours. `about.html` has 27 commits and
+four full rebuilds — *"rebuild as a scrapbook bento"* → *"rebuild as an actual
+desk"* → *"rebuild against the Emmi reference"* — each one following a flat
+"i don't like it". Rebuilding threw away every part he had **not** objected to,
+which is how a page gets rebuilt four times without converging.
 
-### Page structure — each page is a standalone HTML file:
+So: **a rejection names one thing, not the whole page.**
 
-| File | Purpose | JS |
-|---|---|---|
-| `index.html` | Video intro (Bunny Stream HLS) — redirects to playground.html on end | Inline only |
-| `playground.html` | Photo scatter canvas — draggable photo/text cards | `playground.js` |
-| `hub.html` | "Work With Me" hub — service offerings | `hub.js` |
-| `about.html` | About page | `about.js` |
-| `ciad.html` | Content in a Day — full product experience (folders, pricing, email bar) | `ciad.js` (62KB, largest file) |
-| `portfolio.html` | Portfolio grid with category filters | `portfolio.js` |
+1. Ask which part. One question, with options drawn from what's actually on
+   screen. He answers precisely when the options are concrete — asked to choose
+   between "bring back scatter" and "refine what's there" he picked refine
+   instantly, after three rebuilds guessing.
+2. Change that part. Leave the rest alone.
+3. If two rounds of targeted fixes don't land, *then* ask whether to restart —
+   don't decide that yourself.
 
-**Shared files:**
-- `styles.css` (2200+ lines) — all CSS for all pages, browser-cached
-- `shared.js` — nav initialization only (shows `#pg-nav`)
-
-### Navigation
-Real `<a href>` links between pages. CSS View Transitions API (`@view-transition { navigation: auto }`) handles smooth page fades. No SPA routing, no `switchTo()`.
-
-### CSS architecture
-Single `styles.css` with section comments (`/* === SCREEN N: NAME === */`). Two design systems coexist:
-- **Warm paper** (playground, hub, about, portfolio): `--bg-warm: #f5f2ee`, grain texture, editorial serif (Cormorant Garamond), hand-placed feel
-- **iOS dark precision** (CIAD): near-black bg, accent colors `#0a84ff`/`#ff375f`/`#30d158`, geometric sans, folder metaphor
-
-CSS custom properties in `:root` define the shared palette: `--accent-r: #ff7bac`, `--accent-b: #0d8aaf`, `--accent-g: #3a8c52`.
-
-### JS patterns
-- Each page JS file exports one `init*()` function called on `DOMContentLoaded`
-- ES5 `var`/`function` syntax in most files; `ciad.js` uses ES6 (`const`, template literals, arrow functions)
-- `playground.js`: canvas world coordinates (`WCX=1800, WCY=1400`), photo cards array with `{x, y, w, h, rot, src}`, drag-to-pan with momentum
-- `ciad.js`: SVG glyph system (`const G={...}`), HLS video gallery via Bunny CDN, folder UI, pricing tiers, email subscription bar
-
-### External services
-- **Bunny CDN** — image hosting (`picturesbyraj.b-cdn.net`) and HLS video streams (`vz-466dc643-be5.b-cdn.net`)
-- **Resend** — email subscription via `api/subscribe.js` (Vercel Edge Function, CORS-locked to `rajkashyap.studio` + `localhost:8080`)
-- **Google Fonts** — Cormorant Garamond, DM Mono
+He will also correct facts and copy. Take his wording verbatim; he strips
+cleverness back to the plain statement, and he is right every time.
 
 ---
 
-## How you work on this project
+## 3. The subtraction rule
 
-Taste direction lives in `TASTE.md` (what Raj actually said) and in `emil-design-eng` (how to execute). Neither is repeated here.
+This site's chronic failure is accumulation. Clutter never arrives in one bad
+decision — it arrives as twenty reasonable additions with nothing removed. Four
+separate passes were made at Work With Me and About and every one made the page
+*bigger*. His verdict after all four: *"both pages are still very very cluttered."*
 
-Never use generic AI aesthetics: default shadows, safe color palettes, predictable layouts, uniform spacing. Typography should be precise — tight tracking on large headings, generous line-height on body, deliberate font pairing (editorial serif + monospace, never the same font for both).
+- **Say each fact once.** Before adding a stat, claim or credential, grep for
+  it. "Word of mouth" was on About four times.
+- **Never ship a placeholder.** No `[bracketed template text]`, no empty card,
+  no `...` reaches a committed file. Delete the section or fill it.
+- **Ornament is not hierarchy.** Reaching for a divider, rule or label to show
+  structure means the spacing is wrong. Fix the spacing, delete the ornament.
+- **One focal point per screen.** Give it depth and weight; make everything
+  else actively recede. Uniform emphasis is identical to no emphasis.
+- **Proximity beats decoration.** The gap *between* two things must exceed the
+  padding *inside* them, or they fuse. Hub broke this with a 16px gap and 26px
+  padding. (Wrapping chip lists are exempt — a set is not a comparison.)
+- **Comparison requires adjacency.** Options the user must choose between have
+  to be visible simultaneously, sharing a structure and *starting* together.
+  Not ending together: `align-items:start`, never `stretch`.
 
-**One focal point per screen.** Give it depth, weight, and character; then make everything else actively recede. Uniform emphasis is mathematically identical to no emphasis — a page where every surface has depth reads as a page where nothing does. Decoration is earned by one element at a time, not distributed evenly.
-
-Animations: only `transform` and `opacity`. Spring-style easing, not linear. Every interactive element needs hover, focus, and active states.
-
-When you're unsure between two approaches, pick the one with more craft — and note that removing something is usually the higher-craft option. More stuff is not more craft.
-
----
-
-## The subtraction rule
-
-This site's recurring failure is accumulation. Four separate passes were made at Work With Me and About — copy passes, type passes, motion passes — and every single one made the page *bigger*. `hub.html` went 8.6KB → 13.9KB in a commit whose message was "hub clarity." Clutter never arrives in one bad decision; it arrives as twenty reasonable additions with nothing ever removed.
-
-So:
-
-- **Every design commit must name what it removes.** If a change adds a block, a type size, a color, or a metaphor and removes nothing, justify it explicitly or don't ship it.
-- **Say each fact once.** Before adding a stat, claim, or credential, grep for it. "Word of mouth" was on About four times; the work history was listed twice under two headings that both said EXPERIENCE.
-- **Never ship a placeholder.** No `[bracketed template text]` reaches a committed file. Delete the section or fill it.
-- **One physical-object metaphor per page.** Hang tags, receipts, wristbands, folders, barcodes — pick one. Three competing skeuomorphs is not charm, it's noise.
-- **Ornament is not hierarchy.** If you're reaching for a divider, rule, label, or chapter break to show structure, the spacing is wrong. Fix the spacing and delete the ornament.
-
-### Hard budgets (per page)
+**Budgets, per page:**
 
 | Budget | Limit |
 |---|---|
 | Distinct font sizes | 5 |
-| Accent colors | 1, with a stated job — **except About**, which runs pink *and* blue on purpose: blue marks the work, pink marks the person. Two accents are fine when the split carries meaning; two accents used interchangeably are not. |
-| Spacing values | 3 tiers only: `8px` inside a unit, `32px` between units, `128px` between sections |
-| Physical-object metaphors | 1 |
+| Accent colours | 1 — except About and Work With Me, which run 2 because the split means something (blue marks the work / the path you scope; pink marks the person / the recommendation). Two accents used interchangeably are not allowed. |
+| Structural spacing values | 4 tiers, well separated. Two values within 15% of each other communicate nothing and cost a decision. |
+| Physical-object metaphors | 1. Hang tags, receipts, wristbands, folders — pick one. Three skeuomorphs is noise, not charm. |
 
-Nothing between the spacing tiers. The whole point is that the jump from 32 to 128 is what tells the eye a new section began. An 11-value scale running 2px→36px (what About had) communicates nothing.
-
-**Proximity beats decoration.** The gap *between* two things must always exceed the padding *inside* them. Hub violated this — 16px between the two offer cards, 26px of padding within each — so the two choices visually fused into one blob.
-
-**~~About is the scatter page.~~** Superseded `2026-08-10`. About was the scatter page — every cell tilted, staggered and drifting on its own clock. Commit `94d41ca` rebuilt it against the Emmi reference and Raj confirmed that direction on 2026-08-10, choosing "refine what's there" over "bring back scatter". **About is now the editorial page:** writing on the left, photographs on the right bled to the viewport edge, no cards, no tape, no tilt, no drift. The pictures carry the personality; the type stays out of their way. Don't re-scatter it. The playground canvas is still the scatter north star — that's where tilt and drift belong.
-
-Note: `ref-emmi-playground.png` is referenced below but is not in the repo or in git history. The Emmi reference survives only as that structural rule.
-
-**Comparison requires adjacency.** If a page asks the user to choose between options, those options must be visible simultaneously. Stacked vertically, they can't be compared, only remembered. Adjacency is about *starting* together and sharing a structure, not about ending together — Hub stretched both cards to equal height to align their CTAs and bought a 150px hole above the shorter one. `align-items:start` is the fix.
-
-**Never centre a flex child that can outgrow its scroll container.** `align-items:center` on an `overflow-y:auto` flex parent pushes the overflow *above* the scroll origin, where it can never be reached. On Hub this silently ate the entire masthead on a phone. Use `align-items:flex-start` plus `margin-block:auto` on the child.
+When unsure between two approaches, pick the one with more craft — and note
+that removing something is usually the higher-craft option.
 
 ---
 
-## Screenshot workflow
+## 4. Verify with numbers, then with your eyes
 
-**Always screenshot from localhost:8080**, never `file:///`.
-
-After every visible change:
-1. Screenshot your output.
-2. Compare against reference (Emmi screenshot for playground, previous state for everything else).
-3. Be specific about mismatches: "cards weighted left, right side empty" not "looks off."
-4. **Run the squint test** (below). A diff against the previous state only catches regressions — it can never catch clutter, because clutter arrives a little at a time and every individual step looks fine.
-5. Fix and re-screenshot. Do at least 2 rounds. Stop only when no visible differences remain or Raj says so.
-
-### The squint test
-
-Blur the screenshot until text is illegible. Then ask:
-- **How many things still compete for attention?** More than 3 = fail. Cut or demote until 3.
-- **Where does the eye land first?** If the answer is "nowhere in particular" or "the decoration," the hierarchy is broken.
-- **Can you see the page's structure with the text gone?** If sections are only distinguishable by their labels, the spacing isn't doing its job.
-
-Also verify with measurement, not vibes — count computed values in the real browser, since CSS source undercounts what actually renders:
+Serve on `localhost:8080`, never `file:///`:
 
 ```bash
-node -e "..." # or playwright: getComputedStyle over every text-bearing element,
-              # collect distinct fontSize + color. Compare against the hard budgets above.
+python3 -m http.server 8080
+node .claude/audit.js hub          # or: about, playground, portfolio, ciad
+node .claude/audit.js about --open # expands every disclosure first
 ```
 
-Check both 1440px and 390px wide. Note that pages using `.screen` are internally-scrolling containers, so `fullPage` screenshots capture only the first viewport — scroll the container in steps (which also triggers the IntersectionObserver reveals) and capture slices.
+It screenshots all three widths and counts what actually **renders** — CSS
+source undercounts, since one `clamp()` is three rendered sizes — checking type
+sizes, accents, spacing tiers, fused proximity, unstyled anchors and dead bands
+against the budgets above. Playwright is resolved from wherever it already lives
+on the machine, so there is still no npm and no `package.json`.
+
+Then run the **squint test** on the screenshots — blur until text is illegible:
+
+- How many things still compete? More than 3 is a fail.
+- Where does the eye land first? "Nowhere" or "the decoration" means the
+  hierarchy is broken.
+- Can you see the structure with the text gone? If sections are only
+  distinguishable by their labels, the spacing isn't working.
+
+A diff against the previous state only catches regressions. It can never catch
+clutter, because clutter arrives a little at a time and every step looks fine.
+
+Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
 
 ---
 
-## Design north star
+## 5. Settled directions
 
-**Playground reference:** `ref-emmi-playground.png` in project folder. Scatter should feel organic — tight clusters, dramatic size variety, edge bleed, clear centre. If it looks "placed" instead of "scattered", it's wrong.
-
-**Raj's identity:** uncurated.raj. Intentional living, aesthetics, the gap between performing a life and living one. Audience is inward-looking creatives, not metrics chasers.
+- **About is the editorial page.** Writing on the left, photographs on the right
+  bled to the viewport edge. No cards, no tape, no tilt, no drift. The pictures
+  carry the personality; the type stays out of their way. One dominant
+  photograph is the focal point. Don't scatter it.
+- **Playground is the scatter page.** Tilt, drift and organic clustering belong
+  there and only there — tight clusters, dramatic size variety, edge bleed, a
+  clear centre. If it looks "placed" instead of "scattered", it's wrong.
+  (The Emmi reference image is gone from the repo; it survives as this rule.)
+- **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
+- **CIAD has no dark mode**, and the playground hero is finished. Both closed.
+- **Type:** tight tracking on large headings, generous line-height on body.
+  Cormorant Garamond italic for display, DM Mono for everything else, Caveat for
+  marks in Raj's hand. Never swap font family for emphasis mid-thought — he
+  called that out by name.
+- **Pages fill the viewport at any size.** No dead band under the content.
 
 ---
 
-## Do not recreate
+## 6. Copy
 
-The following were intentionally removed to reduce token/context bloat. Do not reinstall or recreate them:
-- **claude-flow / ruflo** — `.claude-flow/`, `.mcp.json`, and all MCP swarm/agent/memory tools. Not needed for a static portfolio.
-- **`.claude/agents/`, `commands/`, `skills/`, `helpers/`** — 260+ files for distributed systems, swarm coordination, daemon management, etc. All irrelevant.
-- **Hooks in `settings.json`** — all hooks referenced deleted helper scripts. Settings is now permissions + attribution only.
-- **`portfolio-brief.md`, `prelaunch-brief.md`** — planning docs, work is done.
+Raj runs copy through two frameworks that already live in his vault. Read them
+before writing any — don't ask him to attach them:
 
-Design skills (`emil-design-eng`, `design-motion-principles`) are installed **globally** at `~/.claude/skills/` and remain available.
+- `raj's obsidian/raj/raj-uncurated/02-content/framework/03-nnv.md` — novelty,
+  non-obvious, tactical
+- `.../framework/07-copywriting.md` — Harry Dry's three tests
+
+Everything is lowercase. Facts he has had to correct more than once: **45+
+brands** (not 25+), and the education is Don Bosco school 2018 → Don Bosco
+humanities 2020 → St Joseph's, graduated 2023.
+
+---
+
+## 7. Skills
+
+All at `~/.claude/skills/`. `emil-design-eng` is the default for any frontend
+work — the rest are situational.
+
+| Skill | Reach for it when |
+|---|---|
+| `emil-design-eng` | Any frontend work. Always. |
+| `design-motion-principles` | Auditing motion from several designers' perspectives |
+| `apple-design` | Gestures, springs, interruptible transitions, optical type |
+| `animation-vocabulary` | You can describe a motion but don't know its name |
+| `pick-ui-library` / `prototype` | Only when explicitly asked |
+
+`review-animations` also exists at `~/.claude/skills/review-animations/` but is
+`disable-model-invocation: true` — **the `Skill` tool cannot load it.** Read
+`SKILL.md` and `STANDARDS.md` from that folder directly instead.
+
+Every one of these only knows how to *add* polish. None will ever tell you to
+cut — that job is section 3, and it is the job this site keeps failing. Same
+reason `animate`, `improve-animations` and `find-animation-opportunities` are
+deliberately left uninstalled: all three hunt for *more* things to animate.
+
+---
+
+## 8. Reference
+
+**No build tools, no npm, no frameworks.** Pure HTML/CSS/JS, fonts via a Google
+Fonts `<link>`. Each page is a standalone HTML file with one `init*()` function
+called on `DOMContentLoaded`.
+
+| File | Purpose | JS |
+|---|---|---|
+| `index.html` | Video intro (Bunny HLS), redirects to playground | inline |
+| `playground.html` | Photo scatter canvas — desktop pan/zoom, mobile vertical feed | `playground.js` |
+| `hub.html` | "Work With Me" — two offers, side by side | `hub.js` |
+| `about.html` | About | `about.js` |
+| `case-studies.html` | Case studies | inline |
+| `ciad.html` | Content in a Day — folders, pricing, email bar | `ciad.js` (62KB) |
+| `portfolio.html` | Full-screen vertical reel | `portfolio.js` |
+
+`styles.css` (2200+ lines) holds every page, sectioned by
+`/* === SCREEN N: NAME === */`. `shared.js` only shows `#pg-nav`. Navigation is
+real `<a href>` links; CSS View Transitions handle the fade. No SPA routing.
+
+Two design systems coexist: **warm paper** (playground, hub, about, portfolio,
+case studies) — `--bg-warm:#f5f2ee`, grain, editorial serif; and **iOS dark
+precision** (CIAD only) — near-black, geometric sans, folder metaphor. Shared
+palette in `:root`: `--accent-r:#ff7bac`, `--accent-b:#0d8aaf`,
+`--accent-g:#3a8c52`. Never the old red or iOS blue.
+
+**Validate JS after every edit** — corruption comes from smart quotes, `/* */`
+comments, Unicode in comments and template literals. Use `//` comments and
+`&rsquo;` for HTML contractions.
+
+```bash
+# inline blocks in an HTML file
+node -e "const fs=require('fs'),vm=require('vm'),h=fs.readFileSync('FILE.html','utf8'),s=[],r=/<script[^>]*>([\s\S]*?)<\/script>/gi;let m;while((m=r.exec(h))!==null)s.push(m[1]);s.forEach((x,i)=>{try{new vm.Script(x);console.log('Block '+i+': OK')}catch(e){console.log('Block '+i+': ERROR - '+e.message)}})"
+
+# a standalone .js file
+node -e "const fs=require('fs'),vm=require('vm');try{new vm.Script(fs.readFileSync('FILE.js','utf8'));console.log('OK')}catch(e){console.log('ERROR: '+e.message)}"
+```
+
+**Deployment:** Vercel, automatic on push. `api/subscribe.js` is a Vercel Edge
+Function handling email via Resend (`RESEND_API_KEY`, `RESEND_AUDIENCE_ID`),
+CORS-locked to `rajkashyap.studio` and `localhost:8080`. Images and HLS video
+are on Bunny CDN.
+
+**`.claude/` holds two hooks — keep them.** `SessionStart` runs `taste.js` to
+inject `TASTE.md`; `PreToolUse` is the design gate on frontend edits. Do not
+reinstall claude-flow, `.mcp.json`, or the 260+ swarm/agent files that were
+deliberately removed.
 
 ---
 
 ## The one rule
 
-Don't create new problems while fixing old ones. If something worked before your edit, it must work after. Test everything. Screenshot everything.
+Don't create new problems while fixing old ones. If something worked before your
+edit, it must work after. Test everything. Screenshot everything.

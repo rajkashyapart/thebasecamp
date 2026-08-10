@@ -631,6 +631,10 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   transition:transform 0.16s cubic-bezier(0.23,1,0.32,1),
              background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
+/* the anchor carried no colour of its own, so it computed to the browser's
+   default link blue. Nothing shows today because every glyph lives in the
+   inner span -- but any text added straight to the <a> would render blue. */
+.hub-opt-btn{color:inherit;}
 .hub-opt-btn::before{content:'';}
 .hub-opt-btn-inner{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
