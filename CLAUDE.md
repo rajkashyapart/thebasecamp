@@ -129,13 +129,18 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   clear centre. If it looks "placed" instead of "scattered", it's wrong.
   (The Emmi reference image is gone from the repo; it survives as this rule.)
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
-- **CIAD is a deck, and the deck is the day.** Five screens — 08:00, 09:00,
-  13:00, 19:00, the month after — crossed by one button that morphs from
-  "find out" into "book a call". The page has the shape of the product it
-  sells. One action on screen at any moment; the rail doubles as the way to
-  skip ahead. Warm paper like everywhere else. The nine folders, the window
-  manager, the ambient video wall, the logo marquee, the newsletter bar and
-  the dark theme are gone — don't reintroduce any of them.
+- **CIAD is a five-screen deck** — the question, the problem, how we work,
+  the work, the month after — crossed by one button that morphs from "find
+  out" into "book a call". One action on screen at any moment; the rail
+  doubles as the way to skip ahead. Warm paper like everywhere else. The
+  nine folders, the window manager, the ambient video wall, the logo
+  marquee, the newsletter bar and the dark theme are gone — don't
+  reintroduce any of them.
+- **The rail is chapters, not a clock.** It ran 08:00 → 19:00 until Raj
+  pointed out that only the smallest package is shootable in a day, which
+  made the hours a claim rather than a metaphor. Don't put the times back.
+  The ground still warms across the five screens; that is progression, not
+  time of day.
 - **CIAD's headline is an open loop.** *"only some videos get outlier
   results. why is that?"* — the next four screens are the answer, so nothing
   on screen one may close it, and the button says "find out" rather than
@@ -167,6 +172,11 @@ before writing any — don't ask him to attach them:
 Everything is lowercase. Facts he has had to correct more than once: **45+
 brands** (not 25+), and the education is Don Bosco school 2018 → Don Bosco
 humanities 2020 → St Joseph's, graduated 2023.
+
+**Shoot days are 1 / 2 / 3, never "one".** Six videos fit in a single day,
+twelve take two, sixteen to twenty take three. "One shoot day" was on CIAD,
+Work With Me *and* About, and was wrong on all three. The product is still
+named *outlier content in a day* — that is the name, not a delivery promise.
 
 ---
 

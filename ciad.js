@@ -1,9 +1,13 @@
 // Outlier content in a day.
 //
-// The deck is the day. Five screens, 08:00 to the month after, and the whole
-// crossing takes about a minute -- the page has the shape of the product.
-// There is exactly one action on screen at any moment: the button in the bar,
-// which morphs from "next" into "book a call" once the day is over.
+// Five screens, crossed in about a minute. There is exactly one action on
+// screen at any moment: the button in the bar, which morphs from "find out"
+// into "book a call" at the end.
+//
+// The rail used to be a clock, 08:00 to 19:00. Only the smallest package is
+// shootable in a day -- growth takes two and expansion three -- so the hours
+// were claiming something untrue and the stops are chapters now. The ground
+// still warms across the five, which is progression rather than time of day.
 //
 // Everything else that used to live here -- nine folders, a desktop, a window
 // manager, a marquee, an email bar -- is gone. The call does that selling now.
@@ -14,9 +18,8 @@ var OD = {
   track: null,
   deck: null,
   screen: null,
-  // The ground warms as the day goes. Morning paper is cool; by the last
-  // screen it is dusk. One property, no ornament, and it does the work a
-  // decorative clock would have done badly.
+  // The ground warms as you go. One property, no ornament -- it is the only
+  // thing left carrying a sense of travel now that the clock is gone.
   tones: ['#f5f2ee', '#f4f1eb', '#f6f1e8', '#f2ebe1', '#efe7dc'],
   labels: [
     'find out &rarr;',
@@ -29,15 +32,19 @@ var OD = {
 
 // The three packages, and nothing between them. A slider that interpolated
 // would be inventing prices Raj has never quoted, so it snaps to the three
-// he has. Cadence is arithmetic off 30 days -- no promise in it.
+// he has. Cadence is arithmetic off 30 days -- no promise in it. Shoot days
+// are Raj's own figures (2026-08-11): six videos fit in one day, twelve take
+// two, sixteen to twenty take three. They are the real commitment the client
+// makes, so they are stated, not implied.
+//
 // Entities, not literal glyphs: this file has been corrupted before by a
 // stray rupee sign or en dash inside a string.
 var OD_TIERS = [
-  { name: 'foundation', videos: 6,  inr: '&#8377;36,995',   usd: '$399',
+  { name: 'foundation', videos: 6,  days: '1 shoot day',  inr: '&#8377;36,995',   usd: '$399',
     cadence: 'one every 5 days',      volLabel: '6 videos a month' },
-  { name: 'growth',     videos: 12, inr: '&#8377;54,995',   usd: '$594',
+  { name: 'growth',     videos: 12, days: '2 shoot days', inr: '&#8377;54,995',   usd: '$594',
     cadence: 'one every 2&ndash;3 days', volLabel: '12 videos a month' },
-  { name: 'expansion',  videos: 18, inr: '&#8377;1,30,000', usd: '$1,404',
+  { name: 'expansion',  videos: 18, days: '3 shoot days', inr: '&#8377;1,30,000', usd: '$1,404',
     cadence: 'one every other day',   volLabel: '16&ndash;20 videos a month' }
 ];
 
@@ -125,10 +132,12 @@ function odAttachDrag() {
   var dragging = false, locked = false, axis = '';
 
   OD.deck.addEventListener('pointerdown', function (e) {
-    // Every reel is a button, so this also hands the horizontal drag on the
-    // reel row to the row itself -- two things claiming the same gesture is
-    // how a carousel ends up fighting its own contents.
-    if (e.target.closest('button, a')) return;
+    // Anything that owns its own horizontal gesture keeps it. The volume
+    // slider is the reason this list has form controls in it: the deck was
+    // capturing the pointer the moment the drag went sideways, so the thumb
+    // never moved and the page slid instead. Every reel is a button, which
+    // is what hands the reel row's sideways scroll back to the row.
+    if (e.target.closest('button, a, input, select, textarea, label')) return;
     dragging = true; locked = false; axis = '';
     startX = e.clientX; startY = e.clientY; dx = 0;
     t0 = Date.now();
@@ -282,6 +291,7 @@ function odSetTier(i) {
   var name = document.getElementById('od-tier');
   var price = document.getElementById('od-price');
   var vol = document.getElementById('od-vol-out');
+  var days = document.getElementById('od-days');
   var cad = document.getElementById('od-cadence');
 
   if (name) name.innerHTML = t.name;
@@ -290,6 +300,7 @@ function odSetTier(i) {
                       '<span class="od-usd">' + t.usd + '</span>';
   }
   if (vol) vol.innerHTML = t.volLabel;
+  if (days) days.innerHTML = t.days;
   if (cad) cad.innerHTML = t.cadence;
 
   var marks = document.querySelectorAll('.od-range-marks span');

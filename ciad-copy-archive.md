@@ -14,66 +14,101 @@ git show def2c86:ciad.html                # the email bar + trusted strip
 
 # PART 1 — what is live now
 
-Five screens. ~180 words total.
+Five screens, ~230 words. Rewritten 2026-08-11 from Raj's own copy.
 
-### 08:00 — the promise
+Rail stops: **the question · the problem · how we work · the work · the month after**.
+They were hours (08:00 → 19:00) for one day, until he pointed out that only the
+smallest package is shootable in a day — so a clock was claiming something
+untrue.
+
+Button, in order: `find out →` `next →` `next →` `see the price →` `book a call →`
+
+Colour: **blue** is the craft (positioning, the pipeline, the rail).
+**pink** is the payoff and the person (outlier, thirty days, his handwriting,
+the button).
+
+### the question
 
 > **outlier content in a day**
 >
-> # an outlier isn't luck.
-> # *it's the one that got planned.*
+> # only some videos get *outlier* results.
+> # *why is that?*
 >
-> we plan it in the morning and shoot it by evening. you post it for a month.
+> it isn't luck, and it isn't the camera. it's decided before anyone starts
+> filming.
 >
-> 45+ brands · one shoot day each
+> 45+ brands · since 2020
 
-### 09:00 — the brief
+### the problem
 
-> **09:00 — the brief**
+> **the problem**
 >
-> # most content dies
-> # *before a camera comes out.*
+> # *pretty* doesn't sell.
+> # *relevance does.*
 >
-> nobody decided who it was for, so it got made for everyone. the morning goes
-> on that one question — who you are talking to, and what makes them stop.
+> keeping a page alive isn't social media marketing. we despise how most
+> agencies go about it — and the ones actually good at this are working with
+> the big brands.
+>
+> ideation → strategy → psychology → production → post → distribution
+>
+> every week. forever.  *that's a full-time job*
+>
+> the basecamp exists to fill that gap.
 
-### 13:00 — the shoot
+### how we work
 
-> **13:00 — the shoot**
+> **how we work**
 >
-> # you show up once.
-> # *that's the whole commitment.*
+> # we sort *positioning*
+> # *before we roll cameras.*
 >
-> we direct it, shoot it, and get the month in one sitting. you are back at
-> your desk by evening.
+> what does your audience already watch, and what would make them watch you.
+> that gets answered first — then we batch shoot the month. one day for six
+> videos, three for twenty. edits are handled by me and my team. after it runs,
+> we read what worked and refine the next batch.
 >
-> 1 day · 6–20 videos · 0 decisions after
+> 1–3 days a month · 6–20 videos · then you're done
+>
+> *and unlimited revisions :')*
 
-### 19:00 — out of your hands
+### the work
 
-> **19:00 — out of your hands**
+> **out of your hands**
 >
-> edited, graded, scheduled. you approve on frame.io — comment on the frame,
-> we fix it. this is what a day makes.
+> you focus on the business. we focus on social — standing you out in a red
+> sea, and making the people you want to reach feel seen.
 >
-> *(five reels)*
+> *(five reels, tap to play)*
 
 ### the month after
 
 > **the month after**
 >
-> # one shoot day.
+> # one to three days.
 > # *thirty days of content.*
 >
-> pay three months upfront → save 10%
+> drag it. build your month.
 >
-> | | foundation | growth *(most pick this)* | expansion |
+> *(a slider across foundation / growth / expansion, and thirty squares that
+> fill in as you drag — a week wide, so it reads as a month)*
+>
+> | | foundation | growth | expansion |
 > |---|---|---|---|
-> | | ₹36,995 / $399 | ₹54,995 / $594 | ₹1,30,000 / $1,404 |
-> | | 6 videos a month | 12 videos a month | 16–20 videos a month |
-> | | visible, without it eating your week. | the volume where inbound starts. | a revenue channel, not a presence. |
+> | price | ₹36,995 / $399 | ₹54,995 / $594 | ₹1,30,000 / $1,404 |
+> | volume | 6 videos a month | 12 videos a month | 16–20 videos a month |
+> | you show up | 1 shoot day | 2 shoot days | 3 shoot days |
+> | cadence | one every 5 days | one every 2–3 days | one every other day |
+>
+> three months upfront → save 10%
+>
+> this isn't for you if you're chasing vanity metrics over business impact
+> … if you want someone to just cut clips
+> … if you want results without positioning and strategy
 
-Button, in order: `start the day →` `next →` `next →` `see the price →` `book a call →`
+Cadence is arithmetic off 30 days, never a promise. Shoot days are Raj's own
+figures. Whatever they build rides into the Calendly link as
+`utm_content=growth-12`.
 
 ---
 

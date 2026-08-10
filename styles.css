@@ -939,6 +939,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .od-range{
   -webkit-appearance:none;appearance:none;
   width:100%;background:transparent;cursor:grab;margin:0;
+  /* the deck is pan-y; without this the browser hands a sideways touch to
+     the page instead of to the thumb, and the slider cannot be dragged */
+  touch-action:none;
+  /* a 2px track is a 2px target -- the padding makes the whole strip grabbable */
+  padding:10px 0;
 }
 .od-range:active{cursor:grabbing;}
 .od-range::-webkit-slider-runnable-track{
@@ -977,8 +982,14 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    thing this product is not. */
 .od-month{
   grid-column:1;
-  display:grid;grid-template-columns:repeat(15,1fr);
-  gap:6px;margin-top:var(--od-2);max-width:520px;
+  /* Seven across, because a week is what makes thirty squares read as a
+     month rather than a bar chart -- and because an even spread of posts
+     lines up into vertical stripes on any column count that divides into
+     30. The ragged last row is correct: months are not rectangles.
+     The grid's own row gap spaces this from the slider, so no margin here
+     or the two stack up. */
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:5px;max-width:250px;
 }
 .od-day{
   aspect-ratio:1;border-radius:2px;
@@ -997,6 +1008,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
   color:var(--ink-muted);
 }
+/* Shoot days are what the client actually gives up, so they read a step
+   stronger than the video count sitting above them. */
+.od-tier-days{color:var(--ink-body);}
 .od-readout .od-hand{display:block;margin-top:var(--od-1);}
 .od-cur{
   display:inline-flex;margin-top:var(--od-2);
@@ -1109,9 +1123,13 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .od-inner-price{gap:var(--od-2);}
   .od-price-head .od-eyebrow{margin-bottom:var(--od-1);}
   .od-h-price{font-size:26px;}
-  .od-month{gap:4px;max-width:280px;}
+  .od-month{gap:4px;max-width:172px;}
   .od-build-label{margin-bottom:var(--od-1);}
-  .od-cur{margin-top:var(--od-1);}
+  /* the currency toggle moves alongside the figures instead of under them --
+     a whole row for two words is the most expensive thing on this screen */
+  .od-readout{display:grid;grid-template-columns:1fr auto;column-gap:var(--od-2);}
+  .od-readout > *{grid-column:1;}
+  .od-readout .od-cur{grid-column:2;grid-row:1 / span 5;align-self:center;margin-top:0;}
   .od-foot{gap:var(--od-1);}
   .od-nope li{line-height:1.6;}
   .od-bar{flex-direction:column;align-items:stretch;gap:var(--od-3);padding-top:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));}

@@ -22,6 +22,8 @@ Exception: a specific, bounded instruction ("make the nav bigger", "these 8 vide
 
 ## Rejected — do not repeat
 
+- `2026-08-11` **"the price slider isnt draggable."** It had been "tested" by setting the value programmatically, which never exercises a drag — the deck was capturing the pointer the moment the gesture went sideways. Anything with its own horizontal gesture (a range input, a scrolling row) has to be excluded from the deck's drag handler, and an interactive control is not tested until something has actually dragged it.
+
 - `2026-06-20` **"i asked for more space between cards and elements. NOT make them tighter."** When Raj says "breathing space", he means *bigger gaps*. Never answer a spacing complaint by tightening. He'd said "negative breathing space between elements" and I read it backwards.
 - `2026-08-09` **"i dont like the font switch from dm mono to cormorant or wtv on work with me. looks ugly."** Don't swap font family for emphasis inside a page. DM Mono + Cormorant are the site's two fonts; switch only at a real structural boundary, never mid-thought.
 - `2026-08-09` **"looks very very basic bro."** Tidy, evenly-spaced grids read as basic to him. His taste runs to scattered, tilted, drifting, textured — the playground canvas is the north star, not a clean bento.
@@ -64,6 +66,7 @@ Exception: a specific, bounded instruction ("make the nav bigger", "these 8 vide
 
 Cheapest things to get right, most annoying to be told twice.
 
+- **Shoot days are 1 / 2 / 3** — `2026-08-11`: *"realistically, only foundation package is shootable in a day. from 7 to up to how ever many videos, shooting seems to take up to 3 days."* Six videos fit in one day, twelve take two, sixteen to twenty take three. ~~"one shoot day"~~ was on CIAD, Work With Me and About and was wrong on all three. The product keeps the name *outlier content in a day* — a name is not a delivery promise — but nothing on any page may claim the whole month is shot in a day. This is why CIAD's rail stopped being a clock.
 - **"45+ brands trusted"** — `2026-08-09`. ~~25+~~ (his own earlier figure, `2026-06-20`) is superseded. He also flagged that this stat "is not standing out ... it's a good thing for the client to see, so somehow needs to be highlighted."
 - **Education** — `2026-08-09`: Don Bosco school (2018), then Don Bosco again for humanities (finished 2020), then St Joseph's, graduated 2023.
 - **Type on About** — `2026-08-09`: italic Cormorant "like the rest of the website", and "make everything lowercase".
