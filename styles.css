@@ -345,6 +345,10 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   --hb-unit:32px;
   --hb-section:clamp(36px,6vh,96px);
 
+  /* fallback for the per-option accent tokens below, so anything that ever
+     lands outside a .hub-option still draws a border instead of none */
+  --opt-accent:var(--ink);--opt-deep:var(--ink);--opt-rgb:30,25,20;
+
   position:relative;z-index:10;
   display:flex;flex-direction:column;align-items:stretch;
   text-align:left;
@@ -393,9 +397,23 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   align-items:start;
   gap:56px;width:100%;
 }
+/* Each option carries its own accent, and the split means something — the
+   same rule About runs on. Pink is the recommended path; blue is the one
+   you scope yourself. Two accents used interchangeably would be noise;
+   these two never appear in the same column.
+   --opt-deep is the same hue darkened to 4.6:1 on warm paper, for the two
+   places the accent is actually small text rather than a rule. */
 .hub-option{
+  --opt-accent:var(--accent-r);
+  --opt-rgb:255,123,172;
+  --opt-deep:var(--accent-r);
   display:flex;flex-direction:column;align-items:flex-start;
   text-align:left;
+}
+.hub-option:not(.hub-option-primary){
+  --opt-accent:var(--accent-b);
+  --opt-rgb:13,138,175;
+  --opt-deep:#0b7695;
 }
 
 /* THE FOCAL POINT. A sheet of paper set down on the page: warmer than the
@@ -429,10 +447,18 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* The alternative is set straight onto the page. No box, no fill, no
    radius, no shadow -- one rule to hold the column. It is not a lesser
    offer, it is a quieter one, and the quiet is what lets the other card
-   read as the recommendation from across the room. */
+   read as the recommendation from across the room.
+   The rule is the whole blue: a spine, not a fill. Tinting a background
+   here would give the column weight and break that. */
 .hub-option:not(.hub-option-primary){
   padding:4px 0 0 24px;
-  border-left:1px solid rgba(30,25,20,0.13);
+  border-left:1px solid rgba(var(--opt-rgb),0.42);
+}
+/* the secondary has no Caveat mark above it, so its kind line is where the
+   column declares itself. Full opacity, not 0.7 -- the tint is doing the
+   quieting now, it doesn't also need to be faded. */
+.hub-option:not(.hub-option-primary) .hub-opt-kind{
+  color:var(--opt-deep);opacity:1;
 }
 
 /* A note in the margin in Raj's hand, not a SaaS "MOST POPULAR" pill.
@@ -493,9 +519,22 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   transition:transform 0.16s ease-out, background 0.2s ease, border-color 0.2s ease;
 }
 .hub-opt-more:active{transform:scale(0.97);}
-.hub-opt-more:focus-visible{outline:2px solid var(--accent-r);outline-offset:2px;}
+.hub-opt-more:focus-visible{outline:2px solid var(--opt-accent);outline-offset:2px;}
 @media(hover:hover) and (pointer:fine){
   .hub-opt-more:hover{background:#fff;border-color:rgba(30,25,20,0.22);}
+}
+/* same hairline weight it had, carrying the column's hue instead of ink --
+   otherwise this control reads as an orphan between a blue spine above it
+   and a blue button below */
+.hub-option:not(.hub-option-primary) .hub-opt-more{
+  border-color:rgba(var(--opt-rgb),0.26);
+  background:transparent;
+}
+@media(hover:hover) and (pointer:fine){
+  .hub-option:not(.hub-option-primary) .hub-opt-more:hover{
+    background:rgba(var(--opt-rgb),0.05);
+    border-color:rgba(var(--opt-rgb),0.46);
+  }
 }
 .hub-chev{
   flex-shrink:0;color:var(--ink-muted);
@@ -535,11 +574,14 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .hub-steps b,.hub-done b{font-weight:500;color:var(--ink);}
 
 .hub-caps{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--hb-unit);}
+/* the white pill fill is gone. It was faking paper on the one card that
+   deliberately has no paper under it -- seven small sheets floating on a
+   column defined by its flatness. A hairline in the column's hue is enough. */
 .hub-caps span{
   font-family:'DM Mono',monospace;font-size:var(--hb-label);
   letter-spacing:0.02em;color:var(--ink-body);line-height:1.4;
-  border:1px solid rgba(30,25,20,0.11);border-radius:100px;
-  padding:5px 11px;background:rgba(255,255,255,0.4);
+  border:1px solid rgba(var(--opt-rgb),0.22);border-radius:100px;
+  padding:5px 11px;background:transparent;
 }
 .hub-done{list-style:none;margin:var(--hb-unit) 0 0;padding:0;}
 .hub-done li{
@@ -548,9 +590,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   font-size:var(--hb-body);line-height:var(--lh-prose);letter-spacing:0;
   color:var(--ink-body);text-wrap:pretty;
 }
+/* mirrors the pink 01/02/03 on the other card -- each column marks its own
+   list in its own hue */
 .hub-done li::before{
   content:'';position:absolute;left:0;top:0.66em;
-  width:5px;height:1px;background:var(--ink-faint);
+  width:5px;height:1px;background:rgba(var(--opt-rgb),0.6);
 }
 .hub-opt-forwho{
   margin:var(--hb-unit) 0 0;padding-top:var(--hb-tight);
@@ -564,14 +608,16 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   font-size:var(--hb-label);letter-spacing:0.16em;text-transform:uppercase;
   color:var(--ink);opacity:0.65;margin-bottom:var(--hb-tight);
 }
+/* was pink, in the one column pink has no business being in */
 .hub-opt-sublink{
   display:inline-block;margin-top:var(--hb-unit);
   font-family:'DM Mono',monospace;font-size:var(--hb-label);letter-spacing:0.09em;
-  color:var(--accent-r);text-decoration:none;
-  border-bottom:1px solid rgba(255,123,172,0.32);
+  color:var(--opt-deep);text-decoration:none;
+  border-bottom:1px solid rgba(var(--opt-rgb),0.32);
   transition:border-color 0.2s ease;
 }
-.hub-opt-sublink:hover{border-color:var(--accent-r);}
+.hub-opt-sublink:hover{border-color:var(--opt-accent);}
+.hub-opt-sublink:focus-visible{outline:2px solid var(--opt-accent);outline-offset:3px;}
 
 /* CTA — an actual button. It was pink text at the same weight as a label,
    which gave the page's primary action no more presence than a caption. */
@@ -597,20 +643,24 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   border:1px solid var(--accent-r);
   box-shadow:0 2px 12px rgba(255,123,172,0.28);
 }
+/* outlined, and outlined in blue -- the ink border it had made this the
+   only element on the page whose colour said nothing. Still no fill and
+   still no shadow: the pink one is filled, and that difference is the
+   recommendation. */
 .hub-option:not(.hub-option-primary) .hub-opt-btn-inner{
-  background:transparent;color:var(--ink);
-  border:1px solid rgba(30,25,20,0.22);
+  background:transparent;color:var(--opt-deep);
+  border:1px solid rgba(var(--opt-rgb),0.42);
 }
 @media(hover:hover) and (pointer:fine){
   .hub-option-primary:hover .hub-opt-btn-inner{
     background:#ff6aa2;box-shadow:0 4px 18px rgba(255,123,172,0.38);
   }
   .hub-option:not(.hub-option-primary):hover .hub-opt-btn-inner{
-    border-color:var(--ink);background:rgba(30,25,20,0.03);
+    border-color:var(--opt-accent);background:rgba(var(--opt-rgb),0.06);
   }
 }
 .hub-opt-btn:focus-visible{outline:none;}
-.hub-opt-btn:focus-visible .hub-opt-btn-inner{outline:2px solid var(--accent-r);outline-offset:3px;}
+.hub-opt-btn:focus-visible .hub-opt-btn-inner{outline:2px solid var(--opt-accent);outline-offset:3px;}
 .hub-opt-btn:active{transform:scale(0.985);}
 
 /* ── proof — one signal, not two ───────────────────── */
