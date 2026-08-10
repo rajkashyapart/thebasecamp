@@ -78,7 +78,7 @@ separate passes were made at Work With Me and About and every one made the page
 | Budget | Limit |
 |---|---|
 | Distinct font sizes | 5 |
-| Accent colours | 1 — except About and Work With Me, which run 2 because the split means something (blue marks the work / the path you scope; pink marks the person / the recommendation). Two accents used interchangeably are not allowed. |
+| Accent colours | 1 — except About, Work With Me and CIAD, which run 2 because the split means something (blue marks the work / the path you scope / the craft; pink marks the person / the recommendation / the payoff). Two accents used interchangeably are not allowed. Colour lands on the word that carries the meaning, never on a whole line. |
 | Structural spacing values | 4 tiers, well separated. Two values within 15% of each other communicate nothing and cost a decision. |
 | Physical-object metaphors | 1. Hang tags, receipts, wristbands, folders — pick one. Three skeuomorphs is noise, not charm. |
 
@@ -131,12 +131,21 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
 - **CIAD is a deck, and the deck is the day.** Five screens — 08:00, 09:00,
   13:00, 19:00, the month after — crossed by one button that morphs from
-  "next" into "book a call". The page has the shape of the product it sells.
-  One action on screen at any moment; the rail doubles as the way to skip
-  ahead. Warm paper like everywhere else, one accent (pink, the same pink
-  that marks this offer on Work With Me). The nine folders, the window
+  "find out" into "book a call". The page has the shape of the product it
+  sells. One action on screen at any moment; the rail doubles as the way to
+  skip ahead. Warm paper like everywhere else. The nine folders, the window
   manager, the ambient video wall, the logo marquee, the newsletter bar and
   the dark theme are gone — don't reintroduce any of them.
+- **CIAD's headline is an open loop.** *"only some videos get outlier
+  results. why is that?"* — the next four screens are the answer, so nothing
+  on screen one may close it, and the button says "find out" rather than
+  "next". If the headline changes, that button label changes with it.
+- **The price screen is built, not compared.** Dragging the volume fills in
+  thirty squares — their month — and the price follows. It snaps to the three
+  packages because interpolating would invent prices Raj has never quoted,
+  and the cadence line ("one every 2–3 days") is arithmetic off 30 days, not
+  a promise. Their choice rides into the Calendly link. Don't turn it back
+  into three cards.
 - **The playground hero is finished.** Closed.
 - **Type:** tight tracking on large headings, generous line-height on body.
   Cormorant Garamond italic for display, DM Mono for everything else, Caveat for

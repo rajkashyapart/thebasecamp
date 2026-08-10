@@ -746,10 +746,15 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    one action on screen at any moment: the button in the bar, which morphs
    from "next" into "book a call" once the day is over.
 
-   Budgets: one accent (pink -- the same pink that marks this offer on Work
-   With Me), one physical metaphor (the day), five type sizes, four spacing
-   tiers. The nine folders, the window manager, the ambient video wall, the
-   logo marquee, the newsletter bar and the dark theme are all gone.
+   Budgets: two accents, one physical metaphor (the day), five type sizes,
+   four spacing tiers. The nine folders, the window manager, the ambient
+   video wall, the logo marquee, the newsletter bar and the dark theme are
+   all gone.
+
+   The two accents carry the same split as About and Work With Me, and they
+   are never swapped: BLUE is the craft -- positioning, the method, the day
+   itself. PINK is the payoff and the person -- the outlier, the thirty days,
+   the handwritten asides, the one button that books a call.
 ====================================================== */
 #screen-ciad{
   z-index:40;overflow:hidden;
@@ -810,6 +815,18 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   margin-bottom:var(--od-2);
 }
 .od-h em{font-style:italic;color:var(--ink);}
+/* Colour lands on the word that carries the meaning, never on a whole line.
+   ac-b is the craft, ac-p is the payoff -- see the note at the top. */
+.od-h b{font-weight:inherit;}
+.ac-b{color:var(--accent-b);}
+.ac-p{color:var(--accent-r);}
+
+/* Raj's hand. Set at the price step so it costs no new type size. */
+.od-hand{
+  font-family:'Caveat',cursive;font-size:20px;line-height:1.1;
+  letter-spacing:0;text-transform:none;color:var(--accent-r);
+}
+.od-hand-block{display:inline-block;margin-top:var(--od-2);transform:rotate(-2deg);}
 .od-lead{
   font-size:var(--t-lead);line-height:var(--lh-prose);color:var(--ink-body);
   max-width:56ch;
@@ -832,6 +849,29 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   content:'';position:absolute;left:calc(var(--od-2) / -2);top:50%;
   width:3px;height:3px;border-radius:50%;background:var(--ink-faint);
 }
+
+/* The pipeline, set as a chain rather than a sentence -- six nouns with
+   arrows between them say "this never ends" faster than a clause can. */
+.od-chain{
+  list-style:none;display:flex;flex-wrap:wrap;align-items:center;
+  gap:var(--od-1) var(--od-2);margin-top:var(--od-3);
+}
+.od-chain li{
+  position:relative;
+  font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
+  color:var(--accent-b);
+}
+.od-chain li + li::before{
+  content:'\2192';position:absolute;left:calc(var(--od-2) / -2);
+  transform:translateX(-50%);color:var(--ink-faint);
+}
+.od-chain-note{
+  margin-top:var(--od-1);
+  font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
+  color:var(--ink-muted);
+}
+.od-chain-note .od-hand{margin-left:var(--od-1);text-transform:none;letter-spacing:0;}
+.od-lead-close{margin-top:var(--od-2);color:var(--ink);}
 
 /* ---- 19:00 -- the reels ----
    The output of the day is the focal point here, so the copy above it stays
@@ -873,19 +913,95 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   to{opacity:1;transform:translateY(0);}
 }
 
-/* ---- the month after -- price ----
-   Three options the visitor has to choose between, so they start together
-   and share a structure. align-items:start, never stretch. */
+
+/* ---- the month after: they build it ----
+   Not a pricing table. Three packages exist and nothing sits between them,
+   so the slider snaps -- interpolating would invent prices Raj has never
+   quoted. What moves continuously is the month: thirty squares that fill as
+   the volume goes up. The page has spent a minute showing you one day; this
+   is that day paying out, which is why it belongs here and not in a card. */
 .od-inner-price{display:flex;flex-direction:column;gap:var(--od-3);}
 .od-price-head .od-eyebrow{margin-bottom:var(--od-2);}
 .od-h-price{margin-bottom:0;}
-/* the toggle sits on the tiers, not beside the headline -- it changes the
-   numbers below it, and proximity is the only thing that says so */
-.od-tier-block{display:flex;flex-direction:column;gap:var(--od-2);}
-/* the discount is a footnote on all three tiers, not on the last one -- under
-   the bottom tier it reads as expansion's small print */
-.od-tier-controls{display:flex;flex-wrap:wrap;align-items:center;gap:var(--od-2);}
-.od-cur{margin-left:auto;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(30,25,20,0.05);}
+
+.od-build{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,auto);
+  gap:var(--od-3);align-items:start;
+}
+.od-build-controls{grid-column:1;}
+.od-build-label{
+  display:block;margin-bottom:var(--od-2);
+  font-size:var(--t-fine);letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--ink-muted);
+}
+
+/* the slider itself -- native range, so keyboard and touch come for free */
+.od-range{
+  -webkit-appearance:none;appearance:none;
+  width:100%;background:transparent;cursor:grab;margin:0;
+}
+.od-range:active{cursor:grabbing;}
+.od-range::-webkit-slider-runnable-track{
+  height:2px;border-radius:2px;background:rgba(30,25,20,0.16);
+}
+.od-range::-moz-range-track{
+  height:2px;border-radius:2px;background:rgba(30,25,20,0.16);
+}
+.od-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:20px;height:20px;margin-top:-9px;border-radius:50%;
+  background:var(--accent-r);border:3px solid var(--bg-warm);
+  box-shadow:0 2px 10px rgba(255,123,172,0.45);
+  transition:transform 0.16s cubic-bezier(0.23,1,0.32,1);
+}
+.od-range::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--accent-r);border:3px solid var(--bg-warm);
+  box-shadow:0 2px 10px rgba(255,123,172,0.45);
+}
+.od-range:active::-webkit-slider-thumb{transform:scale(1.14);}
+.od-range:focus-visible{outline:none;}
+.od-range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(13,138,175,0.35);}
+
+.od-range-marks{display:flex;justify-content:space-between;margin-top:var(--od-1);}
+.od-range-marks span{
+  font-size:var(--t-micro);letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--ink-faint);cursor:pointer;transition:color 0.2s ease;
+}
+.od-range-marks span:first-child{text-align:left;}
+.od-range-marks span:last-child{text-align:right;}
+.od-range-marks span.is-on{color:var(--ink);}
+
+/* thirty days. filled squares are posts, spread across the month rather than
+   stacked at the front -- a block would be showing a batch, which is the one
+   thing this product is not. */
+.od-month{
+  grid-column:1;
+  display:grid;grid-template-columns:repeat(15,1fr);
+  gap:6px;margin-top:var(--od-2);max-width:520px;
+}
+.od-day{
+  aspect-ratio:1;border-radius:2px;
+  background:rgba(30,25,20,0.07);
+  transition:background-color 0.28s cubic-bezier(0.23,1,0.32,1) var(--d,0ms);
+}
+.od-day.is-on{background:var(--accent-b);}
+
+.od-readout{grid-column:2;grid-row:1 / span 2;}
+.od-tier-name{
+  font-size:var(--t-fine);letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--accent-r);margin-bottom:var(--od-1);
+}
+.od-tier-price{font-size:20px;line-height:1.2;color:var(--ink);margin-bottom:2px;}
+.od-tier-vol{
+  font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
+  color:var(--ink-muted);
+}
+.od-readout .od-hand{display:block;margin-top:var(--od-1);}
+.od-cur{
+  display:inline-flex;margin-top:var(--od-2);
+  gap:2px;padding:3px;border-radius:999px;background:rgba(30,25,20,0.05);
+}
 .od-cur-btn{
   border:0;background:none;cursor:pointer;border-radius:999px;
   padding:7px 14px;font-family:'DM Mono',monospace;
@@ -894,31 +1010,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .od-cur-btn.is-on{background:var(--bg-warm);color:var(--ink);}
 .od-cur-btn:active{transform:scale(0.97);}
-
-.od-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--od-2);align-items:start;}
-.od-tier{position:relative;padding-top:var(--od-1);border-top:1px solid rgba(30,25,20,0.14);}
-.od-tier.is-pick{border-top-color:var(--accent-r);}
-.od-tier-name{
-  font-size:var(--t-fine);letter-spacing:var(--tr-label);text-transform:uppercase;
-  color:var(--ink-muted);margin-bottom:var(--od-1);
-}
-.od-tier.is-pick .od-tier-name{color:var(--accent-r);}
-.od-tier-price{font-size:20px;line-height:1.2;color:var(--ink);margin-bottom:2px;}
-.od-tier-vol{font-size:var(--t-fine);letter-spacing:var(--tr-ui);color:var(--ink-muted);margin-bottom:var(--od-1);text-transform:uppercase;}
-.od-tier-desc{font-size:var(--t-lead);line-height:var(--lh-prose);color:var(--ink-body);}
-/* Raj's hand, once. Set at the price size so it costs no new type step, and
-   sitting on the tier name rather than floating above the rule -- a note
-   beside the thing it is about. */
-.od-mark{
-  display:inline-block;margin-left:8px;
-  font-family:'Caveat',cursive;font-size:20px;line-height:1;
-  letter-spacing:0;text-transform:none;
-  color:var(--accent-r);transform:rotate(-3deg);
-}
 .od-usd{display:none;}
 .show-usd .od-inr{display:none;}
 .show-usd .od-usd{display:inline;}
-.od-note{font-size:var(--t-fine);letter-spacing:var(--tr-ui);color:var(--ink-muted);text-transform:uppercase;}
+
+.od-foot{display:flex;flex-wrap:wrap;gap:var(--od-1) var(--od-3);align-items:baseline;}
+.od-note{
+  font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
+  color:var(--ink-muted);
+}
+/* the disqualifier. fence sitters don't buy, so it sits right where the
+   decision is being made rather than three screens back. */
+.od-nope{list-style:none;}
+.od-nope li{font-size:var(--t-fine);line-height:1.7;color:var(--ink-muted);}
 
 /* ---- the bar: the day on the left, the only action on the right ---- */
 .od-bar{
@@ -938,10 +1042,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .od-rail{position:relative;flex:1 1 auto;display:flex;justify-content:space-between;padding-top:14px;}
 .od-rail-line{position:absolute;top:0;left:0;right:0;height:1px;background:rgba(30,25,20,0.13);}
 /* a highlighter stroke over the hairline, not a hairline in another colour --
-   1px of pink on 1px of grey is not a progress bar anyone can read */
+   1px on 1px of grey is not a progress bar anyone can read. Blue, because
+   the rail is the day, and the day is the craft. */
 .od-rail-fill{
   position:absolute;left:0;top:-1px;display:block;
-  width:100%;height:3px;border-radius:2px;background:var(--accent-r);
+  width:100%;height:3px;border-radius:2px;background:var(--accent-b);
   transform:scaleX(0);transform-origin:left center;
   transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);
 }
@@ -954,24 +1059,41 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .od-tick.is-on{color:var(--ink);}
 @media(hover:hover) and (pointer:fine){ .od-tick:hover{color:var(--ink-body);} }
 
+/* Filled pink with a lift under it, the same treatment the recommended card
+   gets on Work With Me. Near-black on warm paper read as another piece of
+   type; this reads as the thing to press. */
 .od-go{
-  flex:0 0 auto;border:0;cursor:pointer;border-radius:999px;
-  padding:13px 24px;background:var(--ink);color:var(--bg-warm);
+  flex:0 0 auto;border:1px solid var(--accent-r);cursor:pointer;border-radius:999px;
+  padding:13px 26px;background:var(--accent-r);color:#fff;
+  box-shadow:0 2px 12px rgba(255,123,172,0.32);
   font-family:'DM Mono',monospace;font-size:var(--t-fine);
   letter-spacing:var(--tr-ui);text-transform:uppercase;
-  transition:transform 0.16s ease-out,background-color 0.2s ease;
+  transition:transform 0.16s ease-out,box-shadow 0.2s ease;
 }
-@media(hover:hover) and (pointer:fine){ .od-go:hover{background:#000;} }
+@media(hover:hover) and (pointer:fine){
+  .od-go:hover{box-shadow:0 4px 18px rgba(255,123,172,0.42);}
+}
 .od-go:active{transform:scale(0.97);}
 /* the label swaps in place -- blur through the middle so the eye reads one
    word changing rather than two words overlapping */
 .od-go-label{display:block;transition:filter 0.13s ease,opacity 0.13s ease;}
 .od-go-label.is-swapping{filter:blur(3px);opacity:0.35;}
 
+/* Short desktops. The price screen is the tallest of the five, so the frame
+   tier contracts rather than the month getting cropped. */
+@media(min-width:861px) and (max-height:860px){
+  #screen-ciad{--od-3:40px;}
+  .od-h-price{font-size:44px;}
+}
+
 /* ---- mobile ---- */
 @media(max-width:860px){
-  .od-tiers{grid-template-columns:1fr;gap:var(--od-2);}
-  .od-mark{top:-26px;}
+  /* The readout drops under the month instead of beside it, and the three
+     parts close up: slider, month and price are one object, not three
+     things that happen to be stacked. */
+  .od-build{grid-template-columns:1fr;gap:var(--od-1);}
+  .od-build-controls,.od-month,.od-readout{grid-column:1;}
+  .od-readout{grid-row:auto;}
 }
 @media(max-width:639px){
   /* the bar is two stacked rows on a phone, so the frame has to clear it */
@@ -982,13 +1104,16 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .od-reels{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .od-reels::-webkit-scrollbar{display:none;}
   .od-reel{flex:0 0 44%;}
-  /* three prices have to be comparable without scrolling, so the headline
-     gives up the room -- the tiers are the focal point on this screen */
-  .od-inner-price{gap:var(--od-1);}
+  /* the month has to be reachable without scrolling, so the headline gives
+     up the room -- the thing they came to build is the focal point here */
+  .od-inner-price{gap:var(--od-2);}
   .od-price-head .od-eyebrow{margin-bottom:var(--od-1);}
-  .od-tier-controls{gap:var(--od-1);}
   .od-h-price{font-size:26px;}
-  .od-tier-block{gap:var(--od-1);}
+  .od-month{gap:4px;max-width:280px;}
+  .od-build-label{margin-bottom:var(--od-1);}
+  .od-cur{margin-top:var(--od-1);}
+  .od-foot{gap:var(--od-1);}
+  .od-nope li{line-height:1.6;}
   .od-bar{flex-direction:column;align-items:stretch;gap:var(--od-3);padding-top:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));}
   .od-go{width:100%;justify-content:center;text-align:center;}
   /* only the current stop keeps its label; the rest become tick marks */

@@ -47,7 +47,9 @@ const BUDGET = {
   // Two accents are allowed only where the split carries meaning.
   // about: blue marks the work, pink marks the person.
   // hub:   blue marks the path you scope, pink the recommended one.
-  accentsException: { about: 2, hub: 2 },
+  // ciad:  blue is the craft (positioning, the method, the day itself),
+  //        pink is the payoff and the person (Raj's hand, the one button).
+  accentsException: { about: 2, hub: 2, ciad: 2 },
   spacingCount: 4                   // tight / unit / between-units / section
 };
 

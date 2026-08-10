@@ -19,13 +19,27 @@ var OD = {
   // decorative clock would have done badly.
   tones: ['#f5f2ee', '#f4f1eb', '#f6f1e8', '#f2ebe1', '#efe7dc'],
   labels: [
-    'start the day &rarr;',
+    'find out &rarr;',
     'next &rarr;',
     'next &rarr;',
     'see the price &rarr;',
     'book a call &rarr;'
   ]
 };
+
+// The three packages, and nothing between them. A slider that interpolated
+// would be inventing prices Raj has never quoted, so it snaps to the three
+// he has. Cadence is arithmetic off 30 days -- no promise in it.
+// Entities, not literal glyphs: this file has been corrupted before by a
+// stray rupee sign or en dash inside a string.
+var OD_TIERS = [
+  { name: 'foundation', videos: 6,  inr: '&#8377;36,995',   usd: '$399',
+    cadence: 'one every 5 days',      volLabel: '6 videos a month' },
+  { name: 'growth',     videos: 12, inr: '&#8377;54,995',   usd: '$594',
+    cadence: 'one every 2&ndash;3 days', volLabel: '12 videos a month' },
+  { name: 'expansion',  videos: 18, inr: '&#8377;1,30,000', usd: '$1,404',
+    cadence: 'one every other day',   volLabel: '16&ndash;20 videos a month' }
+];
 
 var OD_REELS = [
   { src: 'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8', name: 'Kaheen' },
@@ -92,8 +106,13 @@ function odNext() {
   odGo(OD.i + 1, true);
 }
 
+// Whatever month they built rides into the booking, so the call already knows
+// what they picked instead of asking them to say it again.
 function odBook() {
-  window.open('https://calendly.com/shootwraj/content-in-a-day', '_blank');
+  var t = OD_TIERS[odTierIndex];
+  var url = 'https://calendly.com/shootwraj/content-in-a-day' +
+            '?utm_source=ciad&utm_content=' + t.name + '-' + t.videos;
+  window.open(url, '_blank');
 }
 
 // ---- drag -------------------------------------------------------------
@@ -225,13 +244,65 @@ function odPlay(cell) {
   }
 }
 
-// ---- price ------------------------------------------------------------
+// ---- the month --------------------------------------------------------
+//
+// Thirty squares, one per day. Drag the volume and the month fills in front
+// of you. It is the same metaphor as the deck, one turn further on: the page
+// has been showing you a day, and this is what the day pays out.
+
+var OD_MONTH_DAYS = 30;
+var odTierIndex = 1;
+
+function odBuildMonth() {
+  var wrap = document.getElementById('od-month');
+  if (!wrap) return;
+  var html = '';
+  for (var d = 0; d < OD_MONTH_DAYS; d++) {
+    html += '<i class="od-day" style="--d:' + (d * 12) + 'ms"></i>';
+  }
+  wrap.innerHTML = html;
+}
+
+// Spread n posts evenly across the month rather than filling from the left --
+// a block of colour on days 1-12 would be showing a batch, which is exactly
+// the thing this product is not.
+function odPaintMonth(videos) {
+  var days = document.querySelectorAll('.od-day');
+  if (!days.length) return;
+  var step = OD_MONTH_DAYS / videos;
+  var on = {};
+  for (var i = 0; i < videos; i++) on[Math.round(i * step)] = true;
+  for (var d = 0; d < days.length; d++) days[d].classList.toggle('is-on', !!on[d]);
+}
+
+function odSetTier(i) {
+  odTierIndex = Math.max(0, Math.min(OD_TIERS.length - 1, i));
+  var t = OD_TIERS[odTierIndex];
+
+  var name = document.getElementById('od-tier');
+  var price = document.getElementById('od-price');
+  var vol = document.getElementById('od-vol-out');
+  var cad = document.getElementById('od-cadence');
+
+  if (name) name.innerHTML = t.name;
+  if (price) {
+    price.innerHTML = '<span class="od-inr">' + t.inr + '</span>' +
+                      '<span class="od-usd">' + t.usd + '</span>';
+  }
+  if (vol) vol.innerHTML = t.volLabel;
+  if (cad) cad.innerHTML = t.cadence;
+
+  var marks = document.querySelectorAll('.od-range-marks span');
+  for (var m = 0; m < marks.length; m++) marks[m].classList.toggle('is-on', m === odTierIndex);
+
+  odPaintMonth(t.videos);
+}
 
 function odCurrency(c) {
   var price = document.querySelector('.od-inner-price');
   if (price) price.classList.toggle('show-usd', c === 'usd');
-  var inr = document.getElementById('od-inr');
-  var usd = document.getElementById('od-usd');
+  var inr = document.getElementById('od-inr-btn');
+  var usd = document.getElementById('od-usd-btn');
   if (inr) inr.classList.toggle('is-on', c === 'inr');
   if (usd) usd.classList.toggle('is-on', c === 'usd');
 }
@@ -257,13 +328,32 @@ function ciadInit() {
     });
   }
 
-  var inr = document.getElementById('od-inr');
-  var usd = document.getElementById('od-usd');
+  var inr = document.getElementById('od-inr-btn');
+  var usd = document.getElementById('od-usd-btn');
   if (inr) inr.addEventListener('click', function () { odCurrency('inr'); });
   if (usd) usd.addEventListener('click', function () { odCurrency('usd'); });
 
+  odBuildMonth();
+  var vol = document.getElementById('od-vol');
+  if (vol) {
+    vol.addEventListener('input', function () { odSetTier(parseInt(this.value, 10)); });
+    // clicking a package name moves the slider to it
+    var marks = document.querySelectorAll('.od-range-marks span');
+    for (var k = 0; k < marks.length; k++) {
+      (function (idx, el) {
+        el.addEventListener('click', function () { vol.value = idx; odSetTier(idx); });
+      })(k, marks[k]);
+    }
+  }
+  odSetTier(1);
+
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
+    // The volume slider is a native range and left/right is how you drive it.
+    // Without this the deck eats the keypress and the page jumps a screen
+    // while the visitor is trying to change their package.
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
     if (e.key === 'ArrowRight') { e.preventDefault(); odGo(OD.i + 1, true); }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); odGo(OD.i - 1, true); }
     else if (e.key === 'Home') { e.preventDefault(); odGo(0, true); }
