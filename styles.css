@@ -719,9 +719,16 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* ── the writing ───────────────────────────────────── */
 /* padding-top clears the fixed nav (46px) plus the italic ascenders of
    Cormorant at display size, which overflow their line box */
+/* A flex column so the playlist can sit on the floor of the writing rather
+   than wherever the prose happens to end. flex-start + margin-block:auto on
+   the docked child, never align-items:center -- centring a child that can
+   outgrow an overflow:auto parent pushes the overflow above the scroll
+   origin, where it cannot be reached. */
 .col{
   padding:52px 38px var(--t) clamp(20px,3.2vw,48px);
   max-width:700px;
+  display:flex;flex-direction:column;align-items:stretch;
+  align-self:stretch;min-height:100%;
 }
 .name{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
@@ -879,6 +886,84 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    also need a margin under it */
 .col > *:last-child{margin-bottom:0;}
 
+/* ── the playlist ──────────────────────────────────── */
+/* Docked to the floor of the writing column. No rule above it and no box
+   around it -- spacing is what separates it from the prose, and a divider
+   would be an ornament standing in for spacing that already works.
+   Pink, because the music is the person talking, not the work. */
+.player{
+  /* its own clamp rather than --s: at 1080 tall the section tier is 48px and
+     that was the two pixels the column overflowed by */
+  margin-top:auto;padding-top:clamp(18px,2.6vh,34px);
+  display:grid;grid-template-columns:auto 1fr auto;
+  align-items:center;column-gap:14px;
+  /* capped, because a progress bar run the full width of the column stops
+     reading as a control and starts reading as a rule under the writing --
+     and this page separates things with spacing, not rules */
+  max-width:400px;
+}
+.player[hidden]{display:none;}
+
+.pl-btn{
+  width:32px;height:32px;flex:0 0 auto;
+  display:grid;place-items:center;position:relative;
+  border:1px solid rgba(255,123,172,0.45);border-radius:50%;
+  background:transparent;color:var(--accent-r);cursor:pointer;
+  transition:transform .16s cubic-bezier(0.23,1,0.32,1),
+             background-color .2s ease,border-color .2s ease;
+}
+@media(hover:hover) and (pointer:fine){
+  .pl-btn:hover{background:rgba(255,123,172,0.12);border-color:var(--accent-r);}
+}
+.pl-btn:active{transform:scale(0.95);}
+.pl-btn:focus-visible{outline:2px solid var(--accent-r);outline-offset:3px;}
+
+/* Both glyphs stacked; the pressed state crossfades between them rather
+   than swapping instantly, which at this size reads as a flicker. */
+.pl-i{
+  grid-area:1/1;width:10px;height:12px;fill:currentColor;
+  transition:opacity .15s ease,transform .15s cubic-bezier(0.23,1,0.32,1);
+}
+/* a triangle's visual centre sits left of its bounding box */
+.pl-play{transform:translateX(1px);}
+.pl-pause{opacity:0;transform:scale(0.86);}
+.pl-btn[aria-pressed="true"] .pl-play{opacity:0;transform:translateX(1px) scale(0.86);}
+.pl-btn[aria-pressed="true"] .pl-pause{opacity:1;transform:scale(1);}
+
+.pl-body{min-width:0;}
+.pl-title{
+  font-family:'DM Mono',monospace;font-size:var(--small);
+  line-height:1.3;color:var(--ink-muted);margin:0 0 6px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pl-bar{
+  height:2px;border-radius:2px;overflow:hidden;
+  background:rgba(30,25,20,0.10);
+}
+.pl-bar i{
+  display:block;height:100%;border-radius:2px;
+  background:var(--accent-r);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .25s linear;
+}
+.pl-out{
+  font-family:'DM Mono',monospace;font-size:var(--small);
+  white-space:nowrap;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .pl-btn,.pl-i{transition:opacity .15s ease;}
+  .pl-btn:active{transform:none;}
+  .pl-bar i{transition:none;}
+}
+
+/* The embed is the audio element. Clipped, not display:none -- a hidden
+   iframe can have its media suspended by the browser. */
+#sp-host{
+  position:fixed;left:0;bottom:0;width:1px;height:1px;
+  overflow:hidden;clip-path:inset(50%);opacity:0;pointer-events:none;
+}
+
 /* ── the bands ─────────────────────────────────────── */
 /* The ledger holds the two credential bands. Which way it folds depends on
    the shape of the window, not on a breakpoint: on a tall screen it runs
@@ -902,32 +987,74 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    masonry columns: row height is continuous where a column count is
    quantised, so the grid can fill the viewport exactly at any window size
    without cropping a single photograph. */
+/* padding-top clears the fixed nav. Without it the mosaic starts at y=0 and
+   the nav sits on top of the first row of photographs. */
+/* padding-top clears the fixed nav. Without it the mosaic starts at y=0 and
+   the nav sits on top of the first row of photographs.
+   space-between at this level is where the leftover height goes. Twenty-five
+   photographs at integer row counts cannot tile a pane exactly, and the
+   remainder has to surface somewhere; between the hero band and the bottom
+   band it is one seam between two structurally different things, which reads
+   as a deliberate break. Inside a band, between two identical rows, the same
+   pixels read as a hole. */
 .shots.justified{
   column-count:auto;
-  display:flex;flex-direction:column;justify-content:center;
-  gap:7px;padding:0 6px 0 0;
+  display:flex;flex-direction:column;justify-content:space-between;
+  gap:7px;padding:52px 0 0;
 }
 .shots.justified .srow{display:flex;gap:7px;}
 .shots.justified .tile{margin:0;flex:0 0 auto;}
 .shots.justified .tile img{height:100%;object-fit:cover;}
+
+/* The hero band: supporting tiles in a strip on the left, the one
+   photograph on the right, bled to the viewport edge. */
+.shots.justified .hband{display:flex;gap:7px;align-items:stretch;}
+/* the strip spreads to reach the hero's foot; the bottom band never does,
+   because its height is exactly the height of the rows in it */
+.shots.justified .hstrip{
+  display:flex;flex-direction:column;justify-content:space-between;gap:7px;
+}
+.shots.justified .bband{
+  display:flex;flex-direction:column;justify-content:flex-start;gap:7px;
+}
+
+/* Every tile that is not the hero. No shadow, no radius to speak of, no
+   hover: this is the "everything else actively recedes" half of one focal
+   point. They are texture, and texture that lifts on hover is 25 more
+   things asking to be looked at. */
 .tile{
   margin:0 0 7px;
   break-inside:avoid;-webkit-column-break-inside:avoid;
-  overflow:hidden;border-radius:7px;background:#e8e3db;
-  box-shadow:0 1px 3px rgba(45,33,22,0.07);
-  transition:transform .4s cubic-bezier(0.23,1,0.32,1),
-             box-shadow .4s cubic-bezier(0.23,1,0.32,1);
+  overflow:hidden;border-radius:4px;background:#e8e3db;
+  opacity:0.78;
+  transition:opacity .2s ease;
 }
-.tile img{width:100%;height:auto;display:block;border-radius:7px;}
+.tile img{width:100%;height:auto;display:block;border-radius:inherit;}
 @media(hover:hover) and (pointer:fine){
-  .tile:hover{
-    transform:translateY(-3px);
-    box-shadow:0 10px 26px -8px rgba(45,33,22,0.26);
+  /* the only affordance the small ones keep: they come back to full
+     strength under the cursor, so nothing is actually hidden */
+  .tile:hover{opacity:1;}
+}
+
+/* The one photograph that gets depth. */
+.tile.hero{
+  opacity:1;border-radius:9px;
+  box-shadow:0 2px 5px rgba(45,33,22,0.09), 0 18px 44px -16px rgba(45,33,22,0.30);
+  /* 280ms, not the 400 the old uniform tiles used: this is a hover, and a
+     hover that takes four tenths of a second to arrive feels like lag rather
+     than weight */
+  transition:transform .28s cubic-bezier(0.23,1,0.32,1),
+             box-shadow .28s cubic-bezier(0.23,1,0.32,1);
+}
+@media(hover:hover) and (pointer:fine){
+  .tile.hero:hover{
+    transform:translateY(-4px);
+    box-shadow:0 2px 5px rgba(45,33,22,0.09), 0 26px 60px -18px rgba(45,33,22,0.34);
   }
 }
 @media(prefers-reduced-motion:reduce){
-  .tile{transition:none;}
-  .tile:hover{transform:none;}
+  .tile.hero{transition:none;}
+  .tile.hero:hover{transform:none;}
 }
 
 /* the reveal script fades whole cards in; nothing here needs it */
@@ -944,10 +1071,15 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .recs{grid-template-columns:1fr;gap:var(--u);}
 }
 
-/* Short viewports (1366x768, 13" airs). The writing, not the photographs,
-   is what overflows there. Both bands already run in columns of their own,
-   so the only thing left is a single step down in type. */
-@media(min-width:821px) and (max-height:880px){
+/* Short viewports. The writing, not the photographs, is what overflows
+   there. Both bands already run in columns of their own, so the only thing
+   left is a single step down in type.
+   The threshold is 920, not 880: a 900-tall laptop is the commonest desktop
+   there is, and the playlist plus the Dhiman line put the column 137px over
+   at that height. Stepping the scale is what buys those back -- the
+   alternative was deleting a section, and the section nearest the chopping
+   block was the education list Raj has already corrected twice. */
+@media(min-width:821px) and (max-height:920px){
   #about-inner{
     --name:clamp(26px,2.4vw,33px);--sec:18px;--text:13.5px;--small:12.5px;--hand:17px;
     --u:16px;--s:24px;

@@ -1,4 +1,4 @@
-// About — justified photo mosaic.
+// About — one dominant photograph, twenty-five that recede.
 //
 // The mosaic has to fill the viewport on any screen and never crop a photo.
 // A column masonry cannot do both: column count is a whole number, so the
@@ -7,8 +7,14 @@
 //
 // Standard algorithm: for a trial row height, greedily fill rows until each
 // one is wide enough, then scale every row so its widths sum to exactly the
-// available width. Binary-search the trial height until the total lands on
-// the space we actually have.
+// available width. Sweep the trial height until the total lands on the space
+// we actually have.
+//
+// The hero changes the shape of the problem. The pane is split into two
+// regions -- a top band holding a strip of small tiles beside the hero, and
+// a bottom band spanning the full width -- and the same solver runs on each.
+// How many tiles go in the strip is not fixed: we try every split and keep
+// whichever fills both regions closest to exactly.
 
 function initAbout() {
   var shots = document.querySelector('.shots');
@@ -17,19 +23,23 @@ function initAbout() {
   var tiles = Array.prototype.slice.call(shots.querySelectorAll('.tile'));
   if (!tiles.length) return;
 
-  var GAP = 7;
-  // The most a row may be squeezed to make an arrangement fit. object-fit
-  // crops from the centre, so 0.86 takes 7% off the top of a photograph and
-  // 7% off the bottom -- a sliver, nowhere near the old bug where portrait
-  // photos in landscape tiles lost people's heads.
-  var MIN_SCALE = 0.86;
+  var hero = shots.querySelector('.tile.hero');
+  var rest = tiles.filter(function (t) { return t !== hero; });
 
-  var ratios = tiles.map(function (t) {
+  var GAP = 7;
+  // How much of the pane's width the hero may claim. Below about 44% it
+  // stops reading as dominant and becomes merely the biggest tile; above
+  // 60% there is not enough strip left beside it to hold a row.
+  var HERO_MIN = 0.40, HERO_MAX = 0.64;
+
+  function ratioOf(t) {
     var v = parseFloat(t.style.getPropertyValue('--ar'));
     if (v > 0) return v;
     var img = t.querySelector('img');
     return (img && img.naturalWidth) ? img.naturalWidth / img.naturalHeight : 0.75;
-  });
+  }
+
+  var heroRatio = hero ? ratioOf(hero) : 0.8;
 
   // Distance from the top of the mosaic to the bottom of the screen.
   // offsetTop walks up to the scroller, so this survives being scrolled.
@@ -41,49 +51,141 @@ function initAbout() {
     return screenEl.clientHeight - top - 6;
   }
 
-  // Rows for a given trial height. The final row is left at the trial height
-  // rather than stretched: a short last row is normal, a last row scaled from
-  // three photos to full width is a wall.
-  function plan(h, W) {
-    var rows = [], cur = [], sum = 0;
-    for (var i = 0; i < tiles.length; i++) {
-      cur.push(i);
-      sum += ratios[i];
-      if (sum * h + (cur.length - 1) * GAP >= W) { rows.push(cur); cur = []; sum = 0; }
-    }
-    var partial = cur.length > 0;
-    if (partial) rows.push(cur);
+  // ---- packing ---------------------------------------------------------
+  //
+  // Every row is justified to its region's exact width, so a row's height
+  // falls out of the ratios in it and no photograph is ever cropped.
+  //
+  // Rows are chosen by dynamic programming rather than greedily. A greedy
+  // fill closes a row as soon as it is wide enough, which means the tiles
+  // that do not make a full row end up in a short trailing one -- and a short
+  // trailing row here sits in the bottom-right corner of the viewport with a
+  // wedge of bare paper beside it. Partitioning into exactly r rows instead
+  // makes every row full by construction; the only question is how many rows,
+  // and that is cheap to try exhaustively.
 
-    // No orphans. A last row holding one photograph, left-aligned against a
-    // wall of white, looks like a mistake -- so borrow from the row above
-    // until it has company, as long as that row can spare it.
-    if (partial && rows.length > 1) {
-      var last = rows[rows.length - 1], prev = rows[rows.length - 2];
-      while (last.length < 3 && prev.length > 3) last.unshift(prev.pop());
-      // once it is no longer a runt it can justify like any other row
-      if (last.length >= 3) partial = false;
-    }
+  function stack(rows) {
+    var t = 0;
+    rows.forEach(function (r, i) { t += r.h + (i ? GAP : 0); });
+    return t;
+  }
 
-    var out = [], total = 0;
-    for (var r = 0; r < rows.length; r++) {
-      var s = 0;
-      rows[r].forEach(function (ix) { s += ratios[ix]; });
-      var isRunt = partial && r === rows.length - 1;
-      var rh = isRunt
-        ? Math.min((W - (rows[r].length - 1) * GAP) / s, h * 1.3)
-        : (W - (rows[r].length - 1) * GAP) / s;
-      out.push({ items: rows[r], h: rh, stretch: !isRunt });
-      total += rh + GAP;
+  function avgH(rows) {
+    var t = 0;
+    rows.forEach(function (r) { t += r.h; });
+    return t / rows.length;
+  }
+
+  // Rows within a region must be near enough each other that none of them
+  // reads as a different kind of thing.
+  function even(rows) {
+    var a = avgH(rows);
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i].h < a * 0.74 || rows[i].h > a * 1.36) return false;
     }
-    return { rows: out, total: total - GAP };
+    return true;
+  }
+
+  // prefix sums of the ratios, so a row's justified height is O(1)
+  function prefix(list) {
+    var p = [0];
+    for (var i = 0; i < list.length; i++) p.push(p[i] + list[i]);
+    return p;
+  }
+  function rowH(pre, a, b, W) {
+    return (W - (b - a - 1) * GAP) / (pre[b] - pre[a]);
+  }
+
+  // Split tiles [a,b) into exactly r contiguous justified rows, each as close
+  // to `t` tall as the ratios allow. Squared deviation, so one wildly wrong
+  // row costs more than several slightly wrong ones.
+  function split(pre, a, b, W, r, t) {
+    var n = b - a, i, j, k;
+    if (r < 1 || r > n) return null;
+    var cost = [], cut = [];
+    for (j = 0; j <= r; j++) {
+      cost.push([]); cut.push([]);
+      for (i = 0; i <= n; i++) { cost[j].push(Infinity); cut[j].push(-1); }
+    }
+    cost[0][0] = 0;
+    for (j = 1; j <= r; j++) {
+      for (i = j; i <= n; i++) {
+        for (k = j - 1; k < i; k++) {
+          if (cost[j - 1][k] === Infinity) continue;
+          var h = rowH(pre, a + k, a + i, W);
+          var c = cost[j - 1][k] + (h - t) * (h - t);
+          if (c < cost[j][i]) { cost[j][i] = c; cut[j][i] = k; }
+        }
+      }
+    }
+    if (cost[r][n] === Infinity) return null;
+    var rows = [];
+    i = n;
+    for (j = r; j >= 1; j--) {
+      k = cut[j][i];
+      var items = [];
+      for (var q = k; q < i; q++) items.push(a + q);
+      rows.unshift({ items: items, h: rowH(pre, a + k, a + i, W), stretch: true });
+      i = k;
+    }
+    return rows;
+  }
+
+  // Every partition of [a,b) into a W x H region that fits and looks even,
+  // one per row count. The caller picks, because which one is best depends on
+  // what the other region is doing.
+  function parts(pre, a, b, W, H) {
+    var out = [];
+    if (H <= 0 || b - a < 1) return out;
+    var maxR = Math.min(6, b - a);
+    for (var r = 1; r <= maxR; r++) {
+      var rows = split(pre, a, b, W, r, (H - (r - 1) * GAP) / r);
+      if (!rows) continue;
+      var total = stack(rows);
+      if (total > H + 0.5 || !even(rows)) continue;
+      out.push({ rows: rows, total: total, r: r, slack: H - total });
+    }
+    return out;
   }
 
   // put every tile back as a direct child so a re-layout starts from scratch
   function unwrap() {
-    var rows = shots.querySelectorAll('.srow');
-    if (!rows.length) return;
+    var made = shots.querySelectorAll('.srow,.hband,.hstrip,.bband');
+    if (!made.length) return;
     tiles.forEach(function (t) { shots.appendChild(t); });
-    Array.prototype.forEach.call(rows, function (r) { r.remove(); });
+    Array.prototype.forEach.call(made, function (r) { r.remove(); });
+  }
+
+  // Render solved rows as .srow elements inside `host`.
+  function paint(host, list, els, rows, W) {
+    rows.forEach(function (r) {
+      var rowEl = document.createElement('div');
+      rowEl.className = 'srow';
+      var h = Math.max(1, Math.floor(r.h));
+      var ws = r.items.map(function (ix) { return Math.max(1, Math.floor(h * list[ix])); });
+
+      // Spread the rounding remainder a pixel at a time across the whole row
+      // rather than dumping it on one tile. Flooring eight tile widths can
+      // lose a dozen pixels between them, and handing all twelve to a single
+      // 49px-wide photograph stretched it by a quarter.
+      if (r.stretch) {
+        var sumW = 0;
+        ws.forEach(function (w) { sumW += w; });
+        var rem = Math.round(W - (r.items.length - 1) * GAP) - sumW;
+        var n = ws.length, step = Math.floor(rem / n), extra = rem - step * n;
+        for (var m = 0; m < n; m++) {
+          ws[m] = Math.max(1, ws[m] + step + (m < extra ? 1 : 0));
+        }
+      }
+
+      r.items.forEach(function (ix, idx) {
+        var el = els[ix];
+        el.style.width = ws[idx] + 'px';
+        el.style.height = h + 'px';
+        rowEl.appendChild(el);
+      });
+      host.appendChild(rowEl);
+    });
   }
 
   function layout() {
@@ -101,68 +203,133 @@ function initAbout() {
     shots.classList.add('justified');
     var cs = getComputedStyle(shots);
     var W = shots.clientWidth - parseFloat(cs.paddingRight || 0) - parseFloat(cs.paddingLeft || 0);
-    var availH = available();
-    if (W <= 0 || availH <= 0) return;
+    var H = available();
+    if (W <= 0 || H <= 0) return;
 
-    // Sweep the trial height rather than bisecting it. A binary search
-    // converges on the boundary between "fits" and "does not", so it only
-    // ever sees the arrangements either side of that one crossing -- and the
-    // arrangement we want here is usually the one just past it, which the
-    // search then throws away. The scan is 173 iterations of an 18-element
-    // loop, which costs nothing.
-    var fits = null, smallest = null, near = null;
-    for (var trial = 70; trial <= 760; trial += 1) {
-      var p = plan(trial, W);
-      // the tallest arrangement that still fits, uncropped
-      if (p.total <= availH) {
-        if (!fits || p.total > fits.total) fits = p;
-      } else if (p.total <= availH / MIN_SCALE) {
-        // ...and the shortest that overshoots by little enough to be
-        // squeezed back in. Scaling it down costs a crop of a few per cent,
-        // which is the difference between a mosaic that fills the page and
-        // one that floats in the middle of it.
-        if (!near || p.total < near.total) near = p;
-      }
-      if (!smallest || p.total < smallest.total) smallest = p;
+    var ratios = rest.map(ratioOf);
+    if (!hero) return;
+
+    // shots.style.height is the border box, so the nav-clearing padding has
+    // to come off before anything is packed into it
+    var inner = H - parseFloat(cs.paddingTop || 0);
+    if (inner <= 0) return;
+
+    // Three things are searched together: how wide the hero is, how many
+    // photographs go in the strip beside it, and how many rows each region
+    // uses. Fixing any one of them first leaves the other two nothing to
+    // trade with -- fixing the hero was what produced a 95px hole in the
+    // bottom band, and fixing the split was what produced the short last row.
+    var pre = prefix(ratios);
+    var N = ratios.length;
+
+    // Solved, not swept.
+    //
+    // Twenty-five photographs at whole row counts cannot tile a fixed pane:
+    // every arrangement lands tens of pixels short, and that remainder has to
+    // show up somewhere as a hole. The way out is one continuous dimension,
+    // and the cheapest one to give up is the hero's height -- it is a
+    // portrait with room above the head and below the elbow, so a few per
+    // cent off it is invisible, where the same few per cent of bare paper in
+    // the middle of the mosaic is the first thing you see.
+    //
+    // So: choose how many photographs go beside the hero and how many rows
+    // each region uses, let the bottom band take its natural height, and give
+    // the hero band exactly the rest. A strip of r rows has total height
+    //     T = stripW * C1 - C2
+    // which is linear in its width, so the width that makes the strip reach
+    // the hero's foot exactly can be solved for rather than hunted. Two
+    // passes settle it, because solving changes the width, which can change
+    // which tiles fall in which row.
+    function shape(rows) {
+      var c1 = 0, c2 = 0;
+      rows.forEach(function (r) {
+        var s = 0;
+        r.items.forEach(function (ix) { s += ratios[ix]; });
+        c1 += 1 / s;
+        c2 += (r.items.length - 1) * GAP / s;
+      });
+      return { c1: c1, c2: c2 - (rows.length - 1) * GAP };
     }
 
-    // 18 photographs at these ratios partition into about three rows or about
-    // four and nothing in between: three leaves ~350px of the pane empty,
-    // four spills over by ~30. Take the four and shrink it -- but only ever
-    // by MIN_SCALE, so no photograph loses more than a sliver.
-    var best = fits || smallest;
-    if (near && (!fits || near.total * MIN_SCALE > fits.total)) best = near;
+    var best = null;
+    for (var k = 3; k <= N - 3; k++) {
+      for (var rB = 1; rB <= 5; rB++) {
+        // the band at its own natural size, aimed at rows of equal height
+        var tB = W / (((N - k) / rB) * 0.75);
+        var Brows = split(pre, k, N, W, rB, tB);
+        if (!Brows || !even(Brows)) continue;
+        var TB = stack(Brows);
+        var TA = inner - GAP - TB;
+        if (TA < inner * 0.26 || TA > inner * 0.84) continue;
 
-    var scale = best.total > availH ? availH / best.total : 1;
+        for (var rA = 1; rA <= 6; rA++) {
+          if (rA > k) continue;
+          var sw = Math.round(W * 0.45), Arows = null, sh = null;
+          for (var pass = 0; pass < 3; pass++) {
+            Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
+            if (!Arows) break;
+            sh = shape(Arows);
+            var solved = (TA + sh.c2) / sh.c1;
+            if (!isFinite(solved) || solved <= 0) { Arows = null; break; }
+            sw = Math.round(solved);
+          }
+          if (!Arows) continue;
+          Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
+          if (!Arows || !even(Arows)) continue;
+          if (Math.abs(stack(Arows) - TA) > 2) continue;
 
-    // Pin the pane to the full height and centre the rows in it, so any
-    // remainder reads as margin above and below, not a dead band at the
-    // bottom.
-    shots.style.height = availH + 'px';
+          var hw = W - sw - GAP;
+          if (hw < W * HERO_MIN || hw > W * HERO_MAX) continue;
 
-    // Explicit row elements rather than flex-wrap. Relying on wrapping meant a
-    // single subpixel of rounding could tip the last tile of a row onto the
-    // next line, and every row after it came out ragged.
+          // how much of the hero this costs. cover crops from the centre, so
+          // the number is the whole crop, split top and bottom
+          var crop = Math.abs(1 - (hw / TA) / heroRatio);
+          if (crop > 0.11) continue;
+
+          // both regions hold the same kind of picture, so they have to be
+          // about the same size as each other, not just internally tidy --
+          // otherwise the strip reads as a second, lesser hero
+          var ha = avgH(Arows), hb = avgH(Brows);
+          if (Math.abs(ha - hb) / Math.max(ha, hb) > 0.3) continue;
+
+          // least crop wins; the tile size is a tie-break so the mosaic does
+          // not collapse to postage stamps when several shapes are equal
+          var score = crop * 100 - Math.min(ha, hb) / 400;
+          if (!best || score < best.score) {
+            best = {
+              top: { rows: Arows }, bot: { rows: Brows, total: TB },
+              score: score, hw: hw, hh: Math.round(TA), sw: sw
+            };
+          }
+        }
+      }
+    }
+    if (!best) return;
+
+    shots.style.height = H + 'px';
     var frag = document.createDocumentFragment();
-    best.rows.forEach(function (r) {
-      var rowEl = document.createElement('div');
-      rowEl.className = 'srow';
-      // Widths come from the unscaled height so the row still spans W
-      // exactly; only the rendered height shrinks, and object-fit:cover
-      // takes the difference off the top and bottom of each photograph.
-      var hw = Math.floor(r.h), h = Math.floor(r.h * scale), used = 0;
-      r.items.forEach(function (ix, idx) {
-        var last = idx === r.items.length - 1;
-        var w = (last && r.stretch)
-          ? Math.max(1, Math.floor(W - used - idx * GAP))   // absorb the rounding
-          : Math.floor(hw * ratios[ix]);
-        used += w;
-        tiles[ix].style.width = w + 'px';
-        tiles[ix].style.height = h + 'px';
-        rowEl.appendChild(tiles[ix]);
-      });
-      frag.appendChild(rowEl);
-    });
+
+    var hband = document.createElement('div');
+    hband.className = 'hband';
+    hband.style.height = best.hh + 'px';
+
+    var strip = document.createElement('div');
+    strip.className = 'hstrip';
+    strip.style.width = best.sw + 'px';
+    paint(strip, ratios, rest, best.top.rows, best.sw);
+    hband.appendChild(strip);
+
+    hero.style.width = best.hw + 'px';
+    hero.style.height = best.hh + 'px';
+    hband.appendChild(hero);
+    frag.appendChild(hband);
+
+    var bband = document.createElement('div');
+    bband.className = 'bband';
+    bband.style.height = Math.round(best.bot.total) + 'px';
+    paint(bband, ratios, rest, best.bot.rows, W);
+    frag.appendChild(bband);
+
     shots.appendChild(frag);
   }
 
@@ -177,5 +344,82 @@ function initAbout() {
     t = setTimeout(layout, 120);
   });
 }
+
+// ── the playlist ─────────────────────────────────────────────────────────
+//
+// No browser will start audio on page load without a gesture, so "autoplay"
+// here means: primed on load, started by the visitor's first click, tap,
+// keypress or scroll -- whichever comes first. If they pause it on purpose we
+// never start it again behind their back.
+//
+// The controller exposes position, duration and paused state, but not the
+// current track's title, so the strip names the playlist instead of the song.
+
+var PLAYLIST_URI = 'spotify:playlist:3AG6YEKfEY5FxRVe3yCU6S';
+
+function initPlayer(IFrameAPI) {
+  var host = document.getElementById('sp-embed');
+  var strip = document.getElementById('player');
+  var btn = document.getElementById('pl-toggle');
+  var fill = document.getElementById('pl-fill');
+  var bar = strip && strip.querySelector('.pl-bar');
+  if (!host || !strip || !btn || !fill) return;
+
+  var ctrl = null;
+  var armed = false;       // has the first gesture been spent
+  var userPaused = false;  // they pressed pause; do not resume for them
+  var duration = 0;
+
+  IFrameAPI.createController(host, { uri: PLAYLIST_URI, width: '100%', height: '80' }, function (c) {
+    ctrl = c;
+    strip.hidden = false;
+
+    c.addListener('playback_update', function (e) {
+      var d = e && e.data; if (!d) return;
+      if (d.duration) duration = d.duration;
+      var p = duration ? Math.min(1, d.position / duration) : 0;
+      // transform, not width: width would relayout the strip 4x a second
+      fill.style.transform = 'scaleX(' + p + ')';
+      if (bar) bar.setAttribute('aria-valuenow', Math.round(p * 100));
+      setPressed(!d.isPaused);
+    });
+  });
+
+  function setPressed(playing) {
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    btn.setAttribute('aria-label', playing ? 'pause the playlist' : 'play the playlist');
+  }
+
+  btn.addEventListener('click', function () {
+    if (!ctrl) return;
+    var playing = btn.getAttribute('aria-pressed') === 'true';
+    userPaused = playing;          // pressing pause is a decision, remember it
+    armed = true;                  // and it counts as the first gesture
+    ctrl.togglePlay();
+  });
+
+  // The first gesture anywhere starts it -- unless that gesture landed on the
+  // player itself, in which case the button's own handler owns it and firing
+  // here as well would play and immediately pause.
+  function kick(e) {
+    if (armed) return;
+    if (e && e.target && e.target.closest && e.target.closest('#player')) { armed = true; return; }
+    armed = true;
+    if (ctrl && !userPaused) ctrl.play();
+  }
+  ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, kick, { passive: true });
+  });
+
+  // Leaving the page stops the music. A real navigation tears the iframe
+  // down on its own; this is for the back/forward cache, which would
+  // otherwise restore the page mid-song.
+  window.addEventListener('pagehide', function () {
+    try { if (ctrl) ctrl.pause(); } catch (err) {}
+  });
+}
+
+// assigned at top level: the API script is async and may run at any moment
+window.onSpotifyIframeApiReady = function (IFrameAPI) { initPlayer(IFrameAPI); };
 
 document.addEventListener('DOMContentLoaded', function () { initAbout(); });
