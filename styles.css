@@ -707,7 +707,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
   --t:8px;
   --u:clamp(18px,2.4vh,30px);
-  --s:clamp(26px,4.4vh,48px);
+  --s:clamp(26px,4.4vh,44px);
 
   display:grid;
   grid-template-columns:minmax(380px,48%) 1fr;
@@ -725,7 +725,12 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    outgrow an overflow:auto parent pushes the overflow above the scroll
    origin, where it cannot be reached. */
 .col{
-  padding:52px 38px var(--t) clamp(20px,3.2vw,48px);
+  /* The nav is 46px tall, so 52px left six pixels between it and the
+     ascenders of a 33px italic. Raj, 2026-08-10: "it's too close to the nav
+     bar." Fluid, because the room to give it is room the column has to find
+     somewhere else, and a 1080-tall screen has less of it spare than a
+     900-tall one does. */
+  padding:clamp(56px,8vh,76px) 38px var(--t) clamp(20px,3.2vw,48px);
   max-width:700px;
   display:flex;flex-direction:column;align-items:stretch;
   align-self:stretch;min-height:100%;
@@ -894,7 +899,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .player{
   /* its own clamp rather than --s: at 1080 tall the section tier is 48px and
      that was the two pixels the column overflowed by */
-  margin-top:auto;padding-top:clamp(18px,2.6vh,34px);
+  margin-top:auto;padding-top:clamp(16px,2.2vh,28px);
   display:grid;grid-template-columns:auto 1fr auto;
   align-items:center;column-gap:14px;
   /* capped, because a progress bar run the full width of the column stops
@@ -1000,7 +1005,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .shots.justified{
   column-count:auto;
   display:flex;flex-direction:column;justify-content:space-between;
-  gap:7px;padding:52px 0 0;
+  gap:7px;padding:clamp(56px,8vh,76px) 0 0;
 }
 .shots.justified .srow{display:flex;gap:7px;}
 .shots.justified .tile{margin:0;flex:0 0 auto;}
@@ -1018,27 +1023,22 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   display:flex;flex-direction:column;justify-content:flex-start;gap:7px;
 }
 
-/* Every tile that is not the hero. No shadow, no radius to speak of, no
-   hover: this is the "everything else actively recedes" half of one focal
-   point. They are texture, and texture that lifts on hover is 25 more
-   things asking to be looked at. */
+/* Every tile that is not the hero. No shadow, no lift, no fade: the
+   photographs are printed at full strength and the hero is simply much
+   bigger than they are. Raj, 2026-08-10: "i dont like the washed look on
+   pictures - the sizing of the main is enough of a focal point." Size is
+   doing the hierarchy on its own, so dimming them was taking the pictures
+   away to make a point that was already made. */
 .tile{
   margin:0 0 7px;
   break-inside:avoid;-webkit-column-break-inside:avoid;
   overflow:hidden;border-radius:4px;background:#e8e3db;
-  opacity:0.78;
-  transition:opacity .2s ease;
 }
 .tile img{width:100%;height:auto;display:block;border-radius:inherit;}
-@media(hover:hover) and (pointer:fine){
-  /* the only affordance the small ones keep: they come back to full
-     strength under the cursor, so nothing is actually hidden */
-  .tile:hover{opacity:1;}
-}
 
 /* The one photograph that gets depth. */
 .tile.hero{
-  opacity:1;border-radius:9px;
+  border-radius:9px;
   box-shadow:0 2px 5px rgba(45,33,22,0.09), 0 18px 44px -16px rgba(45,33,22,0.30);
   /* 280ms, not the 400 the old uniform tiles used: this is a hover, and a
      hover that takes four tenths of a second to arrive feels like lag rather
@@ -1084,7 +1084,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
     --name:clamp(26px,2.4vw,33px);--sec:18px;--text:13.5px;--small:12.5px;--hand:17px;
     --u:16px;--s:24px;
   }
-  .col{padding:52px 34px var(--t) clamp(18px,3vw,42px);}
+  .col{padding:clamp(56px,8vh,76px) 34px var(--t) clamp(18px,3vw,42px);}
   /* at 12.5px the longest skill clears a third-width column, so the list
      loses a row here without anything wrapping */
   .skills{columns:3;}

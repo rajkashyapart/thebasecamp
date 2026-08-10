@@ -23,3 +23,4 @@ Empty. Seeded batch of 9 was folded into TASTE.md on 2026-08-10.
   huge headline, a playlist-as-object, or a merely-bigger tile.
 - **Playlist is "beats by pink"** — his own beats. Autoplay-on-first-interaction
   was his pick over a plain play button.
+- [ ] `2026-08-10` **REJECTED** — "headline should be "hi, i'm raj :')" also it's too close to the nav bar. also, i dont like the washed look on pictures - the sizing of the main is enough of a focal point. also, 2nd and 3rd attached image. run necessary emil skills - also wtv needs me to invoke them, invoke them"

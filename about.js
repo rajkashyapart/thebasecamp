@@ -27,10 +27,12 @@ function initAbout() {
   var rest = tiles.filter(function (t) { return t !== hero; });
 
   var GAP = 7;
-  // How much of the pane's width the hero may claim. Below about 44% it
-  // stops reading as dominant and becomes merely the biggest tile; above
-  // 60% there is not enough strip left beside it to hold a row.
-  var HERO_MIN = 0.40, HERO_MAX = 0.64;
+  // How much of the pane's width the hero may claim. The floor is high on
+  // purpose: Raj, 2026-08-10, "the sizing of the main is enough of a focal
+  // point" -- size is the only thing doing the hierarchy now that the other
+  // photographs are back at full strength, so a hero that drifts down to 42%
+  // of the pane is not merely smaller, it is the hierarchy failing.
+  var HERO_MIN = 0.48, HERO_MAX = 0.64;
 
   function ratioOf(t) {
     var v = parseFloat(t.style.getPropertyValue('--ar'));
@@ -77,11 +79,14 @@ function initAbout() {
   }
 
   // Rows within a region must be near enough each other that none of them
-  // reads as a different kind of thing.
-  function even(rows) {
+  // reads as a different kind of thing. The tolerance is a parameter because
+  // the search relaxes it rather than giving up: returning nothing drops the
+  // whole desktop page into the phone's column layout, which is a 25,000px
+  // scroll, and a slightly uneven row is not worth that.
+  function even(rows, lo, hi) {
     var a = avgH(rows);
     for (var i = 0; i < rows.length; i++) {
-      if (rows[i].h < a * 0.74 || rows[i].h > a * 1.36) return false;
+      if (rows[i].h < a * lo || rows[i].h > a * hi) return false;
     }
     return true;
   }
@@ -251,60 +256,95 @@ function initAbout() {
       return { c1: c1, c2: c2 - (rows.length - 1) * GAP };
     }
 
-    var best = null;
-    for (var k = 3; k <= N - 3; k++) {
-      for (var rB = 1; rB <= 5; rB++) {
-        // the band at its own natural size, aimed at rows of equal height
-        var tB = W / (((N - k) / rB) * 0.75);
-        var Brows = split(pre, k, N, W, rB, tB);
-        if (!Brows || !even(Brows)) continue;
-        var TB = stack(Brows);
-        var TA = inner - GAP - TB;
-        if (TA < inner * 0.26 || TA > inner * 0.84) continue;
+    // Tried at three levels of fussiness rather than once. The envelope
+    // below -- crop, row evenness, size disparity -- is what makes the mosaic
+    // look considered, but a hard reject at every level means some counts of
+    // photographs have no solution at all, and returning nothing drops the
+    // desktop page into the phone's column layout: a 25,000px scroll instead
+    // of a screen. Twenty-four photographs did exactly that. So the caps
+    // loosen until something fits, and only then does it give up.
+    function attempt(cropCap, disp, lo, hi) {
+      var out = null;
+      for (var k = 3; k <= N - 3; k++) {
+        for (var rB = 1; rB <= 5; rB++) {
+          // the band at its own natural size, aimed at rows of equal height
+          var tB = W / (((N - k) / rB) * 0.75);
+          var Brows = split(pre, k, N, W, rB, tB);
+          if (!Brows || !even(Brows, lo, hi)) continue;
+          var TB = stack(Brows);
+          var TA = inner - GAP - TB;
+          if (TA < inner * 0.24 || TA > inner * 0.86) continue;
 
-        for (var rA = 1; rA <= 6; rA++) {
-          if (rA > k) continue;
-          var sw = Math.round(W * 0.45), Arows = null, sh = null;
-          for (var pass = 0; pass < 3; pass++) {
+          for (var rA = 1; rA <= 6; rA++) {
+            if (rA > k) continue;
+            var sw = Math.round(W * 0.45), Arows = null, sh = null;
+            for (var pass = 0; pass < 3; pass++) {
+              Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
+              if (!Arows) break;
+              sh = shape(Arows);
+              var solved = (TA + sh.c2) / sh.c1;
+              if (!isFinite(solved) || solved <= 0) { Arows = null; break; }
+              sw = Math.round(solved);
+            }
+            if (!Arows) continue;
             Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
-            if (!Arows) break;
-            sh = shape(Arows);
-            var solved = (TA + sh.c2) / sh.c1;
-            if (!isFinite(solved) || solved <= 0) { Arows = null; break; }
-            sw = Math.round(solved);
-          }
-          if (!Arows) continue;
-          Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
-          if (!Arows || !even(Arows)) continue;
-          if (Math.abs(stack(Arows) - TA) > 2) continue;
+            if (!Arows || !even(Arows, lo, hi)) continue;
+            if (Math.abs(stack(Arows) - TA) > 2) continue;
 
-          var hw = W - sw - GAP;
-          if (hw < W * HERO_MIN || hw > W * HERO_MAX) continue;
+            var hw = W - sw - GAP;
+            if (hw < W * HERO_MIN || hw > W * HERO_MAX) continue;
 
-          // how much of the hero this costs. cover crops from the centre, so
-          // the number is the whole crop, split top and bottom
-          var crop = Math.abs(1 - (hw / TA) / heroRatio);
-          if (crop > 0.11) continue;
+            // how much of the hero this costs. cover crops from the centre,
+            // so the number is the whole crop, split top and bottom
+            var crop = Math.abs(1 - (hw / TA) / heroRatio);
+            if (crop > cropCap) continue;
 
-          // both regions hold the same kind of picture, so they have to be
-          // about the same size as each other, not just internally tidy --
-          // otherwise the strip reads as a second, lesser hero
-          var ha = avgH(Arows), hb = avgH(Brows);
-          if (Math.abs(ha - hb) / Math.max(ha, hb) > 0.3) continue;
+            // both regions hold the same kind of picture, so they have to be
+            // about the same size as each other, not just internally tidy --
+            // otherwise the strip reads as a second, lesser hero
+            var ha = avgH(Arows), hb = avgH(Brows);
+            if (Math.abs(ha - hb) / Math.max(ha, hb) > disp) continue;
 
-          // least crop wins; the tile size is a tie-break so the mosaic does
-          // not collapse to postage stamps when several shapes are equal
-          var score = crop * 100 - Math.min(ha, hb) / 400;
-          if (!best || score < best.score) {
-            best = {
-              top: { rows: Arows }, bot: { rows: Brows, total: TB },
-              score: score, hw: hw, hh: Math.round(TA), sw: sw
-            };
+            // The biggest hero wins, with the crop it costs charged against
+            // it. Scoring by least crop instead -- which is what this did --
+            // bought a 1% crop with a hero only 42% of the pane wide, paying
+            // in the one thing the page is built around.
+            var score = -hw + crop * 220;
+            if (!out || score < out.score) {
+              out = {
+                top: { rows: Arows }, bot: { rows: Brows, total: TB },
+                score: score, hw: hw, hh: Math.round(TA), sw: sw
+              };
+            }
           }
         }
       }
+      return out;
     }
-    if (!best) return;
+
+    var best = attempt(0.11, 0.36, 0.74, 1.36)
+            || attempt(0.16, 0.44, 0.68, 1.48)
+            || attempt(0.24, 0.58, 0.60, 1.70);
+
+    // Last resort: no hero band at all, just one justified block of every
+    // photograph. Plainer than intended, but it is a page of pictures that
+    // fills the screen rather than a column that runs for twenty screens.
+    if (!best) {
+      var allR = tiles.map(ratioOf), allPre = prefix(allR), flat = null;
+      for (var fr = 3; fr <= 8 && !flat; fr++) {
+        var rows = split(allPre, 0, allR.length, W, fr, (inner - (fr - 1) * GAP) / fr);
+        if (rows && stack(rows) <= inner + 0.5) flat = rows;
+      }
+      if (flat) {
+        shots.style.height = H + 'px';
+        var fband = document.createElement('div');
+        fband.className = 'bband';
+        fband.style.height = Math.round(stack(flat)) + 'px';
+        paint(fband, allR, tiles, flat, W);
+        shots.appendChild(fband);
+      }
+      return;
+    }
 
     shots.style.height = H + 'px';
     var frag = document.createDocumentFragment();
