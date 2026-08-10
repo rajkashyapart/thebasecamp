@@ -880,15 +880,23 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   display:flex;gap:14px;margin-top:var(--od-3);
   align-items:flex-start;touch-action:pan-x;
 }
+/* Sized from height, not width. A row of 9:16 reels stretched across the
+   measure is as tall as the measure is wide, which pushed this screen past
+   the viewport the moment it got a heading. Height-first keeps the row
+   inside the fold at every size and the aspect ratio picks the width. */
 .od-reel{
-  flex:1 1 0;min-width:0;position:relative;
+  flex:0 0 auto;position:relative;
+  height:clamp(160px,32vh,360px);
   aspect-ratio:9 / 16;
   border:0;padding:0;background:#e7e1d8;
   border-radius:10px;overflow:hidden;cursor:pointer;
   box-shadow:0 10px 30px rgba(30,25,20,0.10),0 1px 3px rgba(30,25,20,0.06);
   transition:transform 0.2s cubic-bezier(0.23,1,0.32,1);
-  opacity:0;animation:odReelIn 0.5s cubic-bezier(0.23,1,0.32,1) var(--d,0ms) forwards;
 }
+/* There was a staggered entrance here. Every slide exists at load, so it
+   played to an empty room while the visitor was still on screen one and had
+   always finished by the time they arrived. An animation nobody can see is
+   just a cost. */
 .od-reel img,.od-reel video{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;display:block;
@@ -908,10 +916,6 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .od-reel-play svg{width:13px;height:13px;margin-left:2px;}
 .od-reel.is-playing .od-reel-play{opacity:0;}
-@keyframes odReelIn{
-  from{opacity:0;transform:translateY(10px);}
-  to{opacity:1;transform:translateY(0);}
-}
 
 
 /* ---- the month after: they build it ----
@@ -991,12 +995,20 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   display:grid;grid-template-columns:repeat(7,1fr);
   gap:5px;max-width:250px;
 }
+/* The fill is an opacity change on an overlay, not a background-color
+   transition. background-color repaints; opacity composites. Thirty of them
+   repainting on every drag of the slider is the one place on this page that
+   could actually drop frames. */
 .od-day{
-  aspect-ratio:1;border-radius:2px;
+  position:relative;aspect-ratio:1;border-radius:2px;
   background:rgba(30,25,20,0.07);
-  transition:background-color 0.28s cubic-bezier(0.23,1,0.32,1) var(--d,0ms);
 }
-.od-day.is-on{background:var(--accent-b);}
+.od-day::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--accent-b);opacity:0;
+  transition:opacity 0.28s cubic-bezier(0.23,1,0.32,1) var(--d,0ms);
+}
+.od-day.is-on::after{opacity:1;}
 
 .od-readout{grid-column:2;grid-row:1 / span 2;}
 .od-tier-name{
@@ -1117,7 +1129,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      two and a half and let the row scroll */
   .od-reels{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .od-reels::-webkit-scrollbar{display:none;}
-  .od-reel{flex:0 0 44%;}
+  .od-reel{height:clamp(150px,26vh,240px);}
   /* the month has to be reachable without scrolling, so the headline gives
      up the room -- the thing they came to build is the focal point here */
   .od-inner-price{gap:var(--od-2);}
@@ -1150,7 +1162,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* ---- reduced motion ---- */
 @media(prefers-reduced-motion:reduce){
   .od-track{transition:none;}
-  .od-reel{animation:none;opacity:1;}
+  /* the hover lift is movement, and so is the month's staggered sweep */
+  .od-reel:hover{transform:none;}
+  .od-day::after{transition-delay:0ms;}
   .od-rail-fill{transition:none;}
   #screen-ciad{transition:none;}
 }

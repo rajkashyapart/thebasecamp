@@ -230,27 +230,90 @@ function odBuildReels() {
   });
 }
 
+// Tapping a reel is an explicit request to watch it, so it plays with sound.
+// Autoplay policy allows an unmuted play() inside a user gesture; if a browser
+// refuses anyway, fall back to muted rather than leaving a dead frame. Only one
+// reel is ever playing (odStopReels runs first), so nothing overlaps.
 function odPlay(cell) {
   var src = cell.getAttribute('data-src');
   var v = document.createElement('video');
   v.playsInline = true;
-  v.muted = true;
+  v.muted = false;
+  v.volume = 1;
   v.loop = true;
   v.setAttribute('playsinline', '');
   cell.appendChild(v);
   cell.classList.add('is-playing');
 
+  function start() {
+    var p = v.play();
+    if (p && p.catch) {
+      p.catch(function () {
+        v.muted = true;
+        v.play().catch(function () {});
+      });
+    }
+  }
+
   if (v.canPlayType('application/vnd.apple.mpegurl')) {
     v.src = src;
-    v.play().catch(function () {});
+    start();
   } else if (window.Hls && window.Hls.isSupported()) {
     odHls = new window.Hls({ maxBufferLength: 12 });
     odHls.loadSource(src);
     odHls.attachMedia(v);
-    odHls.on(window.Hls.Events.MANIFEST_PARSED, function () {
-      v.play().catch(function () {});
-    });
+    odHls.on(window.Hls.Events.MANIFEST_PARSED, start);
   }
+}
+
+// ---- the wheel --------------------------------------------------------
+//
+// A trackpad does not send one event per gesture, it sends a burst and then a
+// long inertia tail. Firing per event walks four slides on one flick, so the
+// deck accumulates delta to a threshold, moves once, then stays locked until
+// the stream actually stops -- the tail extends the lock rather than queueing
+// another move. One gesture, one slide.
+
+function odAttachWheel() {
+  var acc = 0, lock = false, unlock = null;
+  var THRESHOLD = 60;   // a light nudge should not move the page
+  var SETTLE = 520;     // the slide takes 480ms; let it land first
+  var QUIET = 140;      // how long the wheel must be silent before unlocking
+
+  function relock(ms) {
+    window.clearTimeout(unlock);
+    unlock = window.setTimeout(function () { lock = false; acc = 0; }, ms);
+  }
+
+  OD.deck.addEventListener('wheel', function (e) {
+    // A slide tall enough to scroll owns the wheel until it reaches its edge.
+    // Taking it earlier would trap content the visitor cannot reach.
+    var slide = document.querySelectorAll('.od-slide')[OD.i];
+    if (slide && slide.scrollHeight > slide.clientHeight + 2) {
+      var atTop = slide.scrollTop <= 0;
+      var atEnd = slide.scrollTop + slide.clientHeight >= slide.scrollHeight - 2;
+      if ((e.deltaY < 0 && !atTop) || (e.deltaY > 0 && !atEnd)) return;
+    }
+
+    var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!d) return;
+    e.preventDefault();
+
+    if (lock) { acc = 0; relock(QUIET); return; }
+
+    acc += d;
+    if (Math.abs(acc) < THRESHOLD) return;
+
+    var dir = acc > 0 ? 1 : -1;
+    acc = 0;
+    // Nowhere to go at the ends -- don't start a lock for a move that cannot
+    // happen, or the deck feels stuck for half a second.
+    if ((dir > 0 && OD.i === OD.n - 1) || (dir < 0 && OD.i === 0)) return;
+
+    lock = true;
+    odGo(OD.i + dir, true);
+    relock(SETTLE);
+  }, { passive: false });
 }
 
 // ---- the month --------------------------------------------------------
@@ -266,8 +329,10 @@ function odBuildMonth() {
   var wrap = document.getElementById('od-month');
   if (!wrap) return;
   var html = '';
+  // The sweep across the month is charming; a 350ms tail on a drag is not.
+  // 7ms a square keeps the last one inside 200ms of the thumb.
   for (var d = 0; d < OD_MONTH_DAYS; d++) {
-    html += '<i class="od-day" style="--d:' + (d * 12) + 'ms"></i>';
+    html += '<i class="od-day" style="--d:' + (d * 7) + 'ms"></i>';
   }
   wrap.innerHTML = html;
 }
@@ -328,6 +393,7 @@ function ciadInit() {
 
   odBuildReels();
   odAttachDrag();
+  odAttachWheel();
 
   var go = document.getElementById('od-go');
   if (go) go.addEventListener('click', odNext);
