@@ -73,22 +73,38 @@
         </div>
       </section>
 
-      <!-- ── the problem ── -->
+      <!-- ── the problem ──
+           The six disciplines used to be a wrapped list with arrows between
+           them, which claims a loop and draws a line. They are a ring now:
+           same six words, same accent, no start and no exit, and the note
+           that sat under the list is the thing the ring encircles. -->
       <section class="od-slide" aria-label="the problem">
-        <div class="od-inner">
-          <p class="od-eyebrow">the problem</p>
-          <h2 class="od-h"><b class="ac-b">pretty</b> doesn&rsquo;t sell.<br><em><b class="ac-p">relevance</b> does.</em></h2>
-          <p class="od-lead">keeping a page alive isn&rsquo;t social media marketing. we despise how most agencies go about it &mdash; and the ones actually good at this are working with the big brands.</p>
-          <ul class="od-chain">
-            <li>ideation</li>
-            <li>strategy</li>
-            <li>psychology</li>
-            <li>production</li>
-            <li>post</li>
-            <li>distribution</li>
-          </ul>
-          <p class="od-chain-note">every week. forever. <span class="od-hand">that&rsquo;s a full-time job</span></p>
-          <p class="od-lead od-lead-close">the basecamp exists to fill that gap.</p>
+        <div class="od-inner od-inner-split">
+          <div class="od-col">
+            <p class="od-eyebrow">the problem</p>
+            <h2 class="od-h"><b class="ac-b">pretty</b> doesn&rsquo;t sell.<br><em><b class="ac-p">relevance</b> does.</em></h2>
+            <p class="od-lead">keeping a page alive isn&rsquo;t social media marketing. we despise how most agencies go about it &mdash; and the ones actually good at this are working with the big brands.</p>
+            <p class="od-lead od-lead-close">the basecamp exists to fill that gap.</p>
+          </div>
+
+          <div class="od-loop">
+            <svg class="od-loop-ring" viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="od-ring-track" cx="50" cy="50" r="34"/>
+              <!-- pathLength normalises the circumference to 100, so the dash
+                   that hides the stroke is exactly the ring and not a number
+                   that has to be recomputed if the radius ever moves -->
+              <circle class="od-ring-draw" cx="50" cy="50" r="34" pathLength="100"/>
+            </svg>
+            <ul class="od-chain">
+              <li style="--x:0%;--y:-34%;--n:0">ideation</li>
+              <li style="--x:29.4%;--y:-17%;--n:1">strategy</li>
+              <li style="--x:29.4%;--y:17%;--n:2">psychology</li>
+              <li style="--x:0%;--y:34%;--n:3">production</li>
+              <li style="--x:-29.4%;--y:17%;--n:4">post</li>
+              <li style="--x:-29.4%;--y:-17%;--n:5">distribution</li>
+            </ul>
+            <p class="od-loop-mid">every week. forever.<span class="od-hand">that&rsquo;s a full-time job</span></p>
+          </div>
         </div>
       </section>
 
@@ -98,11 +114,24 @@
           <p class="od-eyebrow">how we work</p>
           <h2 class="od-h">we sort <b class="ac-b">positioning</b><br><em>before we roll cameras.</em></h2>
           <p class="od-lead">what does your audience already watch, and what would make them watch you. that gets answered first &mdash; then we batch shoot the month. one day for six videos, three for twenty. edits are handled by me and my team. after it runs, we read what worked and refine the next batch.</p>
-          <ul class="od-spec">
-            <li>1&ndash;3 days a month</li>
-            <li>6&ndash;20 videos</li>
-            <li>then you&rsquo;re done</li>
-          </ul>
+          <!-- The spec list is drawn now. Its three figures were sitting in a
+               row where none of them meant anything: "1-3 days a month" next
+               to "6-20 videos" is two numbers, but under the station it
+               describes it is the whole commitment. The pink tick is the
+               handover -- the one thing on this screen they actually want to
+               know, and the only place it can be said precisely. -->
+          <div class="od-path">
+            <div class="od-path-rail" aria-hidden="true"><i></i></div>
+            <ol class="od-path-steps">
+              <li class="od-step" style="--n:0"><b>positioning</b></li>
+              <li class="od-step" style="--n:1"><b>shoot</b><span>1&ndash;3 days a month</span></li>
+              <li class="od-step" style="--n:2"><b>edit</b><span>6&ndash;20 videos</span></li>
+              <li class="od-step" style="--n:3"><b>read what worked</b></li>
+            </ol>
+            <p class="od-path-out"><span>then you&rsquo;re done</span></p>
+            <div class="od-path-back" aria-hidden="true"></div>
+            <p class="od-path-back-label"><span>refine</span></p>
+          </div>
           <p class="od-hand od-hand-block">and unlimited revisions :&rsquo;)</p>
         </div>
       </section>

@@ -90,6 +90,12 @@ function odGo(next, animate) {
     slides[s].classList.toggle('is-on', s === OD.i);
     slides[s].setAttribute('aria-hidden', s === OD.i ? 'false' : 'true');
   }
+  // The ring on "the problem" and the path on "how we work" draw themselves
+  // the first time you arrive here, then hold still -- the class is added and
+  // never removed. Replaying on every visit would be a nag, and playing on
+  // load would spend the whole animation on a slide nobody is looking at,
+  // which is exactly how the reel stagger died.
+  if (slides[OD.i]) slides[OD.i].classList.add('od-drawn');
 
   odSetLabel(OD.labels[OD.i], changed);
   if (OD.refreshCursor) OD.refreshCursor();
