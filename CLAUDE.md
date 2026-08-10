@@ -129,7 +129,15 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   clear centre. If it looks "placed" instead of "scattered", it's wrong.
   (The Emmi reference image is gone from the repo; it survives as this rule.)
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
-- **CIAD has no dark mode**, and the playground hero is finished. Both closed.
+- **CIAD is a deck, and the deck is the day.** Five screens — 08:00, 09:00,
+  13:00, 19:00, the month after — crossed by one button that morphs from
+  "next" into "book a call". The page has the shape of the product it sells.
+  One action on screen at any moment; the rail doubles as the way to skip
+  ahead. Warm paper like everywhere else, one accent (pink, the same pink
+  that marks this offer on Work With Me). The nine folders, the window
+  manager, the ambient video wall, the logo marquee, the newsletter bar and
+  the dark theme are gone — don't reintroduce any of them.
+- **The playground hero is finished.** Closed.
 - **Type:** tight tracking on large headings, generous line-height on body.
   Cormorant Garamond italic for display, DM Mono for everything else, Caveat for
   marks in Raj's hand. Never swap font family for emphasis mid-thought — he
@@ -190,18 +198,19 @@ called on `DOMContentLoaded`.
 | `hub.html` | "Work With Me" — two offers, side by side | `hub.js` |
 | `about.html` | About | `about.js` |
 | `case-studies.html` | Case studies | inline |
-| `ciad.html` | Content in a Day — folders, pricing, email bar | `ciad.js` (62KB) |
+| `ciad.html` | Outlier Content in a Day — a five-screen deck | `ciad.js` |
 | `portfolio.html` | Full-screen vertical reel | `portfolio.js` |
 
 `styles.css` (2200+ lines) holds every page, sectioned by
 `/* === SCREEN N: NAME === */`. `shared.js` only shows `#pg-nav`. Navigation is
 real `<a href>` links; CSS View Transitions handle the fade. No SPA routing.
 
-Two design systems coexist: **warm paper** (playground, hub, about, portfolio,
-case studies) — `--bg-warm:#f5f2ee`, grain, editorial serif; and **iOS dark
-precision** (CIAD only) — near-black, geometric sans, folder metaphor. Shared
-palette in `:root`: `--accent-r:#ff7bac`, `--accent-b:#0d8aaf`,
-`--accent-g:#3a8c52`. Never the old red or iOS blue.
+**One design system: warm paper.** `--bg-warm:#f5f2ee`, grain, Cormorant
+italic display, DM Mono for everything else. The iOS dark precision system —
+near-black ground, geometric sans, folder metaphor, theme toggle — was CIAD's
+alone and went with the rebuild on 2026-08-10. Palette in `:root`:
+`--accent-r:#ff7bac`, `--accent-b:#0d8aaf`, `--accent-g:#3a8c52`. Never the
+old red or iOS blue.
 
 **Validate JS after every edit** — corruption comes from smart quotes, `/* */`
 comments, Unicode in comments and template literals. Use `//` comments and

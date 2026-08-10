@@ -4,30 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#f5f2ee">
-<meta name="description" content="Raj Kashyap — content strategist, photographer, creator. Building things that feel real.">
+<meta name="description" content="Outlier content in a day — one shoot day, a month of content. Strategy, direction, shooting, editing and scheduling, handled.">
 <meta name="author" content="Raj Kashyap">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://rajkashyap.studio">
-<meta property="og:title" content="Raj Kashyap — never stop playing">
-<meta property="og:description" content="Content strategist, photographer, creator. Building things that feel real.">
+<meta property="og:url" content="https://rajkashyap.studio/ciad.html">
+<meta property="og:title" content="Outlier content in a day — Raj Kashyap">
+<meta property="og:description" content="An outlier isn't luck. It's the one that got planned. One shoot day, thirty days of content.">
 <meta property="og:image" content="https://rajkashyap.studio/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Raj Kashyap">
+<meta name="twitter:title" content="Outlier content in a day">
 <meta name="twitter:image" content="https://rajkashyap.studio/og.jpg">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="canonical" href="https://rajkashyap.studio">
+<link rel="canonical" href="https://rajkashyap.studio/ciad.html">
 <script defer data-domain="rajkashyap.studio" src="https://plausible.io/js/script.js"></script>
-<link rel="preconnect" href="https://iframe.mediadelivery.net">
-<link rel="dns-prefetch" href="https://iframe.mediadelivery.net">
 <link rel="preconnect" href="https://vz-6f9a60bb-593.b-cdn.net">
 <link rel="dns-prefetch" href="https://vz-6f9a60bb-593.b-cdn.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<title>Content in a Day — Raj Kashyap</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Outlier content in a day — Raj Kashyap</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -43,119 +41,113 @@
   </div>
 </nav>
 
-
-<!-- ═══ SCREEN 3: CONTENT IN A DAY ═══ -->
+<!-- ═══ SCREEN 3: OUTLIER CONTENT IN A DAY ═══
+     The deck is the day. Five screens, morning to the month after, crossed in
+     about a minute — the page has the shape of the thing it sells. -->
 <div id="screen-ciad" class="screen">
-<!-- ═══ LOADER ═══ -->
-<div id="loader">
-  <img id="loader-logo" src="/basecamp-logo.png" alt="The Basecamp" draggable="false">
-</div>
 
-<a id="back-home" href="hub.html" class="loading-hidden">← the basecamp</a>
+  <div class="od-deck" id="od-deck">
+    <div class="od-track" id="od-track">
 
-<div class="blob b1"></div>
-<div class="blob b2"></div>
+      <!-- ── 08:00 · the promise ── -->
+      <section class="od-slide" aria-label="the promise">
+        <div class="od-inner">
+          <p class="od-eyebrow">outlier content in a day</p>
+          <h1 class="od-h">an outlier isn&rsquo;t luck.<br><em>it&rsquo;s the one that got planned.</em></h1>
+          <p class="od-lead">we plan it in the morning and shoot it by evening. you post it for a month.</p>
+          <p class="od-meta">45+ brands &middot; one shoot day each</p>
+        </div>
+      </section>
 
-<div id="gallery-layer">
-  <div class="gtrack r1" id="row1"></div>
-  <div class="gtrack r2" id="row2"></div>
-</div>
+      <!-- ── 09:00 · the brief ── -->
+      <section class="od-slide" aria-label="the brief">
+        <div class="od-inner">
+          <p class="od-eyebrow">09:00 &mdash; the brief</p>
+          <h2 class="od-h">most content dies<br><em>before a camera comes out.</em></h2>
+          <p class="od-lead">nobody decided who it was for, so it got made for everyone. the morning goes on that one question &mdash; who you are talking to, and what makes them stop.</p>
+        </div>
+      </section>
 
-<div id="win-overlay" onclick="handleOverlayClick()"></div>
+      <!-- ── 13:00 · the shoot ── -->
+      <section class="od-slide" aria-label="the shoot">
+        <div class="od-inner">
+          <p class="od-eyebrow">13:00 &mdash; the shoot</p>
+          <h2 class="od-h">you show up once.<br><em>that&rsquo;s the whole commitment.</em></h2>
+          <p class="od-lead">we direct it, shoot it, and get the month in one sitting. you are back at your desk by evening.</p>
+          <ul class="od-spec">
+            <li>1 day</li>
+            <li>6&ndash;20 videos</li>
+            <li>0 decisions after</li>
+          </ul>
+        </div>
+      </section>
 
-<div id="desktop"></div>
-<!-- Mobile explore trigger -->
-<div id="mob-explore">
-  <span id="mob-explore-label">see the work</span>
-  <span id="mob-explore-chevron">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="7" y1="1" x2="7" y2="13"/><polyline points="1,7 7,13 13,7"/>
-    </svg>
-  </span>
-</div>
+      <!-- ── 19:00 · out of your hands ── -->
+      <section class="od-slide" aria-label="the work">
+        <div class="od-inner">
+          <p class="od-eyebrow">19:00 &mdash; out of your hands</p>
+          <p class="od-lead">edited, graded, scheduled. you approve on frame.io &mdash; comment on the frame, we fix it. this is what a day makes.</p>
+          <div class="od-reels" id="od-reels"></div>
+        </div>
+      </section>
 
-<!-- Mobile: TLDR pinned near hero -->
-<div id="mob-tldr">
-  <div class="ficon fi-rose">
-    <div class="fglyph" id="mob-tldr-glyph"></div>
-  </div>
-  <div class="flabel">TLDR</div>
-</div>
+      <!-- ── the month after · price ── -->
+      <section class="od-slide" aria-label="the price">
+        <div class="od-inner od-inner-price">
+          <div class="od-price-head">
+            <p class="od-eyebrow">the month after</p>
+            <h2 class="od-h od-h-price">one shoot day.<br><em>thirty days of content.</em></h2>
+          </div>
+          <div class="od-tier-block">
+          <div class="od-tier-controls">
+            <p class="od-note">pay three months upfront &rarr; save 10%</p>
+            <div class="od-cur" role="group" aria-label="currency">
+              <button type="button" class="od-cur-btn is-on" id="od-inr">&#8377; inr</button>
+              <button type="button" class="od-cur-btn" id="od-usd">$ usd</button>
+            </div>
+          </div>
+          <div class="od-tiers">
+            <div class="od-tier">
+              <p class="od-tier-name">foundation</p>
+              <p class="od-tier-price"><span class="od-inr">&#8377;36,995</span><span class="od-usd">$399</span></p>
+              <p class="od-tier-vol">6 videos a month</p>
+              <p class="od-tier-desc">visible, without it eating your week.</p>
+            </div>
+            <div class="od-tier is-pick">
+              <p class="od-tier-name">growth <span class="od-mark">most pick this</span></p>
+              <p class="od-tier-price"><span class="od-inr">&#8377;54,995</span><span class="od-usd">$594</span></p>
+              <p class="od-tier-vol">12 videos a month</p>
+              <p class="od-tier-desc">the volume where inbound starts.</p>
+            </div>
+            <div class="od-tier">
+              <p class="od-tier-name">expansion</p>
+              <p class="od-tier-price"><span class="od-inr">&#8377;1,30,000</span><span class="od-usd">$1,404</span></p>
+              <p class="od-tier-vol">16&ndash;20 videos a month</p>
+              <p class="od-tier-desc">a revenue channel, not a presence.</p>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
 
-<!-- Mobile folder panel -->
-<div id="mob-panel">
-  <div id="mob-panel-header">
-    <div id="mob-back">
-      <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,1 1,7 7,13"/></svg>
-      back
-    </div>
-    <div id="mob-panel-title">Content in a Day</div>
-    <div id="mob-panel-spacer"></div>
-  </div>
-  <div id="mob-blur-overlay"></div>
-  <div id="mob-panel-scroll">
-    <div id="mob-panel-grid"></div>
-  </div>
-</div>
-
-<!-- ═══ THE BRIEF — floating email bar ═══ -->
-<div id="email-bar">
-  <button class="eb-close" onclick="dismissEmailBar()" aria-label="Close">✕</button>
-  <div class="eb-copy"><em>the brief</em> &mdash; what's working in founder content this week. free.</div>
-  <div class="eb-form" id="eb-form">
-    <input type="text" id="eb-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="eb-hp">
-    <input type="email" class="eb-input" id="eb-email" placeholder="your@email.com" aria-label="your email address" autocomplete="email" required>
-    <button class="eb-btn" id="eb-submit" onclick="submitEmail()">send it</button>
-  </div>
-  <div class="eb-fine">no spam. unsubscribe anytime.</div>
-</div>
-
-<div id="trusted">
-  <div class="trust-label">Our work has been trusted by</div>
-  <div class="trust-marquee">
-    <div class="trust-track">
-      <!--
-        ╔══════════════════════════════════════════════════════╗
-        ║  TRUSTED BY LOGOS — HOW TO ADD                      ║
-        ║                                                      ║
-        ║  Replace each <div class="trust-slot"> below with:  ║
-        ║  <img class="trust-logo" src="logo-name.png"        ║
-        ║       alt="Brand Name">                             ║
-        ║                                                      ║
-        ║  IMPORTANT: keep the full list duplicated (both     ║
-        ║  halves) for the seamless infinite scroll to work.  ║
-        ║  The first 4 are the real set; the next 4 are the   ║
-        ║  duplicate. Replace both halves with the same logos.║
-        ╚══════════════════════════════════════════════════════╝
-      -->
-      <!-- MISSING FILES: ICCCF, The Fresh Factory and Insanely Good Coffee
-           were 404ing on the CDN and have no copy in this repo, so they
-           rendered as gaps in the marquee. Drop the PNGs in the repo root
-           and add them back here (all four sets) to restore them. -->
-      <!-- SET 1 -->
-      <img class="trust-logo" src="/Amintiri-Logo-Teal.png" alt="Amintiri">
-      <img class="trust-logo" src="/bira.png" alt="Bira 91">
-      <img class="trust-logo" src="/c+c.png" alt="C+C">
-      <img class="trust-logo" src="/ember.png" alt="Ember">
-      <!-- SET 2 -->
-      <img class="trust-logo" src="/Amintiri-Logo-Teal.png" alt="Amintiri">
-      <img class="trust-logo" src="/bira.png" alt="Bira 91">
-      <img class="trust-logo" src="/c+c.png" alt="C+C">
-      <img class="trust-logo" src="/ember.png" alt="Ember">
-      <!-- SET 3 -->
-      <img class="trust-logo" src="/Amintiri-Logo-Teal.png" alt="Amintiri">
-      <img class="trust-logo" src="/bira.png" alt="Bira 91">
-      <img class="trust-logo" src="/c+c.png" alt="C+C">
-      <img class="trust-logo" src="/ember.png" alt="Ember">
-      <!-- SET 4 -->
-      <img class="trust-logo" src="/Amintiri-Logo-Teal.png" alt="Amintiri">
-      <img class="trust-logo" src="/bira.png" alt="Bira 91">
-      <img class="trust-logo" src="/c+c.png" alt="C+C">
-      <img class="trust-logo" src="/ember.png" alt="Ember">
     </div>
   </div>
-</div>
+
+  <!-- ── the day rail + the one action ── -->
+  <div class="od-bar">
+    <div class="od-rail" id="od-rail" role="tablist" aria-label="the day">
+      <span class="od-rail-line" aria-hidden="true"><i class="od-rail-fill" id="od-rail-fill"></i></span>
+      <button type="button" class="od-tick is-on" data-go="0" role="tab" aria-selected="true">08:00</button>
+      <button type="button" class="od-tick" data-go="1" role="tab" aria-selected="false">09:00</button>
+      <button type="button" class="od-tick" data-go="2" role="tab" aria-selected="false">13:00</button>
+      <button type="button" class="od-tick" data-go="3" role="tab" aria-selected="false">19:00</button>
+      <button type="button" class="od-tick" data-go="4" role="tab" aria-selected="false">the month after</button>
+    </div>
+    <button type="button" class="od-go" id="od-go"><span class="od-go-label" id="od-go-label">start the day &rarr;</span></button>
+  </div>
+
 </div><!-- /#screen-ciad -->
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js"></script>
 <script src="shared.js"></script>
 <script src="ciad.js"></script>
