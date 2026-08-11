@@ -1,20 +1,25 @@
-// About — one dominant photograph, twenty-five that recede.
+// About — one dominant photograph, thirty-five that recede.
 //
-// The mosaic has to fill the viewport on any screen and never crop a photo.
-// A column masonry cannot do both: column count is a whole number, so the
-// height jumps in steps and you get either an overflow or a dead band at the
-// bottom. Justified rows fix it because row height is continuous.
+// The mosaic must never crop a photo. A column masonry cannot manage that and
+// a controlled row height at the same time: column count is a whole number,
+// so the height jumps in steps. Justified rows fix it because row height is
+// continuous.
 //
-// Standard algorithm: for a trial row height, greedily fill rows until each
-// one is wide enough, then scale every row so its widths sum to exactly the
-// available width. Sweep the trial height until the total lands on the space
-// we actually have.
+// Standard algorithm: partition the tiles into rows, then scale every row so
+// its widths sum to exactly the available width; a row's height falls out of
+// the ratios in it.
 //
-// The hero changes the shape of the problem. The pane is split into two
-// regions -- a top band holding a strip of small tiles beside the hero, and
-// a bottom band spanning the full width -- and the same solver runs on each.
-// How many tiles go in the strip is not fixed: we try every split and keep
-// whichever fills both regions closest to exactly.
+// The pane is two regions. The hero band -- a strip of small tiles beside the
+// one big photograph -- fills the first screen exactly, so its strip width has
+// to be *solved* for; how many tiles go in the strip is searched. Everything
+// below it simply flows at a chosen row height and takes whatever height that
+// comes to, because past the fold there is nothing to fit.
+//
+// Until 2026-08-12 the whole mosaic was crushed into one viewport, which put
+// thirty-six photographs at ~125px each. Raj: "are the rest of the images too
+// small on desktop?" -- they were, and none of them could go, so the pane
+// grew instead and the writing column stays put (position:sticky) while they
+// scroll past it.
 
 function initAbout() {
   var shots = document.querySelector('.shots');
@@ -136,23 +141,6 @@ function initAbout() {
     return rows;
   }
 
-  // Every partition of [a,b) into a W x H region that fits and looks even,
-  // one per row count. The caller picks, because which one is best depends on
-  // what the other region is doing.
-  function parts(pre, a, b, W, H) {
-    var out = [];
-    if (H <= 0 || b - a < 1) return out;
-    var maxR = Math.min(6, b - a);
-    for (var r = 1; r <= maxR; r++) {
-      var rows = split(pre, a, b, W, r, (H - (r - 1) * GAP) / r);
-      if (!rows) continue;
-      var total = stack(rows);
-      if (total > H + 0.5 || !even(rows)) continue;
-      out.push({ rows: rows, total: total, r: r, slack: H - total });
-    }
-    return out;
-  }
-
   // put every tile back as a direct child so a re-layout starts from scratch
   function unwrap() {
     var made = shots.querySelectorAll('.srow,.hband,.hstrip,.bband');
@@ -193,6 +181,41 @@ function initAbout() {
     });
   }
 
+  // The hero's two homes. On a phone it sits in the writing, directly under
+  // the clients line, so a photograph arrives inside the first scroll instead
+  // of after every word on the page; on a desktop it goes back to being the
+  // right-hand pane's focal point. Moved rather than duplicated -- a second
+  // copy is a second 1400px download and a second thing to keep in step.
+  var anchor = document.querySelector('.col .clients');
+  var col = document.querySelector('#about-inner .col');
+
+  // Where the writing comes to rest. A column that fits pins at the top; one
+  // that is taller than the viewport pins at minus its overflow, so it scrolls
+  // just far enough to show its last line and stops there. Measured rather
+  // than assumed -- the column is over the viewport at most desktop sizes, and
+  // pinning those at 0 would park the playlist off-screen for the whole page.
+  function pin(on) {
+    if (!col) return;
+    if (!on) { col.classList.remove('pinned'); col.style.top = ''; return; }
+    var screenEl = document.getElementById('screen-about');
+    var vh = screenEl ? screenEl.clientHeight : window.innerHeight;
+    var over = col.scrollHeight - vh;
+    col.style.top = (over > 0 ? -Math.ceil(over) : 0) + 'px';
+    col.classList.add('pinned');
+  }
+
+  function placeHero(inline) {
+    if (!hero) return;
+    if (inline) {
+      if (!anchor) return;
+      hero.classList.add('inline');
+      if (hero.previousElementSibling !== anchor) anchor.insertAdjacentElement('afterend', hero);
+    } else if (hero.classList.contains('inline')) {
+      hero.classList.remove('inline');
+      shots.insertBefore(hero, shots.firstChild);
+    }
+  }
+
   function layout() {
     // On a phone you are scrolling regardless, and bigger pictures beat a
     // tidy fit, so the CSS column layout stays.
@@ -201,9 +224,13 @@ function initAbout() {
       shots.style.height = '';
       unwrap();
       tiles.forEach(function (t) { t.style.width = ''; t.style.height = ''; });
+      placeHero(true);
+      pin(false);
       return;
     }
 
+    placeHero(false);
+    pin(true);
     unwrap();
     shots.classList.add('justified');
     var cs = getComputedStyle(shots);
@@ -256,6 +283,13 @@ function initAbout() {
       return { c1: c1, c2: c2 - (rows.length - 1) * GAP };
     }
 
+    // How tall a row wants to be once nothing is fitting it to a viewport:
+    // four photographs across the pane. That is about twice the size they ran
+    // at when all thirty-six shared one screen, which is the whole point of
+    // letting the pane run past the fold. Derived from W rather than fixed, so
+    // a 2560px monitor gets bigger pictures rather than more of them.
+    var TARGET = W / (4 * 0.75);
+
     // Tried at three levels of fussiness rather than once. The envelope
     // below -- crop, row evenness, size disparity -- is what makes the mosaic
     // look considered, but a hard reject at every level means some counts of
@@ -263,63 +297,82 @@ function initAbout() {
     // desktop page into the phone's column layout: a 25,000px scroll instead
     // of a screen. Twenty-four photographs did exactly that. So the caps
     // loosen until something fits, and only then does it give up.
+    //
+    // Only the hero band is searched now. It is the one region still pinned to
+    // a fixed height -- the first screen -- so it is the only one where the
+    // width has to be solved rather than chosen.
     function attempt(cropCap, disp, lo, hi) {
       var out = null;
-      for (var k = 3; k <= N - 3; k++) {
-        for (var rB = 1; rB <= 5; rB++) {
-          // the band at its own natural size, aimed at rows of equal height
-          var tB = W / (((N - k) / rB) * 0.75);
-          var Brows = split(pre, k, N, W, rB, tB);
-          if (!Brows || !even(Brows, lo, hi)) continue;
-          var TB = stack(Brows);
-          var TA = inner - GAP - TB;
-          if (TA < inner * 0.24 || TA > inner * 0.86) continue;
+      var maxK = Math.min(12, N - 4);
+      for (var k = 2; k <= maxK; k++) {
+        for (var rA = 1; rA <= 5; rA++) {
+          if (rA > k) continue;
+          var sw = Math.round(W * 0.45), Arows = null, sh = null;
+          for (var pass = 0; pass < 3; pass++) {
+            Arows = split(pre, 0, k, sw, rA, (inner - (rA - 1) * GAP) / rA);
+            if (!Arows) break;
+            sh = shape(Arows);
+            var solved = (inner + sh.c2) / sh.c1;
+            if (!isFinite(solved) || solved <= 0) { Arows = null; break; }
+            sw = Math.round(solved);
+          }
+          if (!Arows) continue;
+          Arows = split(pre, 0, k, sw, rA, (inner - (rA - 1) * GAP) / rA);
+          if (!Arows || !even(Arows, lo, hi)) continue;
+          if (Math.abs(stack(Arows) - inner) > 2) continue;
 
-          for (var rA = 1; rA <= 6; rA++) {
-            if (rA > k) continue;
-            var sw = Math.round(W * 0.45), Arows = null, sh = null;
-            for (var pass = 0; pass < 3; pass++) {
-              Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
-              if (!Arows) break;
-              sh = shape(Arows);
-              var solved = (TA + sh.c2) / sh.c1;
-              if (!isFinite(solved) || solved <= 0) { Arows = null; break; }
-              sw = Math.round(solved);
-            }
-            if (!Arows) continue;
-            Arows = split(pre, 0, k, sw, rA, (TA - (rA - 1) * GAP) / rA);
-            if (!Arows || !even(Arows, lo, hi)) continue;
-            if (Math.abs(stack(Arows) - TA) > 2) continue;
+          var hw = W - sw - GAP;
+          if (hw < W * HERO_MIN || hw > W * HERO_MAX) continue;
 
-            var hw = W - sw - GAP;
-            if (hw < W * HERO_MIN || hw > W * HERO_MAX) continue;
+          // how much of the hero this costs. cover crops from the centre,
+          // so the number is the whole crop, split top and bottom
+          var crop = Math.abs(1 - (hw / inner) / heroRatio);
+          if (crop > cropCap) continue;
 
-            // how much of the hero this costs. cover crops from the centre,
-            // so the number is the whole crop, split top and bottom
-            var crop = Math.abs(1 - (hw / TA) / heroRatio);
-            if (crop > cropCap) continue;
+          // the strip and the rows under it hold the same kind of picture, so
+          // they have to be about the same size as each other -- otherwise the
+          // strip reads as a second, lesser hero. It is measured against
+          // TARGET now rather than against a bottom band solved alongside it.
+          var ha = avgH(Arows);
+          if (Math.abs(ha - TARGET) / Math.max(ha, TARGET) > disp) continue;
 
-            // both regions hold the same kind of picture, so they have to be
-            // about the same size as each other, not just internally tidy --
-            // otherwise the strip reads as a second, lesser hero
-            var ha = avgH(Arows), hb = avgH(Brows);
-            if (Math.abs(ha - hb) / Math.max(ha, hb) > disp) continue;
-
-            // The biggest hero wins, with the crop it costs charged against
-            // it. Scoring by least crop instead -- which is what this did --
-            // bought a 1% crop with a hero only 42% of the pane wide, paying
-            // in the one thing the page is built around.
-            var score = -hw + crop * 220;
-            if (!out || score < out.score) {
-              out = {
-                top: { rows: Arows }, bot: { rows: Brows, total: TB },
-                score: score, hw: hw, hh: Math.round(TA), sw: sw
-              };
-            }
+          // The biggest hero wins, with the crop it costs charged against
+          // it. Scoring by least crop instead -- which is what this did --
+          // bought a 1% crop with a hero only 42% of the pane wide, paying
+          // in the one thing the page is built around.
+          var score = -hw + crop * 220;
+          if (!out || score < out.score) {
+            out = { rows: Arows, k: k, score: score, hw: hw, hh: Math.round(inner), sw: sw };
           }
         }
       }
       return out;
+    }
+
+    // Everything below the fold. No height to hit, so the row count is read
+    // off the target instead of searched for: the tiles laid end to end at
+    // TARGET are this many panes wide. Neighbouring counts are tried too,
+    // because rounding can leave the rows visibly off the size asked for.
+    function flow(a, b, t) {
+      if (b - a < 1) return null;
+      var sum = 0, i;
+      for (i = a; i < b; i++) sum += ratios[i];
+      var r = Math.max(1, Math.round(sum * t / W));
+      var tries = [r, r + 1, r - 1, r + 2, r - 2], rows, j;
+      // Tighter than the hero band's tolerance, and tried tight-first. These
+      // rows are stacked directly on each other with a 7px gap, so a row 36%
+      // taller than the one above it -- which the band's own tolerance allows
+      // -- reads as two different grids rather than one. Three photographs at
+      // 245px sitting on four at 182px was exactly that.
+      var bands = [[0.90, 1.11], [0.84, 1.19], [0.74, 1.36]];
+      for (j = 0; j < bands.length; j++) {
+        for (i = 0; i < tries.length; i++) {
+          if (tries[i] < 1 || tries[i] > b - a) continue;
+          rows = split(pre, a, b, W, tries[i], t);
+          if (rows && even(rows, bands[j][0], bands[j][1])) return rows;
+        }
+      }
+      return split(pre, a, b, W, Math.min(b - a, r), t);
     }
 
     var best = attempt(0.11, 0.36, 0.74, 1.36)
@@ -327,26 +380,22 @@ function initAbout() {
             || attempt(0.24, 0.58, 0.60, 1.70);
 
     // Last resort: no hero band at all, just one justified block of every
-    // photograph. Plainer than intended, but it is a page of pictures that
-    // fills the screen rather than a column that runs for twenty screens.
+    // photograph at the target row height. Plainer than intended, but it is a
+    // page of pictures rather than a column of them.
     if (!best) {
-      var allR = tiles.map(ratioOf), allPre = prefix(allR), flat = null;
-      for (var fr = 3; fr <= 8 && !flat; fr++) {
-        var rows = split(allPre, 0, allR.length, W, fr, (inner - (fr - 1) * GAP) / fr);
-        if (rows && stack(rows) <= inner + 0.5) flat = rows;
-      }
+      var allR = tiles.map(ratioOf), allPre = prefix(allR), sumA = 0;
+      for (var q = 0; q < allR.length; q++) sumA += allR[q];
+      var fr = Math.max(1, Math.round(sumA * TARGET / W));
+      var flat = split(allPre, 0, allR.length, W, Math.min(allR.length, fr), TARGET);
       if (flat) {
-        shots.style.height = H + 'px';
         var fband = document.createElement('div');
         fband.className = 'bband';
-        fband.style.height = Math.round(stack(flat)) + 'px';
         paint(fband, allR, tiles, flat, W);
         shots.appendChild(fband);
       }
       return;
     }
 
-    shots.style.height = H + 'px';
     var frag = document.createDocumentFragment();
 
     var hband = document.createElement('div');
@@ -356,7 +405,7 @@ function initAbout() {
     var strip = document.createElement('div');
     strip.className = 'hstrip';
     strip.style.width = best.sw + 'px';
-    paint(strip, ratios, rest, best.top.rows, best.sw);
+    paint(strip, ratios, rest, best.rows, best.sw);
     hband.appendChild(strip);
 
     hero.style.width = best.hw + 'px';
@@ -364,11 +413,13 @@ function initAbout() {
     hband.appendChild(hero);
     frag.appendChild(hband);
 
-    var bband = document.createElement('div');
-    bband.className = 'bband';
-    bband.style.height = Math.round(best.bot.total) + 'px';
-    paint(bband, ratios, rest, best.bot.rows, W);
-    frag.appendChild(bband);
+    var below = flow(best.k, N, TARGET);
+    if (below) {
+      var bband = document.createElement('div');
+      bband.className = 'bband';
+      paint(bband, ratios, rest, below, W);
+      frag.appendChild(bband);
+    }
 
     shots.appendChild(frag);
   }
@@ -377,6 +428,17 @@ function initAbout() {
   // Fonts and images both shift the mosaic's top edge once they land.
   window.addEventListener('load', layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+
+  // The resting offset is measured off the column's height, and that height
+  // is not final when layout() first runs -- the playlist unhides whenever
+  // Spotify's controller is ready, which is after everything else. Without
+  // this the writing pins 65px short of the floor and the playlist hangs in
+  // mid-air. Setting top does not resize the column, so this cannot loop.
+  if (col && window.ResizeObserver) {
+    new ResizeObserver(function () {
+      if (col.classList.contains('pinned')) pin(true);
+    }).observe(col);
+  }
 
   var t = null;
   window.addEventListener('resize', function () {

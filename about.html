@@ -160,8 +160,10 @@
          that pull zone has no image optimizer, so ?width= returns the
          original bytes. They are re-encoded to webp at 1000px and served
          locally, which is what About already did. The tiles are encoded at
-         500px: with 36 of them each renders around 100-140 CSS px, so
-         anything larger is paying for pixels nobody sees.
+         500px. That was sized when all thirty-six shared one screen at
+         100-140 CSS px each; since 2026-08-12 the pane runs past the fold and
+         a tile renders around 245px, which 500px still covers exactly on a 2x
+         display. Anything under 490 would now be visibly soft.
          --ar is each file's true ratio, not a guess: about.js justifies every
          row off that value and only falls back to naturalWidth once the
          images have loaded, so a wrong one breaks the first paint. -->

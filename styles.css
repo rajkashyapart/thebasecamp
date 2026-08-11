@@ -1533,6 +1533,14 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   --u:clamp(18px,2.4vh,30px);
   --s:clamp(26px,4.4vh,44px);
 
+  /* Clearance under the fixed nav, shared by the writing and the mosaic so
+     the first line of type and the top edge of the photographs sit on one
+     line. One value at every height: the short-viewport branch used to cut it
+     back to buy column height, which is why raising it did almost nothing on
+     a 900-tall laptop -- 920 is a max-height, so the commonest desktop there
+     is was taking the short value. The column no longer has to fit anyway. */
+  --top:clamp(80px,10vh,104px);
+
   display:grid;
   grid-template-columns:minmax(380px,48%) 1fr;
   align-items:start;
@@ -1553,12 +1561,27 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      ascenders of a 33px italic. Raj, 2026-08-10: "it's too close to the nav
      bar." Fluid, because the room to give it is room the column has to find
      somewhere else, and a 1080-tall screen has less of it spare than a
-     900-tall one does. */
-  padding:clamp(56px,8vh,76px) 38px var(--t) clamp(20px,3.2vw,48px);
+     900-tall one does.
+     Raised again 2026-08-12 -- still too close at 72px, because the gap you
+     read is not the padding but what is left after Cormorant's italic
+     ascenders overflow their line box. The mosaic takes the same value so the
+     first line of type and the top edge of the photographs share a baseline. */
+  padding:var(--top) 38px var(--t) clamp(20px,3.2vw,48px);
   max-width:700px;
   display:flex;flex-direction:column;align-items:stretch;
-  align-self:stretch;min-height:100%;
+  /* The writing stays while the photographs run past it. align-self:start is
+     required -- a stretched grid item fills the whole (now several-screens
+     tall) track and has nothing to travel within.
+     sticky *top*, with a negative offset -- not sticky bottom, which simply
+     never engages inside #screen-about's scroller (measured: the column just
+     scrolls away and leaves half the page bare). about.js sets top to
+     viewport minus column height, so a column that overflows scrolls exactly
+     far enough to show its last line and pins there, and one that fits pins
+     at 0. Which is the behaviour sticky bottom was supposed to give. */
+  align-self:start;
+  min-height:100vh;
 }
+.col.pinned{position:sticky;top:0;}
 .name{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
   font-size:var(--name);line-height:1.1;letter-spacing:-0.015em;
@@ -1820,16 +1843,17 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    the nav sits on top of the first row of photographs. */
 /* padding-top clears the fixed nav. Without it the mosaic starts at y=0 and
    the nav sits on top of the first row of photographs.
-   space-between at this level is where the leftover height goes. Twenty-five
-   photographs at integer row counts cannot tile a pane exactly, and the
-   remainder has to surface somewhere; between the hero band and the bottom
-   band it is one seam between two structurally different things, which reads
-   as a deliberate break. Inside a band, between two identical rows, the same
-   pixels read as a hole. */
+   No justify-content and no fixed height any more: the mosaic is taller than
+   the screen now, so there is no leftover to distribute. Raj, 2026-08-12,
+   asked for playground's quality here -- pictures you move through rather
+   than pictures fitted to a pane -- while keeping all thirty-six, and the two
+   only reconcile by letting the pane run past the fold. The hero band still
+   fills the first screen exactly; everything under it flows at a row height
+   chosen for the photographs instead of one solved for the viewport. */
 .shots.justified{
   column-count:auto;
-  display:flex;flex-direction:column;justify-content:space-between;
-  gap:7px;padding:clamp(56px,8vh,76px) 0 0;
+  display:flex;flex-direction:column;
+  gap:7px;padding:var(--top) 0 6px;
 }
 .shots.justified .srow{display:flex;gap:7px;}
 .shots.justified .tile{margin:0;flex:0 0 auto;}
@@ -1889,7 +1913,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 @media(max-width:1000px){ .shots{column-count:4;} }
 @media(max-width:1100px){
   #about-inner{grid-template-columns:minmax(300px,44%) 1fr;}
-  .col{padding:34px 30px 20px clamp(20px,3.5vw,40px);}
+  /* was 34px, which is less than the 46px nav it is supposed to clear -- the
+     name sat behind the bar at this width. --top, like everywhere else. */
+  .col{padding:var(--top) 30px 20px clamp(20px,3.5vw,40px);}
   /* below this the ledger's two columns start breaking "visual
      communication" onto its own line, which reads as a wrap bug */
   .recs{grid-template-columns:1fr;gap:var(--u);}
@@ -1908,7 +1934,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
     --name:clamp(26px,2.4vw,33px);--sec:18px;--text:13.5px;--small:12.5px;--hand:17px;
     --u:16px;--s:24px;
   }
-  .col{padding:clamp(56px,8vh,76px) 34px var(--t) clamp(18px,3vw,42px);}
+  .col{padding:var(--top) 34px var(--t) clamp(18px,3vw,42px);}
   /* at 12.5px the longest skill clears a third-width column, so the list
      loses a row here without anything wrapping */
   .skills{columns:3;}
@@ -1922,9 +1948,24 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .col{
     padding:86px 20px 40px;
     max-width:640px;margin:0 auto;
+    /* one column: there is nothing beside the writing to stay put for */
+    min-height:0;
   }
+  .col.pinned{position:static;}
   .recs{grid-template-columns:1fr;}
   .shots{column-count:3;padding:0 14px 18px;}
+
+  /* The hero, lifted out of the mosaic and set under the intro. Raj,
+     2026-08-12: "on phone, about is too text heavy from the start - visitor
+     only sees images after all the text is over." Every word came before
+     every picture; now a photograph lands inside the first scroll and the
+     other thirty-five still close the page. about.js does the move, because
+     the desktop mosaic needs the same element back. */
+  .tile.hero.inline{
+    width:100%;margin:0 0 var(--s);
+    border-radius:6px;
+  }
+  .tile.hero.inline img{width:100%;height:auto;}
 }
 @media(max-width:430px){
   #about-inner{--name:32px;--sec:19px;--text:14.5px;--small:13px;--hand:19px;}

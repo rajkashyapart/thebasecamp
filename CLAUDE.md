@@ -131,6 +131,21 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   bled to the viewport edge. No cards, no tape, no tilt, no drift. The pictures
   carry the personality; the type stays out of their way. One dominant
   photograph is the focal point. Don't scatter it.
+  **The photographs scroll; the writing does not.** Asked on 2026-08-12
+  whether the tiles were too small, Raj wanted playground's quality — moving
+  through pictures rather than pictures fitted to a pane — and *"every
+  picture on the page needs to stay somehow, they're a part of my brand."*
+  The two only reconcile by letting the pane run past the fold: the hero
+  band still fills screen one exactly, everything under it flows at four
+  tiles to the pane width (~245px, twice what thirty-six-in-one-screen
+  gave), and the writing column is `position:sticky`. Sticky *bottom* does
+  not engage inside `#screen-about`'s scroller — measured; the column just
+  scrolls away. `about.js` sets a negative `top` instead, so a column
+  taller than the viewport scrolls exactly far enough to show its last line
+  and pins there. Don't crush the mosaic back into one screen, and don't
+  cut photographs to make it fit.
+  On a phone the hero is moved into the writing, under the clients line:
+  every word used to come before every picture.
   The twenty photographs live in `shots/`, served locally. Raj's originals
   are raw camera JPGs on Bunny — ~150MB for the set, and **that pull zone
   has no image optimizer**, so `?width=` returns the original bytes. There
@@ -193,6 +208,10 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   marks in Raj's hand. Never swap font family for emphasis mid-thought — he
   called that out by name.
 - **Pages fill the viewport at any size.** No dead band under the content.
+  About is the one page that deliberately runs longer than a screen — but
+  the rule still holds on its *first* screen and at its foot: the hero band
+  is sized to the viewport exactly, and the last row of photographs ends
+  flush with the bottom of the scroll.
 
 ---
 
