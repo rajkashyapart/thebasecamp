@@ -150,15 +150,18 @@
     <!-- One dominant photograph, then twenty-five that actively recede.
          Uniform emphasis is the same as no emphasis, so the hero keeps the
          depth, the radius and the hover, and every other tile gives them up. -->
-    <!-- One dominant photograph, then nineteen that actively recede.
+    <!-- One dominant photograph, then thirty-five that actively recede.
          Uniform emphasis is the same as no emphasis, so the hero keeps the
          depth, the radius and the hover, and every other tile gives them up.
 
-         These are Raj's 20 supplied frames (2026-08-11). They arrived as raw
+         These are Raj's supplied frames -- 20 on 2026-08-11, 16 more on
+         2026-08-12. They arrived as raw
          camera JPGs on Bunny totalling ~150MB -- one of them 11.9MB -- and
          that pull zone has no image optimizer, so ?width= returns the
          original bytes. They are re-encoded to webp at 1000px and served
-         locally, which is what About already did: 2.85MB for the set.
+         locally, which is what About already did. The tiles are encoded at
+         500px: with 36 of them each renders around 100-140 CSS px, so
+         anything larger is paying for pixels nobody sees.
          --ar is each file's true ratio, not a guess: about.js justifies every
          row off that value and only falls back to naturalWidth once the
          images have loaded, so a wrong one breaks the first paint. -->
@@ -169,59 +172,107 @@
       <figure class="tile" style="--ar:0.75">
         <img src="/shots/02-shopfront.webp" alt="a pink shopfront and a red shutter" loading="lazy" decoding="async">
       </figure>
-      <figure class="tile" style="--ar:0.75">
-        <img src="/shots/03-trees.webp" alt="trees and open sky" loading="lazy" decoding="async">
+      <figure class="tile" style="--ar:0.8">
+        <img src="/shots/03-camera.webp" alt="raj with a camera" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/04-bar.webp" alt="a bar packed to the ceiling" loading="lazy" decoding="async">
+        <img src="/shots/04-trees.webp" alt="trees and open sky" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/05-hills.webp" alt="hills going under the mist" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/06-bar.webp" alt="a bar packed to the ceiling" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/07-crt.webp" alt="a CRT television in the corner" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.667">
-        <img src="/shots/05-shoreline.webp" alt="a figure on the shoreline" loading="lazy" decoding="async">
+        <img src="/shots/08-shoreline.webp" alt="a figure on the shoreline" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/06-pinboard.webp" alt="a cat asleep under the pinboard" loading="lazy" decoding="async">
+        <img src="/shots/09-waterfall.webp" alt="a waterfall, and someone standing under it" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/07-lanterns.webp" alt="lanterns strung over a night market" loading="lazy" decoding="async">
+        <img src="/shots/10-pinboard.webp" alt="a cat asleep under the pinboard" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/08-drawing.webp" alt="a tree, drawn on grid paper" loading="lazy" decoding="async">
+        <img src="/shots/11-catwall.webp" alt="a cat asleep against a painted wall" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/09-mural.webp" alt="a motorbike parked against a mural" loading="lazy" decoding="async">
+        <img src="/shots/12-lanterns.webp" alt="lanterns strung over a night market" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/10-nursery.webp" alt="a nursery under glass" loading="lazy" decoding="async">
+        <img src="/shots/13-rooftop.webp" alt="a rooftop, and the town below" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/11-hoperich.webp" alt="a doorway sign reading hope you rich" loading="lazy" decoding="async">
+        <img src="/shots/14-drawing.webp" alt="a tree, drawn on grid paper" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/12-walkway.webp" alt="a covered walkway, mid-afternoon" loading="lazy" decoding="async">
+        <img src="/shots/15-baby.webp" alt="a long time ago" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/13-redphone.webp" alt="a lamp, a cassette deck and a red phone" loading="lazy" decoding="async">
+        <img src="/shots/16-mural.webp" alt="a motorbike parked against a mural" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/14-street.webp" alt="a street of murals and outdoor tables" loading="lazy" decoding="async">
+        <img src="/shots/17-doorway.webp" alt="a doorway covered in names" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/15-cyanotype.webp" alt="a cyanotype pinned above the desk" loading="lazy" decoding="async">
+        <img src="/shots/18-nursery.webp" alt="a nursery under glass" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/19-elephant.webp" alt="a black cat on a stone elephant" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/20-hoperich.webp" alt="a doorway sign reading hope you rich" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/21-townlights.webp" alt="town lights, and someone watching them" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/22-walkway.webp" alt="a covered walkway, mid-afternoon" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/23-field.webp" alt="a field, wide open" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/24-redphone.webp" alt="a lamp, a cassette deck and a red phone" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/25-desk.webp" alt="the desk, and a cat on the shelf" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/26-street.webp" alt="a street of murals and outdoor tables" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/27-riverbikes.webp" alt="motorbikes down by the water" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/28-cyanotype.webp" alt="a cyanotype pinned above the desk" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/29-bridge.webp" alt="raj on a bridge above the mist" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.563">
-        <img src="/shots/16-towers.webp" alt="petronas Towers, Kuala Lumpur" loading="lazy" decoding="async">
+        <img src="/shots/30-towers.webp" alt="petronas Towers, Kuala Lumpur" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/17-rain.webp" alt="shophouses in the rain" loading="lazy" decoding="async">
+        <img src="/shots/31-mirror.webp" alt="a wing mirror and a wide river" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/18-vintage.webp" alt="a vintage shop, open front" loading="lazy" decoding="async">
+        <img src="/shots/32-rain.webp" alt="shophouses in the rain" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.75">
-        <img src="/shots/19-lamp.webp" alt="a dim room and one warm lamp" loading="lazy" decoding="async">
+        <img src="/shots/33-cornershop.webp" alt="a corner shop under red lanterns" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/34-vintage.webp" alt="a vintage shop, open front" loading="lazy" decoding="async">
+      </figure>
+      <figure class="tile" style="--ar:0.75">
+        <img src="/shots/35-lamp.webp" alt="a dim room and one warm lamp" loading="lazy" decoding="async">
       </figure>
       <figure class="tile" style="--ar:0.667">
-        <img src="/shots/20-nightout.webp" alt="a night out" loading="lazy" decoding="async">
+        <img src="/shots/36-nightout.webp" alt="a night out" loading="lazy" decoding="async">
       </figure>
     </div><!-- /.shots -->
 
