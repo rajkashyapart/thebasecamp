@@ -48,17 +48,22 @@ var OD_TIERS = [
     cadence: 'one every other day',   volLabel: '16&ndash;20 videos a month' }
 ];
 
-// The figures are Raj's own, lifted from the outcome lines already written
-// for these same five clients in portfolio.js -- not new claims. Each one is
-// against that client's own average post, which is what the line above the
-// row says, so the caption carries the multiple and the name and nothing
-// else. Entities, not glyphs.
+// The figures are Raj's own (2026-08-11) and they REPLACED an earlier set --
+// 22x for Copper + Cloves, 20x for three others -- which were single
+// best-video spikes. These are what each set actually sustained, which is why
+// two of them came down a long way. They are ranges where he gave a range and
+// hedged where he hedged: "up to 5x" does not become "5x".
+//
+// The same five figures are in case-studies.js and portfolio.js. If one moves,
+// all three move, or the site argues with itself.
+//
+// Entities, not glyphs -- this file has been corrupted before by a stray dash.
 var OD_REELS = [
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8', name: 'Kaheen',               mult: '20&times;' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/fddf2783-d99b-440c-b433-0dbcbad3a07c/playlist.m3u8', name: 'Copper + Cloves',      mult: '22&times;' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/a0bd786e-b67c-4c1f-b53a-2a25e3542227/playlist.m3u8', name: 'Upsurge Labs',         mult: '20&times;' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/4c09e742-2c9f-4c7d-918a-4b05c8e30f53/playlist.m3u8', name: 'The Fresh Factory',    mult: '20&times;' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/f7b91a7c-a8b3-46d1-8465-bd9b134db124/playlist.m3u8', name: 'Insanely Good Coffee', mult: '2.5&ndash;3&times;' }
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8', name: 'Kaheen',               mult: '5&ndash;20&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/fddf2783-d99b-440c-b433-0dbcbad3a07c/playlist.m3u8', name: 'Copper + Cloves',      mult: '3&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/a0bd786e-b67c-4c1f-b53a-2a25e3542227/playlist.m3u8', name: 'Upsurge Labs',         mult: '3&ndash;11&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/4c09e742-2c9f-4c7d-918a-4b05c8e30f53/playlist.m3u8', name: 'The Fresh Factory',    mult: '<i>up to</i> 5&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/f7b91a7c-a8b3-46d1-8465-bd9b134db124/playlist.m3u8', name: 'Insanely Good Coffee', mult: '2.5&times;' }
 ];
 
 function odReduced() {

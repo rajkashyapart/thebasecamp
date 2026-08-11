@@ -1089,7 +1089,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    inside the fold at every size and the aspect ratio picks the width. */
 .od-reel{
   flex:0 0 auto;position:relative;
-  height:clamp(160px,32vh,360px);
+  height:clamp(160px,30vh,360px);
   aspect-ratio:9 / 16;
   border:0;padding:0;background:#e7e1d8;
   border-radius:10px;overflow:hidden;cursor:pointer;
@@ -1126,10 +1126,24 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    checkable. */
 /* the tight tier, not a 9 that sits close enough to it to cost a decision
    and communicate nothing */
-.od-reel-cap{margin-top:var(--od-1);display:flex;flex-direction:column;gap:1px;}
+/* the top margin also houses the hanging "up to" above one of the figures */
+.od-reel-cap{margin-top:15px;display:flex;flex-direction:column;gap:1px;}
 .od-reel-cap b{
   display:block;font-weight:400;font-size:20px;line-height:1.15;
   color:var(--accent-r);
+}
+/* "up to" is Raj's hedge on one of the five and it stays -- dropping it to
+   read "5x" would overstate what the set did. But inline it shunts that one
+   figure 55px right, and five figures being compared have to *start*
+   together, so it hangs on its own line above instead and the numbers keep a
+   shared left edge. Absolute, so the four captions without it don't each pay
+   for a line they never use. */
+.od-reel-cap b{position:relative;}
+.od-reel-cap b i{
+  position:absolute;left:0;bottom:100%;
+  font-style:normal;font-size:var(--t-micro);line-height:1.1;
+  letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--ink-muted);
 }
 .od-reel-cap span{
   font-size:var(--t-micro);letter-spacing:var(--tr-label);text-transform:uppercase;
@@ -1353,7 +1367,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      two and a half and let the row scroll */
   .od-reels{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .od-reels::-webkit-scrollbar{display:none;}
-  .od-reel{height:clamp(150px,26vh,240px);}
+  .od-reel{height:clamp(150px,24.5vh,240px);}
   /* A reel is ~103px wide here and "copper + cloves" at label tracking is
      105px, so two neighbouring names ran into each other with 2px between
      them. Tighter tracking keeps every name on one line inside its own reel

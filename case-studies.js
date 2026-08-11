@@ -24,7 +24,7 @@ var CASE_STUDIES = [
     id: 'copper-cloves', client: 'Copper + Cloves', person: 'Sarah Edwards', sector: 'Food brand &middot; Founder',
     teaser: 'Saying the things only she could say.',
     vid: csVid('fddf2783-d99b-440c-b433-0dbcbad3a07c'),
-    metrics: [{ v: '22&times;', l: 'first video vs their average' }],
+    metrics: [{ v: '3&times;', l: 'their average post' }],
     quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'Sarah Edwards', role: 'Founder, Copper + Cloves' },
     content: {
       overview: 'Counter-positioning, ideation, direction, shoot and edit for Sarah Edwards of Copper + Cloves &mdash; all of it handled here.',
@@ -32,14 +32,14 @@ var CASE_STUDIES = [
       insights: 'Everyone is different, and that difference is the one thing a competitor cannot copy. The way out of a red ocean isn&rsquo;t better execution &mdash; it&rsquo;s saying the things only you can say.',
       problem: 'She was competing in the same water as everyone else, on things anyone could have said.',
       solution: 'Counter-positioning first &mdash; finding the things only she could say &mdash; then ideation, direction, shoot and edit.',
-      outcome: 'The first video hit 22&times; the reach of their average post.'
+      outcome: 'The work ran 3&times; their average post.'
     }
   },
   {
     id: 'upsurge-labs', client: 'Upsurge Labs', person: 'Sowmay Jain', sector: 'Tech &middot; Company content',
     teaser: 'A company building in public, at volume, on a 48-hour clock.',
     vid: csVid('46151b93-4758-4055-ab4d-944a470f7c17'),
-    metrics: [{ v: '48', l: 'videos' }, { v: '20&times;', l: 'first edit vs average' }, { v: '3&times;', l: 'run average' }],
+    metrics: [{ v: '48', l: 'videos' }, { v: '3&ndash;11&times;', l: 'their average post' }],
     quote: null,
     content: {
       overview: 'Editing across everything Upsurge Labs was building &mdash; Sowmay, the product, the team, the progress. 48 videos, every cut back inside a 48-hour window.',
@@ -47,14 +47,14 @@ var CASE_STUDIES = [
       insights: 'A company posting about itself is boring unless every cut has a reason to exist. A product demo, a team moment and a founder take each need their own edit logic &mdash; not one template.',
       problem: 'They were generating more raw material than they could turn into content.',
       solution: 'Edit only, at volume and on a clock. 48 videos, each one back inside 48 hours, cut to whatever that particular piece of footage needed rather than to a house format.',
-      outcome: 'The first edit hit 20&times; their average post, and the run settled at up to 3&times; &mdash; with nothing ever waiting on the edit.'
+      outcome: 'The run went 3&ndash;11&times; their average post, with nothing ever waiting on the edit.'
     }
   },
   {
     id: 'fresh-factory', client: 'The Fresh Factory', person: 'Prabhjot Dhami', sector: 'F&amp;B',
     teaser: 'Honest beats styled, when freshness is the whole pitch.',
     vid: csVid('253d1a6a-6912-4c6b-ad40-8371dfcb829e'),
-    metrics: [{ v: '20&times;', l: 'best video vs their average' }],
+    metrics: [{ v: 'up to 5&times;', l: 'their average post' }],
     quote: null,
     content: {
       overview: 'Concept, direction, shoot and edit for Prabhjot Dhami&rsquo;s The Fresh Factory.',
@@ -62,14 +62,14 @@ var CASE_STUDIES = [
       insights: 'People have been trained to distrust food photography. For a brand selling real produce, honest outperforms perfect.',
       problem: 'Their content looked like everyone else&rsquo;s, so it carried none of the thing that made them different.',
       solution: 'Concept, direction, shoot and edit built to show the produce as it is &mdash; because for this brand, that was the whole argument.',
-      outcome: 'One video hit 20&times; the reach of their average post.'
+      outcome: 'The work went up to 5&times; their average post.'
     }
   },
   {
     id: 'insanely-good-coffee', client: 'Insanely Good Coffee', person: 'Aditya Kumar', sector: 'Coffee &middot; Product',
     teaser: 'A full brand content run, without ever being in the room.',
     vid: csVid('48daa49e-172d-4934-9c0d-1136cf223339'),
-    metrics: [{ v: '2.5&ndash;3&times;', l: 'above their average' }],
+    metrics: [{ v: '2.5&times;', l: 'their average post' }],
     quote: null,
     content: {
       overview: 'Positioning, ideation, concept and edit for Aditya Kumar&rsquo;s Insanely Good Coffee &mdash; handled entirely remotely.',
@@ -77,14 +77,14 @@ var CASE_STUDIES = [
       insights: 'Remote only fails when the brief is thin. Lock positioning and concept before anyone picks up a camera and the footage comes back usable the first time.',
       problem: 'Making brand content carry a product I was never physically near.',
       solution: 'Positioning, ideation, concept and edit, run remotely end to end, with the thinking locked before anything was shot.',
-      outcome: 'The set ran 2.5&ndash;3&times; above their average.'
+      outcome: 'The set ran 2.5&times; their average post.'
     }
   },
   {
     id: 'kaheen', client: 'Kaheen', person: 'Shashank Arora', sector: 'Brand &middot; Story',
     teaser: 'Positioning, concept, direction, shoot and edit.',
     vid: csVid('2b6ecca6-96e1-4890-9170-1f60ef2ad41b'),
-    metrics: [{ v: '20&times;', l: 'first reel vs their average' }],
+    metrics: [{ v: '5&ndash;20&times;', l: 'their average post' }],
     quote: null,
     content: {
       overview: 'Positioning, concept, direction, shoot and edit for Shashank Arora&rsquo;s Kaheen.',
@@ -95,14 +95,14 @@ var CASE_STUDIES = [
       insights: '',
       problem: '',
       solution: 'Positioning, concept, direction, shoot and edit &mdash; all of it handled here.',
-      outcome: 'The first reel hit 20&times; the reach of their average post.'
+      outcome: 'The work ran 5&ndash;20&times; their average post.'
     }
   },
   {
     id: 'indian-cacao', client: 'Indian Cacao Festival', person: 'Patricia &middot; Ketaki &middot; Sneha', sector: 'Event &middot; Campaign',
     teaser: 'Making a niche category feel like a room you had to be in.',
     vid: csVid('7badd2e0-7d8c-42db-98a1-57c78b3e29fb'),
-    metrics: [{ v: 'sold out', l: 'the festival' }],
+    metrics: [{ v: '5&ndash;20&times;', l: 'their average post' }, { v: 'sold out', l: 'the festival' }],
     quote: { text: 'i enjoy working with raj, he is very focused and motivated, which makes it a smooth experience. the results of his work are great without too much back and forth.', name: 'Patricia Cosma', role: 'Co-founder, Indian Cacao &amp; Craft Chocolate Festival' },
     content: {
       overview: 'Content direction, on-ground coverage and edit for Patricia, Ketaki &amp; Sneha &mdash; the Indian Cacao &amp; Craft Chocolate Festival.',
@@ -110,7 +110,7 @@ var CASE_STUDIES = [
       insights: 'Niche events don&rsquo;t sell on explanation, they sell on atmosphere. People buy the feeling of being in the room and learn what cacao is once they&rsquo;re in it.',
       problem: 'Selling a category most people didn&rsquo;t know they cared about yet.',
       solution: 'Content direction across the festival, on-ground coverage, and an edit that carried the craft and the energy rather than explaining them.',
-      outcome: 'Content that helped sell the festival out.'
+      outcome: 'The work ran 5&ndash;20&times; their average post, and the festival sold out.'
     }
   }
 ];

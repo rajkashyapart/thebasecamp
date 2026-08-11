@@ -14,7 +14,7 @@ var projects = [
     category: 'content',
     description: 'Content direction and personal branding for Sarah Edwards of Copper + Cloves \u2014 a voice as warm as the brand itself.',
     role: 'counter-positioning, ideation, direction, shoot, edit &mdash; all of it mine',
-    outcome: 'first video hit 22&times; the reach of their average post',
+    outcome: '3&times; their average post, no ad spend',
     items: [
       { type: 'video', src: vid('fddf2783-d99b-440c-b433-0dbcbad3a07c'), size: 'big' },
       { type: 'video', src: vid('7c61d479-6e79-4c32-be60-4d43444bc460'), size: 'tall' },
@@ -28,7 +28,7 @@ var projects = [
     category: 'content',
     description: 'Founder-led content for Sowmay Jain of Upsurge Labs \u2014 a consistent reel series built around positioning, authority, and inbound.',
     role: 'edit &mdash; 48 videos, every cut back inside a 48-hour window',
-    outcome: 'first edit hit 20&times; their average post; the run averaged up to 3&times;',
+    outcome: '3&ndash;11&times; their average post, no ad spend',
     items: [
       { type: 'video', src: vid('46151b93-4758-4055-ab4d-944a470f7c17'), size: 'tall' },
       { type: 'video', src: vid('eb2d2262-f579-4b69-9ea3-5b4db0bcac2c'), size: 'reg' },
@@ -51,7 +51,7 @@ var projects = [
     category: 'fnb',
     description: 'F&amp;B content for Prabhjot Dhami of The Fresh Factory \u2014 fresh produce, honest storytelling.',
     role: 'concept, direction, shoot, edit',
-    outcome: 'one video hit 20&times; the reach of their average post',
+    outcome: 'up to 5&times; their average post, no ad spend',
     items: [
       { type: 'video', src: vid('253d1a6a-6912-4c6b-ad40-8371dfcb829e'), size: 'tall' },
       { type: 'video', src: vid('4c09e742-2c9f-4c7d-918a-4b05c8e30f53'), size: 'reg' },
@@ -66,7 +66,7 @@ var projects = [
     category: 'fnb',
     description: 'Brand and product content for Aditya Kumar of Insanely Good Coffee.',
     role: 'positioning, ideation, concept, edit &mdash; handled entirely remote',
-    outcome: '2.5&ndash;3&times; above their average across the set',
+    outcome: '2.5&times; their average post, no ad spend',
     items: [
       { type: 'video', src: vid('48daa49e-172d-4934-9c0d-1136cf223339'), size: 'tall' },
       { type: 'video', src: vid('a900299f-5c7c-45ea-9f2f-5d076c4a019f'), size: 'reg' },
@@ -80,7 +80,7 @@ var projects = [
     category: 'content',
     description: 'Content and direction for Shashank Arora of Kaheen.',
     role: 'positioning, concept, direction, shoot, edit',
-    outcome: 'first reel hit 20&times; the reach of their average post',
+    outcome: '5&ndash;20&times; their average post, no ad spend',
     items: [
       { type: 'video', src: vid('2b6ecca6-96e1-4890-9170-1f60ef2ad41b'), size: 'tall' },
       { type: 'video', src: vid('fb502bdb-185e-4356-89f0-b9be31eb77cf'), size: 'reg' }
@@ -146,7 +146,7 @@ var projects = [
     category: 'events',
     description: 'Festival content for Patricia, Ketaki &amp; Sneha — the Indian Cacao &amp; Craft Chocolate Festival.',
     role: 'content direction, on-ground coverage, edit',
-    outcome: 'content that helped sell the festival out',
+    outcome: '5&ndash;20&times; their average post; the festival sold out',
     items: [
       { type: 'video', src: vid('7badd2e0-7d8c-42db-98a1-57c78b3e29fb'), size: 'wide' },
       { type: 'video', src: vid('af9add4d-4c87-4f42-99d3-49cc3837dd55'), size: 'reg' },
