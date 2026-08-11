@@ -103,6 +103,13 @@ sizes, accents, spacing tiers, fused proximity, unstyled anchors and dead bands
 against the budgets above. Playwright is resolved from wherever it already lives
 on the machine, so there is still no npm and no `package.json`.
 
+**The phone is 390×706, not 390×844.** 844 is the *device* height; Safari's own
+chrome takes ~138px of it, so 706 is the live viewport a page actually gets
+(and ~664 on a smaller handset). The audit was checking 844 until 2026-08-11,
+which is how CIAD shipped with four of five screens overflowing — headline cut
+off under the nav, copy running under the bar — while every check came back
+green. Never sign off a phone layout at the device height.
+
 Then run the **squint test** on the screenshots — blur until text is illegible:
 
 - How many things still compete? More than 3 is a fail.
@@ -135,7 +142,24 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   doubles as the way to skip ahead. Warm paper like everywhere else. The
   nine folders, the window manager, the ambient video wall, the logo
   marquee, the newsletter bar and the dark theme are gone — don't
-  reintroduce any of them.
+  reintroduce any of them. **Five, not six** — asked whether outliers
+  deserved their own screen, Raj put the figures on "the work" instead.
+- **The two diagrams each replaced something.** The problem's six
+  disciplines are a closed ring (was a wrapped list with arrows); how we
+  work is a stationed line with a dashed return (was a three-item spec
+  list, each figure now under the station it describes). Both draw once on
+  arrival and hold still — linear, because a line being traced is constant
+  motion and an eased one outruns the labels timed off it. Drawings only:
+  he chose them over photographs and over video, and the reels on "the
+  work" stay the deck's only photography.
+- **"the work" is the proof screen.** Each reel carries its multiple —
+  20× / 22× / 2.5–3× — with the client under it and the unit stated once
+  below the row. The figures are Raj's own, already in `portfolio.js` as
+  `outcome:` lines for the same five clients; look there before asking him
+  for numbers. The lead line that used to claim it paid for them.
+- **The bar is one row, including on a phone.** Stacked (rail above a
+  full-width button) it was 168px — a quarter of a 706px viewport before
+  any content. Don't stack it again.
 - **The rail is chapters, not a clock.** It ran 08:00 → 19:00 until Raj
   pointed out that only the smallest package is shootable in a day, which
   made the hours a claim rather than a metaphor. Don't put the times back.

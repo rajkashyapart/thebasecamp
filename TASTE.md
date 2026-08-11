@@ -24,6 +24,9 @@ Exception: a specific, bounded instruction ("make the nav bigger", "these 8 vide
 
 - `2026-08-11` **"the price slider isnt draggable."** It had been "tested" by setting the value programmatically, which never exercises a drag — the deck was capturing the pointer the moment the gesture went sideways. Anything with its own horizontal gesture (a range input, a scrolling row) has to be excluded from the deck's drag handler, and an interactive control is not tested until something has actually dragged it.
 
+- `2026-08-11` **"cluttered on phone"** — sent as a photograph of CIAD's price screen in Safari with the headline cut off under the nav and the disqualifier running under the bar. It had been screenshotted at 390×844 and passed. **844 is the device, not the viewport.** Safari's own chrome takes ~138px of it, so a phone has about **706px** of live height — and against 706 four of the five screens overflowed, one by 153px. Never verify a phone layout at the device height again; 390×706 is the number, and 390×664 is the smaller handset.
+  Two things fell out of it worth keeping. The bar was 168px — a quarter of the screen before a word of content landed — because it stacked the rail above a full-width button; one row, as on desktop, gave every screen ~90px back and fixed most of the overflow on its own. And `.od-slide` was centring its child with `align-items:center`, so anything taller than the viewport overflowed in *both* directions and its top went under the nav where no scrolling reached it — `align-items:safe center` is the fix, and it is a bug anywhere a centred flex child can outgrow its box.
+
 - `2026-06-20` **"i asked for more space between cards and elements. NOT make them tighter."** When Raj says "breathing space", he means *bigger gaps*. Never answer a spacing complaint by tightening. He'd said "negative breathing space between elements" and I read it backwards.
 - `2026-08-09` **"i dont like the font switch from dm mono to cormorant or wtv on work with me. looks ugly."** Don't swap font family for emphasis inside a page. DM Mono + Cormorant are the site's two fonts; switch only at a real structural boundary, never mid-thought.
 - `2026-08-09` **"looks very very basic bro."** Tidy, evenly-spaced grids read as basic to him. His taste runs to scattered, tilted, drifting, textured — the playground canvas is the north star, not a clean bento.
@@ -55,6 +58,10 @@ Exception: a specific, bounded instruction ("make the nav bigger", "these 8 vide
 - `2026-08-10` **The playlist is "beats by pink"** — his own beats — and it autoplays on first interaction rather than waiting behind a play button. His pick.
 - `2026-08-10` **"keep distribution."** Rejected cutting a service line to make a budget fit. Don't buy space by deleting what he actually offers; find the room somewhere else.
 - `2026-08-10` **Work With Me runs two accents on purpose** — blue on "personalised projects", pink on "content in a day". Blue marks the path you scope yourself, pink the recommendation. Same rule as About, where blue marks the work and pink the person.
+
+- `2026-08-11` **CIAD stays five screens, and a graphic has to replace something.** Asked whether slides needed images or graphics, he took drawings over photographs and over video — the reels one screen later are the only photography the deck gets. The pipeline became a closed ring on "the problem" (replacing the wrapped list of six nouns) and a stationed line on "how we work" (replacing the three-item spec list, each figure moving under the station it describes). Both draw once on arrival and hold still. He also chose **not** to add a sixth screen for outliers — the figures went onto "the work", which was always the screen meant to close the headline's loop.
+
+- `2026-08-11` **Proof beats the sentence about the proof.** "the work" had five silent thumbnails under *"standing you out in a red sea…"*. Asked what pays for the outlier figures, he removed that lead. The multiples were already written in `portfolio.js` as outcome lines for the same five clients — **look there before asking him for numbers.**
 
 ## Approved — this landed
 

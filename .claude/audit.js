@@ -53,10 +53,15 @@ const BUDGET = {
   spacingCount: 4                   // tight / unit / between-units / section
 };
 
+// 706, not 844. 844 is the *device* height of the phone Raj holds; Safari's
+// own chrome takes about 138 of it, so 706 is the live viewport a page
+// actually gets. Auditing at 844 is what let CIAD ship with four of its five
+// screens overflowing -- headline cut off under the nav, copy running under
+// the bar -- while every check here came back green. (2026-08-11)
 const VIEWS = [
   ['desktop', 1440, 900],
   ['short',   1366, 768],   // the laptop that exposes dead bands
-  ['phone',    390, 844]
+  ['phone',    390, 706]    // iPhone 14/15 in Safari, both toolbars showing
 ];
 
 // ── args ─────────────────────────────────────────────────────────────────
