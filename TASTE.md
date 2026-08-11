@@ -77,6 +77,7 @@ Cheapest things to get right, most annoying to be told twice.
 - **"45+ brands trusted"** — `2026-08-09`. ~~25+~~ (his own earlier figure, `2026-06-20`) is superseded. He also flagged that this stat "is not standing out ... it's a good thing for the client to see, so somehow needs to be highlighted."
 - **Education** — `2026-08-09`: Don Bosco school (2018), then Don Bosco again for humanities (finished 2020), then St Joseph's, graduated 2023.
 - **Type on About** — `2026-08-09`: italic Cormorant "like the rest of the website", and "make everything lowercase".
+- **The outlier multiples** — `2026-08-11`. He supplied these and confirmed they **replace** what was on the site; the old ones were single best-video spikes and two of them were far too high. ~~C+C 22×~~ → **3×**. ~~TFF 20×~~ → **up to 5×**. ~~Upsurge 20× / 3×~~ → **3–11×**. ~~Kaheen 20×~~ → **5–20×**. ~~IGC 2.5–3×~~ → **2.5×**. Indian Cacao → **5–20×**, and the festival sold out. Two site-wide facts go with them: **no ad spend**, and **almost every shot clears 2× their average**. His hedges are part of the fact — "up to 5×" never becomes "5×". The same figures live in `ciad.js`, `case-studies.js` and `portfolio.js`; move one and you move all three.
 
 ## What he reaches for when he likes something
 

@@ -131,6 +131,14 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   bled to the viewport edge. No cards, no tape, no tilt, no drift. The pictures
   carry the personality; the type stays out of their way. One dominant
   photograph is the focal point. Don't scatter it.
+  The twenty photographs live in `shots/`, served locally. Raj's originals
+  are raw camera JPGs on Bunny — ~150MB for the set, and **that pull zone
+  has no image optimizer**, so `?width=` returns the original bytes. There
+  is no converter on the machine either; they were re-encoded to webp
+  through Playwright's canvas at the size each actually renders (600px for
+  the tiles, 1400px for the hero). Every tile's `--ar` is the file's true
+  ratio, because `about.js` justifies each row off that value before the
+  images have loaded — a guessed one breaks the first paint.
 - **Playground is the scatter page.** Tilt, drift and organic clustering belong
   there and only there — tight clusters, dramatic size variety, edge bleed, a
   clear centre. If it looks "placed" instead of "scattered", it's wrong.
@@ -153,10 +161,14 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   he chose them over photographs and over video, and the reels on "the
   work" stay the deck's only photography.
 - **"the work" is the proof screen.** Each reel carries its multiple —
-  20× / 22× / 2.5–3× — with the client under it and the unit stated once
-  below the row. The figures are Raj's own, already in `portfolio.js` as
-  `outcome:` lines for the same five clients; look there before asking him
-  for numbers. The lead line that used to claim it paid for them.
+  5–20× / 3× / 3–11× / up to 5× / 2.5× — with the client under it and the
+  unit stated once below the row: *× their own average post. no ad spend.*
+  The lead line that used to claim it paid for them.
+  **The same five figures are hard-coded in three files** — `ciad.js`,
+  `case-studies.js` and `portfolio.js`. Move one and you move all three or
+  the site argues with itself. Hedges are part of the fact: "up to 5×"
+  never becomes "5×". Figures being compared must *start* together, which
+  is why that hedge hangs on its own line above its number.
 - **The bar is one row, including on a phone.** Stacked (rail above a
   full-width button) it was 168px — a quarter of a 706px viewport before
   any content. Don't stack it again.
@@ -239,8 +251,8 @@ called on `DOMContentLoaded`.
 | `index.html` | Video intro (Bunny HLS), redirects to playground | inline |
 | `playground.html` | Photo scatter canvas — desktop pan/zoom, mobile vertical feed | `playground.js` |
 | `hub.html` | "Work With Me" — two offers, side by side | `hub.js` |
-| `about.html` | About | `about.js` |
-| `case-studies.html` | Case studies | inline |
+| `about.html` | About — photographs in `shots/` | `about.js` |
+| `case-studies.html` | Case studies | `case-studies.js` |
 | `ciad.html` | Outlier Content in a Day — a five-screen deck | `ciad.js` |
 | `portfolio.html` | Full-screen vertical reel | `portfolio.js` |
 
