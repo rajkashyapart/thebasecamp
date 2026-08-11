@@ -48,12 +48,17 @@ var OD_TIERS = [
     cadence: 'one every other day',   volLabel: '16&ndash;20 videos a month' }
 ];
 
+// The figures are Raj's own, lifted from the outcome lines already written
+// for these same five clients in portfolio.js -- not new claims. Each one is
+// against that client's own average post, which is what the line above the
+// row says, so the caption carries the multiple and the name and nothing
+// else. Entities, not glyphs.
 var OD_REELS = [
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8', name: 'Kaheen' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/fddf2783-d99b-440c-b433-0dbcbad3a07c/playlist.m3u8', name: 'Copper + Cloves' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/a0bd786e-b67c-4c1f-b53a-2a25e3542227/playlist.m3u8', name: 'Upsurge Labs' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/4c09e742-2c9f-4c7d-918a-4b05c8e30f53/playlist.m3u8', name: 'The Fresh Factory' },
-  { src: 'https://vz-6f9a60bb-593.b-cdn.net/f7b91a7c-a8b3-46d1-8465-bd9b134db124/playlist.m3u8', name: 'Insanely Good Coffee' }
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/2b6ecca6-96e1-4890-9170-1f60ef2ad41b/playlist.m3u8', name: 'Kaheen',               mult: '20&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/fddf2783-d99b-440c-b433-0dbcbad3a07c/playlist.m3u8', name: 'Copper + Cloves',      mult: '22&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/a0bd786e-b67c-4c1f-b53a-2a25e3542227/playlist.m3u8', name: 'Upsurge Labs',         mult: '20&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/4c09e742-2c9f-4c7d-918a-4b05c8e30f53/playlist.m3u8', name: 'The Fresh Factory',    mult: '20&times;' },
+  { src: 'https://vz-6f9a60bb-593.b-cdn.net/f7b91a7c-a8b3-46d1-8465-bd9b134db124/playlist.m3u8', name: 'Insanely Good Coffee', mult: '2.5&ndash;3&times;' }
 ];
 
 function odReduced() {
@@ -142,9 +147,11 @@ function odAttachDrag() {
     // Anything that owns its own horizontal gesture keeps it. The volume
     // slider is the reason this list has form controls in it: the deck was
     // capturing the pointer the moment the drag went sideways, so the thumb
-    // never moved and the page slid instead. Every reel is a button, which
-    // is what hands the reel row's sideways scroll back to the row.
-    if (e.target.closest('button, a, input, select, textarea, label')) return;
+    // never moved and the page slid instead. The reel row is named outright
+    // rather than relying on every reel being a button -- each one carries a
+    // caption now, and a drag that started on the figures under the row was
+    // moving the deck instead of scrolling the row.
+    if (e.target.closest('button, a, input, select, textarea, label, .od-reels')) return;
     dragging = true; locked = false; axis = '';
     startX = e.clientX; startY = e.clientY; dx = 0;
     t0 = Date.now();
@@ -251,7 +258,8 @@ function odAttachCursor() {
   // A control owns its own pointer. Over one of those the browser cursor
   // comes back and the deck's half-screen click is off.
   function isControl(t) {
-    return !!(t && t.closest && t.closest('button, a, input, select, textarea, label, .od-bar'));
+    return !!(t && t.closest &&
+      t.closest('button, a, input, select, textarea, label, .od-bar, .od-reels'));
   }
 
   function zoneFor(e) {
@@ -316,12 +324,16 @@ function odBuildReels() {
   for (var i = 0; i < OD_REELS.length; i++) {
     var r = OD_REELS[i];
     var poster = r.src.replace('playlist.m3u8', 'thumbnail.jpg');
-    html += '<button type="button" class="od-reel" data-src="' + r.src + '" ' +
-            'style="--d:' + (i * 45) + 'ms" aria-label="watch ' + r.name + '">' +
+    html += '<figure class="od-reel-fig">' +
+            '<button type="button" class="od-reel" data-src="' + r.src + '" ' +
+            'aria-label="watch ' + r.name + '">' +
             '<img src="' + poster + '" alt="' + r.name + '" loading="lazy">' +
             '<span class="od-reel-play" aria-hidden="true">' +
             '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg>' +
-            '</span></button>';
+            '</span></button>' +
+            '<figcaption class="od-reel-cap">' +
+            '<b>' + r.mult + '</b><span>' + r.name + '</span>' +
+            '</figcaption></figure>';
   }
   wrap.innerHTML = html;
 

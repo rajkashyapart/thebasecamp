@@ -1061,13 +1061,26 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .od-path-back-label span{background:var(--od-ground);padding:0 9px;}
 .od-drawn .od-path-back-label{opacity:1;}
 
-/* ---- 19:00 -- the reels ----
-   The output of the day is the focal point here, so the copy above it stays
-   at reading size and gets out of the way. */
+/* ---- the work ----
+   The deck opens with "only some videos get outlier results" and this is the
+   screen that has to make that word true. It was five silent thumbnails under
+   a sentence claiming they stood out; the figures are Raj's own, already
+   written for these same five clients on the portfolio, and they say it
+   instead. The sentence went -- proof beats the sentence about the proof.
+
+   The unit is stated once, above the row. Five captions each repeating "the
+   reach of their average post" is the same fact said five times, and under a
+   9:16 thumbnail it wraps to three lines and buries the number it qualifies. */
+.od-reels-unit{
+  margin-top:var(--od-1);
+  font-size:var(--t-micro);letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--ink-muted);
+}
 .od-reels{
   display:flex;gap:14px;margin-top:var(--od-3);
   align-items:flex-start;touch-action:pan-x;
 }
+.od-reel-fig{flex:0 0 auto;}
 /* Sized from height, not width. A row of 9:16 reels stretched across the
    measure is as tall as the measure is wide, which pushed this screen past
    the viewport the moment it got a heading. Height-first keeps the row
@@ -1104,6 +1117,20 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .od-reel-play svg{width:13px;height:13px;margin-left:2px;}
 .od-reel.is-playing .od-reel-play{opacity:0;}
+
+/* The multiple is the payoff, so it is pink and set at the figure size the
+   price uses -- no new type size, no new colour. The client's name recedes
+   under it: the number is what is being read, the name is only what makes it
+   checkable. */
+.od-reel-cap{margin-top:9px;display:flex;flex-direction:column;gap:1px;}
+.od-reel-cap b{
+  display:block;font-weight:400;font-size:20px;line-height:1.15;
+  color:var(--accent-r);
+}
+.od-reel-cap span{
+  font-size:var(--t-micro);letter-spacing:var(--tr-label);text-transform:uppercase;
+  color:var(--ink-muted);
+}
 
 
 /* ---- the month after: they build it ----
@@ -1323,6 +1350,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .od-reels{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .od-reels::-webkit-scrollbar{display:none;}
   .od-reel{height:clamp(150px,26vh,240px);}
+  /* A reel is ~103px wide here and "copper + cloves" at label tracking is
+     105px, so two neighbouring names ran into each other with 2px between
+     them. Tighter tracking keeps every name on one line inside its own reel
+     -- letting them wrap instead would cost a line the screen hasn't got. */
+  .od-reel-cap span{letter-spacing:var(--tr-ui);}
   /* the month has to be reachable without scrolling, so the headline gives
      up the room -- the thing they came to build is the focal point here */
   .od-inner-price{gap:var(--od-2);}
