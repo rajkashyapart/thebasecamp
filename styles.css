@@ -2470,27 +2470,55 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.018'/%3E%3C/svg%3E"); }
 
 #cs-listwrap{ position:relative; z-index:2; max-width:920px; margin:0 auto; padding:96px 24px 80px; }
-.cs-head{ text-align:center; margin-bottom:48px; }
+.cs-head{ text-align:center; margin-bottom:56px; }
 .cs-eyebrow{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
 .cs-title{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(40px,8vw,72px); line-height:0.98; color:var(--ink); margin:0; letter-spacing:-0.01em; }
 .cs-title em{ font-style:italic; color:var(--accent-r); }
-.cs-sub{ font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.06em; color:var(--ink-muted); margin-top:18px; }
-#cs-list{ display:flex; flex-direction:column; gap:14px; }
-.cs-card{ display:flex; align-items:center; gap:20px; width:100%; text-align:left; cursor:pointer; font:inherit; color:inherit;
-  background:rgba(255,255,255,0.5); border:1px solid rgba(30,25,20,0.08); border-radius:12px; padding:22px 24px;
+.cs-sub{ font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.06em; color:var(--ink-muted); margin-top:16px; }
+/* 28, not 14. The gap between two cards has to beat the 22px padding inside
+   them or the six read as one blob -- the audit was calling this fused, and it
+   was right. Raj kept the card layout, so the fix is the spacing, not the box. */
+#cs-list{ display:flex; flex-direction:column; gap:28px; }
+.cs-card{ display:flex; align-items:center; gap:16px; width:100%; text-align:left; cursor:pointer; font:inherit; color:inherit;
+  background:rgba(255,255,255,0.5); border:1px solid rgba(30,25,20,0.08); border-radius:12px; padding:20px 24px;
   transition:transform .25s cubic-bezier(0.23,1,0.32,1), box-shadow .25s, border-color .2s, background .2s; }
 @media(hover:hover) and (pointer:fine){ .cs-card:hover{ transform:translateY(-2px); border-color:rgba(30,25,20,0.16); box-shadow:0 16px 40px -18px rgba(45,33,22,0.28); background:rgba(255,255,255,0.72); } }
 .cs-card:active{ transform:translateY(0) scale(0.995); }
-.cs-card-no{ font-family:'DM Mono',monospace; font-size:13px; color:var(--accent-b); letter-spacing:0.1em; flex-shrink:0; }
+/* Muted, not blue. This page runs one accent, and an ordinal is not what it
+   should be spent on -- the multiple is the only figure here that means
+   anything, so pink goes there and nowhere else. 12px, not 13: 12 is already
+   the page's small-type size and two sizes a pixel apart communicate nothing. */
+.cs-card-no{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); letter-spacing:0.1em; flex-shrink:0; }
 .cs-card-body{ flex:1; min-width:0; }
 .cs-card-client{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); line-height:1.05; color:var(--ink); }
-.cs-card-sector{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:5px; }
-.cs-card-teaser{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); margin-top:9px; line-height:1.5; }
+.cs-card-sector{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
+.cs-card-teaser{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); margin-top:8px; line-height:1.5; }
+/* The one figure on the row that carries meaning, so it gets the page's one
+   accent. Fixed width and left-aligned, not right-aligned: six multiples in a
+   column are being compared, and comparison needs them to *start* together --
+   right-aligning "3&times;" against "up to 5&times;" puts the digits in
+   different places. The hedge sits on its own line above the number for the
+   same reason it does on CIAD, and it is never dropped. */
+.cs-card-mult{
+  flex:0 0 auto; width:112px; text-align:left;
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
+  font-size:clamp(22px,3vw,30px); line-height:1; letter-spacing:-0.01em;
+  color:var(--accent-r);
+}
+.cs-card-mult i{
+  display:block; font-style:normal; font-family:'DM Mono',monospace;
+  font-size:9px; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--ink-muted); margin-bottom:3px;
+}
 .cs-card-arrow{ font-size:20px; color:var(--ink-muted); flex-shrink:0; transition:transform .25s, color .2s; }
 @media(hover:hover) and (pointer:fine){ .cs-card:hover .cs-card-arrow{ transform:translateX(4px); color:var(--accent-r); } }
 .cs-foot{ text-align:center; margin-top:56px; }
-.cs-foot-line{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:14px; }
-.cs-cta{ display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:24px; color:var(--accent-b); text-decoration:none; border-bottom:1px solid rgba(13,138,175,0.4); padding-bottom:2px; transition:transform .2s; }
+.cs-foot-line{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
+/* Pink and on the page's own display size. It was 24px blue -- which was both
+   the sixth type size and the last second accent on the page, one rule causing
+   two breaches. It shares the card headline's clamp now, so it adds no size,
+   and it takes the one accent because the action is the payoff. */
+.cs-cta{ display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); color:var(--accent-r); text-decoration:none; border-bottom:1px solid rgba(255,123,172,0.45); padding-bottom:2px; transition:transform .2s; }
 .cs-cta:active{ transform:scale(0.98); }
 
 #cs-detail{ position:relative; z-index:2; max-width:1080px; margin:0 auto; padding:84px 24px 100px; }
@@ -2500,25 +2528,66 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-hero-eyebrow{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
 .cs-hero-client{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,7vw,64px); line-height:0.98; color:var(--ink); margin:0; }
 .cs-hero-person{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(16px,2.4vw,22px); color:var(--ink-muted); margin-top:6px; }
-.cs-layout{ display:grid; grid-template-columns:200px 1fr; gap:48px; align-items:start; }
+.cs-layout{ display:grid; grid-template-columns:200px 1fr; gap:56px; align-items:start; }
 .cs-sidebar{ position:sticky; top:84px; }
 .cs-nav{ display:flex; flex-direction:column; gap:2px; }
 .cs-navlink{ display:flex; align-items:center; gap:10px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.04em; color:var(--ink-muted); text-decoration:none; padding:8px 10px; border-left:2px solid transparent; border-radius:0 6px 6px 0; transition:color .2s, border-color .2s, background .2s; }
 .cs-navlink:hover{ color:var(--ink); background:rgba(30,25,20,0.04); }
 .cs-navlink.active{ color:var(--ink); border-left-color:var(--accent-r); background:rgba(255,123,172,0.07); }
-.cs-navnum{ font-size:9px; color:var(--accent-b); opacity:0.8; }
+/* muted, not blue -- one accent on this page, and it is spent on the multiple */
+.cs-navnum{ font-size:9px; color:var(--ink-muted); opacity:0.8; }
 .cs-content{ min-width:0; }
-.cs-media{ border-radius:10px; overflow:hidden; background:#15120f; box-shadow:0 30px 70px -26px rgba(45,33,22,0.4); margin-bottom:28px; aspect-ratio:16/9; }
+/* The frame takes the video's shape, not the other way round. Raj,
+   2026-08-12: "video ui is horizontal. only 1 video in the entire bank is
+   horizontal. it should adapt according to the dimensions of the videos."
+   It was a hard 16/9 with object-fit:cover, so every vertical reel -- which is
+   all of them bar one -- was being centre-cropped to a letterbox.
+   --vr is a unitless width/height set by case-studies.js from the video's own
+   videoWidth/videoHeight once metadata lands. It defaults to 9/16 because the
+   wrong guess should be the rare case, not the common one. Width is derived
+   from the height cap rather than the other way round, so a tall reel is
+   limited by the viewport and a wide one by the column, and neither distorts. */
+.cs-media{
+  --vr:0.5625;
+  aspect-ratio:var(--vr);
+  width:min(100%, calc(min(72vh, 640px) * var(--vr)));
+  /* starts at the column edge, not centred: it shares a left margin with the
+     section text under it, and a centred portrait floats away from both */
+  margin:0 0 28px;
+  border-radius:10px; overflow:hidden; background:#15120f;
+  box-shadow:0 30px 70px -26px rgba(45,33,22,0.4);
+}
 .cs-media video{ width:100%; height:100%; object-fit:cover; display:block; }
 /* Most clients have one real number, not three. A lone tile stretching the
    full column reads as an empty banner, so tiles size to content and sit left
    instead of filling the row. */
-.cs-metrics{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; justify-content:flex-start; }
+/* Everything else made for that client. Each tile is sized off the video's own
+   ratio, same --vr as the hero frame, so a row of vertical reels reads as a
+   row of vertical reels and the one horizontal cut sits in it at its true
+   shape instead of being cropped to match. */
+.cs-reels{ margin:0 0 40px; }
+.cs-reelrow{
+  display:flex; gap:12px; overflow-x:auto; padding:4px 0 10px;
+  scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.cs-reelrow::-webkit-scrollbar{ display:none; }
+.cs-reel{
+  --vr:0.5625;
+  flex:0 0 auto;
+  height:clamp(200px,32vh,300px);
+  aspect-ratio:var(--vr);
+  border-radius:8px; overflow:hidden; background:#15120f;
+  scroll-snap-align:start;
+}
+.cs-reel video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.cs-metrics{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:40px; justify-content:flex-start; }
 .cs-metric{ flex:1 1 180px; max-width:280px; background:rgba(255,255,255,0.5); border:1px solid rgba(30,25,20,0.08); border-radius:10px; padding:18px 16px; text-align:center; }
 .cs-metric-v{ font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(28px,4vw,40px); color:var(--ink); line-height:1; }
 .cs-metric-l{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
 .cs-section{ padding:22px 0; border-top:1px solid rgba(30,25,20,0.08); scroll-margin-top:84px; }
-.cs-section-label{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent-b); margin-bottom:12px; }
+.cs-section-label{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:12px; }
 .cs-section-body{ font-family:'DM Mono',monospace; font-size:14px; line-height:1.8; color:var(--ink); max-width:62ch; }
 /* .cs-prompt and .cs-quote-empty are gone: they styled internal writing
    prompts that were rendering on the live page. Unwritten content now renders
@@ -2529,19 +2598,30 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-cta-wrap{ margin-top:44px; text-align:center; }
 
 @media(max-width:760px){
-  .cs-layout{ grid-template-columns:1fr; gap:18px; }
+  .cs-layout{ grid-template-columns:1fr; gap:16px; }
   /* min-width:0 is load-bearing. A grid item defaults to min-width:auto, so
      the nowrap nav links forced this track to their full 654px and the whole
      detail view overflowed -- invisibly, because #cs-screen clips overflow-x.
      Zeroing it lets .cs-nav actually scroll instead of pushing the column. */
   .cs-sidebar{ position:sticky; top:50px; z-index:5; min-width:0; margin:0 -18px; padding:0 18px; background:rgba(245,242,238,0.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
-  .cs-nav{ flex-direction:row; gap:4px; overflow-x:auto; padding:10px 18px; margin:0 -18px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  /* No second bleed. .cs-sidebar already pulls out to the screen edge with
+     margin:0 -18px; padding:0 18px, and this row was doing it again -- 18px
+     of negative margin on top of 18px, so the strip ran 36px past the right
+     edge and took the page with it. Raj, 2026-08-12: "the horizontal inline
+     nav bar inside each par spills beyond screen." The row scrolls inside the
+     bleed the sidebar already provides. */
+  .cs-nav{ flex-direction:row; gap:4px; overflow-x:auto; padding:10px 0; margin:0; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
   .cs-nav::-webkit-scrollbar{ display:none; }
   .cs-navlink{ flex-shrink:0; border-left:none; border-bottom:2px solid transparent; border-radius:6px; padding:7px 11px; white-space:nowrap; }
   .cs-navlink.active{ border-left:none; border-bottom-color:var(--accent-r); background:rgba(255,123,172,0.07); }
   #cs-listwrap{ padding:78px 18px 60px; }
   #cs-detail{ padding:68px 18px 80px; }
-  .cs-card{ padding:18px 18px; gap:14px; }
+  .cs-card{ padding:16px 18px; gap:16px; }
+  /* full column width on a phone. The height cap that sizes it on a desktop
+     leaves ~68px of bare paper beside a vertical reel here, and a reel on a
+     phone should be the width of the phone. Height still follows --vr, so the
+     one horizontal cut sits short instead of being blown up. */
+  .cs-media{ width:100%; }
 }
 
 

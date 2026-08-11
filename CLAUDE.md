@@ -223,7 +223,33 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   and the cadence line ("one every 2–3 days") is arithmetic off 30 days, not
   a promise. Their choice rides into the Calendly link. Don't turn it back
   into three cards.
-- **The playground hero is finished.** Closed.
+- **Case studies is the list, and the list carries the proof.** Six studies,
+  not five — CIAD's reel row is the five, this page adds the Indian Cacao
+  Festival. Each row shows its multiple in the page's one accent, in a
+  fixed-width column so six figures *start* together; "up to" hangs on its
+  own line above its number, same as CIAD, and never drops. Raj kept the
+  card layout on 2026-08-12 — *"it's good as of now i think"* — so the
+  fused-proximity failure was fixed with spacing (28px gap over 20px
+  padding), not by removing the box. One accent here: pink on the
+  multiple, the title's *in depth* and the CTA; the row numbers and
+  section labels went to muted ink to pay for it.
+  **`case-studies.html` loads `portfolio.js` for its data.** That file
+  already lists every reel made for every client, so each detail page
+  builds its "everything we made for them" row from it rather than
+  keeping a second copy of the ids. All three of portfolio.js's init
+  functions return early when their own DOM is absent, which is what makes
+  this safe — don't add one that doesn't. The match is
+  **case-insensitive**: this page's client names are lowercase, that
+  file's are still title case, and an exact match silently returns nothing.
+- **Video frames take the video's shape, never the reverse.** `.cs-media`
+  and `.cs-reel` size off a `--vr` that `case-studies.js` reads from the
+  playing video's own `videoWidth/videoHeight`. It was a hard `16/9` with
+  `object-fit:cover`, so every vertical reel — all of them but one — was
+  centre-cropped to a letterbox. Raj, 2026-08-12: *"it should adapt
+  according to the dimensions of the videos."* Default is 9/16, because
+  the wrong guess should be the rare case.
+- **The playground hero is finished.** Closed. *(Reopened 2026-08-12 for
+  centring only — see the playground bullet above. The direction stands.)*
 - **Type:** tight tracking on large headings, generous line-height on body.
   Cormorant Garamond italic for display, DM Mono for everything else, Caveat for
   marks in Raj's hand. Never swap font family for emphasis mid-thought — he

@@ -11,112 +11,216 @@ function csVid(id) { return VZ + id + '/playlist.m3u8'; }
 
 // Section order requested: overview, context, insights, the problem, solution, the outcome
 var CS_SECTIONS = [
-  { key: 'overview', label: 'Overview' },
-  { key: 'context', label: 'Context' },
-  { key: 'insights', label: 'Insights' },
-  { key: 'problem', label: 'The Problem' },
-  { key: 'solution', label: 'Solution' },
-  { key: 'outcome', label: 'The Outcome' }
+  { key: 'overview', label: 'overview' },
+  { key: 'context', label: 'context' },
+  { key: 'insights', label: 'insights' },
+  { key: 'problem', label: 'the problem' },
+  { key: 'solution', label: 'solution' },
+  { key: 'outcome', label: 'the outcome' }
 ];
 
 var CASE_STUDIES = [
   {
-    id: 'copper-cloves', client: 'Copper + Cloves', person: 'Sarah Edwards', sector: 'Food brand &middot; Founder',
-    teaser: 'Saying the things only she could say.',
+    id: 'copper-cloves', client: 'copper + cloves', person: 'sarah edwards', sector: 'food brand &middot; founder',
+    teaser: 'saying the things only she could say.',
     vid: csVid('fddf2783-d99b-440c-b433-0dbcbad3a07c'),
     metrics: [{ v: '3&times;', l: 'their average post' }],
-    quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'Sarah Edwards', role: 'Founder, Copper + Cloves' },
+    quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'sarah edwards', role: 'founder, copper + cloves' },
     content: {
-      overview: 'Counter-positioning, ideation, direction, shoot and edit for Sarah Edwards of Copper + Cloves &mdash; all of it handled here.',
-      context: 'A warm brand in a category where everyone already had good photography and roughly the same things to say.',
-      insights: 'Everyone is different, and that difference is the one thing a competitor cannot copy. The way out of a red ocean isn&rsquo;t better execution &mdash; it&rsquo;s saying the things only you can say.',
-      problem: 'She was competing in the same water as everyone else, on things anyone could have said.',
-      solution: 'Counter-positioning first &mdash; finding the things only she could say &mdash; then ideation, direction, shoot and edit.',
-      outcome: 'The work ran 3&times; their average post.'
+      overview: 'counter-positioning, ideation, direction, shoot and edit for sarah edwards of copper + cloves &mdash; all of it handled here.',
+      context: 'a warm brand in a category where everyone already had good photography and roughly the same things to say.',
+      insights: 'everyone is different, and that difference is the one thing a competitor cannot copy. the way out of a red ocean isn&rsquo;t better execution &mdash; it&rsquo;s saying the things only you can say.',
+      problem: 'she was competing in the same water as everyone else, on things anyone could have said.',
+      solution: 'counter-positioning first &mdash; finding the things only she could say &mdash; then ideation, direction, shoot and edit.',
+      outcome: 'the work ran 3&times; their average post.'
     }
   },
   {
-    id: 'upsurge-labs', client: 'Upsurge Labs', person: 'Sowmay Jain', sector: 'Tech &middot; Company content',
-    teaser: 'A company building in public, at volume, on a 48-hour clock.',
+    id: 'upsurge-labs', client: 'upsurge labs', person: 'sowmay jain', sector: 'tech &middot; company content',
+    teaser: 'a company building in public, at volume, on a 48-hour clock.',
     vid: csVid('46151b93-4758-4055-ab4d-944a470f7c17'),
     metrics: [{ v: '48', l: 'videos' }, { v: '3&ndash;11&times;', l: 'their average post' }],
     quote: null,
     content: {
-      overview: 'Editing across everything Upsurge Labs was building &mdash; Sowmay, the product, the team, the progress. 48 videos, every cut back inside a 48-hour window.',
-      context: 'Upsurge was building fast and wanted all of it on camera &mdash; the founder, the product, the team, the milestones. Someone had to turn a constant stream of raw footage into things people would actually watch.',
-      insights: 'A company posting about itself is boring unless every cut has a reason to exist. A product demo, a team moment and a founder take each need their own edit logic &mdash; not one template.',
-      problem: 'They were generating more raw material than they could turn into content.',
-      solution: 'Edit only, at volume and on a clock. 48 videos, each one back inside 48 hours, cut to whatever that particular piece of footage needed rather than to a house format.',
-      outcome: 'The run went 3&ndash;11&times; their average post, with nothing ever waiting on the edit.'
+      overview: 'editing across everything upsurge labs was building &mdash; sowmay, the product, the team, the progress. 48 videos, every cut back inside a 48-hour window.',
+      context: 'upsurge was building fast and wanted all of it on camera &mdash; the founder, the product, the team, the milestones. someone had to turn a constant stream of raw footage into things people would actually watch.',
+      insights: 'a company posting about itself is boring unless every cut has a reason to exist. a product demo, a team moment and a founder take each need their own edit logic &mdash; not one template.',
+      problem: 'they were generating more raw material than they could turn into content.',
+      solution: 'edit only, at volume and on a clock. 48 videos, each one back inside 48 hours, cut to whatever that particular piece of footage needed rather than to a house format.',
+      outcome: 'the run went 3&ndash;11&times; their average post, with nothing ever waiting on the edit.'
     }
   },
   {
-    id: 'fresh-factory', client: 'The Fresh Factory', person: 'Prabhjot Dhami', sector: 'F&amp;B',
-    teaser: 'Honest beats styled, when freshness is the whole pitch.',
+    id: 'fresh-factory', client: 'the fresh factory', person: 'prabhjot dhami', sector: 'f&amp;b',
+    teaser: 'honest beats styled, when freshness is the whole pitch.',
     vid: csVid('253d1a6a-6912-4c6b-ad40-8371dfcb829e'),
     metrics: [{ v: 'up to 5&times;', l: 'their average post' }],
     quote: null,
     content: {
-      overview: 'Concept, direction, shoot and edit for Prabhjot Dhami&rsquo;s The Fresh Factory.',
-      context: 'A produce business whose entire pitch is freshness, selling into a feed full of styled food that never resembles what actually arrives.',
-      insights: 'People have been trained to distrust food photography. For a brand selling real produce, honest outperforms perfect.',
-      problem: 'Their content looked like everyone else&rsquo;s, so it carried none of the thing that made them different.',
-      solution: 'Concept, direction, shoot and edit built to show the produce as it is &mdash; because for this brand, that was the whole argument.',
-      outcome: 'The work went up to 5&times; their average post.'
+      overview: 'concept, direction, shoot and edit for prabhjot dhami&rsquo;s the fresh factory.',
+      context: 'a produce business whose entire pitch is freshness, selling into a feed full of styled food that never resembles what actually arrives.',
+      insights: 'people have been trained to distrust food photography. for a brand selling real produce, honest outperforms perfect.',
+      problem: 'their content looked like everyone else&rsquo;s, so it carried none of the thing that made them different.',
+      solution: 'concept, direction, shoot and edit built to show the produce as it is &mdash; because for this brand, that was the whole argument.',
+      outcome: 'the work went up to 5&times; their average post.'
     }
   },
   {
-    id: 'insanely-good-coffee', client: 'Insanely Good Coffee', person: 'Aditya Kumar', sector: 'Coffee &middot; Product',
-    teaser: 'A full brand content run, without ever being in the room.',
+    id: 'insanely-good-coffee', client: 'insanely good coffee', person: 'aditya kumar', sector: 'coffee &middot; product',
+    teaser: 'a full brand content run, without ever being in the room.',
     vid: csVid('48daa49e-172d-4934-9c0d-1136cf223339'),
     metrics: [{ v: '2.5&times;', l: 'their average post' }],
     quote: null,
     content: {
-      overview: 'Positioning, ideation, concept and edit for Aditya Kumar&rsquo;s Insanely Good Coffee &mdash; handled entirely remotely.',
-      context: 'A coffee brand and a content lead who were never once in the same room.',
-      insights: 'Remote only fails when the brief is thin. Lock positioning and concept before anyone picks up a camera and the footage comes back usable the first time.',
-      problem: 'Making brand content carry a product I was never physically near.',
-      solution: 'Positioning, ideation, concept and edit, run remotely end to end, with the thinking locked before anything was shot.',
-      outcome: 'The set ran 2.5&times; their average post.'
+      overview: 'positioning, ideation, concept and edit for aditya kumar&rsquo;s insanely good coffee &mdash; handled entirely remotely.',
+      context: 'a coffee brand and a content lead who were never once in the same room.',
+      insights: 'remote only fails when the brief is thin. lock positioning and concept before anyone picks up a camera and the footage comes back usable the first time.',
+      problem: 'making brand content carry a product i was never physically near.',
+      solution: 'positioning, ideation, concept and edit, run remotely end to end, with the thinking locked before anything was shot.',
+      outcome: 'the set ran 2.5&times; their average post.'
     }
   },
   {
-    id: 'kaheen', client: 'Kaheen', person: 'Shashank Arora', sector: 'Brand &middot; Story',
-    teaser: 'Positioning, concept, direction, shoot and edit.',
+    id: 'kaheen', client: 'kaheen', person: 'shashank arora', sector: 'brand &middot; story',
+    teaser: 'positioning, concept, direction, shoot and edit.',
     vid: csVid('2b6ecca6-96e1-4890-9170-1f60ef2ad41b'),
     metrics: [{ v: '5&ndash;20&times;', l: 'their average post' }],
     quote: null,
     content: {
-      overview: 'Positioning, concept, direction, shoot and edit for Shashank Arora&rsquo;s Kaheen.',
+      overview: 'positioning, concept, direction, shoot and edit for shashank arora&rsquo;s kaheen.',
       // TODO(raj): context, insights and problem still need what Kaheen
       // actually is, who it is for, and where it was before the work.
       // Empty strings render nothing at all, so the page stays clean until then.
       context: '',
       insights: '',
       problem: '',
-      solution: 'Positioning, concept, direction, shoot and edit &mdash; all of it handled here.',
-      outcome: 'The work ran 5&ndash;20&times; their average post.'
+      solution: 'positioning, concept, direction, shoot and edit &mdash; all of it handled here.',
+      outcome: 'the work ran 5&ndash;20&times; their average post.'
     }
   },
   {
-    id: 'indian-cacao', client: 'Indian Cacao Festival', person: 'Patricia &middot; Ketaki &middot; Sneha', sector: 'Event &middot; Campaign',
-    teaser: 'Making a niche category feel like a room you had to be in.',
+    id: 'indian-cacao', client: 'indian cacao festival', person: 'patricia &middot; ketaki &middot; sneha', sector: 'event &middot; campaign',
+    teaser: 'making a niche category feel like a room you had to be in.',
     vid: csVid('7badd2e0-7d8c-42db-98a1-57c78b3e29fb'),
     metrics: [{ v: '5&ndash;20&times;', l: 'their average post' }, { v: 'sold out', l: 'the festival' }],
-    quote: { text: 'i enjoy working with raj, he is very focused and motivated, which makes it a smooth experience. the results of his work are great without too much back and forth.', name: 'Patricia Cosma', role: 'Co-founder, Indian Cacao &amp; Craft Chocolate Festival' },
+    quote: { text: 'i enjoy working with raj, he is very focused and motivated, which makes it a smooth experience. the results of his work are great without too much back and forth.', name: 'patricia cosma', role: 'co-founder, indian cacao &amp; craft chocolate festival' },
     content: {
-      overview: 'Content direction, on-ground coverage and edit for Patricia, Ketaki &amp; Sneha &mdash; the Indian Cacao &amp; Craft Chocolate Festival.',
-      context: 'A craft chocolate festival in a country where craft chocolate is still a new idea, with a room to fill.',
-      insights: 'Niche events don&rsquo;t sell on explanation, they sell on atmosphere. People buy the feeling of being in the room and learn what cacao is once they&rsquo;re in it.',
-      problem: 'Selling a category most people didn&rsquo;t know they cared about yet.',
-      solution: 'Content direction across the festival, on-ground coverage, and an edit that carried the craft and the energy rather than explaining them.',
-      outcome: 'The work ran 5&ndash;20&times; their average post, and the festival sold out.'
+      overview: 'content direction, on-ground coverage and edit for patricia, ketaki &amp; sneha &mdash; the indian cacao &amp; craft chocolate festival.',
+      context: 'a craft chocolate festival in a country where craft chocolate is still a new idea, with a room to fill.',
+      insights: 'niche events don&rsquo;t sell on explanation, they sell on atmosphere. people buy the feeling of being in the room and learn what cacao is once they&rsquo;re in it.',
+      problem: 'selling a category most people didn&rsquo;t know they cared about yet.',
+      solution: 'content direction across the festival, on-ground coverage, and an edit that carried the craft and the energy rather than explaining them.',
+      outcome: 'the work ran 5&ndash;20&times; their average post, and the festival sold out.'
     }
   }
 ];
 
 // ---- render ----
 var csHls = [];
+
+// The figure a study is actually about. Upsurge also carries a "48 videos"
+// metric, and the volume is not the proof -- the multiple against their own
+// average is, and it is the same number CIAD and the portfolio quote.
+// The hedge is part of the fact and never drops, but it hangs on its own line
+// above the number so six of these read as a column of figures that start
+// together rather than "3&times;" trailing off the end of "up to 5&times;".
+// Same treatment as CIAD's reel row.
+function csMult(cs) {
+  if (!cs.metrics) return '';
+  for (var i = 0; i < cs.metrics.length; i++) {
+    if (!/average post/i.test(cs.metrics[i].l)) continue;
+    return cs.metrics[i].v.replace(/^up to\s+/i, '<i>up to</i>');
+  }
+  return '';
+}
+
+// The frame takes the video's shape. Every reel here is vertical bar one, and
+// the media box was a hard 16/9, so the common case was being centre-cropped.
+// videoWidth/videoHeight is the only honest source for this -- the manifest
+// does not say, and guessing from the filename says less.
+function csFitFrame(v) {
+  if (!v || !v.parentElement) return;
+  var frame = v.parentElement;
+  function apply() {
+    if (v.videoWidth && v.videoHeight) {
+      frame.style.setProperty('--vr', (v.videoWidth / v.videoHeight).toFixed(4));
+    }
+  }
+  v.addEventListener('loadedmetadata', apply);
+  apply();
+}
+
+// Every reel made for this client. portfolio.js is the source and this page
+// loads it for its data alone -- all three of its init functions bail when
+// their own DOM is absent, so nothing else happens. Copying the ids across
+// would be a second list to keep in step, which is exactly the trap the five
+// figures spread over three files already document.
+function csReels(cs) {
+  if (typeof projects === 'undefined') return [];
+  var out = [], seen = {};
+  seen[cs.vid] = true; // the hero is already at the top of the page
+  // Case-insensitive, and it has to be: this file's client names are lowercase
+  // to match the rest of the site, portfolio.js's are still title case, and
+  // matching them exactly silently returned nothing at all.
+  var want = String(cs.client).toLowerCase();
+  for (var i = 0; i < projects.length; i++) {
+    var p = projects[i];
+    // matched on subtitle too: "come spend christmas with us" and "c+c menu"
+    // are Copper + Cloves work filed under their own names
+    if (String(p.name).toLowerCase() !== want &&
+        String(p.subtitle).toLowerCase() !== want) continue;
+    var items = p.items || [];
+    for (var j = 0; j < items.length; j++) {
+      if (items[j].type !== 'video' || seen[items[j].src]) continue;
+      seen[items[j].src] = true;
+      out.push(items[j].src);
+    }
+  }
+  return out;
+}
+
+// Reels mount as they scroll into the row and unmount once they are well past
+// it. Upsurge has twelve; twelve live HLS instances on one page is a stalled
+// tab, and preload="none" alone would still leave every one of them attached.
+function csMountReels(root) {
+  var row = root.querySelector('.cs-reelrow');
+  if (!row) return;
+  var live = [];
+
+  function unmount(v) {
+    if (v._hls) { try { v._hls.destroy(); } catch (e) {} v._hls = null; }
+    try { v.pause(); } catch (e) {}
+    v.removeAttribute('src');
+    v.dataset.mounted = '';
+  }
+
+  function mount(v) {
+    if (v.dataset.mounted) { v.play().catch(function () {}); return; }
+    v.dataset.mounted = '1';
+    csFitFrame(v);
+    var src = v.getAttribute('data-src');
+    if (v.canPlayType('application/vnd.apple.mpegurl')) {
+      v.src = src; v.play().catch(function () {});
+    } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+      var h = new Hls({ enableWorker: true, startLevel: -1, maxBufferLength: 6 });
+      h.loadSource(src); h.attachMedia(v); v._hls = h; csHls.push(h);
+      h.on(Hls.Events.MANIFEST_PARSED, function () { v.play().catch(function () {}); });
+    }
+    live.push(v);
+    while (live.length > 6) unmount(live.shift());
+  }
+
+  if (!('IntersectionObserver' in window)) { return; }
+  var io = new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      var v = entries[i].target;
+      if (entries[i].isIntersecting) mount(v);
+      else if (v.dataset.mounted) { try { v.pause(); } catch (e) {} }
+    }
+  }, { root: row, threshold: 0.2 });
+  var vids = row.querySelectorAll('video');
+  for (var k = 0; k < vids.length; k++) io.observe(vids[k]);
+}
 
 function initCaseStudies() {
   var list = document.getElementById('cs-list');
@@ -125,7 +229,7 @@ function initCaseStudies() {
     (function (cs, idx) {
       var card = document.createElement('button');
       card.className = 'cs-card';
-      card.setAttribute('aria-label', 'Open case study: ' + cs.client);
+      card.setAttribute('aria-label', 'open case study: ' + cs.client);
       card.innerHTML =
         '<div class="cs-card-no">' + (idx < 9 ? '0' : '') + (idx + 1) + '</div>' +
         '<div class="cs-card-body">' +
@@ -133,6 +237,7 @@ function initCaseStudies() {
           '<div class="cs-card-sector">' + cs.sector + '</div>' +
           '<div class="cs-card-teaser">' + cs.teaser + '</div>' +
         '</div>' +
+        '<div class="cs-card-mult">' + csMult(cs) + '</div>' +
         '<div class="cs-card-arrow">&#8594;</div>';
       card.addEventListener('click', function () { openCase(cs); });
       list.appendChild(card);
@@ -173,6 +278,24 @@ function openCase(cs) {
     metrics += '</div>';
   }
 
+  // Everything else made for this client, after the reading and before the
+  // testimonial: the sections are the argument, this is the body of work the
+  // argument is about. No reels means no strip -- a heading over nothing is
+  // the placeholder rule.
+  var reels = csReels(cs);
+  var reelRow = '';
+  if (reels.length) {
+    reelRow = '<section class="cs-reels">' +
+                '<div class="cs-section-label">everything we made for them</div>' +
+                '<div class="cs-reelrow">';
+    for (var r = 0; r < reels.length; r++) {
+      reelRow += '<div class="cs-reel"><video muted loop playsinline webkit-playsinline ' +
+                 'preload="none" poster="' + reels[r].replace('playlist.m3u8', 'thumbnail.jpg') +
+                 '" data-src="' + reels[r] + '"></video></div>';
+    }
+    reelRow += '</div></section>';
+  }
+
   // No quote means no quote block. An empty bordered box reads as broken.
   var quote = cs.quote
     ? '<figure class="cs-quote"><blockquote>&ldquo;' + cs.quote.text + '&rdquo;</blockquote>' +
@@ -193,6 +316,7 @@ function openCase(cs) {
           'poster="' + cs.vid.replace('playlist.m3u8', 'thumbnail.jpg') + '"></video></div>' +
         metrics +
         sections +
+        reelRow +
         quote +
         '<div class="cs-cta-wrap"><a href="hub.html" class="cs-cta">work with me &#8594;</a></div>' +
       '</div>' +
@@ -207,6 +331,7 @@ function openCase(cs) {
   // hero video -- lazy load + play
   var v = detail.querySelector('.cs-media video');
   if (v) {
+    csFitFrame(v);
     var src = cs.vid;
     if (v.canPlayType('application/vnd.apple.mpegurl')) { v.src = src; v.play().catch(function () {}); }
     else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
@@ -215,6 +340,8 @@ function openCase(cs) {
       hls.on(Hls.Events.MANIFEST_PARSED, function () { v.play().catch(function () {}); });
     }
   }
+
+  csMountReels(detail);
 
   // scroll-spy: highlight the section in view
   var links = detail.querySelectorAll('.cs-navlink');

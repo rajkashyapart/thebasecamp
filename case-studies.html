@@ -48,13 +48,14 @@
     <header class="cs-head">
       <div class="cs-eyebrow">case studies</div>
       <h1 class="cs-title">the work, <em>in depth.</em></h1>
-      <!-- Raj's line, and the only true reframe in what he wrote: it argues
+      <!-- Raj's line, 2026-08-12, replacing his own earlier one. It argues
            against the big number, which is the last thing a content person is
-           expected to do. It lives here rather than on CIAD because the deck
-           already makes the same inversion one screen earlier with "pretty
-           doesn't sell. relevance does." -- and once is the budget.
-           "no ad spend" is stated here once, not on all six outcome lines. -->
-      <p class="cs-sub">i could put anyone on camera tomorrow and get 100k views. that 100k isn&rsquo;t worth anything.<br>no ad spend here, and almost every shot clears 2&times; their own average.</p>
+           expected to do, and it now ends on a question the six studies below
+           are the answer to. Take it as typed.
+           It lives here rather than on CIAD because the deck already makes the
+           same inversion one screen earlier with "pretty doesn't sell.
+           relevance does." -- and once is the budget. -->
+      <p class="cs-sub">if i shoot a video of someone getting slapped on camera, it&rsquo;ll certainly cross 50k views.<br>are those views worth it?</p>
     </header>
     <div id="cs-list"></div>
     <div class="cs-foot">
@@ -68,6 +69,12 @@
 </div>
 
 <script src="shared.js"></script>
+<!-- for its data, not its behaviour: portfolio.js already lists every reel
+     made for every client, and renderReel/setupViewToggle/setupProgress each
+     return immediately when their own elements are missing. Loading it here
+     beats keeping a second copy of the ids in step. Must come first --
+     case-studies.js reads `projects` at render. -->
+<script src="portfolio.js"></script>
 <script src="case-studies.js"></script>
 </body>
 </html>
