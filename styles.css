@@ -765,7 +765,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   transition:background-color 0.7s ease;
   font-family:'DM Mono',monospace;
   color:var(--ink);
-  --od-1:10px;   /* inside a line */
+  --od-1:9px;    /* inside a line -- 9, not 10: a 9 already renders on this
+                    page and two spacing values 1px apart are one tier that
+                    costs two decisions */
   --od-2:26px;   /* between lines */
   --od-3:56px;   /* between parts */
   --od-4:104px;  /* frame */
@@ -1122,7 +1124,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    price uses -- no new type size, no new colour. The client's name recedes
    under it: the number is what is being read, the name is only what makes it
    checkable. */
-.od-reel-cap{margin-top:9px;display:flex;flex-direction:column;gap:1px;}
+/* the tight tier, not a 9 that sits close enough to it to cost a decision
+   and communicate nothing */
+.od-reel-cap{margin-top:var(--od-1);display:flex;flex-direction:column;gap:1px;}
 .od-reel-cap b{
   display:block;font-weight:400;font-size:20px;line-height:1.15;
   color:var(--accent-r);
