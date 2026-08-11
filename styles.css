@@ -1616,6 +1616,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   line-height:1.55;color:var(--ink-muted);margin:0 0 var(--u);text-wrap:pretty;
 }
 
+/* ── colour inside a heading ───────────────────────── */
+/* The accent lands on the word that carries the meaning, never on the whole
+   line -- so the heads that make a claim get one word of ink and the heads
+   that are only labels ("experience", "education") get none. Colouring all
+   five would make colour the heading style, which is decoration, not
+   hierarchy.
+   Same split the links already run on: pink is the person (raj, the "one" in
+   a team of one), blue is the craft ("all of them", which is pointing at the
+   eleven disciplines directly underneath it). Spans only -- a.me keeps its
+   own rule and is untouched. */
+.col span.me{color:var(--accent-r);}
+.col span.work{color:var(--accent-b);}
+
 /* ── a team of one ─────────────────────────────────── */
 /* A stacked list in two columns, not pills. Ten bordered chips would be ten
    more boxes on a page whose whole argument is that one person did all of
@@ -1634,9 +1647,13 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   padding-left:15px;position:relative;
 }
 /* a rule, not a bullet: these are capabilities on a ledger, not a to-do list */
+/* The rules used to be blue. Eleven repeated blue ticks were the page's most
+   frequent instance of the accent and the least meaningful one -- a bullet
+   substitute, spent on ornament. The blue is now on the phrase above them
+   instead ("all of them"), which points at this list and means something. */
 .skills li::before{
   content:'';position:absolute;left:0;top:0.92em;
-  width:7px;height:1px;background:rgba(13,138,175,0.5);
+  width:7px;height:1px;background:rgba(30,25,20,0.22);
 }
 
 /* ── ruled records ─────────────────────────────────── */
