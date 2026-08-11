@@ -216,6 +216,69 @@ function initAbout() {
     }
   }
 
+  // ── the drift ──────────────────────────────────────
+  // The mosaic creeps upward on its own. Raj, 2026-08-12, asked for it to stop
+  // when the cursor is on a photograph and to start again "only after the
+  // mouse goes towards the writing area" -- so leaving a picture is not
+  // enough on its own, the pointer has to arrive somewhere else.
+  //
+  // Constant motion, so it is linear and frame-rate independent: a fixed step
+  // per frame runs at double speed on a 120Hz screen, and an eased drift reads
+  // as the page deciding to move rather than a steady creep.
+  var DRIFT = 24;      // css px per second
+  var RESUME = 2500;   // ms of quiet before it takes over again after a scroll
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var drift = { on: false, hover: false, until: 0, last: 0, raf: 0, carry: 0 };
+
+  function driftTick(now) {
+    drift.raf = 0;
+    var s = document.getElementById('screen-about');
+    if (!drift.on || !s) return;
+    // clamp the delta: a backgrounded tab hands back one enormous frame, and
+    // the page would jump a screen the moment it is looked at again
+    var dt = drift.last ? Math.min(100, now - drift.last) : 16;
+    drift.last = now;
+    if (!drift.hover && now >= drift.until && !document.hidden) {
+      var max = s.scrollHeight - s.clientHeight;
+      if (s.scrollTop < max - 0.5) {
+        // carry the fraction: at 24px/s a 16ms frame is 0.38px, and a scrollTop
+        // that rounds would swallow every one of them and never move at all
+        drift.carry += DRIFT * dt / 1000;
+        var step = Math.floor(drift.carry);
+        if (step > 0) { drift.carry -= step; s.scrollTop = Math.min(max, s.scrollTop + step); }
+      }
+    }
+    drift.raf = requestAnimationFrame(driftTick);
+  }
+
+  function setDrift(on) {
+    on = !!on && !reduce.matches;
+    if (on === drift.on) return;
+    drift.on = on;
+    drift.last = 0; drift.carry = 0;
+    // Let the first screen land before anything moves. A page that starts
+    // creeping the instant it appears reads as broken rather than alive, and
+    // the hero band is composed to be looked at for a moment first.
+    if (on) { drift.until = performance.now() + RESUME; drift.raf = requestAnimationFrame(driftTick); }
+    else if (drift.raf) { cancelAnimationFrame(drift.raf); drift.raf = 0; }
+  }
+
+  function holdDrift() { drift.until = performance.now() + RESUME; }
+
+  if (shots) shots.addEventListener('pointerenter', function () { drift.hover = true; });
+  // arriving at the writing is the resume signal, and it is immediate -- it
+  // clears the post-scroll hold too, because going back to the words is the
+  // clearest possible statement that you are done scrolling yourself
+  if (col) col.addEventListener('pointerenter', function () { drift.hover = false; drift.until = 0; });
+  // the pointer leaving the window entirely counts as leaving the pictures,
+  // or parking the cursor on a photograph and switching apps stops it forever
+  document.addEventListener('pointerleave', function () { drift.hover = false; });
+  var scroller = document.getElementById('screen-about');
+  if (scroller) {
+    scroller.addEventListener('wheel', holdDrift, { passive: true });
+    scroller.addEventListener('touchmove', holdDrift, { passive: true });
+  }
+
   function layout() {
     // On a phone you are scrolling regardless, and bigger pictures beat a
     // tidy fit, so the CSS column layout stays.
@@ -226,11 +289,14 @@ function initAbout() {
       tiles.forEach(function (t) { t.style.width = ''; t.style.height = ''; });
       placeHero(true);
       pin(false);
+      // no cursor to stop it and no pinned writing to drift past
+      setDrift(false);
       return;
     }
 
     placeHero(false);
     pin(true);
+    setDrift(true);
     unwrap();
     shots.classList.add('justified');
     var cs = getComputedStyle(shots);
@@ -329,18 +395,23 @@ function initAbout() {
           var crop = Math.abs(1 - (hw / inner) / heroRatio);
           if (crop > cropCap) continue;
 
-          // the strip and the rows under it hold the same kind of picture, so
-          // they have to be about the same size as each other -- otherwise the
-          // strip reads as a second, lesser hero. It is measured against
-          // TARGET now rather than against a bottom band solved alongside it.
+          // The strip and the rows under it hold the same kind of picture at
+          // the same distance, so they have to be about the same size or the
+          // strip reads as a second, lesser hero. This is a cost, not a cliff:
+          // as a hard gate it either threw away every arrangement and fell
+          // through to a looser pass, or accepted a 195px strip above 245px
+          // rows because both sides happened to sit inside the tolerance.
+          // Priced instead, a coherent strip can buy itself a slightly
+          // narrower hero, which is the trade actually worth making.
           var ha = avgH(Arows);
-          if (Math.abs(ha - TARGET) / Math.max(ha, TARGET) > disp) continue;
+          var gap = Math.abs(ha - TARGET) / Math.max(ha, TARGET);
+          if (gap > disp) continue;
 
           // The biggest hero wins, with the crop it costs charged against
           // it. Scoring by least crop instead -- which is what this did --
           // bought a 1% crop with a hero only 42% of the pane wide, paying
           // in the one thing the page is built around.
-          var score = -hw + crop * 220;
+          var score = -hw + crop * 220 + gap * 400;
           if (!out || score < out.score) {
             out = { rows: Arows, k: k, score: score, hw: hw, hh: Math.round(inner), sw: sw };
           }
@@ -359,20 +430,26 @@ function initAbout() {
       for (i = a; i < b; i++) sum += ratios[i];
       var r = Math.max(1, Math.round(sum * t / W));
       var tries = [r, r + 1, r - 1, r + 2, r - 2], rows, j;
-      // Tighter than the hero band's tolerance, and tried tight-first. These
-      // rows are stacked directly on each other with a 7px gap, so a row 36%
-      // taller than the one above it -- which the band's own tolerance allows
-      // -- reads as two different grids rather than one. Three photographs at
-      // 245px sitting on four at 182px was exactly that.
+      // Two things matter and they pull apart, so both are scored rather than
+      // one being used as a gate. Rows are stacked directly on each other with
+      // a 7px gap, so a row much taller than the one above reads as two
+      // different grids -- but taking the *tidiest* arrangement instead of the
+      // right-sized one is worse: with 25 photographs it picked five rows of
+      // five, perfectly even at 145px, which is the small-tile problem this
+      // whole layout exists to fix. Closest to the target height wins, with a
+      // small tax for needing a looser evenness band to get there.
       var bands = [[0.90, 1.11], [0.84, 1.19], [0.74, 1.36]];
+      var best = null;
       for (j = 0; j < bands.length; j++) {
         for (i = 0; i < tries.length; i++) {
           if (tries[i] < 1 || tries[i] > b - a) continue;
           rows = split(pre, a, b, W, tries[i], t);
-          if (rows && even(rows, bands[j][0], bands[j][1])) return rows;
+          if (!rows || !even(rows, bands[j][0], bands[j][1])) continue;
+          var score = Math.abs(avgH(rows) - t) + j * t * 0.06;
+          if (!best || score < best.score) best = { rows: rows, score: score };
         }
       }
-      return split(pre, a, b, W, Math.min(b - a, r), t);
+      return best ? best.rows : split(pre, a, b, W, Math.min(b - a, r), t);
     }
 
     var best = attempt(0.11, 0.36, 0.74, 1.36)

@@ -137,8 +137,11 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   picture on the page needs to stay somehow, they're a part of my brand."*
   The two only reconcile by letting the pane run past the fold: the hero
   band still fills screen one exactly, everything under it flows at four
-  tiles to the pane width (~245px, twice what thirty-six-in-one-screen
-  gave), and the writing column is `position:sticky`. Sticky *bottom* does
+  tiles to the pane width (~245px, twice what one-screen gave), and the
+  writing column is `position:sticky`. The flow picks its row count by
+  scoring closeness to that target *and* row evenness together — as a
+  pure evenness filter it once chose five rows of five, perfectly tidy at
+  145px, which is the exact problem the layout exists to solve. Sticky *bottom* does
   not engage inside `#screen-about`'s scroller — measured; the column just
   scrolls away. `about.js` sets a negative `top` instead, so a column
   taller than the viewport scrolls exactly far enough to show its last line
@@ -146,7 +149,14 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   cut photographs to make it fit.
   On a phone the hero is moved into the writing, under the clients line:
   every word used to come before every picture.
-  The twenty photographs live in `shots/`, served locally. Raj's originals
+  **The mosaic drifts.** 24px/s, linear, starting 2.5s after arrival so
+  the first screen lands first. It stops while the cursor is over the
+  photographs and starts again only when the cursor reaches the writing —
+  Raj's rule, 2026-08-12: leaving a picture is not enough on its own. A
+  manual scroll holds it off for 2.5s, and it is off entirely on a phone
+  and under `prefers-reduced-motion`. Every tile lifts 5px / 1.02 on
+  hover, 200ms ease-out; that and the drift stopping are one gesture.
+  The thirty-four photographs live in `shots/`, served locally. Raj's originals
   are raw camera JPGs on Bunny — ~150MB for the set, and **that pull zone
   has no image optimizer**, so `?width=` returns the original bytes. There
   is no converter on the machine either; they were re-encoded to webp
@@ -154,10 +164,21 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   the tiles, 1400px for the hero). Every tile's `--ar` is the file's true
   ratio, because `about.js` justifies each row off that value before the
   images have loaded — a guessed one breaks the first paint.
-- **Playground is the scatter page.** Tilt, drift and organic clustering belong
+- **Playground is the scatter page.** Tilt and organic clustering belong
   there and only there — tight clusters, dramatic size variety, edge bleed, a
   clear centre. If it looks "placed" instead of "scattered", it's wrong.
   (The Emmi reference image is gone from the repo; it survives as this rule.)
+  **The headline is the centre, and the scatter is built around it.**
+  `never stop playing <3` sits at the world origin; the cards' bounding
+  box did not, so "centre the composition" and "centre the headline" were
+  92px and 115px apart and the view could only hit one. `playground.js`
+  now shifts every card and glyph on load so the two coincide, and
+  `centerView` targets the headline's own box — not `.pg-center`, which
+  also holds the sub-line and the CTA and would leave the words sitting
+  high. A reserved rectangle round the headline evicts anything that
+  overlaps it along its shortest axis, so no card or glyph can sit behind
+  the words or on the one link the page has. Don't hand-place cards to
+  dodge the headline; the rectangle is what keeps it clear.
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
 - **CIAD is a five-screen deck** — the question, the problem, how we work,
   the work, the month after — crossed by one button that morphs from "find

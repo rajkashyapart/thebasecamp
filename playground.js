@@ -58,6 +58,79 @@ var pgGlyphs = [
   {svg:G_EYE, cls:'', pos:[[-650,0],[650,0],[-200,440],[250,-420]]}
 ];
 
+// The headline lives at the world origin. The scatter did not: its bounding
+// box centred 120px right and 110px below that point, so "centre the
+// composition" and "centre the headline" were two different places and the
+// view could only ever land on one of them. Raj, 2026-08-12: "it is not
+// centred" and "never stop playing <3 is not in dead center" -- one cause,
+// two symptoms. Shift every card and glyph once so the two coincide. The
+// scatter's shape, spacing and edge bleed are untouched; only its origin moves.
+function pgSets() { return [photoCards, videoCards, textCards]; }
+
+function pgCentreOnOrigin() {
+  var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  pgSets().forEach(function (set) {
+    set.forEach(function (c) {
+      if (c.x < minX) minX = c.x;
+      if (c.y < minY) minY = c.y;
+      if (c.x + c.w > maxX) maxX = c.x + c.w;
+      if (c.y + c.h > maxY) maxY = c.y + c.h;
+    });
+  });
+  var dx = (minX + maxX) / 2, dy = (minY + maxY) / 2;
+  pgSets().forEach(function (set) {
+    set.forEach(function (c) { c.x -= dx; c.y -= dy; });
+  });
+  pgGlyphs.forEach(function (g) {
+    g.pos.forEach(function (p) { p[0] -= dx; p[1] -= dy; });
+  });
+}
+
+// Nothing gets to sit behind the words. Rather than hand-placing the one card
+// that did -- a video, at the headline's left shoulder -- the headline keeps a
+// reserved rectangle, and anything overlapping it leaves along its shortest
+// axis. That is the smallest move that clears, so the composition barely
+// changes, and it still holds if a card is added or moved later.
+var PG_CLEAR_W = 250, PG_CLEAR_H = 110, PG_CLEAR_PAD = 26;
+
+function pgClearHeadline() {
+  var x0 = -PG_CLEAR_W - PG_CLEAR_PAD, x1 = PG_CLEAR_W + PG_CLEAR_PAD;
+  var y0 = -PG_CLEAR_H - PG_CLEAR_PAD, y1 = PG_CLEAR_H + PG_CLEAR_PAD;
+
+  // shortest way out of the rectangle, applied to any box that is inside it
+  function evict(box, set) {
+    if (box.x + box.w <= x0 || box.x >= x1 || box.y + box.h <= y0 || box.y >= y1) return;
+    var left = (box.x + box.w) - x0, right = x1 - box.x;
+    var up = (box.y + box.h) - y0, down = y1 - box.y;
+    var m = Math.min(left, right, up, down);
+    if (m === left) set(-left, 0);
+    else if (m === right) set(right, 0);
+    else if (m === up) set(0, -up);
+    else set(0, down);
+  }
+
+  pgSets().forEach(function (s) {
+    s.forEach(function (c) {
+      evict(c, function (dx, dy) { c.x += dx; c.y += dy; });
+    });
+  });
+
+  // The glyphs go too. They are positioned by their top-left corner and run
+  // about 20x22, and one of them was standing on the "see the work" arrow --
+  // a stray mark on the one link the page has reads as a mistake, not charm.
+  pgGlyphs.forEach(function (g) {
+    g.pos.forEach(function (p) {
+      evict({ x: p[0], y: p[1], w: 20, h: 22 }, function (dx, dy) { p[0] += dx; p[1] += dy; });
+    });
+  });
+}
+
+// Centring and clearing pull against each other -- pushing a card out moves
+// the bounding box, which moves the centre. Three passes converge to within a
+// few pixels, and it ends on a clear so the reserved rectangle is the one
+// that wins.
+for (var pgPass = 0; pgPass < 3; pgPass++) { pgCentreOnOrigin(); pgClearHeadline(); }
+
 // Mobile: replace card positions with viewport-friendly layout (fits 390px wide phone)
 var isMobile = window.innerWidth < 640;
 
@@ -444,13 +517,29 @@ function initPlayground() {
 
   function applyTransform() { pgWorld.style.transform = 'translate('+offX+'px,'+offY+'px) scale('+scale+')'; }
 
+  // Dead centre means the words, not the block they sit in. .pg-center also
+  // holds the "drag to move" line and the CTA, both stacked under the
+  // headline, so centring the block leaves the headline itself ~29px high.
+  // Measure the headline's own offset inside the block and take it out.
+  var hlEl = ct.querySelector('.pg-headline');
+  function headlineOffset() {
+    if (!hlEl || !scale) return { x: 0, y: 0 };
+    var a = hlEl.getBoundingClientRect(), b = ct.getBoundingClientRect();
+    if (!a.width || !b.width) return { x: 0, y: 0 };
+    return {
+      x: ((a.left + a.width / 2) - (b.left + b.width / 2)) / scale,
+      y: ((a.top + a.height / 2) - (b.top + b.height / 2)) / scale
+    };
+  }
+
   // transform-origin is 0 0, so world point p maps to screen (off + p*scale).
-  // Centre on the composition's centre of mass, not on WCX/WCY — the scatter
-  // isn't symmetrical around it.
+  // Centre on the headline: the cards were shifted to be symmetrical about it
+  // when the file loaded, so this centres the composition at the same time.
   function centerView() {
     var nh = getNavHeight();
-    offX = window.innerWidth/2 - (WCX + bounds.cx) * scale;
-    offY = (window.innerHeight + nh)/2 - (WCY + bounds.cy) * scale;
+    var h = headlineOffset();
+    offX = window.innerWidth/2 - (WCX + h.x) * scale;
+    offY = (window.innerHeight + nh)/2 - (WCY + h.y) * scale;
     homeX = offX; homeY = offY;
     applyTransform();
   }
@@ -462,6 +551,19 @@ function initPlayground() {
     centerView();
   }
   resetToFit();
+
+  // The headline's offset is measured, and at first paint Cormorant italic has
+  // not landed yet -- the fallback's line box is a different height, so the
+  // centring is off by a few pixels until the webfont arrives. Re-centre once
+  // it does, unless the visitor has already taken hold of the canvas: yanking
+  // the view back under someone mid-drag is worse than being 4px out.
+  var interacted = false;
+  ['wheel', 'mousedown', 'touchstart'].forEach(function (t) {
+    canvas.addEventListener(t, function () { interacted = true; }, { passive: true, capture: true });
+  });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { if (!interacted) resetToFit(); });
+  }
 
   var resizeTimer = null;
   window.addEventListener('resize', function() {

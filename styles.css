@@ -1881,6 +1881,32 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   margin:0 0 7px;
   break-inside:avoid;-webkit-column-break-inside:avoid;
   overflow:hidden;border-radius:4px;background:#e8e3db;
+  /* so a lifted tile can sit above the row it is in */
+  position:relative;
+}
+
+/* Every photograph answers the cursor. Raj, 2026-08-12: "upon hover - idk
+   make them nudge or something along the lines."
+   5px and 1.02 -- enough to read as a nudge on a 245px tile, small enough to
+   survive thirty-four of them being hoverable. transform and box-shadow only:
+   both composite, and neither reflows the justified row it sits in, which
+   anything touching width or margin would. 200ms ease-out because the tile is
+   arriving; an ease-in here reads as lag at the exact moment the cursor lands.
+   The other half of this hover is in about.js -- the drift stops. */
+@media(hover:hover) and (pointer:fine){
+  .shots.justified .tile:not(.hero){
+    transition:transform .2s cubic-bezier(0.23,1,0.32,1),
+               box-shadow .2s cubic-bezier(0.23,1,0.32,1);
+  }
+  .shots.justified .tile:not(.hero):hover{
+    transform:translateY(-5px) scale(1.02);
+    box-shadow:0 2px 6px rgba(45,33,22,0.10), 0 14px 30px -12px rgba(45,33,22,0.26);
+    z-index:2;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .shots.justified .tile:not(.hero){transition:none;}
+  .shots.justified .tile:not(.hero):hover{transform:none;}
 }
 .tile img{width:100%;height:auto;display:block;border-radius:inherit;}
 
