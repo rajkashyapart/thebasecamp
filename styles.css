@@ -1381,14 +1381,26 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      wraps to fill nearly all of it. Without the inline padding the figures
      under two neighbouring stations end up 6px apart and read as one string
      -- the gap between them has to beat the gap inside them. */
-  .od-step{padding-top:16px;gap:3px;padding-inline:5px;}
+  .od-step{padding-inline:5px;}
+  /* An eyebrow and the headline it labels are one thing, so the tight tier is
+     the right gap between them regardless -- on a phone it is also 16px that
+     every screen gets back. */
+  .od-eyebrow{margin-bottom:var(--od-1);}
   .od-step span{letter-spacing:var(--tr-ui);}
   /* the run-up to the line, the return under it and the note after it all
      come in a step, which is what this screen owed the 706px viewport */
-  .od-path{margin-top:var(--od-2);padding-top:30px;}
-  .od-path-rail{top:30px;}
-  .od-path-out{height:30px;}
-  .od-path-back{height:14px;margin-top:10px;}
+  /* Bound to the paragraph it draws, the same way the ring is on the screen
+     before it -- the bar is the next thing after, 94px down.
+     The run-up to the line is one variable shared by the rail's offset and the
+     handover tick's height, because all three are the same distance and drift
+     apart the moment they are three numbers. It scales with the viewport for
+     the same reason the ring does: this screen carries an eight-line paragraph
+     on a phone and is the last one to fit. */
+  .od-path{--run:clamp(25px,4.2vh,30px);margin-top:var(--od-1);padding-top:var(--run);}
+  .od-path-rail{top:var(--run);}
+  .od-path-out{height:var(--run);}
+  .od-path-back{height:clamp(11px,2vh,14px);margin-top:8px;}
+  .od-step{padding-top:14px;gap:2px;}
   .od-hand-block{margin-top:var(--od-1);}
   /* Everything on this screen is sized off one constraint: the centre of the
      ring has to stay two single lines. At three or four it grows into the rows
@@ -1405,8 +1417,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      six disciplines drawn, not a separate part, and the bar is 110px below
      it, so the two still read as one block against everything else. */
   .od-inner-split{gap:var(--od-1);}
-  .od-loop{width:min(100%,240px);margin-block:-29px;}
-  .od-loop-mid{width:142px;font-size:var(--t-micro);}
+  /* 240 is a floor, not a preference, and it must not scale with the viewport.
+     "that's a full-time job" is 140px of Caveat on one line; the ring's inside
+     measures 0.68 of its width, so anything under ~240 leaves the hand under
+     4px of air a side -- and the moment it wraps, the centre becomes three
+     lines and grows straight into the rows where "distribution" and
+     "strategy" sit. Scaling this to vh was tried on 2026-08-11 and collided
+     on Raj's own phone. Height comes out of the frame instead. */
+  .od-loop{
+    --ring:min(100%,240px);
+    width:var(--ring);
+    margin-block:calc(var(--ring) * -0.125);
+  }
+  .od-loop-mid{width:calc(var(--ring) * 0.59);font-size:var(--t-micro);}
   .od-chain li{padding:2px 5px;font-size:var(--t-micro);}
   /* The bar was two stacked rows here -- rail, 34px, full-width button -- and
      it came to 168px. A phone in Safari has about 706px of live viewport, not
@@ -1417,6 +1440,9 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .od-bar{gap:var(--od-2);padding-top:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));}
   .od-go{padding:14px 20px;}
   .od-rail{padding-top:12px;}
+  /* The bar already fades content out beneath itself, so the frame tier under
+     the content is doing less work here than the gap it costs. */
+  .od-slide{padding-bottom:calc(var(--od-bar-h,84px) + var(--od-1));}
   /* only the current stop keeps its label; the rest become tick marks */
   .od-tick{padding:8px 0;}
   .od-tick:not(.is-on){
