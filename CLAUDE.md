@@ -78,9 +78,10 @@ separate passes were made at Work With Me and About and every one made the page
 | Budget | Limit |
 |---|---|
 | Distinct font sizes | 5 |
-| Accent colours | 1 — except About, Work With Me and CIAD, which run 2 because the split means something (blue marks the work / the path you scope / the craft; pink marks the person / the recommendation / the payoff). Two accents used interchangeably are not allowed. Colour lands on the word that carries the meaning, never on a whole line. |
+| Accent colours | 1 — except About, Work With Me, CIAD, Case Studies and Playground, which run 2 because the split means something (blue marks the work / the path you scope / the craft / *who* the client is / Raj's own notes; pink marks the person / the recommendation / the payoff / *what it did* / the one link out). Two accents used interchangeably are not allowed. Colour lands on the word that carries the meaning, never on a whole line. There is no third — green was retired from playground's doodles on 2026-08-12 and `--accent-g` is now declared but unused. |
 | Structural spacing values | 4 tiers, well separated. Two values within 15% of each other communicate nothing and cost a decision. |
 | Physical-object metaphors | 1. Hang tags, receipts, wristbands, folders — pick one. Three skeuomorphs is noise, not charm. |
+| Easing curves | 5, all tokens in `:root`, none written by hand. `--e-out` is the default (entering, exiting, answering a press); `--e-in-out` for something already on screen moving; `--e-drawer` for the CIAD deck's long travel; `--e-dissolve` for the video intro only; `--e-spring` overshoots and is allowed **only** on the playground recenter. A bounce on anything a visitor triggers more than once a page is wrong — it was on the CTA hover and came off. Loop animations keep a literal symmetric curve at the call site. |
 
 When unsure between two approaches, pick the one with more craft — and note
 that removing something is usually the higher-craft option.
@@ -131,6 +132,16 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   bled to the viewport edge. No cards, no tape, no tilt, no drift. The pictures
   carry the personality; the type stays out of their way. One dominant
   photograph is the focal point. Don't scatter it.
+  **The three section heads are marked, and the mark is size plus a rule.**
+  Raj, 2026-08-12: *"a team of one needs to be highlighted i guess, same for
+  experience and education."* At 21px against 15px body they were four points
+  above the prose in a face nobody reads as loud, so the column squinted down
+  to one grey block with no sections in it. They are 28 now with the gap above
+  each several times the gap below, and a 22px rule sits above each one —
+  *above*, flush with the column's spine, never indented into the margin,
+  because the left edge every other line aligns to is what makes the page
+  read as editorial. Rule colour is the page's own split, no new hue: pink on
+  "a team of one" (the person), blue on the two records of the work.
   **The photographs scroll; the writing does not.** Asked on 2026-08-12
   whether the tiles were too small, Raj wanted playground's quality — moving
   through pictures rather than pictures fitted to a pane — and *"every
@@ -168,7 +179,14 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   there and only there — tight clusters, dramatic size variety, edge bleed, a
   clear centre. If it looks "placed" instead of "scattered", it's wrong.
   (The Emmi reference image is gone from the repo; it survives as this rule.)
-  **The headline is the centre, and the scatter is built around it.**
+  **The three note cards are one blue and pink belongs to the one link.**
+  They were two hand-mixed teals and a pink, and blurred until the type is
+  illegible that pink note was the loudest thing on the canvas — louder
+  than the headline, louder than *see the work*, which is the only link
+  the page has and is also pink. Three notes in one voice look like it now
+  (`--accent-b`, set from `PG_NOTE_BG` in `playground.js`). Glyph colour
+  used to be assigned by which ring a doodle sat in, which is what a third
+  accent with no job looks like; the green went with it.
   `never stop playing <3` sits at the world origin; the cards' bounding
   box did not, so "centre the composition" and "centre the headline" were
   92px and 115px apart and the view could only hit one. `playground.js`
@@ -230,9 +248,23 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   own line above its number, same as CIAD, and never drops. Raj kept the
   card layout on 2026-08-12 — *"it's good as of now i think"* — so the
   fused-proximity failure was fixed with spacing (28px gap over 20px
-  padding), not by removing the box. One accent here: pink on the
-  multiple, the title's *in depth* and the CTA; the row numbers and
-  section labels went to muted ink to pay for it.
+  padding), not by removing the box.
+  **Two accents, and the split is who / what.** Blue on the client name —
+  in the list row and on its own detail page — because Raj asked on
+  2026-08-12 for the names to be *"coloured/highlighted. needs contrast in
+  some way"*: they were dark ink on a near-white card at the same value as
+  the sector and teaser under them, so the loudest thing in the row was the
+  arrow. Pink stays on the multiple, the title's *in depth* and the booking
+  CTA. The hover arrow went blue with the names, so one gesture lights one
+  row and two colours never both mean "go". Row numbers and section labels
+  are muted ink.
+  **The row has its own phone layout below 600px** — stacked as who / what
+  kind / what it did / the sentence about it, with `display:contents` on
+  `.cs-card-body` so its three children can take grid rows of their own.
+  Above that it kept the desktop's four-column flex all the way to 390px,
+  where the multiple's fixed 112px column left the teaser ~150px and four
+  lines. The multiples still start together there: column 2 begins where
+  the two-digit row number ends, so all six share a left edge.
   **`case-studies.html` loads `portfolio.js` for its data.** That file
   already lists every reel made for every client, so each detail page
   builds its "everything we made for them" row from it rather than
@@ -308,9 +340,17 @@ deliberately left uninstalled: all three hunt for *more* things to animate.
 
 ## 8. Reference
 
-**No build tools, no npm, no frameworks.** Pure HTML/CSS/JS, fonts via a Google
-Fonts `<link>`. Each page is a standalone HTML file with one `init*()` function
-called on `DOMContentLoaded`.
+**No build tools, no npm, no frameworks.** Pure HTML/CSS/JS. Cormorant Garamond
+and DM Mono come from a Google Fonts `<link>`; **Caveat is self-hosted** at
+`fonts/caveat-latin-var.woff2` with an `@font-face` at the top of `styles.css`
+and a `<link rel="preload">` on the three pages that use it. Raj reported on
+2026-08-12 that "(badly)" on About rendered in a different face on his phone —
+it could not be reproduced in a 390-wide Chromium, which leaves the generic
+`cursive` fallback, and `cursive` is Snell Roundhand on iOS. Every `.hand`-ish
+rule now falls back to Cormorant rather than `cursive`, so a failure stays
+inside the site's own faces. Don't put Caveat back on the Google URL.
+Each page is a standalone HTML file with one `init*()` function called on
+`DOMContentLoaded`.
 
 | File | Purpose | JS |
 |---|---|---|
