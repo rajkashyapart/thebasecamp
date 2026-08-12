@@ -326,20 +326,52 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
 
 **The copy is his, verbatim. You are an editor, not a writer.**
 
-When Raj sends a dump about a client, a page or an offer, those are the
-sentences that ship. Settled 2026-08-12, after a Copper + Cloves study where
-every fact was his and not one sentence was: *"damn you turned my copy bad,
-it unnatural AI slop language."* Offered three levels of "verbatim" he chose
-the strictest.
+**This rule already existed and I never read it.** On 2026-08-12 Raj rejected a
+Copper + Cloves study with *"damn you turned my copy bad, it unnatural AI slop
+language"* — and the ban was already sitting in his own framework, in
+`00-the-process.md`: *"you never write script lines — only raj writes scripts…
+fabrication is forbidden — if a line is missing, you ask a question to pull it
+out of raj; you never supply the line yourself."* This file had pointed at only
+`03-nnv.md` and `07-copywriting.md`, the two that teach *principles*, and never
+at the two that enforce *mechanics*. **Read all four, in this order, before
+writing a word of copy.** They live in
+`raj's obsidian/raj/raj-uncurated/02-content/framework/` — don't ask him to
+attach them.
+
+| File | Why it matters |
+|---|---|
+| `00-the-process.md` | **Governing.** The pipeline and the fabrication ban. Its own opening says the rest of the framework teaches principles and this one enforces mechanics. Not optional. |
+| `01-donts.md` | What kills the voice — don't paraphrase, don't complete his fragments, don't upgrade the vocabulary. Holds the vibe test. |
+| `03-nnv.md` | Novel / non-obvious / tactical. The cutting gate. **Carries a flagged contradiction** at *"fabrication earns its place"* — `00` wins, and that paragraph is the one I acted on. |
+| `07-copywriting.md` | Harry Dry's three tests. A cutting instrument, never a rewrite licence. |
+
+**The pipeline applies here, with one substitution: the section is the beat.**
+Dump arrives → tag every sentence → NNV pass → map the survivors onto overview /
+context / insights / problem / solution / outcome → ask questions for the gaps →
+never fill a gap yourself. `case-studies.js` renders nothing for an empty
+string, so **an empty section is a finished state**, not a to-do.
 
 You may: **fix typos and spelling. cut a whole line. choose which lines
 survive and what order they sit in.** That is the entire permitted set.
+Placement is where your judgement is actually worth something — moving
+*"2 shoot days."* off the end of a section because it sat beside *"2017"* and
+the two numbers read as one commenting on the other is editing. Writing a
+sentence to bridge them is not.
 
 You may not: re-say a point in your own words, merge two of his sentences
-into one better one, add a connective sentence to smooth a join, or supply a
-sentence for a fact he only listed. **A fact with no sentence attached to it
-does not go on the page** — leave the section short, or leave it empty and
-ask. Empty is already the house style here; invented is not.
+into one better one, add a connective sentence to smooth a join, complete a
+fragment he left open, upgrade his vocabulary, or supply a sentence for a fact
+he only listed. **A fact with no sentence attached to it does not go on the
+page.** Clipping a trailing clause is **not** authorised — ask first.
+
+**Slop is an operation, not a style.** It is what comes out when a sentence is
+generated to fill an empty slot, which is why it always has the same shape.
+Two tests catch it — his, and the editor-side one:
+
+- *Would Raj say this exact sentence, these exact words, in this order, to his
+  best friend over tea?* (`01-donts.md`)
+- *Could I have written this sentence without his dump in front of me?* If yes,
+  it is mine, and it does not ship.
 
 The tells he named, all five of them banned even when true and even when
 shorter:
@@ -355,22 +387,36 @@ shorter:
 Run **NNV and Harry Dry as cutting tools only.** They decide what comes out;
 they never license a rewrite. Cut a line that is vague (*"she wanted to have
 all things personal brand"*), or that a later line says with receipts
-(*"above 10k views on each video"* against the list of six). Do **not** cut
-his opinions for failing Harry Dry's third test — *"a strategy well suited
-for 2017"* and *"unselfish truth the industry is scared of saying out loud"*
-were cut as transferable and he put all three back. His voice is what makes
-the page non-transferable; the test does not apply to it.
+(*"above 10k views on each video"* against the list of six). Where step 4c of
+`00-the-process.md` says a failing line should be *"sharpened"*, that never
+means you sharpen it — a sharpened line you wrote is a fabricated line with a
+better score.
+
+**Harry Dry's third test does not apply to his opinions.** *"Can nobody else
+say this?"* measures claims, not voice. Run it on a first-person opinion and it
+fails every time, because an opinion is transferable by construction — anyone
+*can* hold it — while being the least transferable thing on the page in
+practice, since nobody else would bother saying it. Three of his lines were cut
+on that test and he put all three back: *"a strategy well suited for 2017"*,
+*"unselfish truth the industry is scared of saying out loud"*, *"conversations
+among the community"*. Apply the three tests to descriptions, claims and
+outcomes. Never to stance, opinion or confession — the vibe test governs those.
+
+**When a line fails and no cut fixes it, the fact is missing, not the words.**
+Seven sentences on Copper + Cloves failed both gates and not one failed on
+language. Four were cut outright; two needed facts that did not exist, and one
+question each produced them — what counter-positioning Sarah actually meant,
+and how many shoot days. **Intuition is for knowing what to ask, not what to
+write.**
 
 Two consequences worth stating: his sentences are usually longer and looser
 than the ones you'd write, and **that is correct** — the register is the
 point. And a section is allowed to end mid-thought, because his dumps do.
 
-Raj runs copy through two frameworks that already live in his vault. Read them
-before writing any — don't ask him to attach them:
-
-- `raj's obsidian/raj/raj-uncurated/02-content/framework/03-nnv.md` — novelty,
-  non-obvious, tactical
-- `.../framework/07-copywriting.md` — Harry Dry's three tests
+Say less than you know. When *"pretty aesthetic cinematic videos"* appears in
+the overview as what he was making for a client in 2020 and again four sections
+later as the thing he rejects, **do not write the sentence connecting them.**
+That sentence would be yours. The reader finding it is worth more.
 
 Everything is lowercase. Facts he has had to correct more than once: **45+
 brands** (not 25+), and the education is Don Bosco school 2018 → Don Bosco
