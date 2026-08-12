@@ -581,10 +581,93 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 /* Facts — the three things that decide the choice. Two fragments each,
    not three: the unit now lives inside the value string. */
+/* ── build your month ────────────────────────────────
+   The same interaction CIAD's price screen runs, sized for a card rather
+   than a screen. There the month is 7 across and 5 down, because a week's
+   width is what makes thirty squares read as a month; here the card has
+   about 60px of slack before this page stops fitting one viewport, so it is
+   one strip of thirty. A strip still shows the two things that matter -- how
+   many, and spread rather than batched -- and it costs a fifth of the height.
+
+   The metaphor budget is not spent twice: this is the *same* object as the
+   deck's, not a second one. Their choice rides through on ?pkg= so CIAD
+   opens on the package they just built. */
+/* --hb-tight, not --hb-unit: the label is part of the block below it and
+   the desc above already ends a thought. At --hb-unit this card ran 50px
+   past a 900-tall viewport, and this page fits one screen exactly. */
+/* width:100% because .hub-option is a flex column with align-items:
+   flex-start -- children size to content unless told otherwise, which is
+   why .hub-facts already declares it. Without it the slider and the month
+   were half the card wide while the copy above ran full width. */
+.hub-build{ margin-top:var(--hb-tight);width:100%; }
+.hub-build-label{
+  display:block;margin-bottom:var(--hb-tight);
+  font-family:'DM Mono',monospace;font-size:var(--hb-label);
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--ink-muted);opacity:0.75;
+}
+.hub-range{
+  -webkit-appearance:none;appearance:none;
+  display:block;width:100%;background:transparent;cursor:grab;margin:0;
+  /* a 2px track is a 2px target; the padding makes the whole strip grabbable */
+  padding:7px 0;touch-action:none;
+}
+.hub-range:active{cursor:grabbing;}
+.hub-range::-webkit-slider-runnable-track{
+  height:2px;border-radius:2px;background:rgba(30,25,20,0.16);
+}
+.hub-range::-moz-range-track{
+  height:2px;border-radius:2px;background:rgba(30,25,20,0.16);
+}
+.hub-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;margin-top:-8px;border-radius:50%;
+  background:var(--accent-r);border:3px solid var(--bg-warm);
+  box-shadow:0 2px 10px rgba(255,123,172,0.45);
+  transition:transform 0.16s var(--e-out);
+}
+.hub-range::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--accent-r);border:3px solid var(--bg-warm);
+  box-shadow:0 2px 10px rgba(255,123,172,0.45);
+}
+.hub-range:active::-webkit-slider-thumb{transform:scale(1.14);}
+.hub-range:focus-visible{outline:none;}
+.hub-range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(13,138,175,0.35);}
+
+/* thirty days, one strip. filled are posts, spread across the month rather
+   than stacked at the front -- a block would be showing a batch. */
+.hub-month{
+  display:grid;grid-template-columns:repeat(30,1fr);
+  gap:3px;margin-top:var(--hb-tight);
+}
+.hub-day{
+  position:relative;height:9px;border-radius:2px;
+  background:rgba(30,25,20,0.07);
+}
+.hub-day::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  /* pink, not the deck's blue. On CIAD blue is the craft and the days
+     belong to it; here blue means "the path you scope yourself" -- the
+     other card -- so blue squares inside the recommended one would be the
+     two accents crossing over. */
+  background:var(--accent-r);opacity:0;
+  transition:opacity 0.28s var(--e-out) var(--d,0ms);
+}
+.hub-day.is-on::after{opacity:1;}
+@media(prefers-reduced-motion:reduce){
+  .hub-day::after{transition:none;}
+}
+
 .hub-facts{
   display:flex;align-items:stretch;width:100%;
   margin:var(--hb-unit) 0 0;padding:var(--hb-unit) 0 0;
   border-top:1px solid rgba(30,25,20,0.09);
+}
+/* the build block already separates this from the copy above, so the rule
+   and the second unit of padding would be a divider doing spacing's job */
+.hub-build + .hub-facts{
+  margin-top:var(--hb-unit);padding-top:0;border-top:none;
 }
 .hub-fact{flex:1;min-width:0;padding-right:12px;}
 .hub-fact + .hub-fact{padding-left:12px;border-left:1px solid rgba(30,25,20,0.08);}

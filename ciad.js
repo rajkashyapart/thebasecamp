@@ -547,7 +547,15 @@ function ciadInit() {
       })(k, marks[k]);
     }
   }
-  odSetTier(1);
+  // ?pkg=N arrives from Work With Me, where the visitor has already dragged
+  // out the month they want. Opening the deck's price screen on a different
+  // package would make them build it twice. Only the tier is pre-set -- the
+  // deck still starts on screen one, because the four screens before the
+  // price are the argument for it.
+  var pkg = parseInt((location.search.match(/[?&]pkg=(\d+)/) || [])[1], 10);
+  var start = (pkg >= 0 && pkg < OD_TIERS.length) ? pkg : 1;
+  if (vol) vol.value = start;
+  odSetTier(start);
 
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;

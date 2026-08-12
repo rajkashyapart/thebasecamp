@@ -197,6 +197,24 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   overlaps it along its shortest axis, so no card or glyph can sit behind
   the words or on the one link the page has. Don't hand-place cards to
   dodge the headline; the rectangle is what keeps it clear.
+- **Work With Me's primary card is built, not read.** Its three facts were
+  three ranges — *1–3 days / mo*, *6–20 videos*, *from ₹36,995* — which is
+  three questions a visitor has to answer for themselves before the card
+  means anything. Dragging answers all three at once and fills in their
+  month. It is the **same object** as CIAD's price screen, not a second
+  one: `hub.html` loads `ciad.js` for `OD_TIERS`, exactly as
+  `case-studies.html` loads `portfolio.js` — safe because `ciadInit()`
+  returns early when `#od-track` is absent. **Never copy the three
+  packages into `hub.js`**; that would be a fourth place for the site to
+  quote a different price. It snaps to the three for the same reason CIAD
+  does. One strip of thirty here rather than CIAD's 7×5 grid, because this
+  page fits one viewport exactly and the grid put it 50px over. The desc's
+  *"you show up for one to three shoot days"* came off to pay for it — the
+  slider says that now, precisely. The choice rides to `ciad.html?pkg=N`,
+  which pre-sets the deck's tier and nothing else; the deck still opens on
+  screen one, because the four screens before the price are the argument
+  for it. Days are pink here, not the deck's blue: on this page blue means
+  *the path you scope yourself*, which is the other card.
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
 - **CIAD is a five-screen deck** — the question, the problem, how we work,
   the work, the month after — crossed by one button that morphs from "find
@@ -258,6 +276,16 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   CTA. The hover arrow went blue with the names, so one gesture lights one
   row and two colours never both mean "go". Row numbers and section labels
   are muted ink.
+  **The multiple is drawn as well as typeset.** A tick at that client's own
+  average post, and a line out to what the work did — solid for what it
+  reliably did, a lighter tail for how far it went, which is how a hedge
+  draws. One scale across all six rows (0–20×); a per-row scale would draw
+  six identical bars and say nothing. The numbers are **parsed out of the
+  same `metrics` string `csMult()` prints** — never add a parallel `bar:`
+  field, that is a fourth place for the five figures to disagree. The tick
+  is labelled once, on row 01, and is the legend for the five under it.
+  Drawn on arrival, linear, then held, and the observer unobserves as it
+  fires so it never replays on the way back up.
   **The row has its own phone layout below 600px** — stacked as who / what
   kind / what it did / the sentence about it, with `display:contents` on
   `.cs-card-body` so its three children can take grid rows of their own.
@@ -356,7 +384,7 @@ Each page is a standalone HTML file with one `init*()` function called on
 |---|---|---|
 | `index.html` | Video intro (Bunny HLS), redirects to playground | inline |
 | `playground.html` | Photo scatter canvas — desktop pan/zoom, mobile vertical feed | `playground.js` |
-| `hub.html` | "Work With Me" — two offers, side by side | `hub.js` |
+| `hub.html` | "Work With Me" — two offers, side by side | `ciad.js` (for `OD_TIERS`) + `hub.js` |
 | `about.html` | About — photographs in `shots/` | `about.js` |
 | `case-studies.html` | Case studies | `case-studies.js` |
 | `ciad.html` | Outlier Content in a Day — a five-screen deck | `ciad.js` |
