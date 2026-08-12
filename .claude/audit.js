@@ -49,7 +49,9 @@ const BUDGET = {
   // hub:   blue marks the path you scope, pink the recommended one.
   // ciad:  blue is the craft (positioning, the method, the day itself),
   //        pink is the payoff and the person (Raj's hand, the one button).
-  accentsException: { about: 2, hub: 2, ciad: 2 },
+  // case-studies: blue is *who* (the client name, in the list and on its own
+  //        page), pink is *what it did* (the multiple) and the booking CTA.
+  accentsException: { about: 2, hub: 2, ciad: 2, 'case-studies': 2 },
   spacingCount: 4                   // tight / unit / between-units / section
 };
 

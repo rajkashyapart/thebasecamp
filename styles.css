@@ -3,6 +3,35 @@
 ::view-transition-old(nsp-headline), ::view-transition-new(nsp-headline) { animation-duration: 0.5s; animation-timing-function: cubic-bezier(0.4,0,0.2,1); }
 
 /* ======================================================
+   CAVEAT, SELF-HOSTED
+
+   Raj, 2026-08-12: on his phone the "(badly)" aside on About rendered in a
+   font that was not Caveat, while desktop was correct. It could not be
+   reproduced in a phone-width Chromium -- Caveat renders there -- which
+   leaves the one thing that genuinely differs per platform: the generic
+   `cursive` fallback. On iOS that resolves to Snell Roundhand, a copperplate
+   script that looks nothing like Caveat's marker hand, so any moment the
+   webfont is late or missing the word changes typeface. Serving the file
+   ourselves removes the third-party request, the UA sniffing and the
+   fallback window in one go, so every device gets the same letterforms.
+
+   The latin subset only (the three marks on this site are ascii), and it is
+   the variable file, so one 51KB request covers the 600 About and Work With
+   Me use and any weight a later mark wants. Caveat is OFL -- self-hosting is
+   what the licence is for. No build step: it is a static file.
+====================================================== */
+@font-face{
+  font-family:'Caveat';
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url('/fonts/caveat-latin-var.woff2') format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,
+                U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,
+                U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ======================================================
    GLOBAL RESET + SCREEN SYSTEM
 ====================================================== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -478,7 +507,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    three words. Caveat replaces the two font families this page was loading
    and never used (Playfair Display, DM Sans). */
 .hub-opt-mark{
-  font-family:'Caveat',cursive;font-weight:600;
+  font-family:'Caveat','Cormorant Garamond',serif;font-weight:600;
   font-size:var(--hb-title);line-height:1;color:var(--accent-r);
   display:inline-block;transform:rotate(-2.2deg);transform-origin:left center;
   margin-bottom:var(--hb-tight);
@@ -861,7 +890,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 /* Raj's hand. Set at the price step so it costs no new type size. */
 .od-hand{
-  font-family:'Caveat',cursive;font-size:20px;line-height:1.1;
+  font-family:'Caveat','Cormorant Garamond',serif;font-size:20px;line-height:1.1;
   letter-spacing:0;text-transform:none;color:var(--accent-r);
 }
 .od-hand-block{display:inline-block;margin-top:var(--od-2);transform:rotate(-2deg);}
@@ -1524,10 +1553,12 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 #about-inner{
   --name:clamp(30px,3.2vw,46px);
-  --sec:21px;
+  --sec:28px;
   --text:15px;
   --small:13.5px;
   --hand:20px;
+
+  --sec-rule-gap:13px;
 
   --t:8px;
   --u:clamp(18px,2.4vh,30px);
@@ -1606,11 +1637,37 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .col a.me:hover{color:var(--accent-r);border-bottom-color:var(--accent-r);}
 }
 
+/* ── section heads ─────────────────────────────────── */
+/* Raj, 2026-08-12: "a team of one needs to be highlighted i guess, same for
+   experience and education." At --sec 21 against --text 15 the three heads
+   were four points above the body in a face nobody reads as loud, so the
+   page had no visible sections at all -- squint at it and the whole column
+   is one grey block.
+
+   Two things fix it together, which is what he asked for. Size and air do
+   the hierarchy: the heads jump a third, and the gap above each one is now
+   several times the gap below it, so a head belongs to what follows rather
+   than floating between two paragraphs. The rule is the marker on top of
+   that -- short, flush with the column's spine, so it declares a start
+   without indenting the heading out of alignment with everything else.
+
+   The rule takes the colour the page already runs on: pink is the person,
+   so "a team of one" gets it; blue is the work, so the two records of it do.
+   No new colour, and the split says which half you are reading -- the same
+   job "one" (pink) and "all of them" (blue) already do inside the words. */
 .sec{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;
   font-size:var(--sec);color:var(--ink);
-  margin:0 0 var(--t);letter-spacing:-0.005em;
+  margin:0 0 var(--t);letter-spacing:-0.012em;
+  --sec-rule:var(--accent-r);
 }
+.sec::before{
+  content:'';display:block;
+  width:22px;height:2px;border-radius:1px;
+  background:var(--sec-rule);
+  margin-bottom:var(--sec-rule-gap);
+}
+.recs .sec{--sec-rule:var(--accent-b);}
 .secsub{
   font-family:'DM Mono',monospace;font-size:var(--small);
   line-height:1.55;color:var(--ink-muted);margin:0 0 var(--u);text-wrap:pretty;
@@ -1704,8 +1761,12 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* ── marks made by hand ────────────────────────────── */
 /* Caveat, and only ever on an aside. Nothing you need to read is here.
    Pink, because every aside on this page is the person talking. */
+/* The fallback is Cormorant, not the generic `cursive`. `cursive` is Snell
+   Roundhand on iOS and Comic Sans on Windows -- a fallback that changes the
+   word's typeface per device is the bug Raj reported. Cormorant italic is
+   already this page's display face, so a failure stays inside the system. */
 .hand{
-  font-family:'Caveat',cursive;font-weight:600;
+  font-family:'Caveat','Cormorant Garamond',serif;font-weight:600;
   font-size:var(--hand);line-height:1;color:var(--accent-r);
 }
 
@@ -1974,7 +2035,8 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    block was the education list Raj has already corrected twice. */
 @media(min-width:821px) and (max-height:920px){
   #about-inner{
-    --name:clamp(26px,2.4vw,33px);--sec:18px;--text:13.5px;--small:12.5px;--hand:17px;
+    --name:clamp(26px,2.4vw,33px);--sec:24px;--text:13.5px;--small:12.5px;--hand:17px;
+    --sec-rule-gap:10px;
     --u:16px;--s:24px;
   }
   .col{padding:var(--top) 34px var(--t) clamp(18px,3vw,42px);}
@@ -2011,7 +2073,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .tile.hero.inline img{width:100%;height:auto;}
 }
 @media(max-width:430px){
-  #about-inner{--name:32px;--sec:19px;--text:14.5px;--small:13px;--hand:19px;}
+  #about-inner{--name:32px;--sec:25px;--text:14.5px;--small:13px;--hand:19px;--sec-rule-gap:11px;}
   /* one column of skills, not two: at 350px wide "strategy & positioning"
      wraps, and a wrapped two-column list reads as broken alignment */
   .skills{columns:1;}
@@ -2507,7 +2569,16 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    the page's small-type size and two sizes a pixel apart communicate nothing. */
 .cs-card-no{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); letter-spacing:0.1em; flex-shrink:0; }
 .cs-card-body{ flex:1; min-width:0; }
-.cs-card-client{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); line-height:1.05; color:var(--ink); }
+/* Blue, and this page now runs two accents on purpose. Raj, 2026-08-12: "the
+   client names should be coloured/highlighted. needs contrast in some way."
+   They were dark ink on a near-white card, the same value as the teaser and
+   the sector under them, so the row's loudest thing was the arrow.
+   The split is the site's own and it carries meaning here: blue is *who*,
+   pink is *what it did*. Keeping the multiple as the page's only pink is the
+   point -- if the names took pink too, six names and six figures in one
+   colour would leave nothing for the eye to rank. Don't use the two
+   interchangeably. */
+.cs-card-client{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); line-height:1.05; color:var(--accent-b); }
 .cs-card-sector{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
 .cs-card-teaser{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); margin-top:8px; line-height:1.5; }
 /* The one figure on the row that carries meaning, so it gets the page's one
@@ -2528,7 +2599,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   color:var(--ink-muted); margin-bottom:3px;
 }
 .cs-card-arrow{ font-size:20px; color:var(--ink-muted); flex-shrink:0; transition:transform .25s, color .2s; }
-@media(hover:hover) and (pointer:fine){ .cs-card:hover .cs-card-arrow{ transform:translateX(4px); color:var(--accent-r); } }
+/* Blue on hover, not pink. The arrow goes *into* a client, so it belongs to
+   the who-half with the name it sits beside -- one gesture lighting one row.
+   Pink stays on the booking CTA at the foot, which is the only other action
+   here; two colours both meaning "go" would be the interchangeable use the
+   budget exists to stop. */
+@media(hover:hover) and (pointer:fine){ .cs-card:hover .cs-card-arrow{ transform:translateX(4px); color:var(--accent-b); } }
 .cs-foot{ text-align:center; margin-top:56px; }
 .cs-foot-line{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
 /* Pink and on the page's own display size. It was 24px blue -- which was both
@@ -2543,7 +2619,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-back:hover{ color:var(--ink); }
 .cs-hero{ margin:18px 0 36px; }
 .cs-hero-eyebrow{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
-.cs-hero-client{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,7vw,64px); line-height:0.98; color:var(--ink); margin:0; }
+/* Same blue as the list row it was opened from, so the name you clicked is
+   the name that greets you in the colour you clicked it in. */
+.cs-hero-client{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,7vw,64px); line-height:0.98; color:var(--accent-b); margin:0; }
 .cs-hero-person{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(16px,2.4vw,22px); color:var(--ink-muted); margin-top:6px; }
 .cs-layout{ display:grid; grid-template-columns:200px 1fr; gap:56px; align-items:start; }
 .cs-sidebar{ position:sticky; top:84px; }
