@@ -82,6 +82,18 @@ function measure() {
   const MIN_ALPHA   = 0.16;   // a 0.08 hairline is texture, not a colour decision
   const INK_L       = 0.20;   // a warm near-black is ink however saturated it reads
   const PAPER_L     = 0.90;   // and a warm near-white is paper
+  // HSL saturation is the wrong instrument near white. This whole site is
+  // warm neutrals, and a warm neutral reads as highly "saturated" in HSL
+  // while being visibly grey: About's tile placeholder #e8e3db scores 0.22
+  // saturation -- well over NEUTRAL_SAT -- and sits at 0.884 lightness, just
+  // under PAPER_L, so it was reported as a third accent used 34 times on a
+  // page whose budget is two. It was one placeholder colour behind the
+  // photographs.
+  // Absolute channel spread is the honest measure. #e8e3db spans 13 across
+  // R/G/B; every real accent in this palette spans 82 or more
+  // (#3a8c52 82, #ff7bac 132, #0d8aaf 162), so 30 separates them with room
+  // to spare and no ink or paper tone comes close.
+  const MIN_CHROMA  = 30;
   const MIN_SPACE   = 8;      // under 8px is optical nudging, not structure
 
   function parse(c) {
@@ -149,6 +161,7 @@ function measure() {
                             && parseFloat(cs.borderLeftWidth) === 0) return;
       const c = parse(v);
       if (!c || c.a < MIN_ALPHA) return;
+      if (Math.max(c.r, c.g, c.b) - Math.min(c.r, c.g, c.b) < MIN_CHROMA) return;
       if (sat(c) < NEUTRAL_SAT) return;
       const L = light(c);
       if (L < INK_L || L > PAPER_L) return;    // warm ink and warm paper are not accents

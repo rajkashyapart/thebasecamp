@@ -1811,7 +1811,10 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    underneath. No fact is abbreviated away to make a column fit. */
 .recs .row{
   display:grid;grid-template-columns:1fr auto;
-  column-gap:10px;row-gap:1px;line-height:1.5;
+  /* --t, not a hand-picked 10. The record and its year are two halves of one
+     line, which is exactly what the tight tier is for, and a 10 sitting two
+     pixels off the 8 everywhere else was a value nobody chose on purpose. */
+  column-gap:var(--t);row-gap:1px;line-height:1.5;
 }
 .recs .row-name{grid-area:1/1;}
 .recs .row-name::after{content:none;}
@@ -1886,7 +1889,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      that was the two pixels the column overflowed by */
   margin-top:auto;padding-top:clamp(16px,2.2vh,28px);
   display:grid;grid-template-columns:auto 1fr auto;
-  align-items:center;column-gap:14px;
+  /* --u, not 14. 14 against the unit tier's 16 was the page's one pair of
+     indistinguishable spacings: two values two pixels apart, doing the same
+     job of separating parts of one row, costing a decision and saying
+     nothing. The three parts of the player are one unit's worth apart. */
+  align-items:center;column-gap:var(--u);
   /* capped, because a progress bar run the full width of the column stops
      reading as a control and starts reading as a rule under the writing --
      and this page separates things with spacing, not rules */
@@ -2517,8 +2524,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   letter-spacing:0.18em; text-transform:uppercase;
   color:rgba(255,255,255,0.78); margin-top:8px;
 }
+/* This page's spacing is 8 / 12 / 20 / 28 and nothing between. It used to run
+   an 11 here against the credit block's 12 -- two values one pixel apart,
+   both doing the same job of setting a small gap under a line of type. On a
+   phone the same pair was 11 and 10. Neither difference is visible; both
+   cost a decision every time something new is added near them. */
 .reel-pglink{
-  display:inline-block; margin-top:11px; pointer-events:auto;
+  display:inline-block; margin-top:12px; pointer-events:auto;
   font-family:'DM Mono',monospace; font-size:10px;
   letter-spacing:0.14em; text-transform:uppercase;
   color:#fff; text-decoration:none;
@@ -2530,7 +2542,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 /* Credit block — what raj did, what it did. Sits below the client name,
    separated by a hairline so it reads as a footnote, not a headline. */
 .reel-credit{
-  margin-top:12px; padding-top:11px;
+  margin-top:12px; padding-top:12px;
   max-width:46ch;
   border-top:1px solid rgba(255,255,255,0.18);
 }
@@ -2583,7 +2595,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .reel-media img{ max-width:100vw; max-height:100dvh; }
   .reel-frame::after{ height:52%; }
   .reel-label{ padding:26px 22px; }
-  .reel-credit{ max-width:100%; margin-top:10px; padding-top:9px; }
+  .reel-credit{ max-width:100%; margin-top:12px; padding-top:12px; }
   .reel-credit-row{ font-size:11px; line-height:1.66; }
   #reel-view{ right:12px; top:calc(var(--nav-h,36px) + 10px); }
   .reel-view-btn{ font-size:9px; padding:6px 10px; letter-spacing:0.08em; }
