@@ -134,6 +134,70 @@ function csMult(cs) {
   return '';
 }
 
+// ---- the multiple, drawn ------------------------------------------------
+//
+// The page's whole argument is one number per row, and a number set in a
+// column is read rather than seen. Drawn against the client's own baseline
+// it is a picture: six lines down the page, and you know the shape of the
+// work before you have read a word.
+//
+// Parsed out of the same metric string csMult() prints -- NOT a second
+// field. Three files already hold these five figures and the rule is that
+// moving one moves all three; a parallel `bar:` property would have been a
+// fourth place for them to disagree, inside the same file as the first.
+//
+// CS_BAR_MAX is 20 because the largest claim on the page is 5-20x. One scale
+// across all six rows, so the lines are comparable to each other as well as
+// to their own baselines -- a per-row scale would make every row look
+// identical, which says nothing.
+var CS_BAR_MAX = 20;
+
+function csMultRange(cs) {
+  if (!cs.metrics) return null;
+  for (var i = 0; i < cs.metrics.length; i++) {
+    var m = cs.metrics[i];
+    if (!/average post/i.test(m.l)) continue;
+    // entities out, so '3&ndash;11&times;' reads as '3-11'
+    var s = String(m.v).replace(/&ndash;|&mdash;/g, '-').replace(/&times;|&#215;/g, '')
+                       .replace(/&[a-z]+;/g, '').replace(/[^0-9.\-\sa-z]/gi, '');
+    var upTo = /up to/i.test(m.v);
+    var nums = s.match(/\d+(?:\.\d+)?/g);
+    if (!nums || !nums.length) return null;
+    var lo = parseFloat(nums[0]);
+    var hi = nums.length > 1 ? parseFloat(nums[1]) : lo;
+    // "up to 5x" claims no floor, so the solid part stops at their own
+    // average and the whole reach above it is drawn as the lighter tail.
+    // The hedge is part of the fact -- it never becomes a flat 5x here
+    // either.
+    if (upTo) { hi = lo; lo = 1; }
+    return { lo: lo, hi: hi, upTo: upTo };
+  }
+  return null;
+}
+
+// solid = what it reliably did, light = how far it went. Widths are set as
+// percentages of the track so the drawing survives any column width.
+function csBarHTML(cs, idx) {
+  var r = csMultRange(cs);
+  if (!r) return '';
+  var pct = function (v) { return (Math.min(v, CS_BAR_MAX) / CS_BAR_MAX * 100).toFixed(2) + '%'; };
+  // The tick needs saying once, not six times. On the first row it carries a
+  // label and becomes the legend for the five under it; repeating it down the
+  // page would be the same fact stated six times, which is what makes a list
+  // feel like a form.
+  var legend = idx === 0
+    ? '<i class="cs-bar-legend" style="left:' + pct(1) + '">their average post</i>'
+    : '';
+  return '<span class="cs-bar' + (idx === 0 ? ' has-legend' : '') + '" aria-hidden="true">' +
+           '<i class="cs-bar-track"></i>' +
+           // their own average post, the thing every multiple is a multiple of
+           '<i class="cs-bar-base" style="left:' + pct(1) + '"></i>' +
+           '<i class="cs-bar-reach" style="--to:' + pct(r.hi) + '"></i>' +
+           '<i class="cs-bar-solid" style="--to:' + pct(r.lo) + '"></i>' +
+           legend +
+         '</span>';
+}
+
 // The frame takes the video's shape. Every reel here is vertical bar one, and
 // the media box was a hard 16/9, so the common case was being centre-cropped.
 // videoWidth/videoHeight is the only honest source for this -- the manifest
@@ -237,11 +301,52 @@ function initCaseStudies() {
           '<div class="cs-card-sector">' + cs.sector + '</div>' +
           '<div class="cs-card-teaser">' + cs.teaser + '</div>' +
         '</div>' +
-        '<div class="cs-card-mult">' + csMult(cs) + '</div>' +
+        '<div class="cs-card-mult">' + csMult(cs) + csBarHTML(cs, idx) + '</div>' +
         '<div class="cs-card-arrow">&#8594;</div>';
       card.addEventListener('click', function () { openCase(cs); });
       list.appendChild(card);
     })(CASE_STUDIES[i], i);
+  }
+  csDrawBars(list);
+}
+
+// Draw once on arrival, then hold -- the same rule CIAD's ring and stationed
+// line follow. Linear, because a line being traced is constant motion and an
+// eased one arrives before the number beside it has finished being read.
+// scaleX off a left origin rather than an animated width: it is the same
+// picture on the GPU instead of in layout.
+//
+// One observer, unobserving as it fires, so a bar never redraws on the way
+// back up the page. A drawing that replays every scroll stops being a
+// drawing and becomes a loop.
+function csDrawBars(list) {
+  var bars = list.querySelectorAll('.cs-bar');
+  if (!bars.length) return;
+
+  var reduced = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced || !('IntersectionObserver' in window)) {
+    for (var i = 0; i < bars.length; i++) bars[i].classList.add('is-drawn');
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries, obs) {
+    for (var e = 0; e < entries.length; e++) {
+      if (!entries[e].isIntersecting) continue;
+      var el = entries[e].target;
+      obs.unobserve(el);
+      // When two or three rows land together on the first screen, they
+      // cascade rather than snapping at once. 70ms, and it is capped so a
+      // fast scroll to the sixth row never sits waiting on a queue.
+      var n = Math.min(parseInt(el.getAttribute('data-i'), 10) || 0, 3);
+      el.style.transitionDelay = (n * 70) + 'ms, ' + (n * 70 + 90) + 'ms';
+      el.classList.add('is-drawn');
+    }
+  }, { threshold: 0.6 });
+
+  for (var b = 0; b < bars.length; b++) {
+    bars[b].setAttribute('data-i', b);
+    io.observe(bars[b]);
   }
 }
 
