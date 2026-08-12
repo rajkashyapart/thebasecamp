@@ -186,7 +186,13 @@ function initAbout() {
   // of after every word on the page; on a desktop it goes back to being the
   // right-hand pane's focal point. Moved rather than duplicated -- a second
   // copy is a second 1400px download and a second thing to keep in step.
-  var anchor = document.querySelector('.col .clients');
+  // Anchored to the last line of the intro block, not to .clients directly.
+  // Raj's "i want to win by helping my clients win" sits under the clients
+  // list and is the reason the word-of-mouth claim above it is true -- with
+  // the hero pinned to .clients the photograph landed between the two and
+  // split them on a phone only. Falls back to .clients when the line is absent.
+  var anchor = document.querySelector('.col .creed') ||
+               document.querySelector('.col .clients');
   var col = document.querySelector('#about-inner .col');
 
   // Where the writing comes to rest. A column that fits pins at the top; one

@@ -384,6 +384,12 @@ shorter:
 | Tidy closer | *"six years on, she is still a client"* — a section landing on a resolved beat instead of just stopping |
 | "x NOT y" | any sentence whose engine is the correction |
 
+**These describe sentences *you* generate. They do not constrain his.** His own
+line *"better isn't better, different is what's often better"* is an "x NOT y"
+and it stays — it's the reframe the insights section turns on. The ban exists
+because those shapes are what slot-filling produces, not because the shapes are
+bad. When his dump contains one, it ships.
+
 Run **NNV and Harry Dry as cutting tools only.** They decide what comes out;
 they never license a rewrite. Cut a line that is vague (*"she wanted to have
 all things personal brand"*), or that a later line says with receipts
