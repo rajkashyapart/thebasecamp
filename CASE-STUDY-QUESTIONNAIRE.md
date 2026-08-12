@@ -135,13 +135,16 @@ copy it fresh for any new client.)*
 *food brand · founder · **3×** their average post · quote ✓ on file*
 
 1. What they sell, to whom → vegan food that someone who isn't vegan would most likely enjoy.
-2. What you did + counts → 6 videos, **2 shoot days.** Counter-positioning, then the
-   videos built on it. ⚠ CIAD's foundation tier packages 6 videos as *1* shoot day —
-   this is 2020 work, not the current offer, so the two figures aren't in conflict, but
-   don't let anyone "fix" one to match the other.
-3. How they found you → **first customer, 2020.** Still working together six years on;
-   they've helped each other's businesses multiple ways. She saw the understanding of
-   social + psychology alongside taste and the ability to actually produce.
+2. What you did + counts → 6 videos, **2 shoot days**, made in **2024** — not 2020.
+   Counter-positioning, then the videos built on it.
+   ⚠ CIAD's foundation tier packages 6 videos as *1* shoot day. Raj, 2026-08-12:
+   *"no need to change the offer description. i dont think a client would mind."*
+   Leave both figures as they are.
+3. How they found you → **first customer, 2020** — as a freelancer, making pretty
+   aesthetic cinematic videos for her. That is verbatim the thing the study now rejects,
+   and the page lets the reader find it rather than pointing at it. Still working
+   together six years on. She saw the understanding of social + psychology alongside
+   taste and the ability to actually produce.
 4. What it cost (private) → **₹43,000 for 6 videos.** Not on the page.
 5. What she was posting before → her own page had turned salesy and lost her
    individuality. It read as *selfish* content to the viewer.

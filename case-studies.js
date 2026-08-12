@@ -44,9 +44,15 @@ var CASE_STUDIES = [
     // past the whole-line cut he authorised. "3.5x her average" is held for
     // the baseline question. Held, never rewritten -- that is the whole rule.
     content: {
-      overview: 'sarah was my first customer in 2020. and we still work together often. 6 years later, we&rsquo;ve helped each other&rsquo;s businesses in multiple ways.',
+      // Chronological, and the reorder is the whole point: "pretty aesthetic
+      // cinematic videos" is what he was making for her in 2020, and it is
+      // verbatim the thing the solution section rejects four sections later.
+      // Nothing on the page points at that. Say less than you know -- the
+      // reader connecting it is worth more than a sentence explaining it, and
+      // that sentence would be mine anyway.
+      overview: 'sarah was my first customer in 2020. i was working as a freelancer with her to make pretty aesthetic cinematic videos. these videos were made in 2024. and we still work together often. 6 years later, we&rsquo;ve helped each other&rsquo;s businesses in multiple ways.',
       context: 'founded by sarah edwards, they sell vegan food that even someone who&rsquo;s not vegan might most likely enjoy. she also runs multiple c+c outlets.',
-      insights: 'there is a way to talk about yourself and your brand while at the same time making the viewer feel heard &amp; seen. what made the difference is unselfish truth the industry is scared of saying out loud. especially on social. better isn&rsquo;t better, different is what&rsquo;s often better. that&rsquo;s how outliers form. crocs, coca cola, nothing.',
+      insights: 'there is a way to talk about yourself and your brand while at the same time making the viewer feel heard &amp; seen. what made the difference is unselfish truth the industry is scared of saying out loud. especially on social. better isn&rsquo;t better, different is what&rsquo;s often better. that&rsquo;s how outliers form. crocs, coca cola, nothing phone.',
       problem: 'her content wasn&rsquo;t landing as it seemed &lsquo;selfish&rsquo; content to the viewer. she needed conversations among the community, she wanted thought leadership. while having the time to focus on her f&amp;b business.',
       // "2 shoot days." opens rather than closes: at the end it sat directly
       // beside "2017" and the two numbers read as one commenting on the other.
