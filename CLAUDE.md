@@ -324,6 +324,47 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
 
 ## 6. Copy
 
+**The copy is his, verbatim. You are an editor, not a writer.**
+
+When Raj sends a dump about a client, a page or an offer, those are the
+sentences that ship. Settled 2026-08-12, after a Copper + Cloves study where
+every fact was his and not one sentence was: *"damn you turned my copy bad,
+it unnatural AI slop language."* Offered three levels of "verbatim" he chose
+the strictest.
+
+You may: **fix typos and spelling. cut a whole line. choose which lines
+survive and what order they sit in.** That is the entire permitted set.
+
+You may not: re-say a point in your own words, merge two of his sentences
+into one better one, add a connective sentence to smooth a join, or supply a
+sentence for a fact he only listed. **A fact with no sentence attached to it
+does not go on the page** — leave the section short, or leave it empty and
+ask. Empty is already the house style here; invented is not.
+
+The tells he named, all five of them banned even when true and even when
+shorter:
+
+| Banned shape | What it looks like |
+|---|---|
+| Em-dash antithesis | *"talking about yourself isn't the problem — picking the parts of your own story is the whole job"* |
+| Invented metaphor | *"the page is what gets squeezed when a kitchen needs her"* — he never said kitchen |
+| Balanced "rather than" | *"starting conversations rather than closing sales"* |
+| Tidy closer | *"six years on, she is still a client"* — a section landing on a resolved beat instead of just stopping |
+| "x NOT y" | any sentence whose engine is the correction |
+
+Run **NNV and Harry Dry as cutting tools only.** They decide what comes out;
+they never license a rewrite. Cut a line that is vague (*"she wanted to have
+all things personal brand"*), or that a later line says with receipts
+(*"above 10k views on each video"* against the list of six). Do **not** cut
+his opinions for failing Harry Dry's third test — *"a strategy well suited
+for 2017"* and *"unselfish truth the industry is scared of saying out loud"*
+were cut as transferable and he put all three back. His voice is what makes
+the page non-transferable; the test does not apply to it.
+
+Two consequences worth stating: his sentences are usually longer and looser
+than the ones you'd write, and **that is correct** — the register is the
+point. And a section is allowed to end mid-thought, because his dumps do.
+
 Raj runs copy through two frameworks that already live in his vault. Read them
 before writing any — don't ask him to attach them:
 
