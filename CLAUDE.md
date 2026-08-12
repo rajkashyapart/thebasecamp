@@ -362,7 +362,13 @@ You may not: re-say a point in your own words, merge two of his sentences
 into one better one, add a connective sentence to smooth a join, complete a
 fragment he left open, upgrade his vocabulary, or supply a sentence for a fact
 he only listed. **A fact with no sentence attached to it does not go on the
-page.** Clipping a trailing clause is **not** authorised — ask first.
+page.** Clipping a trailing clause is **not** authorised by default — ask
+first, every time. He has approved three that way (2026-08-12: *"2020 context
+is when"*, *"she wanted thought leadership"*, and a whole-line cut that removed
+*"in multiple ways"* without needing a clip at all). Approval is per clause,
+never standing. **Prefer the whole-line cut** — twice now the vague tail lived
+in a line that was redundant anyway, and cutting the line solved it without
+touching his sentence at all.
 
 **Slop is an operation, not a style.** It is what comes out when a sentence is
 generated to fill an empty slot, which is why it always has the same shape.

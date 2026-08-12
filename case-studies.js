@@ -39,10 +39,20 @@ var CASE_STUDIES = [
     // tier packages 6 videos as 1 shoot day, so these are not the same claim.
     // This is 2020 work, not the current offer; don't "reconcile" them.
     //
-    // Still holding, pending his word: the trailing clauses "in multiple ways"
-    // and "she wanted thought leadership" both fail, but clipping a clause is
-    // past the whole-line cut he authorised. "3.5x her average" is held for
-    // the baseline question. Held, never rewritten -- that is the whole rule.
+    // Cross-checked against the updated framework 2026-08-12: 26 sentences,
+    // one finding. Overview had two lines doing the same job -- "and we still
+    // work together often" and "6 years later, we've helped each other's
+    // businesses in multiple ways". 2020-to-now is arithmetic the reader
+    // already has from sentence one, so the second line's only unique content
+    // was the vague tail; cutting it whole removed both problems at once and
+    // needed no clause cut. "she wanted thought leadership" clipped with his
+    // approval ("do what's necessary") -- a landing-page word; "conversations
+    // among the community" is the half he told me to keep.
+    //
+    // "3.5x her average" is STILL OFF, and it is the one open item that no
+    // instruction can close: the set averages 14.7k against a ~5.7k baseline,
+    // which is 2.6x, not the 3x in the metrics box. Only Raj knows which
+    // window each was measured on. Held, never rewritten -- that is the rule.
     content: {
       // Chronological, and the reorder is the whole point: "pretty aesthetic
       // cinematic videos" is what he was making for her in 2020, and it is
@@ -50,10 +60,10 @@ var CASE_STUDIES = [
       // Nothing on the page points at that. Say less than you know -- the
       // reader connecting it is worth more than a sentence explaining it, and
       // that sentence would be mine anyway.
-      overview: 'sarah was my first customer in 2020. i was working as a freelancer with her to make pretty aesthetic cinematic videos. these videos were made in 2024. and we still work together often. 6 years later, we&rsquo;ve helped each other&rsquo;s businesses in multiple ways.',
+      overview: 'sarah was my first customer in 2020. i was working as a freelancer with her to make pretty aesthetic cinematic videos. these videos were made in 2024. and we still work together often.',
       context: 'founded by sarah edwards, they sell vegan food that even someone who&rsquo;s not vegan might most likely enjoy. she also runs multiple c+c outlets.',
       insights: 'there is a way to talk about yourself and your brand while at the same time making the viewer feel heard &amp; seen. what made the difference is unselfish truth the industry is scared of saying out loud. especially on social. better isn&rsquo;t better, different is what&rsquo;s often better. that&rsquo;s how outliers form. crocs, coca cola, nothing phone.',
-      problem: 'her content wasn&rsquo;t landing as it seemed &lsquo;selfish&rsquo; content to the viewer. she needed conversations among the community, she wanted thought leadership. while having the time to focus on her f&amp;b business.',
+      problem: 'her content wasn&rsquo;t landing as it seemed &lsquo;selfish&rsquo; content to the viewer. she needed conversations among the community. while having the time to focus on her f&amp;b business.',
       // "2 shoot days." opens rather than closes: at the end it sat directly
       // beside "2017" and the two numbers read as one commenting on the other.
       solution: '2 shoot days. we were able to counter position sarah. her truth about going vegan, her truth about diet. her not-so-conventional takes laid out on camera, on our scripts. i disagree with most smmas, and clients always get the same pitch from these agencies: pretty aesthetic cinematic videos. a strategy well suited for 2017, but not today.',
