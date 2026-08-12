@@ -22,17 +22,20 @@ var CS_SECTIONS = [
 var CASE_STUDIES = [
   {
     id: 'copper-cloves', client: 'copper + cloves', person: 'sarah edwards', sector: 'food brand &middot; founder',
-    teaser: 'saying the things only she could say.',
+    teaser: 'her page had gone salesy. the fix wasn&rsquo;t talking about herself less.',
     vid: csVid('fddf2783-d99b-440c-b433-0dbcbad3a07c'),
     metrics: [{ v: '3&times;', l: 'their average post' }],
     quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'sarah edwards', role: 'founder, copper + cloves' },
+    // Written from Raj's dump, 2026-08-12. The 3x stays the set figure; the
+    // outcome states views instead of a second multiple, because the earlier
+    // best-video spikes are exactly what OD_TIERS' note says were retired.
     content: {
-      overview: 'counter-positioning, ideation, direction, shoot and edit for sarah edwards of copper + cloves &mdash; all of it handled here.',
-      context: 'a warm brand in a category where everyone already had good photography and roughly the same things to say.',
-      insights: 'everyone is different, and that difference is the one thing a competitor cannot copy. the way out of a red ocean isn&rsquo;t better execution &mdash; it&rsquo;s saying the things only you can say.',
-      problem: 'she was competing in the same water as everyone else, on things anyone could have said.',
-      solution: 'counter-positioning first &mdash; finding the things only she could say &mdash; then ideation, direction, shoot and edit.',
-      outcome: 'the work ran 3&times; their average post.'
+      overview: 'six videos for sarah edwards, who founded copper + cloves and was watching her own page turn into an ad for it. she was my first client, in 2020. we still work together.',
+      context: 'copper + cloves is vegan food that people who aren&rsquo;t vegan order anyway. sarah runs the outlets and the page about herself on top of them, and the page is what gets squeezed when a kitchen needs her.',
+      insights: 'her posts were about her food and they read as being about her. talking about yourself isn&rsquo;t the problem &mdash; picking the parts of your own story a stranger recognises is the whole job. &ldquo;why i started copper + cloves&rdquo; is entirely about her, and nobody read it as selling.',
+      problem: 'she wanted the page starting conversations rather than closing sales, and she wanted it to cost her almost none of her week.',
+      solution: 'positioning first &mdash; the things only sarah could say, including the ones her industry avoids saying out loud &mdash; then the videos built on them, with everything after the shoot handled here.',
+      outcome: 'all six cleared 10,000 views. the best of them, &ldquo;why i started copper + cloves&rdquo;, did 20,000 and drew more comments than anything else on her page. six years on, she is still a client.'
     }
   },
   {
