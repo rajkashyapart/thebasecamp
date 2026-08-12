@@ -51,7 +51,10 @@ const BUDGET = {
   //        pink is the payoff and the person (Raj's hand, the one button).
   // case-studies: blue is *who* (the client name, in the list and on its own
   //        page), pink is *what it did* (the multiple) and the booking CTA.
-  accentsException: { about: 2, hub: 2, ciad: 2, 'case-studies': 2 },
+  // playground: blue is Raj's three notes, pink is the one link out. It ran
+  //        three until 2026-08-12, the third being a green used on doodles
+  //        and nowhere else on the site.
+  accentsException: { about: 2, hub: 2, ciad: 2, 'case-studies': 2, playground: 2 },
   spacingCount: 4                   // tight / unit / between-units / section
 };
 
@@ -121,6 +124,13 @@ function measure() {
     if (cs.display === 'none' || cs.visibility === 'hidden') return;
     const box = el.getBoundingClientRect();
     if (!box.width && !box.height) return;
+    // .sr-only is 1x1 and clipped, so it has a rect and is neither
+    // display:none nor visibility:hidden -- it was being counted as a real
+    // type size. Playground's h1.sr-only is how that page read as six sizes
+    // when only five are on screen. Nothing a sighted visitor cannot see
+    // belongs in a visual budget.
+    if (box.width <= 1 && box.height <= 1) return;
+    if (el.classList.contains('sr-only')) return;
 
     // type sizes, only where there is real text
     const ownText = [...el.childNodes]

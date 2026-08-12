@@ -39,10 +39,28 @@ var videoCards = [
   {x:-200, y:440, w:300, h:225, rot:-0.4, src:'https://vz-6f9a60bb-593.b-cdn.net/3c36aee0-bec7-4b61-bd69-9b1a07f04676/playlist.m3u8'}
 ];
 
+// Three notes in Raj's voice, and one colour between them, because that is
+// what they are: one voice, not three.
+//
+// They used to be two off-system teals (#3a8597, #6098a3) and pink. The pink
+// one was the fault. Blurred until the type is illegible, that card was the
+// loudest thing on the whole canvas -- louder than the headline, and louder
+// than "see the work", which is the only link this page has and is also
+// pink. The page's one accent was being spent on a joke and then borrowed
+// back by the one thing a visitor is meant to click. Pink now appears once
+// in the composition, on the link.
+//
+// The blue is --accent-b, not a fourth hand-mixed teal. The split reads:
+// the photographs are the work, blue is Raj talking, pink is the way out.
+//
+// var(), not a hex copy: this is assigned straight to style.background, so
+// the token resolves at paint and the palette stays in one file.
+var PG_NOTE_BG = 'var(--accent-b)';
+
 var textCards = [
-  {x:-440, y:-200, w:200, h:110, rot:-1.0, bg:'#3a8597', headline:"i guess you can't defeat someone who's just having fun :')", dark:true},
-  {x:480, y:-140, w:190, h:100, rot:0.8, bg:'#6098a3', headline:'why do you think in the ways you think?', dark:true},
-  {x:340, y:340, w:180, h:100, rot:-0.6, bg:'#ff7bac', headline:"🍡 i hope you win", dark:true}
+  {x:-440, y:-200, w:200, h:110, rot:-1.0, bg:PG_NOTE_BG, headline:"i guess you can't defeat someone who's just having fun :')", dark:true},
+  {x:480, y:-140, w:190, h:100, rot:0.8, bg:PG_NOTE_BG, headline:'why do you think in the ways you think?', dark:true},
+  {x:340, y:340, w:180, h:100, rot:-0.6, bg:PG_NOTE_BG, headline:"🍡 i hope you win", dark:true}
 ];
 
 var G_STICK = '<svg width="14" height="20" viewBox="0 0 14 20" fill="none"><circle cx="7" cy="3.2" r="2.2" stroke="currentColor" stroke-width="1"/><line x1="7" y1="5.4" x2="7" y2="11.2" stroke="currentColor" stroke-width="1"/><line x1="2.5" y1="8" x2="7" y2="10.2" stroke="currentColor" stroke-width="1"/><line x1="11.5" y1="8" x2="7" y2="10.2" stroke="currentColor" stroke-width="1"/><line x1="7" y1="11.2" x2="4.5" y2="17.5" stroke="currentColor" stroke-width="1"/><line x1="7" y1="11.2" x2="9.5" y2="17.5" stroke="currentColor" stroke-width="1"/></svg>';
@@ -50,8 +68,14 @@ var G_EYE = '<svg width="18" height="12" viewBox="0 0 18 12" fill="none"><path d
 var pgGlyphs = [
   // stick figures - near hero and in open gaps
   {svg:G_STICK, cls:'', pos:[[-180,-180],[200,-200],[-160,200],[180,160],[-420,80],[460,-60]]},
-  // eyes - sprinkled around mid-ring
-  {svg:G_EYE, cls:'g', pos:[[-300,-300],[350,-280],[-320,300],[380,220],[0,-300],[0,300]]},
+  // eyes - sprinkled around mid-ring.
+  // These were green, which was the only green anywhere on the site and the
+  // page's third accent. Glyph colour here was assigned by which ring a mark
+  // sat in, not by what it meant -- which is the definition of using accents
+  // interchangeably. The page now runs the same two the rest of the site
+  // does, each with a job: pink is the one link, blue is Raj's three notes,
+  // and the doodles echo whichever of the two they sit nearest.
+  {svg:G_EYE, cls:'', pos:[[-300,-300],[350,-280],[-320,300],[380,220],[0,-300],[0,300]]},
   // sticks - outer ring gaps
   {svg:G_STICK, cls:'b', pos:[[500,-250],[-500,-250],[500,250],[-500,280]]},
   // eyes - outer corners

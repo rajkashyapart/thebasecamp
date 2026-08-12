@@ -306,7 +306,9 @@ p,li,dd,figcaption,
 .pg-text-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-muted);font-weight:300;}
 
 .pg-glyph{position:absolute;pointer-events:none;opacity:0.68;color:var(--accent-r);z-index:50;}
-.pg-glyph.g{color:var(--accent-g);}
+/* .g (green) is gone with the marks that used it -- it was the site's only
+   green and playground's third accent. --accent-g stays declared in :root:
+   it is Raj's palette, not this page's leftover. */
 .pg-glyph.b{color:var(--accent-b);}
 .pg-glyph.f{color:var(--ink-faint);}
 
@@ -2220,10 +2222,16 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     font-size:clamp(24px,7vw,36px); line-height:1.04; letter-spacing:0.01em;
     margin:0; color:#fff;
   }
+  /* 18, and .pgf-outro-cta matches it. The same action was set at 16 here
+     and 22 at the foot of the feed -- one action, two sizes, and the sixth
+     size on a five-size budget. 18 is the meeting point: a better tap target
+     than 16 for the only link on a phone's first screen, and small enough
+     that the fixed hero block does not grow down into the row beneath it.
+     22 here was tried and pushed the CTA onto the cards below. */
   .pgf-hero-fixed .pgf-cta{
     display:inline-block; margin-top:13px; pointer-events:auto;
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-    font-size:16px; color:#fff; text-decoration:none;
+    font-size:18px; color:#fff; text-decoration:none;
     border-bottom:1px solid rgba(255,255,255,0.55); padding-bottom:2px;
   }
   .pgf-hero-fixed .pgf-cta:active{ transform:scale(0.97); }
@@ -2236,16 +2244,23 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .pgf-outro-cta{
     display:inline-block; pointer-events:auto;
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-    font-size:22px; color:var(--accent-b,#0d8aaf); text-decoration:none;
+    font-size:18px; color:var(--accent-b,#0d8aaf); text-decoration:none;
     border-bottom:1px solid rgba(13,138,175,0.4); padding-bottom:2px;
+    transition:transform .14s var(--e-out);
   }
+  .pgf-outro-cta:active{ transform:scale(0.97); }
 
   /* editorial rows — varied width, everything floats, comfortable gaps */
   .pgf-row{ display:flex; align-items:flex-start; margin-bottom:22px; }
   .pgf-solo-l{ justify-content:flex-start; padding-left:20px; }
   .pgf-solo-r{ justify-content:flex-end; padding-right:20px; }
   .pgf-solo-c, .pgf-wide, .pgf-glyphrow{ justify-content:center; }
-  .pgf-pair{ justify-content:center; gap:16px; padding:0 20px; }
+  /* 22, not 16. A paired row can hold a text card, whose 30px of internal
+     padding was larger than the gap separating it from the photo beside it
+     -- so the two read as one object rather than two. Raj's standing note on
+     spacing is that the answer is always more room between things, never
+     less, so the gap went up rather than the card getting tighter. */
+  .pgf-pair{ justify-content:center; gap:22px; padding:0 20px; }
   .pgf-solo-l .pgf-item, .pgf-solo-r .pgf-item{ width:64%; }
   .pgf-solo-c .pgf-item{ width:70%; }
   .pgf-wide .pgf-item{ width:86%; }
@@ -2260,9 +2275,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   /* every card sizes to its media's natural ratio */
   .pgf-item img, .pgf-item video{ width:100%; height:auto; display:block; }
   .pgf-video{ background:#15120f; }
+  /* 20 vertical, down from 30: the remaining half of the same proximity
+     problem. The card still reads as a note -- the text is centred in it and
+     the shape is unchanged -- it just no longer holds more air inside itself
+     than there is between it and its neighbour. */
   .pgf-text{
     display:flex; align-items:center; justify-content:center;
-    padding:30px 20px; text-align:center;
+    padding:20px 18px; text-align:center; min-height:96px;
   }
   .pgf-text span{
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
