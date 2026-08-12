@@ -135,9 +135,10 @@ copy it fresh for any new client.)*
 *food brand · founder · **3×** their average post · quote ✓ on file*
 
 1. What they sell, to whom → vegan food that someone who isn't vegan would most likely enjoy.
-2. What you did + counts → 6 videos. Counter-positioning, then the videos built on it.
-   *(Shoot-day count not given — the study says "everything after the shoot handled
-   here" rather than inventing one.)*
+2. What you did + counts → 6 videos, **2 shoot days.** Counter-positioning, then the
+   videos built on it. ⚠ CIAD's foundation tier packages 6 videos as *1* shoot day —
+   this is 2020 work, not the current offer, so the two figures aren't in conflict, but
+   don't let anyone "fix" one to match the other.
 3. How they found you → **first customer, 2020.** Still working together six years on;
    they've helped each other's businesses multiple ways. She saw the understanding of
    social + psychology alongside taste and the ability to actually produce.
@@ -154,7 +155,10 @@ copy it fresh for any new client.)*
    strategy well suited to 2017, not today. *(Left off the page — any agency could say
    it, so it fails the third test.)*
 9. The decision that made the difference → unselfish truth the industry is scared of
-   saying out loud, especially on social.
+   saying out loud, especially on social. **What counter-positioning her actually
+   meant:** her truth about going vegan, her truth about diet — her not-so-conventional
+   takes laid out on camera, on our scripts. better isn't better, different is what's
+   often better. that's how outliers form. crocs, coca cola, nothing.
 10. What happened other than the 3× → **every video over 10k.** 13k / 20k / 11k / 19k /
     15k / 10k. Most comments and most conversation her personal brand has ever had.
     Six years on, still a client.

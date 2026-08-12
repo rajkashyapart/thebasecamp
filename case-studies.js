@@ -29,18 +29,29 @@ var CASE_STUDIES = [
     // Raj's own sentences from the 2026-08-12 dump. Typos fixed, whole lines
     // cut, NOTHING re-said -- see CLAUDE.md section 6, "copy is his, verbatim".
     // An earlier pass paraphrased all six of these into balanced clauses and
-    // he called it "unnatural AI slop language". Cut under NNV: "she wanted to
-    // have all things personal brand" (vague), "above 10k views on each video"
-    // (the list below says it with receipts), and everything about what she
-    // thinks of me -- flattering, not proof. "3.5x her average" is held back
-    // pending the baseline question, not rewritten.
+    // he called it "unnatural AI slop language".
+    //
+    // Scored 22 sentences against NNV + Harry Dry; seven failed both, and not
+    // one of them failed on language. Four were cut outright (claims about me,
+    // or a line restating its neighbour). Two needed a fact that did not exist
+    // yet and he supplied both: what counter-positioning Sarah actually meant,
+    // and 2 shoot days. NOTE that is 6 videos over 2 days -- CIAD's foundation
+    // tier packages 6 videos as 1 shoot day, so these are not the same claim.
+    // This is 2020 work, not the current offer; don't "reconcile" them.
+    //
+    // Still holding, pending his word: the trailing clauses "in multiple ways"
+    // and "she wanted thought leadership" both fail, but clipping a clause is
+    // past the whole-line cut he authorised. "3.5x her average" is held for
+    // the baseline question. Held, never rewritten -- that is the whole rule.
     content: {
       overview: 'sarah was my first customer in 2020. and we still work together often. 6 years later, we&rsquo;ve helped each other&rsquo;s businesses in multiple ways.',
       context: 'founded by sarah edwards, they sell vegan food that even someone who&rsquo;s not vegan might most likely enjoy. she also runs multiple c+c outlets.',
-      insights: 'there is a way to talk about yourself and your brand while at the same time making the viewer feel heard &amp; seen. that&rsquo;s what basecamp can do very well. what made the difference is unselfish truth the industry is scared of saying out loud. especially on social.',
-      problem: 'her content wasn&rsquo;t landing as it seemed &lsquo;selfish&rsquo; content to the viewer. so she wanted someone to be able to position her again and bring her truth back. she needed conversations among the community, she wanted thought leadership. while having the time to focus on her f&amp;b business.',
-      solution: 'we were able to counter position sarah. all while putting the least amount of effort on content. i disagree with most smmas, and clients always get the same pitch from these agencies: pretty aesthetic cinematic videos. a strategy well suited for 2017, but not today.',
-      outcome: '13k views on the 1st video. 20k next, 11k next, 19k next, 15k next, 10k next. all while making content that serves her and her business. &lsquo;why i started copper + cloves&rsquo; performed the best with 20k views, with the most comments and creating conversations ever on her personal brand.'
+      insights: 'there is a way to talk about yourself and your brand while at the same time making the viewer feel heard &amp; seen. what made the difference is unselfish truth the industry is scared of saying out loud. especially on social. better isn&rsquo;t better, different is what&rsquo;s often better. that&rsquo;s how outliers form. crocs, coca cola, nothing.',
+      problem: 'her content wasn&rsquo;t landing as it seemed &lsquo;selfish&rsquo; content to the viewer. she needed conversations among the community, she wanted thought leadership. while having the time to focus on her f&amp;b business.',
+      // "2 shoot days." opens rather than closes: at the end it sat directly
+      // beside "2017" and the two numbers read as one commenting on the other.
+      solution: '2 shoot days. we were able to counter position sarah. her truth about going vegan, her truth about diet. her not-so-conventional takes laid out on camera, on our scripts. i disagree with most smmas, and clients always get the same pitch from these agencies: pretty aesthetic cinematic videos. a strategy well suited for 2017, but not today.',
+      outcome: '13k views on the 1st video. 20k next, 11k next, 19k next, 15k next, 10k next. &lsquo;why i started copper + cloves&rsquo; performed the best with 20k views, with the most comments and creating conversations ever on her personal brand.'
     }
   },
   {
