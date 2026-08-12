@@ -2811,4 +2811,40 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .cs-media{ width:100%; }
 }
 
+/* The list row on a phone. It had no layout of its own -- it kept the
+   desktop's four-column flex all the way down to 390px, where the multiple's
+   fixed 112px column and the arrow together take more than half the width.
+   The teaser was left about 150px and broke to four lines ("saying the
+   things / only she could / say."), the row number floated somewhere beside
+   the middle of that block instead of beside the name it numbers, and the
+   card grew tall enough that two rows barely fit a screen.
+
+   Stacked, the row reads in the order it argues in: who, what kind, what it
+   did, and then the sentence about it. display:contents on .cs-card-body
+   lifts its three children into the card's own grid so they can take rows of
+   their own -- the body has no box worth keeping, only flex:1 and min-width.
+
+   The multiples still start together, which is the whole reason they are in
+   a column on desktop: column 2 begins where the row number ends, and every
+   number is two digits wide, so all six figures share a left edge down the
+   page. "up to" still hangs on its own line above its number. */
+@media(max-width:600px){
+  .cs-card{
+    display:grid; grid-template-columns:auto 1fr auto;
+    column-gap:12px; row-gap:6px; align-items:start;
+  }
+  .cs-card-body{ display:contents; }
+  .cs-card-no{ grid-area:1/1; line-height:1.35; }
+  .cs-card-client{ grid-area:1/2; }
+  .cs-card-arrow{ grid-area:1/3; line-height:1; }
+  /* The sector sits close to the name because it describes it. The multiple
+     and the teaser are separate facts and get more room -- without it, "F&B"
+     and the "UP TO" above a hedged figure are two tracked uppercase labels
+     of the same size six pixels apart, and they read as one two-line label
+     rather than the end of one thing and the start of another. */
+  .cs-card-sector{ grid-area:2/2/2/-1; margin-top:0; }
+  .cs-card-mult{ grid-area:3/2/3/-1; width:auto; margin-top:7px; }
+  .cs-card-teaser{ grid-area:4/2/4/-1; margin-top:4px; }
+}
+
 
