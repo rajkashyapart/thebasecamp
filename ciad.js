@@ -80,7 +80,10 @@ function odGo(next, animate) {
 
   OD.track.style.transition = (animate === false || odReduced())
     ? 'none'
-    : 'transform 0.48s cubic-bezier(0.32,0.72,0,1)';
+    // var(), not a copy of the curve. styles.css owns the easing system and
+    // .od-track already declares this exact transition there; a literal here
+    // is a second source of truth that drifts the first time one is tuned.
+    : 'transform 0.48s var(--e-drawer)';
   OD.track.style.transform = 'translate3d(' + (-100 * OD.i) + '%,0,0)';
 
   OD.screen.style.setProperty('--od-ground', OD.tones[OD.i]);

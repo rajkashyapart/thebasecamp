@@ -607,12 +607,14 @@ function initPlayground() {
     cancelAnimationFrame(rafId);
     velX = velY = 0;
     scale = fitScale;
-    pgWorld.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+    // --e-spring is the one overshoot in the system and this is the one place
+    // it is allowed: a rare, deliberate action where thirty cards fly home.
+    pgWorld.style.transition = 'transform 0.5s var(--e-spring)';
     centerView();
     // Tidy up: spring all cards back to original positions
     allCardEls.forEach(function(entry, idx) {
       var ce = entry.el, cd = entry.data;
-      ce.style.transition = 'left 0.45s cubic-bezier(0.34,1.56,0.64,1), top 0.45s cubic-bezier(0.34,1.56,0.64,1), transform 0.45s cubic-bezier(0.34,1.56,0.64,1)';
+      ce.style.transition = 'left 0.45s var(--e-spring), top 0.45s var(--e-spring), transform 0.45s var(--e-spring)';
       ce.style.transitionDelay = (idx * 0.03) + 's';
       ce.style.left = ce.dataset.homeLeft + 'px';
       ce.style.top = ce.dataset.homeTop + 'px';
