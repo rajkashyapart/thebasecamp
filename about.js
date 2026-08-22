@@ -532,21 +532,49 @@ function initAbout() {
   // Two stages, because one ramp cannot do both jobs.
   //
   // CY_CRUSH is greyscale and it is the exposure: a short steep middle with
-  // long flat ends, so most of a normally lit frame packs into the blue and
+  // long flat ends, so most of a normally lit frame packs into the ink and
   // the highlights blow to paper. That is what makes a photograph read as a
   // print rather than as a blue photograph.
-  //
-  // CY_R/G/B is the ink, and it is not a straight line from navy to white.
-  // A line between those two passes through blue-grey, which is what the
-  // first attempt at this looked like -- the midtones went dead. A real
-  // cyanotype stays saturated the whole way up: R climbs late, B early. The
-  // six stops are colours picked off the reference, in order --
-  //   #0d3a5c  #12496f  #1d6191  #4e8fb5  #b8d2e0  #f3f1ea
-  // pooled dark, field, mid prussian, pale wash, near-paper, paper.
   var CY_CRUSH = '0 0.03 0.13 0.62 0.93 1';
-  var CY_R = '0.051 0.071 0.114 0.306 0.722 0.953';
-  var CY_G = '0.227 0.286 0.380 0.561 0.824 0.945';
-  var CY_B = '0.361 0.435 0.569 0.710 0.878 0.918';
+
+  // CY_INK is the chemistry, and each one is six stops from pooled dark to
+  // bare paper. Neither is a straight line to white: a line from a dark ink
+  // to paper passes through grey and the midtones die, which is what the
+  // first attempt looked like. Both stay saturated the whole way up.
+  //
+  // Raj, 2026-08-22: "can we make the cyanotype a mix of our blue and pink."
+  // One ink per print, not both in one -- sheets coated from two different
+  // baths rather than a gradient between the accents. Mixed inside a single
+  // photograph they cross at mid-lightness, where cyan and pink cancel into
+  // grey-mauve, and the whole thing goes muddy exactly where the picture is.
+  //
+  //   b  #0d3a5c #12496f #1d6191 #4e8fb5 #b8d2e0 #f3f1ea   the reference
+  //   p  #451630 #6d2247 #a63769 #dd6b95 #f2b6cd #f7f1ec   --accent-r sits
+  //                                        between its fourth and fifth stop
+  //
+  // Same paper stock under both. It is one sheet of paper and two baths.
+  var CY_INK = {
+    b: {
+      r: '0.051 0.071 0.114 0.306 0.722 0.953',
+      g: '0.227 0.286 0.380 0.561 0.824 0.945',
+      b: '0.361 0.435 0.569 0.710 0.878 0.918'
+    },
+    p: {
+      r: '0.271 0.427 0.651 0.867 0.949 0.969',
+      g: '0.086 0.133 0.216 0.420 0.714 0.945',
+      b: '0.188 0.278 0.412 0.584 0.804 0.925'
+    }
+  };
+
+  // Which sheet came out of which bath. A repeating pattern stripes as soon
+  // as two rows happen to share a tile count, and Math.random clumps -- it
+  // put four pinks together on the second reload I tried. The golden ratio's
+  // additive sequence does neither: the gap between hits is only ever two or
+  // three, so no two pink prints are ever adjacent and they never bunch.
+  // Deterministic, so a given photograph is always the same print.
+  function cyanoInk(i) {
+    return ((i * 0.6180339887) % 1) < 0.34 ? 'p' : 'b';
+  }
 
   // How hard the rim is torn, and how big the coating blooms are. A filter's
   // numbers are in CSS pixels, not fractions of the box, so one set of them
@@ -559,7 +587,7 @@ function initAbout() {
     hero: { erode: 4, soft: 12, tear: 48, bloom: 0.0038 }
   };
 
-  function cyanoFilter(id, s, k) {
+  function cyanoFilter(id, s, k, ink) {
     var seed = 3 + s * 17;
     return '<filter id="' + id + '" color-interpolation-filters="sRGB">' +
       // down to one channel of light
@@ -583,9 +611,9 @@ function initAbout() {
       '</feComponentTransfer>' +
       // the ink
       '<feComponentTransfer in="crushed" result="duo">' +
-        '<feFuncR type="table" tableValues="' + CY_R + '"/>' +
-        '<feFuncG type="table" tableValues="' + CY_G + '"/>' +
-        '<feFuncB type="table" tableValues="' + CY_B + '"/>' +
+        '<feFuncR type="table" tableValues="' + ink.r + '"/>' +
+        '<feFuncG type="table" tableValues="' + ink.g + '"/>' +
+        '<feFuncB type="table" tableValues="' + ink.b + '"/>' +
       '</feComponentTransfer>' +
       // paper fibre, added after the crush because grain sits on top of the
       // image rather than inside it
@@ -616,9 +644,16 @@ function initAbout() {
     // hidden svg before; a zero-sized absolutely positioned one always works.
     svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
     var out = '';
-    for (var s = 0; s < CY_SEEDS; s++) out += cyanoFilter('cy' + s, s, CY_RIM.tile);
-    // the hero is one photograph and gets two, so a reload is not identical
-    out += cyanoFilter('cyh0', 1, CY_RIM.hero) + cyanoFilter('cyh1', 4, CY_RIM.hero);
+    for (var s = 0; s < CY_SEEDS; s++) {
+      out += cyanoFilter('cyb' + s, s, CY_RIM.tile, CY_INK.b);
+      out += cyanoFilter('cyp' + s, s, CY_RIM.tile, CY_INK.p);
+    }
+    // The hero stays blue. It is the focal point and the page's dominant
+    // colour, and a pink print at that size stops being one sheet among
+    // thirty-four and becomes the thing the page is about. Two seeds, so a
+    // reload is not identical.
+    out += cyanoFilter('cyh0', 1, CY_RIM.hero, CY_INK.b) +
+           cyanoFilter('cyh1', 4, CY_RIM.hero, CY_INK.b);
     svg.innerHTML = '<defs>' + out + '</defs>';
     document.body.appendChild(svg);
   }
@@ -626,7 +661,6 @@ function initAbout() {
   function develop() {
     if (!window.IntersectionObserver) return;
     var root = document.getElementById('screen-about');
-    var seq = 0;
 
     function prime(t) {
       if (t.__dev) return t.__dev;
@@ -637,9 +671,10 @@ function initAbout() {
       var d = document.createElement('div');
       d.className = 'dev';
       d.style.setProperty('--dev-src', 'url("' + src + '")');
+      var i = tiles.indexOf(t);
       d.style.filter = (t === hero)
         ? 'url(#cyh' + (Math.random() < 0.5 ? 0 : 1) + ')'
-        : 'url(#cy' + (seq++ % CY_SEEDS) + ')';
+        : 'url(#cy' + cyanoInk(i) + (i % CY_SEEDS) + ')';
       t.appendChild(d);
       t.__dev = d;
       return d;
