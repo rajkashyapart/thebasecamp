@@ -330,21 +330,40 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   the time to read the whole page?"* They are, and nobody does. It came
   back the next day **denser rather than identical**: a strip of figures
   under the client's name, above the video, no box and no border — the
-  multiple plus whatever else that study has actually **logged**. Four
-  cells on C+C (3× / 6 videos / 2 shoot days / 6 years still a client),
-  one on the studies where only the multiple exists. **Extend `metrics`,
-  never add a facts field** — `csMult()` and the drawn bar find the
-  multiple by matching `average post` on the label, so the array takes
-  more entries safely, and a parallel field would be a fifth place for
-  these figures to disagree. Labels are written to read **both stacked and
-  inline**, because the list row prints the same cells minus the multiple.
-  Values sit on the list row's own `clamp(22px,3vw,30px)`; at the
-  pull-quote's 24 the numerals read level with their own 10px labels and
-  the strip lost its only job. Pink lands on the multiple alone. **Don't
-  put "no ad spend." back in the strip** — it was there for one build,
-  it already lives in `portfolio.js` and CIAD's unit line, and as a fourth
-  line of tracked uppercase it turned the single-fact studies into a label
-  block with one small number in it.
+  multiple plus whatever else that study has actually **logged**.
+  **Extend `metrics`, never add a facts field** — `csMult()` and the drawn
+  bar find the multiple by matching `average post` on the label, so the
+  array takes more entries safely, and a parallel field would be a fifth
+  place for these figures to disagree. Labels are written to read **both
+  stacked and inline**, because the list row prints the same cells minus
+  the multiple.
+  **It is one figure with two quiet lines under it, never a row of equal
+  cells.** Built as four equal 30px cells for one build and Raj's verdict
+  was *"this is ugly"* (2026-08-23) — correctly, and the reason is section
+  3 of this file word for word: **uniform emphasis is identical to no
+  emphasis**. Measured, it was worse than equal — cells sized to their
+  labels, so the figures landed at 434 / 601 / 680 / 788 with no rhythm,
+  and two number systems were stacked (oldstyle Cormorant figures over
+  lining DM Mono ones). Now: the multiple alone in the display face, pink,
+  on the list row's own `clamp(22px,3vw,30px)` ramp; then the view counts
+  in ink and the engagement spec in muted, both DM Mono at the body's 14px,
+  so every small number on the page is one system. **The multiple must
+  never outgrow the client name** — at `clamp(40px,6vw,64px)` its 40px
+  floor beat the name's 36px on a phone, giving the page two heroes and the
+  budget six sizes.
+  **`font-variant-numeric: lining-nums` on the figure is load-bearing.**
+  Cormorant defaults to oldstyle: at a 100px font-size its italic "3" has a
+  41px ascent and descends 28px, so a declared 30px `3×` was optically
+  ~10px — smaller than the 14px digits under it, which is why the label
+  read louder than its own figure. The webfont does carry a lining set.
+  Applied to the strip only; the list row's multiple stays oldstyle because
+  Raj signed that off with the drawn bar.
+  **Don't put "no ad spend." or "every video over 10k" back.** Both are
+  true and both are his, and both were in the strip for one build. The
+  first already lives in `portfolio.js` and CIAD's unit line; the second is
+  visible in the six counts printed directly above it, which is what "say
+  less than you know" means. Each was a third or fourth line of tracked
+  uppercase in a block that had too many.
   **Sections stay whole underneath.** Asked on 2026-08-23 whether to
   collapse, reorder or fold them away, Raj kept all six as they are: the
   strip is the ten-second read, the sections are the ten-minute one.

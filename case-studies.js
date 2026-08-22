@@ -218,26 +218,55 @@ function csIsMult(m) { return /average post/i.test(m.l); }
 // row where every figure shouts is a row with no figure in it.
 function csFactsHTML(cs) {
   if (!cs.metrics || !cs.metrics.length) return '';
-  var cells = '';
+
+  // Built as four equal cells for one build, and Raj's verdict was "this is
+  // ugly". He was right, and the reason is in CLAUDE.md section 3 word for
+  // word: uniform emphasis is identical to no emphasis. Four figures at one
+  // size means the page's answer -- the multiple -- was the same weight as
+  // the shoot-day count. Measured, it was worse than equal: the cells sized
+  // to their labels, so the figures landed at 434 / 601 / 680 / 788 with no
+  // rhythm at all, and Cormorant's oldstyle numerals dropped the 3 below the
+  // baseline the 6 sat above. Two number systems were stacked as well --
+  // oldstyle Cormorant on the figures, lining DM Mono on the counts.
+  //
+  // So: one focal figure with the page's other lines receding under it. The
+  // multiple keeps Cormorant and the pink because it is the answer; every
+  // other fact drops to the body face at body size, which puts every small
+  // number on the page in one system.
+  var hero = '', spec = [];
   for (var i = 0; i < cs.metrics.length; i++) {
-    var m = cs.metrics[i], isM = csIsMult(m);
-    cells += '<div class="cs-fact' + (isM ? ' is-mult' : '') + '">' +
-               '<div class="cs-fact-v">' + (isM ? csMult(cs) : m.v) + '</div>' +
+    var m = cs.metrics[i];
+    if (csIsMult(m) && !hero) {
+      hero = '<div class="cs-fact-hero">' +
+               '<div class="cs-fact-v">' + csMult(cs) + '</div>' +
                '<div class="cs-fact-l">' + m.l + '</div>' +
              '</div>';
+    } else {
+      spec.push(m.v + ' ' + m.l);
+    }
   }
-  // "no ad spend." was here for one build and came off. It is true and it is
+  // Result first, engagement second: the counts are what the multiple above
+  // them is a multiple of, and the spec line is the terms it happened under.
+  //
+  // "no ad spend." sat here for one build and came off. It is true and it is
   // Raj's, but he did not pick it as one of the figures a client needs in ten
   // seconds -- I added it -- and it already lives in portfolio.js's outcomes
-  // and CIAD's unit line. As a row of its own it was a fourth line of 10px
-  // tracked uppercase under three others, which on the studies carrying only
-  // a multiple left the strip reading as a cramped label block with one small
-  // number in it. The subtraction rule applies to my additions first.
-  return '<div class="cs-facts">' + cells + '</div>' + csRunHTML(cs);
+  // and CIAD's unit line.
+  return '<div class="cs-facts">' +
+           hero +
+           csRunHTML(cs) +
+           (spec.length ? '<div class="cs-fact-spec">' + spec.join(' &middot; ') + '</div>' : '') +
+         '</div>';
 }
 
 // The receipts, for a study that has them: the per-video counts, up top where
-// a skimmer sees them, with Raj's own claim about them as the caption.
+// a skimmer sees them.
+//
+// No caption. "every video over 10k" is Raj's line and it was under these
+// numbers for one build, but a reader looking at 13k 20k 11k 19k 15k 10k can
+// see that every one clears 10k -- saying it as well is the sentence he means
+// by "say less than you know", and it was a third line of tracked uppercase
+// in a block that had too many already.
 //
 // Read out of the outcome sentence he already wrote -- NOT copied into a
 // field of their own. Six figures in two places is how two places start
@@ -257,17 +286,7 @@ function csRunHTML(cs) {
   var out = [], m;
   while ((m = re.exec(src)) !== null) out.push(m[1]);
   if (out.length < 3) return '';
-  // The caption is Raj's line from Q10, and it is a claim about these exact
-  // numbers -- so it is checked against them rather than trusted. If a count
-  // ever lands under 10k the figures still show and the claim drops itself.
-  var all10k = true;
-  for (var i = 0; i < out.length; i++) {
-    if (parseFloat(out[i]) < 10) { all10k = false; break; }
-  }
-  return '<div class="cs-run">' +
-           '<div class="cs-run-v">' + out.join(' &middot; ') + '</div>' +
-           (all10k ? '<div class="cs-fact-l">every video over 10k</div>' : '') +
-         '</div>';
+  return '<div class="cs-run">' + out.join(' &middot; ') + '</div>';
 }
 
 // The same figures on the list row, minus the multiple -- that already has a
