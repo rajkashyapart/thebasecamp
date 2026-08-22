@@ -295,12 +295,50 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   the two-digit row number ends, so all six share a left edge.
   **`case-studies.html` loads `portfolio.js` for its data.** That file
   already lists every reel made for every client, so each detail page
-  builds its "everything we made for them" row from it rather than
+  builds its "more we made for them" row from it rather than
   keeping a second copy of the ids. All three of portfolio.js's init
   functions return early when their own DOM is absent, which is what makes
   this safe — don't add one that doesn't. The match is
   **case-insensitive**: this page's client names are lowercase, that
   file's are still title case, and an exact match silently returns nothing.
+  The row said *"everything we made for them"* until 2026-08-22, which the
+  data cannot keep: C+C's outcome names six videos and `portfolio.js` holds
+  three ids, one of them the hero. **Don't promise completeness over a row
+  built from whatever the reel bank happens to hold.**
+- **A study detail is one column, and it has no index.** No sidebar, no
+  section numbers, no scroll-spy, no rules between sections, and no
+  metrics box — all removed 2026-08-22 on an Elon pass. The longest study
+  is 240 words; it was carrying a sticky sidebar, six links, six ordinals
+  printed a second time inside the labels and an observer to keep them in
+  step, costing 256px of a 1440 layout and 48px of a 706 phone to index a
+  seventy-second read. The spy was also lying — past the last section its
+  ±45% band landed in `.cs-reels`, which it never observed, so the nav sat
+  on "the outcome" for the final 1100px. Deleting the index deleted the
+  bug. Sections are separated by 40px against a 10px label gap, which is
+  the structure the six `border-top` rules were drawn to fake. `#cs-detail`
+  is **620px**, sized to the 62ch measure `.cs-section-body` actually
+  fills, so type, reel and quote share one width and centre as one block —
+  at 820 the column held 772 and read left-shifted with 590px of bare
+  paper. The hero reel caps at `min(62vh,560px)`, down from 640, which
+  with the metrics box gone puts the first section head on screen one;
+  the phone is untouched, where `.cs-media` is `width:100%` by Raj's rule.
+  **The multiple does not appear on a detail page.** It arrives with the
+  click — it is on the list row you pressed, drawn on the one scale all
+  six share — and a box restating it was the same fact twice, with the
+  second copy as the loudest thing on screen before a word of the
+  argument. Nothing unique went with the box: "48 videos" is in upsurge's
+  overview and solution, "sold out" is in the cacao outcome.
+- **C+C's 3× is closed. It stays, and no baseline goes on the page.**
+  Raj logged two multiples — 3× for the set of six against her own average,
+  and 3.5× for the best single video, which is private. Back-solving a
+  baseline from the second (20k ÷ 3.5 = 5.7k) and dividing the set average
+  of 14.7k by it gives 2.6×, but that 5.7k was derived, never measured, and
+  the two may sit on different windows. Raj, 2026-08-22: *"i dont wanna
+  count again, but i wanna state the truth. what did i log exactly? match
+  it acc to that."* So: the page prints the six view counts and the 3×, and
+  **nothing in between** — printing either implied baseline would invent
+  the denominator the multiple rests on. Don't reopen without a new
+  measurement from him.
 - **Video frames take the video's shape, never the reverse.** `.cs-media`
   and `.cs-reel` size off a `--vr` that `case-studies.js` reads from the
   playing video's own `videoWidth/videoHeight`. It was a hard `16/9` with

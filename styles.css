@@ -2854,8 +2854,19 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-cta{ display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); color:var(--accent-r); text-decoration:none; border-bottom:1px solid rgba(255,123,172,0.45); padding-bottom:2px; transition:transform .2s; }
 .cs-cta:active{ transform:scale(0.98); }
 
-#cs-detail{ position:relative; z-index:2; max-width:1080px; margin:0 auto; padding:84px 24px 100px; }
-.cs-back{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted); background:none; border:none; cursor:pointer; padding:6px 0; transition:color .2s ease, transform .14s var(--e-out); }
+/* 620, down from 1080. The sidebar took 200px plus a 56px gutter, so the
+   reading column sat at 776 and started a quarter of the way across the page.
+   Removing the index alone did not fix that -- at 820 the column still held
+   772px while .cs-section-body only ever fills its 62ch measure (~520px), so
+   the block read left-shifted with 590px of bare paper down the right.
+   The container is sized to the measure now: one column, one width for the
+   type, the reel and the quote, centred on the page as a single block. */
+#cs-detail{ position:relative; z-index:2; max-width:620px; margin:0 auto; padding:84px 24px 100px; }
+/* 10px, down from 11. The eyebrow directly under it is 10 and so is every
+   section label -- 11 against 10 is two decisions and one appearance, which
+   is the type budget's whole complaint. Back link and eyebrow now stack at
+   one size. */
+.cs-back{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted); background:none; border:none; cursor:pointer; padding:6px 0; transition:color .2s ease, transform .14s var(--e-out); }
 @media(hover:hover) and (pointer:fine){.cs-back:hover{ color:var(--ink); }}
 .cs-back:active{ color:var(--ink); transform:scale(0.96); }
 .cs-hero{ margin:18px 0 36px; }
@@ -2863,16 +2874,14 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 /* Same blue as the list row it was opened from, so the name you clicked is
    the name that greets you in the colour you clicked it in. */
 .cs-hero-client{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,7vw,64px); line-height:0.98; color:var(--accent-b); margin:0; }
-.cs-hero-person{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(16px,2.4vw,22px); color:var(--ink-muted); margin-top:6px; }
-.cs-layout{ display:grid; grid-template-columns:200px 1fr; gap:56px; align-items:start; }
-.cs-sidebar{ position:sticky; top:84px; }
-.cs-nav{ display:flex; flex-direction:column; gap:2px; }
-.cs-navlink{ display:flex; align-items:center; gap:10px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.04em; color:var(--ink-muted); text-decoration:none; padding:8px 10px; border-left:2px solid transparent; border-radius:0 6px 6px 0; transition:color .2s ease, border-color .2s ease, background .2s ease, transform .14s var(--e-out); }
-@media(hover:hover) and (pointer:fine){.cs-navlink:hover{ color:var(--ink); background:rgba(30,25,20,0.04); }}
-.cs-navlink:active{ color:var(--ink); transform:scale(0.97); }
-.cs-navlink.active{ color:var(--ink); border-left-color:var(--accent-r); background:rgba(255,123,172,0.07); }
-/* muted, not blue -- one accent on this page, and it is spent on the multiple */
-.cs-navnum{ font-size:9px; color:var(--ink-muted); opacity:0.8; }
+/* Shares the pull-quote's ramp exactly, so her name and her words are one
+   size at every width. It was clamp(16,2.4vw,22) against the quote's
+   clamp(18,2.6vw,24) -- 22 and 24 side by side on a desktop, two sizes nobody
+   can tell apart and the sixth and seventh on the page. */
+.cs-hero-person{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(18px,2.6vw,24px); color:var(--ink-muted); margin-top:6px; }
+/* One column. .cs-sidebar / .cs-nav / .cs-navlink / .cs-navnum are gone with
+   the index they styled -- see the note in case-studies.js openCase(). */
+.cs-layout{ display:block; }
 .cs-content{ min-width:0; }
 /* The frame takes the video's shape, not the other way round. Raj,
    2026-08-12: "video ui is horizontal. only 1 video in the entire bank is
@@ -2883,11 +2892,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    videoWidth/videoHeight once metadata lands. It defaults to 9/16 because the
    wrong guess should be the rare case, not the common one. Width is derived
    from the height cap rather than the other way round, so a tall reel is
-   limited by the viewport and a wide one by the column, and neither distorts. */
+   limited by the viewport and a wide one by the column, and neither distorts.
+
+   The cap came down from 72vh/640 to 62vh/560 on 2026-08-22. At 640 the first
+   sentence of the study began 1088px down -- a screen and a fifth of scrolling
+   past a muted loop before a word of the argument. 560 plus the deleted
+   metrics box puts the first section head on screen one at 900. The phone is
+   untouched: .cs-media is width:100% there by Raj's own rule, so the height
+   follows the column, not the cap. */
 .cs-media{
   --vr:0.5625;
   aspect-ratio:var(--vr);
-  width:min(100%, calc(min(72vh, 640px) * var(--vr)));
+  width:min(100%, calc(min(62vh, 560px) * var(--vr)));
   /* starts at the column edge, not centred: it shares a left margin with the
      section text under it, and a centred portrait floats away from both */
   margin:0 0 28px;
@@ -2919,12 +2935,19 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 }
 .cs-reel video{ width:100%; height:100%; object-fit:cover; display:block; }
 
-.cs-metrics{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:40px; justify-content:flex-start; }
-.cs-metric{ flex:1 1 180px; max-width:280px; background:rgba(255,255,255,0.5); border:1px solid rgba(30,25,20,0.08); border-radius:10px; padding:18px 16px; text-align:center; }
-.cs-metric-v{ font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(28px,4vw,40px); color:var(--ink); line-height:1; }
-.cs-metric-l{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
-.cs-section{ padding:22px 0; border-top:1px solid rgba(30,25,20,0.08); scroll-margin-top:84px; }
-.cs-section-label{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:12px; }
+/* .cs-metrics / .cs-metric / .cs-metric-v / .cs-metric-l are gone with the box
+   they styled. The multiple lives on the list row, drawn on the one scale all
+   six share; a card repeating it here was the same fact twice.
+
+   The six border-top rules went with it. CLAUDE.md section 3: reaching for a
+   rule to show structure means the spacing is wrong. It was -- 22px between
+   sections against a 12px label gap, near enough to read as one grey block.
+   40px against 10px is the same structure with nothing drawn, and 40 is the
+   number because the body runs 14px/1.8 = 25px between lines: a section break
+   has to clear a line break by more than a hair or the two fuse. */
+.cs-section{ margin-bottom:40px; }
+.cs-section:last-of-type{ margin-bottom:44px; }
+.cs-section-label{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
 .cs-section-body{ font-family:'DM Mono',monospace; font-size:14px; line-height:1.8; color:var(--ink); max-width:62ch; }
 /* .cs-prompt and .cs-quote-empty are gone: they styled internal writing
    prompts that were rendering on the live page. Unwritten content now renders
@@ -2935,22 +2958,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-cta-wrap{ margin-top:44px; text-align:center; }
 
 @media(max-width:760px){
-  .cs-layout{ grid-template-columns:1fr; gap:16px; }
-  /* min-width:0 is load-bearing. A grid item defaults to min-width:auto, so
-     the nowrap nav links forced this track to their full 654px and the whole
-     detail view overflowed -- invisibly, because #cs-screen clips overflow-x.
-     Zeroing it lets .cs-nav actually scroll instead of pushing the column. */
-  .cs-sidebar{ position:sticky; top:50px; z-index:5; min-width:0; margin:0 -18px; padding:0 18px; background:rgba(245,242,238,0.92); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
-  /* No second bleed. .cs-sidebar already pulls out to the screen edge with
-     margin:0 -18px; padding:0 18px, and this row was doing it again -- 18px
-     of negative margin on top of 18px, so the strip ran 36px past the right
-     edge and took the page with it. Raj, 2026-08-12: "the horizontal inline
-     nav bar inside each par spills beyond screen." The row scrolls inside the
-     bleed the sidebar already provides. */
-  .cs-nav{ flex-direction:row; gap:4px; overflow-x:auto; padding:10px 0; margin:0; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-  .cs-nav::-webkit-scrollbar{ display:none; }
-  .cs-navlink{ flex-shrink:0; border-left:none; border-bottom:2px solid transparent; border-radius:6px; padding:7px 11px; white-space:nowrap; }
-  .cs-navlink.active{ border-left:none; border-bottom-color:var(--accent-r); background:rgba(255,123,172,0.07); }
+  /* The sticky chip bar is gone with the index. It cost 48px under a 50px nav
+     -- 14% of a 706px viewport, permanently -- and showed 3.5 of 6 chips with
+     no affordance saying the rest were off to the right. */
   #cs-listwrap{ padding:78px 18px 60px; }
   #cs-detail{ padding:68px 18px 80px; }
   .cs-card{ padding:16px 18px; gap:16px; }

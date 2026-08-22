@@ -29,6 +29,9 @@ Not a style problem. Four specific faults, and each one has a question below aim
 3. **The outcome restates the metric that's already on screen.** "the work ran 3× their
    average post" sits directly under a box that says 3×. Said twice, so it lands once.
    → Q10 asks what *else* happened.
+   *Fixed 2026-08-22 from the other end: the box is gone. The multiple arrives with
+   the click — it is on the list row you pressed, drawn on the one scale all six
+   share — so the detail page carries the view counts and nothing restating them.*
 
 4. **Nothing is visualisable.** Across all six studies there isn't one object, room,
    date, or sentence somebody said out loud. → Q5, Q6 and Q9 are all fishing for those.
@@ -174,8 +177,20 @@ copy it fresh for any new client.)*
 14. What she's like → trusts the taste, the skillset and the intuition, which most
     clients don't.
 
-> ⚠ **Open:** set average is 14.7k against a ~5.7k baseline, which is 2.6×, not 3×.
-> The 3× may be rounded or measured on a different window. Confirm before the next push.
+> ✅ **Closed 2026-08-22 — the multiple stays 3×.** The conflict was never in the log,
+> it was in the arithmetic done to it. Raj logged two multiples: **3×** for the set of
+> six against her own average (TASTE.md, 2026-08-11), and **3.5×** for the best single
+> video, which is private and stays off the page. Back-solving a baseline from the
+> second (20k ÷ 3.5 = 5.7k) and dividing the set average by it gives 2.6× — but that
+> 5.7k was derived here, never measured by him, and the two multiples may simply sit on
+> different windows.
+>
+> **Do not print a baseline.** Neither 4.9k (implied by 3×) nor 5.7k (implied by 3.5×)
+> is a logged figure, and putting one under the six view counts would invent the
+> denominator the whole multiple rests on. Raj, 2026-08-22: *"i dont wanna count again,
+> but i wanna state the truth. what did i log exactly? match it acc to that."*
+> The log says 3× and says those six counts. The page says exactly those, and nothing
+> in between. Do not reopen this without a new measurement from him.
 
 ---
 

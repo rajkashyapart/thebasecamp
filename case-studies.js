@@ -49,10 +49,22 @@ var CASE_STUDIES = [
     // approval ("do what's necessary") -- a landing-page word; "conversations
     // among the community" is the half he told me to keep.
     //
-    // "3.5x her average" is STILL OFF, and it is the one open item that no
-    // instruction can close: the set averages 14.7k against a ~5.7k baseline,
-    // which is 2.6x, not the 3x in the metrics box. Only Raj knows which
-    // window each was measured on. Held, never rewritten -- that is the rule.
+    // CLOSED 2026-08-22. The multiple stays 3x, because 3x is what Raj logged.
+    //
+    // The apparent conflict was never in his log, it was in my arithmetic.
+    // He logged two multiples: 3x for the set of six against her own average
+    // (TASTE.md, 2026-08-11) and 3.5x for the best single video, which is
+    // private and stays off the page. Back-solving a baseline from the second
+    // (20k / 3.5 = 5.7k) and dividing the set average by it gives 2.6x -- but
+    // that 5.7k is a number I derived, not one he measured, and the two
+    // multiples may simply be measured on different windows.
+    //
+    // So: do not print a baseline here. Neither 4.9k nor 5.7k is a logged
+    // figure, and putting one under the six view counts would be inventing
+    // the denominator the whole multiple rests on. Raj, 2026-08-22:
+    // "i dont wanna count again, but i wanna state the truth. what did i log
+    // exactly? match it acc to that." The log says 3x and says these six
+    // counts. The page says exactly those and nothing between them.
     content: {
       // Chronological, and the reorder is the whole point: "pretty aesthetic
       // cinematic videos" is what he was making for her in 2020, and it is
@@ -389,44 +401,50 @@ function openCase(cs) {
   var detail = document.getElementById('cs-detail');
   var listWrap = document.getElementById('cs-listwrap');
 
-  // Only sections with real copy get rendered, and the numbering counts what
-  // is actually shown -- so an unwritten section leaves no gap and no orphan
-  // sidebar link pointing at nothing.
-  var nav = '';
+  // Only sections with real copy get rendered, so an unwritten section leaves
+  // no gap.
+  //
+  // No ordinals and no index. The longest study here is 240 words -- about a
+  // page of a book -- and it was carrying a sticky sidebar, six links, six
+  // numbers printed a second time inside the labels, and a scroll-spy to keep
+  // them in step. 256px of a 1440 layout and 48px of a 706 phone to index a
+  // seventy-second read. The spy was also wrong: past the last section the
+  // -45% band landed in .cs-reels, which it never observed, so the nav sat on
+  // "the outcome" for the final 1100px. Deleting the index deletes the bug.
   var sections = '';
-  var n = 0;
   for (var s = 0; s < CS_SECTIONS.length; s++) {
     var sec = CS_SECTIONS[s];
     var body = cs.content[sec.key];
     if (!body) continue;
-    n++;
-    nav += '<a href="#cs-' + sec.key + '" class="cs-navlink" data-sec="' + sec.key + '">' +
-             '<span class="cs-navnum">' + n + '</span>' + sec.label + '</a>';
-    sections += '<section id="cs-' + sec.key + '" class="cs-section">' +
-                  '<div class="cs-section-label">' + n + ' &middot; ' + sec.label + '</div>' +
+    sections += '<section class="cs-section">' +
+                  '<div class="cs-section-label">' + sec.label + '</div>' +
                   '<div class="cs-section-body">' + body + '</div>' +
                 '</section>';
   }
 
-  var metrics = '';
-  if (cs.metrics && cs.metrics.length) {
-    metrics = '<div class="cs-metrics">';
-    for (var m = 0; m < cs.metrics.length; m++) {
-      metrics += '<div class="cs-metric"><div class="cs-metric-v">' + cs.metrics[m].v + '</div>' +
-                 '<div class="cs-metric-l">' + cs.metrics[m].l + '</div></div>';
-    }
-    metrics += '</div>';
-  }
+  // cs.metrics is the list row's data, not the detail page's. The multiple
+  // arrives with the click -- it is on the row you pressed, drawn on the one
+  // scale all six share -- and a box restating it two hundred pixels later is
+  // the same fact twice, with the second copy as the loudest thing on screen
+  // before a word of the argument. Nothing unique is lost: "48 videos" is in
+  // upsurge's overview and solution, "sold out" is in the cacao outcome, and
+  // every multiple is on its row. What the detail page carries instead is the
+  // telemetry the outcome section already prints.
 
   // Everything else made for this client, after the reading and before the
   // testimonial: the sections are the argument, this is the body of work the
   // argument is about. No reels means no strip -- a heading over nothing is
   // the placeholder rule.
+  //
+  // "everything we made for them" was a claim the data could not keep. C+C's
+  // outcome section names six videos; portfolio.js holds three ids for them,
+  // one of which is the hero and gets filtered out, so the label sat over two
+  // tiles. The row shows what the reel bank has, and now says so.
   var reels = csReels(cs);
   var reelRow = '';
   if (reels.length) {
     reelRow = '<section class="cs-reels">' +
-                '<div class="cs-section-label">everything we made for them</div>' +
+                '<div class="cs-section-label">more we made for them</div>' +
                 '<div class="cs-reelrow">';
     for (var r = 0; r < reels.length; r++) {
       reelRow += '<div class="cs-reel"><video muted loop playsinline webkit-playsinline ' +
@@ -450,11 +468,9 @@ function openCase(cs) {
       '<div class="cs-hero-person">' + cs.person + '</div>' +
     '</header>' +
     '<div class="cs-layout">' +
-      '<aside class="cs-sidebar"><nav class="cs-nav">' + nav + '</nav></aside>' +
       '<div class="cs-content">' +
         '<div class="cs-media"><video muted loop playsinline webkit-playsinline preload="none" ' +
           'poster="' + cs.vid.replace('playlist.m3u8', 'thumbnail.jpg') + '"></video></div>' +
-        metrics +
         sections +
         reelRow +
         quote +
@@ -482,23 +498,6 @@ function openCase(cs) {
   }
 
   csMountReels(detail);
-
-  // scroll-spy: highlight the section in view
-  var links = detail.querySelectorAll('.cs-navlink');
-  if ('IntersectionObserver' in window) {
-    var spy = new IntersectionObserver(function (entries) {
-      for (var e = 0; e < entries.length; e++) {
-        if (entries[e].isIntersecting) {
-          var id = entries[e].target.id.replace('cs-', '');
-          for (var l = 0; l < links.length; l++) {
-            links[l].classList.toggle('active', links[l].getAttribute('data-sec') === id);
-          }
-        }
-      }
-    }, { rootMargin: '-45% 0px -45% 0px' });
-    var secs = detail.querySelectorAll('.cs-section');
-    for (var q = 0; q < secs.length; q++) spy.observe(secs[q]);
-  }
 }
 
 function closeCase() {
