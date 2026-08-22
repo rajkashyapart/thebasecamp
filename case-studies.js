@@ -233,7 +233,41 @@ function csFactsHTML(cs) {
   // tracked uppercase under three others, which on the studies carrying only
   // a multiple left the strip reading as a cramped label block with one small
   // number in it. The subtraction rule applies to my additions first.
-  return '<div class="cs-facts">' + cells + '</div>';
+  return '<div class="cs-facts">' + cells + '</div>' + csRunHTML(cs);
+}
+
+// The receipts, for a study that has them: the per-video counts, up top where
+// a skimmer sees them, with Raj's own claim about them as the caption.
+//
+// Read out of the outcome sentence he already wrote -- NOT copied into a
+// field of their own. Six figures in two places is how two places start
+// disagreeing, and this file already carries that warning about the
+// multiples. The pattern matches only the run he enumerated ("13k views on
+// the 1st video", then each "20k next"), which is what keeps the best-video
+// line out of it: that sentence names 20k a second time, and it is the same
+// video as the second in the run, not a seventh.
+//
+// Under three matches it renders nothing. If he ever rewrites the outcome
+// the strip goes quiet instead of printing something half-parsed, and the
+// counts still read in full two screens down in his own sentence.
+function csRunHTML(cs) {
+  var src = cs.content && cs.content.outcome;
+  if (!src) return '';
+  var re = /(\d+(?:\.\d+)?k)\s*(?:views on the \d+\w* video|next)/gi;
+  var out = [], m;
+  while ((m = re.exec(src)) !== null) out.push(m[1]);
+  if (out.length < 3) return '';
+  // The caption is Raj's line from Q10, and it is a claim about these exact
+  // numbers -- so it is checked against them rather than trusted. If a count
+  // ever lands under 10k the figures still show and the claim drops itself.
+  var all10k = true;
+  for (var i = 0; i < out.length; i++) {
+    if (parseFloat(out[i]) < 10) { all10k = false; break; }
+  }
+  return '<div class="cs-run">' +
+           '<div class="cs-run-v">' + out.join(' &middot; ') + '</div>' +
+           (all10k ? '<div class="cs-fact-l">every video over 10k</div>' : '') +
+         '</div>';
 }
 
 // The same figures on the list row, minus the multiple -- that already has a

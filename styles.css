@@ -2969,6 +2969,11 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    every label on one baseline while this cell runs a line taller. */
 .cs-fact-v i{ display:block; font-style:italic; font-size:10px; font-family:'DM Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); }
 .cs-fact-l{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:6px; }
+/* The per-video run, under the strip. Body size and full ink, because these
+   are the only checkable numbers on the page -- the multiple is a ratio a
+   visitor has to take on trust, and six counts are not. See csRunHTML(). */
+.cs-run{ margin-top:20px; }
+.cs-run-v{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.06em; color:var(--ink); }
 
 /* .cs-metrics / .cs-metric / .cs-metric-v / .cs-metric-l are gone; the strip
    above replaced the box they styled.
