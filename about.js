@@ -507,10 +507,104 @@ function initAbout() {
     shots.appendChild(frag);
   }
 
+  // ── the photographs develop ────────────────────────────────────────────
+  //
+  // Raj, 2026-08-22: the pictures arrive as a cool wash and resolve to their
+  // own colours. Per tile, once, as it enters the pane -- so the page keeps
+  // developing the whole way down instead of finishing on the first screen.
+  //
+  // Two halves, and they start at different moments on purpose.
+  //
+  // The wash goes on at init, before the images have painted, so the first
+  // one a visitor sees is already cool -- adding it later would flash colour
+  // first. It is added from here and not written into the stylesheet so that
+  // a throw anywhere in this file leaves the photographs at full colour,
+  // which is where they were before this existed.
+  //
+  // The develop waits for the layout to stop moving. layout() runs again on
+  // window.load and again on fonts.ready, and each pass re-appends every tile
+  // (see unwrap) -- a re-append cancels a running transition outright, so a
+  // develop started at init gets cut halfway and snaps to colour. Nothing is
+  // transitioning during the wash, so holding it there costs nothing.
+  function develop() {
+    if (!window.IntersectionObserver) return;
+    shots.classList.add('developing');
+
+    var DUR = 850;
+
+    function resolve(t, delay) {
+      var img = t.querySelector('img');
+      // A lazy tile that has not decoded yet would spend its whole develop on
+      // an empty box and be in colour by the time the photograph lands. Wait
+      // for its image, and drop the stagger -- it is on its own by then.
+      if (img && !img.complete) {
+        img.addEventListener('load', function () { resolve(t, 0); }, { once: true });
+        img.addEventListener('error', function () { t.classList.add('developed', 'done'); }, { once: true });
+        return;
+      }
+      if (delay) t.style.setProperty('--dev-d', delay + 'ms');
+      t.classList.add('developed');
+      // Timed rather than hung off transitionend: a resize relayouts, a
+      // relayout re-appends, and a re-appended element never fires the end of
+      // the transition it was running. The teardown has to happen anyway --
+      // an identity filter and a mix-blend-mode each hold a composited layer
+      // for as long as they are declared.
+      setTimeout(function () {
+        t.classList.add('done');
+        t.style.removeProperty('--dev-d');
+      }, delay + DUR + 80);
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      // Entries arrive in no particular order, and a stagger dealt out at
+      // random reads as noise rather than as a cascade -- so the batch is put
+      // back into reading order before the delays go out. 45ms apart, capped:
+      // the first screen is a dozen tiles at once and a full stagger across
+      // them would still be developing a second and a half in.
+      var hit = [];
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        hit.push(e);
+      });
+      hit.sort(function (a, b) {
+        var r = a.boundingClientRect, q = b.boundingClientRect;
+        return (r.top - q.top) || (r.left - q.left);
+      });
+      hit.forEach(function (e, i) { resolve(e.target, Math.min(i * 45, 360)); });
+    }, {
+      root: document.getElementById('screen-about'),
+      // a shade inside the bottom edge, so the develop happens in view
+      rootMargin: '0px 0px -6% 0px',
+      threshold: 0.01
+    });
+
+    // Start once, on the last of load and fonts, a frame after the layout
+    // those two trigger. The timer is the backstop for a font that never
+    // resolves; start() is idempotent.
+    var started = false, waiting = 2;
+    function start() {
+      if (started) return;
+      started = true;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          tiles.forEach(function (t) { io.observe(t); });
+        });
+      });
+    }
+    function tick() { if (--waiting <= 0) start(); }
+    if (document.readyState === 'complete') tick();
+    else window.addEventListener('load', tick, { once: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(tick);
+    else tick();
+    setTimeout(start, 3500);
+  }
+
   layout();
   // Fonts and images both shift the mosaic's top edge once they land.
   window.addEventListener('load', layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  develop();
 
   // The resting offset is measured off the column's height, and that height
   // is not final when layout() first runs -- the playlist unhides whenever

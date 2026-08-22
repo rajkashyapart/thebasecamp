@@ -2138,6 +2138,57 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .tile img{width:100%;height:auto;display:block;border-radius:inherit;}
 
+/* Every photograph develops. Raj, 2026-08-22: "they appear in cyanotype and
+   subtly smoothly transition to normal colours." Per tile, once, as it scrolls
+   into the pane -- not all together on arrival, which would spend the whole
+   effect on screen one and leave the thirty tiles under it plain.
+
+   The wash is two properties, not an SVG duotone. filter:url() is the truer
+   cyanotype and browsers cannot interpolate it, so thirty-four of them
+   animating would have to be driven frame by frame; these two are declarative
+   and composite. grayscale takes the saturation down partway -- partway,
+   because Raj picked the faint wash over the full sun print, and the pink
+   shopfront should still read pink, only cold. A multiply layer of blue over
+   it tints the shadows and the mid-tones and leaves the highlights alone,
+   which is the shape a cyanotype has. One hue-rotate would have done it in a
+   single property and is wrong: it turns the residual colour as well, so that
+   pink comes out green.
+
+   Deep blue was available and is not used. --accent-b already means something
+   on this page -- it is the rule over "experience" and over "education" -- and
+   a full Prussian wash across thirty-four tiles would out-shout both marks.
+
+   850ms, which is long for this site and deliberate: a photograph developing,
+   not a control answering a press. --e-out because the picture is arriving.
+   No reduced-motion rule -- nothing moves, the colour is the animation, and
+   that is the class of change reduced motion keeps.
+
+   isolation so the blend group is the tile itself either way: a hovered tile
+   takes a transform and would otherwise start its own group mid-develop.
+   Both states are torn down on transitionend -- an identity filter and a
+   mix-blend-mode each cost a composited layer for as long as they are
+   declared, and thirty-four of each held for the rest of the visit buys
+   nothing. */
+.shots.developing .tile{isolation:isolate;}
+.shots.developing .tile img{
+  filter:grayscale(0.5);
+  transition:filter .85s var(--e-out);
+  transition-delay:var(--dev-d,0ms);
+}
+.shots.developing .tile::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:#6d9ec4;mix-blend-mode:multiply;opacity:0.34;
+  border-radius:inherit;
+  transition:opacity .85s var(--e-out);
+  transition-delay:var(--dev-d,0ms);
+}
+.shots.developing .tile.developed img{filter:grayscale(0);}
+.shots.developing .tile.developed::after{opacity:0;}
+/* the print is out; the chemistry goes away */
+.shots.developing .tile.done{isolation:auto;}
+.shots.developing .tile.done img{filter:none;transition:none;}
+.shots.developing .tile.done::after{content:none;}
+
 /* The one photograph that gets depth. */
 .tile.hero{
   border-radius:9px;
