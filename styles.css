@@ -2138,52 +2138,6 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .tile img{width:100%;height:auto;display:block;border-radius:inherit;}
 
-/* Every photograph develops. Raj, 2026-08-22, with a cyanotype in hand:
-   "gritty texture, grainy, soft edges, handmade and wtv."
-
-   The first pass animated `filter` directly, and that is why it had to stay
-   faint: barely any filter function interpolates and none of them make a
-   duotone. So nothing animates the treatment now. A fully finished print is
-   laid over each photograph and the *print* is cross-faded out -- opacity is
-   the only thing moving, which frees the layer under it to be anything at
-   all. It also costs less than the old version did: the filter rasterises
-   once and the fade reuses that raster.
-
-   .dev is built by about.js, one per tile, and removed from the DOM when the
-   tile has landed. Not a class that switches styling off -- the element goes,
-   so a settled photograph carries no filter, no extra layer and no marker.
-
-   Two things are worth saying about the print itself, which lives in the SVG
-   filters about.js writes:
-   - it paints its own paper. The rim is eroded, softened and then torn up
-     with noise, and bare stock sits under the whole rectangle, so the wash
-     thins out at the edge the way a hand-coated sheet does. The photograph
-     is never masked to reveal the colour one underneath -- that would show
-     the finished picture through the gaps in the unfinished one.
-   - every tile gets one of five seeds, and one of two baths. Raj wanted the
-     site's blue and pink in it; they are one ink per print rather than both
-     in one, because mixed inside a single photograph they cross at
-     mid-lightness where cyan and pink cancel into grey-mauve. A print that
-     is identical thirty-four times is not handmade, it is a filter.
-
-   1.2s on --e-in-out. The curve is the one for something already on screen
-   changing state with both ends gentle, which is what this is: --e-out would
-   dump the blue in the first fifth of the transition and spend the rest of
-   the time on a tail nobody can see. Longer than the 850ms the faint version
-   used because there is now something to watch. No reduced-motion rule --
-   nothing moves; colour is the whole animation, and that is the class of
-   change reduced motion keeps. */
-.tile .dev{
-  position:absolute;inset:0;pointer-events:none;
-  background-image:var(--dev-src);
-  background-size:cover;background-position:center;
-  border-radius:inherit;
-  opacity:1;
-  transition:opacity 1.2s var(--e-in-out);
-  transition-delay:var(--dev-d,0ms);
-}
-.tile.developed .dev{opacity:0;}
-
 /* The one photograph that gets depth. */
 .tile.hero{
   border-radius:9px;
