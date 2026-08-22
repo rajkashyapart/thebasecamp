@@ -509,58 +509,188 @@ function initAbout() {
 
   // ── the photographs develop ────────────────────────────────────────────
   //
-  // Raj, 2026-08-22: the pictures arrive as a cool wash and resolve to their
-  // own colours. Per tile, once, as it enters the pane -- so the page keeps
-  // developing the whole way down instead of finishing on the first screen.
+  // Raj, 2026-08-22, holding a real cyanotype: gritty, grainy, soft-edged,
+  // handmade. Each picture arrives as a finished print and resolves to its
+  // own colours once, as it enters the pane -- so the page keeps developing
+  // the whole way down instead of finishing on the first screen.
   //
-  // Two halves, and they start at different moments on purpose.
+  // Nothing animates the treatment. A print is laid over the photograph and
+  // the print is faded off; opacity is the only property in the transition,
+  // which is what lets the layer underneath be a real duotone with grain,
+  // blotching and a torn edge rather than the handful of filter functions a
+  // browser knows how to interpolate.
   //
-  // The wash goes on at init, before the images have painted, so the first
-  // one a visitor sees is already cool -- adding it later would flash colour
-  // first. It is added from here and not written into the stylesheet so that
-  // a throw anywhere in this file leaves the photographs at full colour,
-  // which is where they were before this existed.
+  // Two observers, because a tile has to already be blue well before anyone
+  // can see it. The first builds the print a screen and a half out; the
+  // second, tight to the fold, lets it go. They are kept apart rather than
+  // merged so the number of filtered layers alive at once stays near what
+  // fits on screen -- thirty-four of these rasterised at load is not
+  // something a phone should be asked to do.
+
+  var CY_SEEDS = 5, DEV_MS = 1200;
+
+  // Two stages, because one ramp cannot do both jobs.
   //
-  // The develop waits for the layout to stop moving. layout() runs again on
-  // window.load and again on fonts.ready, and each pass re-appends every tile
-  // (see unwrap) -- a re-append cancels a running transition outright, so a
-  // develop started at init gets cut halfway and snaps to colour. Nothing is
-  // transitioning during the wash, so holding it there costs nothing.
+  // CY_CRUSH is greyscale and it is the exposure: a short steep middle with
+  // long flat ends, so most of a normally lit frame packs into the blue and
+  // the highlights blow to paper. That is what makes a photograph read as a
+  // print rather than as a blue photograph.
+  //
+  // CY_R/G/B is the ink, and it is not a straight line from navy to white.
+  // A line between those two passes through blue-grey, which is what the
+  // first attempt at this looked like -- the midtones went dead. A real
+  // cyanotype stays saturated the whole way up: R climbs late, B early. The
+  // six stops are colours picked off the reference, in order --
+  //   #0d3a5c  #12496f  #1d6191  #4e8fb5  #b8d2e0  #f3f1ea
+  // pooled dark, field, mid prussian, pale wash, near-paper, paper.
+  var CY_CRUSH = '0 0.03 0.13 0.62 0.93 1';
+  var CY_R = '0.051 0.071 0.114 0.306 0.722 0.953';
+  var CY_G = '0.227 0.286 0.380 0.561 0.824 0.945';
+  var CY_B = '0.361 0.435 0.569 0.710 0.878 0.918';
+
+  // How hard the rim is torn, and how big the coating blooms are. A filter's
+  // numbers are in CSS pixels, not fractions of the box, so one set of them
+  // cannot serve both a 245px tile and a hero five times its area: at the
+  // tile's scale the hero's rim is a hairline, and at the hero's scale the
+  // tile's rim eats a third of the picture. Grain is the exception and is
+  // shared -- paper fibre is the same size on every sheet.
+  var CY_RIM = {
+    tile: { erode: 1, soft: 4, tear: 15, bloom: 0.011 },
+    hero: { erode: 4, soft: 12, tear: 48, bloom: 0.0038 }
+  };
+
+  function cyanoFilter(id, s, k) {
+    var seed = 3 + s * 17;
+    return '<filter id="' + id + '" color-interpolation-filters="sRGB">' +
+      // down to one channel of light
+      '<feColorMatrix type="matrix" result="lum" values="' +
+        '0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 ' +
+        '0.2126 0.7152 0.0722 0 0 0 0 0 1 0"/>' +
+      // wet chemistry has no hard edges anywhere in it
+      '<feGaussianBlur in="lum" stdDeviation="0.7" result="wet"/>' +
+      // The coat went on unevenly. Low frequency, and applied before the
+      // crush because this is exposure and not paper -- run through the steep
+      // part of the curve it turns into the blooms and streaks a brush
+      // leaves, which is the thing that reads as handmade.
+      '<feTurbulence type="fractalNoise" baseFrequency="' + k.bloom + '" numOctaves="2" seed="' + seed + '" result="coatN"/>' +
+      '<feColorMatrix in="coatN" type="matrix" result="coat" values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1"/>' +
+      '<feComposite in="wet" in2="coat" operator="arithmetic" k1="0" k2="1" k3="0.26" k4="-0.13" result="uneven"/>' +
+      // the exposure
+      '<feComponentTransfer in="uneven" result="crushed">' +
+        '<feFuncR type="table" tableValues="' + CY_CRUSH + '"/>' +
+        '<feFuncG type="table" tableValues="' + CY_CRUSH + '"/>' +
+        '<feFuncB type="table" tableValues="' + CY_CRUSH + '"/>' +
+      '</feComponentTransfer>' +
+      // the ink
+      '<feComponentTransfer in="crushed" result="duo">' +
+        '<feFuncR type="table" tableValues="' + CY_R + '"/>' +
+        '<feFuncG type="table" tableValues="' + CY_G + '"/>' +
+        '<feFuncB type="table" tableValues="' + CY_B + '"/>' +
+      '</feComponentTransfer>' +
+      // paper fibre, added after the crush because grain sits on top of the
+      // image rather than inside it
+      '<feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" seed="' + (seed + 5) + '" result="grainN"/>' +
+      '<feColorMatrix in="grainN" type="matrix" result="grain" values="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1"/>' +
+      '<feComposite in="duo" in2="grain" operator="arithmetic" k1="0" k2="1" k3="0.13" k4="-0.065" result="print"/>' +
+      // The coating ran thin at the rim: pull the alpha in, soften it, then
+      // tear the falloff up with noise so no two edges are alike.
+      '<feMorphology in="SourceAlpha" operator="erode" radius="' + k.erode + '" result="rim1"/>' +
+      '<feGaussianBlur in="rim1" stdDeviation="' + k.soft + '" result="rim2"/>' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.024" numOctaves="3" seed="' + (seed + 11) + '" result="rimN"/>' +
+      '<feDisplacementMap in="rim2" in2="rimN" scale="' + k.tear + '" xChannelSelector="R" yChannelSelector="G" result="rim"/>' +
+      '<feComposite in="print" in2="rim" operator="in" result="washed"/>' +
+      // Bare stock under all of it, so a thin rim shows paper and never the
+      // finished colour photograph waiting underneath.
+      '<feFlood flood-color="#f0ece4" result="stock"/>' +
+      '<feComposite in="stock" in2="SourceAlpha" operator="in" result="sheet"/>' +
+      '<feMerge><feMergeNode in="sheet"/><feMergeNode in="washed"/></feMerge>' +
+      '</filter>';
+  }
+
+  function cyanoDefs() {
+    if (document.getElementById('cy-defs')) return;
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('id', 'cy-defs');
+    svg.setAttribute('aria-hidden', 'true');
+    // Not display:none. Safari has dropped filter:url() references into a
+    // hidden svg before; a zero-sized absolutely positioned one always works.
+    svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+    var out = '';
+    for (var s = 0; s < CY_SEEDS; s++) out += cyanoFilter('cy' + s, s, CY_RIM.tile);
+    // the hero is one photograph and gets two, so a reload is not identical
+    out += cyanoFilter('cyh0', 1, CY_RIM.hero) + cyanoFilter('cyh1', 4, CY_RIM.hero);
+    svg.innerHTML = '<defs>' + out + '</defs>';
+    document.body.appendChild(svg);
+  }
+
   function develop() {
     if (!window.IntersectionObserver) return;
-    shots.classList.add('developing');
+    var root = document.getElementById('screen-about');
+    var seq = 0;
 
-    var DUR = 850;
-
-    function resolve(t, delay) {
+    function prime(t) {
+      if (t.__dev) return t.__dev;
       var img = t.querySelector('img');
-      // A lazy tile that has not decoded yet would spend its whole develop on
-      // an empty box and be in colour by the time the photograph lands. Wait
-      // for its image, and drop the stagger -- it is on its own by then.
-      if (img && !img.complete) {
-        img.addEventListener('load', function () { resolve(t, 0); }, { once: true });
-        img.addEventListener('error', function () { t.classList.add('developed', 'done'); }, { once: true });
-        return;
-      }
-      if (delay) t.style.setProperty('--dev-d', delay + 'ms');
-      t.classList.add('developed');
-      // Timed rather than hung off transitionend: a resize relayouts, a
-      // relayout re-appends, and a re-appended element never fires the end of
-      // the transition it was running. The teardown has to happen anyway --
-      // an identity filter and a mix-blend-mode each hold a composited layer
-      // for as long as they are declared.
-      setTimeout(function () {
-        t.classList.add('done');
-        t.style.removeProperty('--dev-d');
-      }, delay + DUR + 80);
+      var src = img && (img.currentSrc || img.getAttribute('src'));
+      if (!src) return null;
+      cyanoDefs();
+      var d = document.createElement('div');
+      d.className = 'dev';
+      d.style.setProperty('--dev-src', 'url("' + src + '")');
+      d.style.filter = (t === hero)
+        ? 'url(#cyh' + (Math.random() < 0.5 ? 0 : 1) + ')'
+        : 'url(#cy' + (seq++ % CY_SEEDS) + ')';
+      t.appendChild(d);
+      t.__dev = d;
+      return d;
     }
 
+    function fire(t, delay) {
+      var img = t.querySelector('img');
+      // A tile whose photograph has not decoded yet would spend its whole
+      // develop over an empty box and be in colour by the time the picture
+      // lands. Wait for it, and drop the stagger -- it is on its own by then.
+      if (img && !img.complete) {
+        img.addEventListener('load', function () { fire(t, 0); }, { once: true });
+        img.addEventListener('error', function () { strip(t); }, { once: true });
+        return;
+      }
+      var d = prime(t);
+      if (!d) { strip(t); return; }
+      if (delay) d.style.setProperty('--dev-d', delay + 'ms');
+      // The print has to have been opaque for a frame, or the browser has no
+      // start value to transition from and it simply appears already gone.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { t.classList.add('developed'); });
+      });
+      // Timed rather than hung off transitionend: layout() re-appends every
+      // tile on a resize, and a re-appended element never fires the end of
+      // the transition it was running.
+      setTimeout(function () { strip(t); }, delay + DEV_MS + 200);
+    }
+
+    function strip(t) {
+      if (t.__dev && t.__dev.parentNode) t.__dev.parentNode.removeChild(t.__dev);
+      t.__dev = null;
+      t.classList.remove('developed');
+      t.classList.add('done');
+    }
+
+    // a screen and a half out: blue long before anyone can see it is blue
+    var pre = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        pre.unobserve(e.target);
+        if (!e.target.classList.contains('done')) prime(e.target);
+      });
+    }, { root: root, rootMargin: '400px 0px 150% 0px', threshold: 0 });
+
     var io = new IntersectionObserver(function (entries) {
-      // Entries arrive in no particular order, and a stagger dealt out at
-      // random reads as noise rather than as a cascade -- so the batch is put
-      // back into reading order before the delays go out. 45ms apart, capped:
-      // the first screen is a dozen tiles at once and a full stagger across
-      // them would still be developing a second and a half in.
+      // Entries arrive in no particular order and a stagger dealt out at
+      // random reads as noise rather than as a cascade, so the batch goes
+      // back into reading order first. 60ms apart, capped: the first screen
+      // is a dozen tiles at once and a full stagger across them would still
+      // be developing two seconds in.
       var hit = [];
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
@@ -571,21 +701,18 @@ function initAbout() {
         var r = a.boundingClientRect, q = b.boundingClientRect;
         return (r.top - q.top) || (r.left - q.left);
       });
-      hit.forEach(function (e, i) { resolve(e.target, Math.min(i * 45, 360)); });
-    }, {
-      root: document.getElementById('screen-about'),
-      // a shade inside the bottom edge, so the develop happens in view
-      rootMargin: '0px 0px -6% 0px',
-      threshold: 0.01
-    });
+      hit.forEach(function (e, i) { fire(e.target, Math.min(i * 60, 420)); });
+    }, { root: root, rootMargin: '0px 0px -6% 0px', threshold: 0.01 });
 
     // Start once, on the last of load and fonts, a frame after the layout
-    // those two trigger. The timer is the backstop for a font that never
-    // resolves; start() is idempotent.
+    // those two trigger: layout() re-appends every tile, and a re-append
+    // cancels a running transition outright. The timer is the backstop for a
+    // font that never resolves; start() is idempotent.
     var started = false, waiting = 2;
     function start() {
       if (started) return;
       started = true;
+      tiles.forEach(function (t) { pre.observe(t); });
       requestAnimationFrame(function () {
         requestAnimationFrame(function () {
           tiles.forEach(function (t) { io.observe(t); });
