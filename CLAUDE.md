@@ -306,8 +306,8 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   three ids, one of them the hero. **Don't promise completeness over a row
   built from whatever the reel bank happens to hold.**
 - **A study detail is one column, and it has no index.** No sidebar, no
-  section numbers, no scroll-spy, no rules between sections, and no
-  metrics box — all removed 2026-08-22 on an Elon pass. The longest study
+  section numbers, no scroll-spy and no rules between sections — all
+  removed 2026-08-22 on an Elon pass. The longest study
   is 240 words; it was carrying a sticky sidebar, six links, six ordinals
   printed a second time inside the labels and an observer to keep them in
   step, costing 256px of a 1440 layout and 48px of a 706 phone to index a
@@ -322,12 +322,46 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   paper. The hero reel caps at `min(62vh,560px)`, down from 640, which
   with the metrics box gone puts the first section head on screen one;
   the phone is untouched, where `.cs-media` is `width:100%` by Raj's rule.
-  **The multiple does not appear on a detail page.** It arrives with the
-  click — it is on the list row you pressed, drawn on the one scale all
-  six share — and a box restating it was the same fact twice, with the
-  second copy as the loudest thing on screen before a word of the
-  argument. Nothing unique went with the box: "48 videos" is in upsurge's
+- **Every study opens on a proof strip, and it is the 10-second version of
+  the page.** The bordered metrics box was deleted on 2026-08-22 for
+  repeating the list row, and that was half right — it assumed everyone
+  arrives through that row, and someone landing on a shared link never saw
+  it. Raj, 2026-08-23: *"the key metrics - arent they important? who has
+  the time to read the whole page?"* They are, and nobody does. It came
+  back the next day **denser rather than identical**: a strip of figures
+  under the client's name, above the video, no box and no border — the
+  multiple plus whatever else that study has actually **logged**. Four
+  cells on C+C (3× / 6 videos / 2 shoot days / 6 years still a client),
+  one on the studies where only the multiple exists. **Extend `metrics`,
+  never add a facts field** — `csMult()` and the drawn bar find the
+  multiple by matching `average post` on the label, so the array takes
+  more entries safely, and a parallel field would be a fifth place for
+  these figures to disagree. Labels are written to read **both stacked and
+  inline**, because the list row prints the same cells minus the multiple.
+  Values sit on the list row's own `clamp(22px,3vw,30px)`; at the
+  pull-quote's 24 the numerals read level with their own 10px labels and
+  the strip lost its only job. Pink lands on the multiple alone. **Don't
+  put "no ad spend." back in the strip** — it was there for one build,
+  it already lives in `portfolio.js` and CIAD's unit line, and as a fourth
+  line of tracked uppercase it turned the single-fact studies into a label
+  block with one small number in it.
+  **Sections stay whole underneath.** Asked on 2026-08-23 whether to
+  collapse, reorder or fold them away, Raj kept all six as they are: the
+  strip is the ten-second read, the sections are the ten-minute one.
+  Nothing unique went with the old box: "48 videos" is in upsurge's
   overview and solution, "sold out" is in the cacao outcome.
+- **The list row carries the engagement, not just the result.** A 9px
+  tracked line under the teaser — same size as the sector, so nothing
+  enters the type budget — saying what the work actually was: *6 videos ·
+  2 shoot days · 6 years still a client*. Raj, 2026-08-23: the page
+  *"should properly summarise the context inside for each client - with
+  key metrics or whatever relevant a client would seek before hiring me."*
+  The multiple is deliberately **not** in that line; it has its own column
+  and its own drawn bar. **A study with nothing logged past its multiple
+  renders no line at all** — three of the six are bare, and that is the
+  placeholder rule, not an oversight. The fix is facts from Raj, never
+  filler. Still missing: volume, shoot days and start year for the fresh
+  factory, insanely good coffee and kaheen.
 - **C+C's 3× is closed. It stays, and no baseline goes on the page.**
   Raj logged two multiples — 3× for the set of six against her own average,
   and 3.5× for the best single video, which is private. Back-solving a

@@ -24,7 +24,19 @@ var CASE_STUDIES = [
     id: 'copper-cloves', client: 'copper + cloves', person: 'sarah edwards', sector: 'food brand &middot; founder',
     teaser: 'sarah was tired of her own page turning salesy and losing essence of individuality.',
     vid: csVid('fddf2783-d99b-440c-b433-0dbcbad3a07c'),
-    metrics: [{ v: '3&times;', l: 'their average post' }],
+    // Every entry here is a logged fact, nothing derived. The multiple is the
+    // one csMult() and the drawn bar read (matched on "average post"), so the
+    // rest can be extended freely without touching either.
+    //
+    // "6 years / still a client" is Raj's own line from Q10 -- "Six years on,
+    // still a client" -- against the 2020 in the overview. It is the only cell
+    // that ages: bump it when the year turns, or it starts lying quietly.
+    metrics: [
+      { v: '3&times;', l: 'their average post' },
+      { v: '6', l: 'videos' },
+      { v: '2', l: 'shoot days' },
+      { v: '6 years', l: 'still a client' }
+    ],
     quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'sarah edwards', role: 'founder, copper + cloves' },
     // Raj's own sentences from the 2026-08-12 dump. Typos fixed, whole lines
     // cut, NOTHING re-said -- see CLAUDE.md section 6, "copy is his, verbatim".
@@ -86,7 +98,14 @@ var CASE_STUDIES = [
     id: 'upsurge-labs', client: 'upsurge labs', person: 'sowmay jain', sector: 'tech &middot; company content',
     teaser: 'a company building in public, at volume, on a 48-hour clock.',
     vid: csVid('46151b93-4758-4055-ab4d-944a470f7c17'),
-    metrics: [{ v: '48', l: 'videos' }, { v: '3&ndash;11&times;', l: 'their average post' }],
+    // Multiple first, same order as every other study, so the strips line up
+    // across the six. "48hr / turnaround" is the logged phrasing from
+    // PORTFOLIO-NOTES; the solution section says the same thing in his words.
+    metrics: [
+      { v: '3&ndash;11&times;', l: 'their average post' },
+      { v: '48', l: 'videos' },
+      { v: '48hr', l: 'turnaround' }
+    ],
     quote: null,
     content: {
       overview: 'editing across everything upsurge labs was building &mdash; sowmay, the product, the team, the progress. 48 videos, every cut back inside a 48-hour window.',
@@ -179,6 +198,57 @@ function csMult(cs) {
     return cs.metrics[i].v.replace(/^up to\s+/i, '<i>up to</i>');
   }
   return '';
+}
+
+function csIsMult(m) { return /average post/i.test(m.l); }
+
+// The proof strip: the figures a visitor gets before deciding whether to read.
+//
+// This is the 10% that comes back after a deletion. Removing the metrics box
+// on 2026-08-22 was half right -- it repeated the list row -- but it assumed
+// everyone arrives through that row, and someone landing on a shared link
+// never saw it. Raj, 2026-08-23: "the key metrics - arent they important?
+// who has the time to read the whole page?" They are, and nobody does.
+//
+// So it comes back denser rather than identical: the multiple plus whatever
+// else that study has actually logged -- volume, shoot days, how long they
+// have been a client. Four cells on C+C, one on the studies where only the
+// multiple exists. The multiple keeps the page's pink because it is the
+// what-it-did half of the accent split; the rest are plain ink, because a
+// row where every figure shouts is a row with no figure in it.
+function csFactsHTML(cs) {
+  if (!cs.metrics || !cs.metrics.length) return '';
+  var cells = '';
+  for (var i = 0; i < cs.metrics.length; i++) {
+    var m = cs.metrics[i], isM = csIsMult(m);
+    cells += '<div class="cs-fact' + (isM ? ' is-mult' : '') + '">' +
+               '<div class="cs-fact-v">' + (isM ? csMult(cs) : m.v) + '</div>' +
+               '<div class="cs-fact-l">' + m.l + '</div>' +
+             '</div>';
+  }
+  // "no ad spend." was here for one build and came off. It is true and it is
+  // Raj's, but he did not pick it as one of the figures a client needs in ten
+  // seconds -- I added it -- and it already lives in portfolio.js's outcomes
+  // and CIAD's unit line. As a row of its own it was a fourth line of 10px
+  // tracked uppercase under three others, which on the studies carrying only
+  // a multiple left the strip reading as a cramped label block with one small
+  // number in it. The subtraction rule applies to my additions first.
+  return '<div class="cs-facts">' + cells + '</div>';
+}
+
+// The same figures on the list row, minus the multiple -- that already has a
+// column and a drawn bar of its own two inches to the right. Labels are
+// written so they read in both directions: "6" + "videos" stacks in the strip
+// and runs inline here. A study with nothing logged past its multiple renders
+// nothing, which is the finished state, not a gap to fill with something.
+function csFactsInline(cs) {
+  if (!cs.metrics) return '';
+  var out = [];
+  for (var i = 0; i < cs.metrics.length; i++) {
+    if (csIsMult(cs.metrics[i])) continue;
+    out.push(cs.metrics[i].v + ' ' + cs.metrics[i].l);
+  }
+  return out.length ? out.join(' &middot; ') : '';
 }
 
 // ---- the multiple, drawn ------------------------------------------------
@@ -347,6 +417,9 @@ function initCaseStudies() {
           '<div class="cs-card-client">' + cs.client + '</div>' +
           '<div class="cs-card-sector">' + cs.sector + '</div>' +
           '<div class="cs-card-teaser">' + cs.teaser + '</div>' +
+          (csFactsInline(cs)
+            ? '<div class="cs-card-facts">' + csFactsInline(cs) + '</div>'
+            : '') +
         '</div>' +
         '<div class="cs-card-mult">' + csMult(cs) + csBarHTML(cs, idx) + '</div>' +
         '<div class="cs-card-arrow">&#8594;</div>';
@@ -422,14 +495,6 @@ function openCase(cs) {
                 '</section>';
   }
 
-  // cs.metrics is the list row's data, not the detail page's. The multiple
-  // arrives with the click -- it is on the row you pressed, drawn on the one
-  // scale all six share -- and a box restating it two hundred pixels later is
-  // the same fact twice, with the second copy as the loudest thing on screen
-  // before a word of the argument. Nothing unique is lost: "48 videos" is in
-  // upsurge's overview and solution, "sold out" is in the cacao outcome, and
-  // every multiple is on its row. What the detail page carries instead is the
-  // telemetry the outcome section already prints.
 
   // Everything else made for this client, after the reading and before the
   // testimonial: the sections are the argument, this is the body of work the
@@ -466,6 +531,7 @@ function openCase(cs) {
       '<div class="cs-hero-eyebrow">' + cs.sector + '</div>' +
       '<h1 class="cs-hero-client">' + cs.client + '</h1>' +
       '<div class="cs-hero-person">' + cs.person + '</div>' +
+      csFactsHTML(cs) +
     '</header>' +
     '<div class="cs-layout">' +
       '<div class="cs-content">' +

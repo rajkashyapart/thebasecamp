@@ -2754,6 +2754,16 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-card-client{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); line-height:1.05; color:var(--accent-b); }
 .cs-card-sector{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
 .cs-card-teaser{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); margin-top:8px; line-height:1.5; }
+/* The row's footer: what the engagement actually was, so the list answers
+   "how much work, over how long" without a click. Raj, 2026-08-23: the page
+   "should properly summarise the context inside for each client - with key
+   metrics or whatever relevant a client would seek before hiring me."
+   9px uppercase is the sector's exact size, so nothing enters the type
+   budget, and the case change keeps it from fusing with the 12px teaser
+   directly above. The multiple is deliberately not in here -- it has its own
+   column and its own drawn bar two inches to the right. Studies with nothing
+   logged past their multiple render no line at all. */
+.cs-card-facts{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:16px; line-height:1.6; }
 /* The one figure on the row that carries meaning, so it gets the page's one
    accent. Fixed width and left-aligned, not right-aligned: six multiples in a
    column are being compared, and comparison needs them to *start* together --
@@ -2935,9 +2945,33 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 }
 .cs-reel video{ width:100%; height:100%; object-fit:cover; display:block; }
 
-/* .cs-metrics / .cs-metric / .cs-metric-v / .cs-metric-l are gone with the box
-   they styled. The multiple lives on the list row, drawn on the one scale all
-   six share; a card repeating it here was the same fact twice.
+/* The proof strip, under the name and above the video -- see csFactsHTML().
+   No box, no border, no card: the figures are the only thing at that size in
+   that part of the page, which is all the separation they need. It replaced a
+   bordered .cs-metric card, so the strip carries three more facts than the box
+   did and draws one less object than it did.
+
+   Sizes are the page's own: values on the pull-quote's ramp, labels at the
+   section-label 10px. Nothing new enters the type budget. Pink lands on the
+   multiple only -- it is the what-it-did half of this page's split, and if
+   every figure in the row took the accent none of them would be the answer. */
+.cs-facts{ display:flex; flex-wrap:wrap; gap:18px 34px; margin-top:26px; align-items:end; }
+/* The list row's own multiple size, clamp(22,3vw,30) -- 30 on a desktop and
+   22 on a phone, both already on the page. At the pull-quote's 24 the figures
+   sat level with their own labels: Cormorant's numerals are small on the body,
+   so a 24px "3x" over a 10px tracked label read as two labels rather than a
+   figure and its caption, and the strip lost the one job it has. */
+.cs-fact-v{ font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(22px,3vw,30px); line-height:1.05; color:var(--ink); }
+.cs-fact.is-mult .cs-fact-v{ color:var(--accent-r); }
+/* "up to" is part of the fact and never drops, and it hangs above its number
+   here for the same reason it does on the list row: the figures have to start
+   together or they cannot be read as a set. align-items:end on the row keeps
+   every label on one baseline while this cell runs a line taller. */
+.cs-fact-v i{ display:block; font-style:italic; font-size:10px; font-family:'DM Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); }
+.cs-fact-l{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:6px; }
+
+/* .cs-metrics / .cs-metric / .cs-metric-v / .cs-metric-l are gone; the strip
+   above replaced the box they styled.
 
    The six border-top rules went with it. CLAUDE.md section 3: reaching for a
    rule to show structure means the spacing is wrong. It was -- 22px between
@@ -3005,6 +3039,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .cs-card-sector{ grid-area:2/2/2/-1; margin-top:0; }
   .cs-card-mult{ grid-area:3/2/3/-1; width:auto; margin-top:8px; }
   .cs-card-teaser{ grid-area:4/2/4/-1; margin-top:4px; }
+  /* Row 5, explicitly. .cs-card-body is display:contents here, so a child
+     without a grid-area auto-places into column 1 beside the row number and
+     takes the layout with it. */
+  .cs-card-facts{ grid-area:5/2/5/-1; margin-top:8px; }
 }
 
 
