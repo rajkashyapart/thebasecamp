@@ -21,6 +21,211 @@
 // grew instead and the writing column stays put (position:sticky) while they
 // scroll past it.
 
+// The ascii reveal.
+//
+// Raj, 2026-08-23: ascii on the pictures -- but not as the page's resting
+// state. The photographs stay the photographs. This is only how they turn up:
+// each one arrives as a coarse drawing of itself and dissolves into the
+// print, once, and the canvas is thrown away the frame it finishes.
+//
+// Coarse is a cell size, not a column count. Fixing the count would give a
+// 245px tile 5px characters and the 600px hero 12px ones -- three grains on
+// one screen, when the whole appeal is the wall reading as one text surface.
+// Fixing the cell instead keeps the grain constant, and the 64-column cap is
+// what keeps the hero coarse: at 6px cells it would resolve into a legible
+// portrait, which is the fine setting and not the one that was picked.
+//
+// Drawn a row at a time -- one fillText per row, not per character. A 41x55
+// grid is 2,255 glyphs and thirty-four tiles of those is 74,000 draw calls
+// against 1,900. The font size is solved from the measured advance width so
+// a row of characters is exactly the width of the tile whatever face
+// actually loaded, which is also what makes the fallback mono safe.
+
+var ASCII = {
+  ramp: ' .:-=+*#%@',  // light to dark: more ink where the photograph is darker
+  cell: 6,             // target px per character cell
+  max: 64,             // column ceiling -- the hero stays coarse
+  min: 20,
+  hold: 220,           // ms the drawing is held before it starts to go
+  step: 40,            // stagger between tiles that arrive together
+  cap: 320,            // and the most that stagger may ever add
+  bail: 1200           // ms after which a photograph stops waiting for a draw
+};
+
+function initAsciiReveal(tiles, scroller) {
+  if (!tiles.length || !scroller) return;
+  // Decorative by definition -- there is nothing to understand here that the
+  // photograph underneath does not already say, so reduced motion gets the
+  // photograph and nothing else.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var probe = document.createElement('canvas');
+  if (!probe.getContext || !probe.getContext('2d')) return;
+
+  var rs = getComputedStyle(document.documentElement);
+  var PAPER = (rs.getPropertyValue('--bg-warm') || '#f5f2ee').trim();
+  var INK = (rs.getPropertyValue('--ink') || '#1a1814').trim();
+
+  var bailed = false;
+  tiles.forEach(function (t) { t.classList.add('ascii-wait'); });
+  setTimeout(function () {
+    bailed = true;
+    tiles.forEach(function (t) { t.classList.remove('ascii-wait'); });
+  }, ASCII.bail);
+
+  function draw(tile) {
+    var img = tile.querySelector('img');
+    if (!img || !img.naturalWidth) return false;
+    var w = tile.clientWidth, h = tile.clientHeight;
+    if (w < 8 || h < 8) return false;
+
+    var cols = Math.max(ASCII.min, Math.min(ASCII.max, Math.round(w / ASCII.cell)));
+    var cw = w / cols;
+
+    var dpr = Math.min(2, window.devicePixelRatio || 1);
+    var cv = document.createElement('canvas');
+    cv.className = 'tile-ascii';
+    cv.setAttribute('aria-hidden', 'true');
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext('2d');
+    if (!ctx) return false;
+    ctx.scale(dpr, dpr);
+
+    ctx.font = '100px "DM Mono",ui-monospace,monospace';
+    var adv = (ctx.measureText('M').width / 100) || 0.6;
+    var fs = cw / adv;
+    var rows = Math.max(1, Math.round(h / fs));
+    var ch = h / rows;
+
+    // Sample the crop the tile actually shows, not the whole photograph:
+    // .tile img is object-fit:cover in the justified mosaic, so a third of a
+    // vertical shot can be off the edge and the drawing would dissolve into
+    // a picture it is not a drawing of.
+    var ir = img.naturalWidth / img.naturalHeight, tr = w / h;
+    var sw = img.naturalWidth, sh = img.naturalHeight, sx = 0, sy = 0;
+    if (ir > tr) { sw = img.naturalHeight * tr; sx = (img.naturalWidth - sw) / 2; }
+    else if (ir < tr) { sh = img.naturalWidth / tr; sy = (img.naturalHeight - sh) / 2; }
+
+    var sm = document.createElement('canvas');
+    sm.width = cols; sm.height = rows;
+    var sc = sm.getContext('2d', { willReadFrequently: true });
+    if (!sc) return false;
+    var px;
+    try {
+      sc.drawImage(img, sx, sy, sw, sh, 0, 0, cols, rows);
+      px = sc.getImageData(0, 0, cols, rows).data;
+    } catch (e) { return false; }
+
+    var n = cols * rows, lum = new Float32Array(n), hist = new Uint16Array(256);
+    for (var i = 0; i < n; i++) {
+      var o = i * 4;
+      var v = (px[o] * 0.2126 + px[o + 1] * 0.7152 + px[o + 2] * 0.0722) / 255;
+      lum[i] = v;
+      hist[v * 255 | 0]++;
+    }
+    // Stretch to the full ramp, off the 3rd and 97th percentile rather than
+    // the darkest and brightest cell. Min/max was the first version and it
+    // does nothing on most of these photographs: one lamp in the bar shot
+    // pins the top of the range at white and leaves the other 2,000 cells
+    // squeezed into the bottom fifth of the ramp, which is why half the wall
+    // came out as solid @. A percentile lets the outliers clip -- which is
+    // what a print does too.
+    var cut = Math.max(1, Math.round(n * 0.03)), acc = 0, lo = 0, hi = 255, b;
+    for (b = 0; b < 256; b++) { acc += hist[b]; if (acc > cut) { lo = b; break; } }
+    for (b = 255, acc = 0; b >= 0; b--) { acc += hist[b]; if (acc > cut) { hi = b; break; } }
+    lo /= 255; hi /= 255;
+    var span = hi - lo, stretch = span > 0.04;
+
+    var ramp = ASCII.ramp, last = ramp.length - 1;
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = INK;
+    ctx.font = fs.toFixed(2) + 'px "DM Mono",ui-monospace,monospace';
+    ctx.textBaseline = 'middle';
+    for (var r = 0; r < rows; r++) {
+      var line = '';
+      for (var c = 0; c < cols; c++) {
+        var g = lum[r * cols + c];
+        if (stretch) g = (g - lo) / span;
+        if (g < 0) g = 0; else if (g > 1) g = 1;
+        var k = Math.round((1 - g) * last);
+        line += ramp.charAt(k < 0 ? 0 : (k > last ? last : k));
+      }
+      ctx.fillText(line, 0, (r + 0.5) * ch);
+    }
+
+    tile.appendChild(cv);
+    tile.ascii = cv;
+    return true;
+  }
+
+  function fade(tile, delay) {
+    var cv = tile.ascii;
+    if (!cv || tile.fading) return;
+    tile.fading = true;
+    setTimeout(function () {
+      function done() {
+        if (cv.parentNode) cv.parentNode.removeChild(cv);
+        tile.ascii = null;
+      }
+      cv.addEventListener('transitionend', done, { once: true });
+      // transitionend never fires on a backgrounded tab, and a canvas left
+      // sitting on top of a photograph is worse than one removed early
+      setTimeout(done, 1000);
+      cv.classList.add('gone');
+    }, delay);
+  }
+
+  var io = new IntersectionObserver(function (list) {
+    var seen = list.filter(function (e) { return e.isIntersecting; });
+    if (!seen.length) return;
+    // Entries come in whatever order the observer collected them, so the
+    // cascade is sorted into reading order -- top-left first, the direction
+    // the eye is already travelling.
+    seen.sort(function (a, b) {
+      return (a.boundingClientRect.top - b.boundingClientRect.top) ||
+             (a.boundingClientRect.left - b.boundingClientRect.left);
+    });
+    seen.forEach(function (e, i) {
+      io.unobserve(e.target);
+      var d = ASCII.hold + Math.min(i * ASCII.step, ASCII.cap);
+      // A tile can come into view before its photograph has decoded, in which
+      // case the drawing does not exist yet; the delay waits for it there.
+      if (e.target.ascii) fade(e.target, d);
+      else e.target.asciiDue = d;
+    });
+  }, { root: scroller, threshold: 0.12 });
+
+  tiles.forEach(function (t) {
+    var img = t.querySelector('img');
+    if (!img) { t.classList.remove('ascii-wait'); return; }
+    function go() {
+      if (t.asciiDone) return;
+      // Past the failsafe the photograph is on screen. A tile that is also in
+      // view has already been seen as a photograph, and putting a drawing on
+      // top of it now is a flicker, not a reveal -- so that one just keeps
+      // its picture. Everything still below the fold draws as normal.
+      if (bailed && t.asciiDue != null) { t.asciiDone = true; io.unobserve(t); return; }
+      t.asciiDone = true;
+      var ok = draw(t);
+      t.classList.remove('ascii-wait');
+      if (!ok) { io.unobserve(t); return; }
+      if (t.asciiDue != null) fade(t, t.asciiDue);
+    }
+    function give() {
+      t.asciiDone = true;
+      t.classList.remove('ascii-wait');
+      io.unobserve(t);
+    }
+    if (img.complete && img.naturalWidth) go();
+    else {
+      img.addEventListener('load', go, { once: true });
+      img.addEventListener('error', give, { once: true });
+    }
+    io.observe(t);
+  });
+}
+
 function initAbout() {
   var shots = document.querySelector('.shots');
   if (!shots) return;
@@ -508,6 +713,7 @@ function initAbout() {
   }
 
   layout();
+  initAsciiReveal(tiles, document.getElementById('screen-about'));
   // Fonts and images both shift the mosaic's top edge once they land.
   window.addEventListener('load', layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);

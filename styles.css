@@ -2159,6 +2159,33 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .tile.hero:hover{transform:none;}
 }
 
+/* ── the ascii reveal ──────────────────────────────── */
+/* Every photograph arrives as a coarse drawing of itself and dissolves into
+   the print. It is not a resting state: the canvas is removed the frame it
+   has finished fading, so nothing this rule describes survives the arrival.
+   Ink on paper, one colour -- blue and pink mean the work and the person on
+   this page, and neither of them means texture. */
+.tile-ascii{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:block;border-radius:inherit;
+  pointer-events:none;z-index:1;
+  /* Exiting, so --e-out. Not --e-dissolve, which is the video intro's and is
+     a film cut over a second; this is a half-second hand-off between two
+     pictures of the same thing.
+     The blur is the crossfade mask: without it you watch two distinct images
+     overlap for half a second, with it the characters melt into the grain of
+     the photograph under them. 3px, transient, on a tile-sized layer. */
+  transition:opacity .5s var(--e-out), filter .5s var(--e-out);
+}
+.tile-ascii.gone{opacity:0;filter:blur(3px);}
+
+/* The photograph waits for its drawing. On a cold load the image has not
+   decoded yet and this does nothing; on a reload out of cache it is the
+   difference between the print flashing for two frames before the ascii
+   lands on top of it. about.js clears it per tile, and on a timer if a
+   decode never comes. */
+.tile.ascii-wait img{opacity:0;}
+
 /* the reveal script fades whole cards in; nothing here needs it */
 .obj{opacity:1;}
 
