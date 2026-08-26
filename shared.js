@@ -5,14 +5,13 @@
 // left the rest: the material stays warm paper, the link set stays ours.
 //
 // Everything below builds on markup that is already in all seven HTML files
-// -- a brand and five anchors -- rather than editing seven files to add a
-// wrapper, a pill and two panels. The anchors stay real anchors; they are
-// only re-parented.
+// -- five anchors -- rather than editing seven files to add a wrapper, a pill
+// and two panels. The anchors stay real anchors; they are only re-parented.
 //
 //   #pg-nav
 //     .nav-panel        height 0 -> measured, grows the capsule upward
 //       .nav-panel-in   contents, crossfaded in behind the growth
-//     .nav-row          brand + links, welded to the bottom edge
+//     .nav-row          the links, welded to the bottom edge
 //       .pg-links
 //         .nav-pill     one mark, moved by transform
 //
@@ -40,14 +39,12 @@ function initNav() {
   var isIntro = document.getElementById('screen-video');
   if (!isIntro) nav.classList.add('nav-visible');
 
-  var brand = nav.querySelector('.pg-brand');
   var links = nav.querySelector('.pg-links');
   if (!links) return;
 
   // ── structure ──────────────────────────────────────────────────────────
   var row = document.createElement('div');
   row.className = 'nav-row';
-  if (brand) row.appendChild(brand);
   row.appendChild(links);
 
   var panel = document.createElement('div');
@@ -78,6 +75,7 @@ function initNav() {
 
   var items = Array.prototype.slice.call(links.querySelectorAll('a,button'));
   var active = links.querySelector('a.active');
+  var csLink = document.getElementById('pg-cs-link');
 
   // ── the pill ───────────────────────────────────────────────────────────
   // transform + width rather than left + width: the element is absolutely
@@ -116,7 +114,11 @@ function initNav() {
 
   if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
     items.forEach(function (el) {
-      el.addEventListener('pointerenter', function () { place(el, el !== home); });
+      el.addEventListener('pointerenter', function () {
+        place(el, el !== home);
+        // arriving anywhere else in the bar is a decision to leave
+        if (openKind === 'studies' && el !== csLink) closePanel();
+      });
     });
     links.addEventListener('pointerleave', function () { rest(false); });
   }
@@ -167,6 +169,28 @@ function initNav() {
   var hoverTimer = null;
   var closeTimer = null;
 
+  // Raj, 2026-08-26: "once i hover on case studies, the pop up doesnt [go]
+  // away even if i move mouse to somewhere else."
+  //
+  // pointerleave on the nav was the only thing closing it, and the nav is
+  // 660x295 while a panel is open -- so moving along the bar to any other
+  // link, which is exactly where the mouse goes next, never left the box and
+  // never closed anything. Two more ways out, both of which a menu should
+  // have had from the start: landing on any other item closes it, and so does
+  // the pointer being anywhere outside the capsule at all. The second is a
+  // document listener rather than a leave event because an element that
+  // resizes under the cursor does not reliably fire one.
+  function outside(e) {
+    var r = nav.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right ||
+        e.clientY < r.top || e.clientY > r.bottom) closePanel();
+  }
+  function watch(on) {
+    var m = on ? 'addEventListener' : 'removeEventListener';
+    document[m]('pointermove', outside, { passive: true });
+    window[m]('wheel', closePanel, { passive: true });
+  }
+
   function measure() {
     // height:auto does not transition, so the box is told the number. Read it
     // off the contents with the panel briefly unclipped.
@@ -201,6 +225,7 @@ function initNav() {
 
     nav.classList.add('nav-open');
     panel.style.height = measure() + 'px';
+    watch(true);
     contactBtn.setAttribute('aria-expanded', kind === 'contact' ? 'true' : 'false');
     // swapping contents while already open should not re-run the fade
     if (!first) panelIn.style.transitionDelay = '0s';
@@ -210,6 +235,7 @@ function initNav() {
   function closePanel() {
     if (openKind === null) return;
     openKind = null;
+    watch(false);
     nav.classList.remove('nav-open');
     panel.style.height = '0px';
     contactBtn.setAttribute('aria-expanded', 'false');
@@ -228,7 +254,6 @@ function initNav() {
   // Case studies keeps its href and navigates on click. The panel is a
   // desktop shortcut on the way to it, not a replacement for it -- which is
   // also why it is hover-only: on a touch screen the tap is the navigation.
-  var csLink = document.getElementById('pg-cs-link');
   if (csLink && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
     csLink.addEventListener('pointerenter', function () {
       clearTimeout(hoverTimer);

@@ -233,7 +233,7 @@ p,li,dd,figcaption,
   --nav-r:16px;
   position:fixed;z-index:900;
   left:50%;bottom:var(--nav-gap);transform:translateX(-50%);
-  width:min(660px,calc(100vw - 28px));
+  width:max-content;max-width:calc(100vw - 28px);
   display:flex;flex-direction:column;align-items:stretch;
   background:transparent;
   border:1px solid rgba(30,25,20,0.07);
@@ -273,12 +273,13 @@ p,li,dd,figcaption,
 [data-theme="light"] #pg-nav::before{background:rgba(245,237,225,0.90);}
 [data-theme="light"] #pg-nav{border-color:rgba(120,80,40,0.12);}
 
+/* Just the links now. The wordmark came off on Raj's call: it pointed at
+   playground.html and the first link in the row already does, so it was a
+   second control for one destination taking up the capsule's left third. */
 .nav-row{
-  display:flex;align-items:center;justify-content:space-between;gap:26px;
-  padding:11px 18px;
+  display:flex;align-items:center;justify-content:center;
+  padding:11px 22px;
 }
-.pg-brand{font-family:'DM Mono',monospace;font-size:15px;font-weight:400;letter-spacing:0.1em;color:var(--ink);cursor:pointer;flex-shrink:0;}
-.pg-brand a{color:inherit;text-decoration:none;cursor:pointer;display:inline-block;transition:transform 0.14s var(--e-out);}
 .pg-links{display:flex;align-items:center;gap:22px;position:relative;}
 .pg-links a,.pg-links button{
   font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:0.11em;
@@ -337,6 +338,7 @@ p,li,dd,figcaption,
    transparent rather than from nothing. */
 .nav-panel{
   height:0;overflow:hidden;
+  width:0;min-width:100%;
   /* the capsule's top corners, since the panel is what occupies them once it
      is open and the nav no longer clips */
   border-radius:var(--nav-r) var(--nav-r) 0 0;
@@ -400,8 +402,8 @@ p,li,dd,figcaption,
    playground.html, which the first link in the row already does, and the row
    needs those 42px more than the capsule needs a wordmark on it. */
 @media(max-width:639px){
-  #pg-nav{--nav-gap:10px;--nav-r:14px;width:calc(100vw - 20px);}
-  .nav-row{padding:5px 12px;gap:0;justify-content:space-between;}
+  #pg-nav{--nav-gap:10px;--nav-r:14px;width:calc(100vw - 20px);max-width:calc(100vw - 20px);}
+  .nav-row{padding:5px 12px;justify-content:space-between;}
   .pg-brand{display:none;}
   .pg-links{gap:0;flex:1;justify-content:space-between;}
   .pg-links a,.pg-links button{font-size:10px !important;letter-spacing:0.04em;white-space:nowrap;}
