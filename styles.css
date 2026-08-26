@@ -288,7 +288,6 @@ p,li,dd,figcaption,
   cursor:pointer;white-space:nowrap;position:relative;z-index:1;
   background:none;border:0;padding:0;line-height:1;
 }
-.nav-short{display:none;}
 
 /* ── the pill ──────────────────────────────────────────────────────────
    One rounded mark that travels between the links, replacing the 1.5px pink
@@ -360,6 +359,9 @@ p,li,dd,figcaption,
   display:flex;align-items:center;justify-content:space-between;
   gap:12px;margin-bottom:9px;min-height:16px;
 }
+/* the work panel runs two sections -- the reel, then the six studies -- and
+   the gap between them has to beat the gap inside them or they fuse */
+.nav-panel-list + .nav-panel-head{margin-top:20px;}
 .nav-panel-label{
   font-family:'DM Mono',monospace;font-size:var(--t-micro);
   letter-spacing:var(--tr-label);text-transform:uppercase;
@@ -386,13 +388,15 @@ p,li,dd,figcaption,
 .nav-panel-list a.np-out{color:var(--accent-r);}
 
 .nav-close{
+  display:none;
   flex:0 0 auto;
   width:24px;height:24px;border:0;border-radius:6px;background:none;
   color:var(--ink-muted);font-family:'DM Mono',monospace;font-size:14px;
   line-height:1;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
+  align-items:center;justify-content:center;
   transition:background-color 0.16s ease,color 0.16s ease;
 }
+@media(hover:none){ .nav-close{display:flex;} }
 @media(hover:hover) and (pointer:fine){
   .nav-close:hover{background:rgba(30,25,20,0.06);color:var(--ink);}
 }
@@ -408,8 +412,6 @@ p,li,dd,figcaption,
   .pg-links{gap:0;flex:1;justify-content:space-between;}
   .pg-links a,.pg-links button{font-size:10px !important;letter-spacing:0.04em;white-space:nowrap;}
   .nav-pill{height:22px;margin-top:-11px;border-radius:6px;}
-  .nav-full{display:none;}
-  .nav-short{display:inline;}
   .nav-panel-in{padding:14px 12px 4px;}
   .pg-headline{font-size:28px;}
 }
@@ -424,8 +426,8 @@ p,li,dd,figcaption,
    answer is the smallest one that still registers: full opacity and a hair
    under size, back in 140ms. Nothing here fades in or slides -- the pill
    above already carries the only motion this bar is allowed. */
-.pg-links a:active,.pg-links button:active,.pg-brand a:active{opacity:1;transform:scale(0.94);}
-.pg-links a:focus-visible,.pg-links button:focus-visible,.nav-close:focus-visible,.nav-panel-list a:focus-visible{
+.pg-links a:active{opacity:1;transform:scale(0.94);}
+.pg-links a:focus-visible,.nav-close:focus-visible,.nav-panel-list a:focus-visible{
   outline:2px solid var(--accent-r);outline-offset:3px;border-radius:4px;opacity:1;
 }
 

@@ -437,7 +437,7 @@ function renderReel(mode) {
   intro.className = 'reel-slide reel-intro seen';
   intro.innerHTML =
     '<div class="reel-intro-inner">' +
-      '<div class="reel-intro-eyebrow">portfolio</div>' +
+      '<div class="reel-intro-eyebrow">work</div>' +
       '<h1 class="reel-intro-title">things i’ve<br><em>made.</em></h1>' +
       '<p class="reel-intro-sub">' +
         (mode === 'client'

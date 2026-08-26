@@ -1,12 +1,33 @@
 // The nav.
 //
-// A floating capsule at the bottom centre, after oddfellows.tv. Raj,
-// 2026-08-26, picked the placement and two behaviours off that reference and
-// left the rest: the material stays warm paper, the link set stays ours.
+// A floating capsule at the bottom centre, after oddfellows.tv.
 //
-// Everything below builds on markup that is already in all seven HTML files
-// -- five anchors -- rather than editing seven files to add a wrapper, a pill
-// and two panels. The anchors stay real anchors; they are only re-parented.
+// Raj, 2026-08-26: "there are too many things in the nav bar. i wanna reduce
+// options for a visitor while keeping the same amount of context in the page."
+// Six items became three on the front page and four everywhere else, and
+// nothing became unreachable -- what came out of the bar went into a panel
+// under the item it belongs to.
+//
+// He named the two visitors this has to serve: someone who wants to see the
+// work and the capabilities, and someone who already knows and is trying to
+// get in touch. So there are exactly two panels, one for each of them, and
+// each is one gesture deep from every page on the site.
+//
+//   playground   only when you are not already on it. Raj's own idea, off
+//                oddfellows: the slot for where you are is a wasted slot.
+//                Their version relabels it "home"; his word for home is
+//                playground, so the item simply is not there instead.
+//   work         -> the reel. Hovering gives the reel and the six studies,
+//                so every piece of proof on the site is one hover and one
+//                click from anywhere.
+//   about        -> about. Nothing underneath it, so no panel.
+//   contact      -> work with me. Hovering gives the email, the instagram
+//                and the calendly, because the second visitor does not want
+//                a page, they want the address.
+//
+// The markup lives here rather than in seven HTML files. It was duplicated
+// across all of them, which is how the old bar ended up carrying a dead
+// <i class="nav-ink"> in six copies. The anchors are still real anchors.
 //
 //   #pg-nav
 //     .nav-panel        height 0 -> measured, grows the capsule upward
@@ -14,68 +35,87 @@
 //     .nav-row          the links, welded to the bottom edge
 //       .pg-links
 //         .nav-pill     one mark, moved by transform
-//
-// The capsule is bottom-anchored, so growing the panel moves its top edge up
-// and the row never moves. That is the difference between one object getting
-// bigger and a popover appearing above a bar.
 
-// ── contact ──────────────────────────────────────────────────────────────
-// Every one of these already exists somewhere on the site -- the first two in
-// About's last line, the third on CIAD's button. Nothing here is written.
+var NAV = [
+  { key: 'playground', label: 'playground', href: 'playground.html',
+    hideOn: ['playground.html', 'index.html'] },
+  { key: 'work', label: 'work', href: 'portfolio.html', panel: 'work',
+    owns: ['portfolio.html', 'case-studies.html'] },
+  { key: 'about', label: 'about', href: 'about.html', owns: ['about.html'] },
+  { key: 'contact', label: 'contact', href: 'hub.html', panel: 'contact',
+    owns: ['hub.html', 'ciad.html'] }
+];
+
+// Every one of these already exists on the site -- the first two in About's
+// last line, the third on CIAD's button, and "let's make something" is
+// hub.html's own headline. Nothing here is written.
 var NAV_CONTACT = [
+  { label: 'work with me', text: 'let&rsquo;s make something', href: 'hub.html' },
   { label: 'email', text: 'hello@rajkashyap.studio', href: 'mailto:hello@rajkashyap.studio' },
   { label: 'instagram', text: 'uncurated.raj', href: 'https://instagram.com/uncurated.raj' },
   { label: 'book a call', text: 'content in a day', href: 'https://calendly.com/shootwraj/content-in-a-day' }
 ];
 
-var NAV_OPEN_DELAY = 160;   // ms of hover before case studies unfolds
+var NAV_OPEN_DELAY = 160;   // ms of hover before a panel unfolds
 var NAV_PANEL_MS = 340;     // matches the height transition in styles.css
+
+function navPage() {
+  var p = location.pathname.split('/').pop();
+  return p === '' ? 'index.html' : p;
+}
 
 function initNav() {
   var nav = document.getElementById('pg-nav');
   if (!nav) return;
 
-  // index.html hides the nav until the intro is done
-  var isIntro = document.getElementById('screen-video');
-  if (!isIntro) nav.classList.add('nav-visible');
+  var here = navPage();
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 
-  var links = nav.querySelector('.pg-links');
-  if (!links) return;
+  // index.html hides the nav until the intro is done
+  if (!document.getElementById('screen-video')) nav.classList.add('nav-visible');
 
   // ── structure ──────────────────────────────────────────────────────────
-  var row = document.createElement('div');
-  row.className = 'nav-row';
-  row.appendChild(links);
-
   var panel = document.createElement('div');
   panel.className = 'nav-panel';
   var panelIn = document.createElement('div');
   panelIn.className = 'nav-panel-in';
   panel.appendChild(panelIn);
 
+  var row = document.createElement('div');
+  row.className = 'nav-row';
+  var links = document.createElement('div');
+  links.className = 'pg-links';
+  row.appendChild(links);
+
+  nav.innerHTML = '';
   nav.appendChild(panel);
   nav.appendChild(row);
 
-  // the underline the pill replaces
-  var oldInk = nav.querySelector('.nav-ink');
-  if (oldInk && oldInk.parentNode) oldInk.parentNode.removeChild(oldInk);
+  var byKey = {};
+  var active = null;
 
-  // ── contact: the one item with no page behind it ───────────────────────
-  var contactBtn = document.createElement('button');
-  contactBtn.type = 'button';
-  contactBtn.id = 'nav-contact';
-  contactBtn.setAttribute('aria-expanded', 'false');
-  contactBtn.textContent = 'Contact';
-  links.appendChild(contactBtn);
+  for (var i = 0; i < NAV.length; i++) {
+    var item = NAV[i];
+    if (item.hideOn && item.hideOn.indexOf(here) !== -1) continue;
+    var a = document.createElement('a');
+    a.href = item.href;
+    a.textContent = item.label;
+    a.setAttribute('data-key', item.key);
+    if (item.panel) a.setAttribute('aria-expanded', 'false');
+    if (item.owns && item.owns.indexOf(here) !== -1) {
+      a.classList.add('active');
+      active = a;
+    }
+    links.appendChild(a);
+    byKey[item.key] = a;
+  }
 
   var pill = document.createElement('i');
   pill.className = 'nav-pill idle';
   pill.setAttribute('aria-hidden', 'true');
   links.appendChild(pill);
 
-  var items = Array.prototype.slice.call(links.querySelectorAll('a,button'));
-  var active = links.querySelector('a.active');
-  var csLink = document.getElementById('pg-cs-link');
+  var items = Array.prototype.slice.call(links.querySelectorAll('a'));
 
   // ── the pill ───────────────────────────────────────────────────────────
   // transform + width rather than left + width: the element is absolutely
@@ -83,20 +123,15 @@ function initNav() {
   // is the part the eye follows.
   var home = null;
 
-  function boxOf(el) {
-    var a = el.getBoundingClientRect(), b = links.getBoundingClientRect();
-    return { x: a.left - b.left, w: a.width };
-  }
-
   function place(el, roaming, silent) {
     if (!el) { pill.classList.add('idle'); return; }
-    var box = boxOf(el);
+    var a = el.getBoundingClientRect(), b = links.getBoundingClientRect();
     if (silent) pill.style.transition = 'none';
     pill.classList.remove('idle');
     pill.classList.toggle('roaming', !!roaming);
     // 8px of air either side, so the mark is a mark and not a button
-    pill.style.width = (box.w + 16) + 'px';
-    pill.style.transform = 'translateX(' + (box.x - 8) + 'px)';
+    pill.style.width = (a.width + 16) + 'px';
+    pill.style.transform = 'translateX(' + (a.left - b.left - 8) + 'px)';
     if (silent) {
       // one frame with the transition off, or every page load slides the pill
       // in from x=0 -- which is not a navigation, so it should not animate
@@ -105,23 +140,8 @@ function initNav() {
     }
   }
 
-  function rest(silent) {
-    home = active;
-    place(home, false, silent);
-  }
-
+  function rest(silent) { home = active; place(home, false, silent); }
   rest(true);
-
-  if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-    items.forEach(function (el) {
-      el.addEventListener('pointerenter', function () {
-        place(el, el !== home);
-        // arriving anywhere else in the bar is a decision to leave
-        if (openKind === 'studies' && el !== csLink) closePanel();
-      });
-    });
-    links.addEventListener('pointerleave', function () { rest(false); });
-  }
 
   // Fonts land after this runs and every label changes width with them, so
   // the mark would sit off its word for the first second of the page.
@@ -130,39 +150,41 @@ function initNav() {
   }
 
   // ── the panels ─────────────────────────────────────────────────────────
-  function esc(t) {
-    return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function section(label, rows) {
+    if (!rows) return '';
+    return '<div class="nav-panel-head"><div class="nav-panel-label">' + label + '</div></div>' +
+           '<div class="nav-panel-list">' + rows + '</div>';
+  }
+
+  function link(href, text, sub, ext) {
+    return '<a href="' + href + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>' +
+           text + (sub ? '<span class="np-sub">' + sub + '</span>' : '') + '</a>';
+  }
+
+  // The six come from CASE_STUDIES, the array case-studies.html already
+  // renders its list from. Never a second copy of the names here -- the same
+  // rule that keeps the five multiples in one place.
+  function workHTML() {
+    // no sub: the section head above it already says the reel, and saying it
+    // twice in nine words is the thing this whole pass is meant to remove
+    var reel = link('portfolio.html', 'things i&rsquo;ve made');
+    var studies = '';
+    if (typeof CASE_STUDIES !== 'undefined') {
+      for (var i = 0; i < CASE_STUDIES.length; i++) {
+        var cs = CASE_STUDIES[i];
+        studies += link('case-studies.html#' + cs.id, cs.client, cs.sector);
+      }
+    }
+    return section('the reel', reel) + (studies ? section('capabilities', studies) : '');
   }
 
   function contactHTML() {
     var rows = '';
     for (var i = 0; i < NAV_CONTACT.length; i++) {
       var c = NAV_CONTACT[i];
-      var ext = c.href.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '';
-      rows += '<a href="' + c.href + '"' + ext + '>' + esc(c.text) +
-              '<span class="np-sub">' + esc(c.label) + '</span></a>';
+      rows += link(c.href, c.text, c.label, c.href.indexOf('http') === 0);
     }
-    // "say hello" is his, off About's last line -- the same sentence these
-    // three links were taken from. Not a label I wrote.
-    return '<div class="nav-panel-head"><div class="nav-panel-label">say hello</div></div>' +
-           '<div class="nav-panel-list">' + rows + '</div>';
-  }
-
-  // The six come from CASE_STUDIES, the array case-studies.html already
-  // renders its list from. Never a second copy of the names here -- that is
-  // the same rule that keeps the five multiples in one place.
-  function studiesHTML() {
-    if (typeof CASE_STUDIES === 'undefined') return '';
-    var rows = '';
-    for (var i = 0; i < CASE_STUDIES.length; i++) {
-      var cs = CASE_STUDIES[i];
-      rows += '<a href="case-studies.html#' + cs.id + '">' + cs.client +
-              '<span class="np-sub">' + cs.sector + '</span></a>';
-    }
-    // counted, never typed: a seventh study would make a hardcoded "six" a lie
-    return '<div class="nav-panel-head"><div class="nav-panel-label">' +
-             CASE_STUDIES.length + ' studies</div></div>' +
-           '<div class="nav-panel-list">' + rows + '</div>';
+    return section('say hello', rows);
   }
 
   var openKind = null;
@@ -173,13 +195,11 @@ function initNav() {
   // away even if i move mouse to somewhere else."
   //
   // pointerleave on the nav was the only thing closing it, and the nav is
-  // 660x295 while a panel is open -- so moving along the bar to any other
-  // link, which is exactly where the mouse goes next, never left the box and
-  // never closed anything. Two more ways out, both of which a menu should
-  // have had from the start: landing on any other item closes it, and so does
-  // the pointer being anywhere outside the capsule at all. The second is a
-  // document listener rather than a leave event because an element that
-  // resizes under the cursor does not reliably fire one.
+  // 664x288 while a panel is open -- so moving along the bar to another link,
+  // which is exactly where the mouse goes next, never left the box. Landing on
+  // any other item closes it now, and so does the pointer being outside the
+  // capsule at all, watched at the document because an element that resizes
+  // under the cursor does not fire a leave event reliably.
   function outside(e) {
     var r = nav.getBoundingClientRect();
     if (e.clientX < r.left || e.clientX > r.right ||
@@ -192,8 +212,7 @@ function initNav() {
   }
 
   function measure() {
-    // height:auto does not transition, so the box is told the number. Read it
-    // off the contents with the panel briefly unclipped.
+    // height:auto does not transition, so the box is told the number
     var prev = panel.style.height;
     panel.style.height = 'auto';
     var h = panel.scrollHeight;
@@ -202,34 +221,39 @@ function initNav() {
     return h;
   }
 
+  function setExpanded(kind) {
+    items.forEach(function (el) {
+      if (el.hasAttribute('aria-expanded')) {
+        el.setAttribute('aria-expanded', el.getAttribute('data-key') === kind ? 'true' : 'false');
+      }
+    });
+  }
+
   function openPanel(kind) {
     clearTimeout(closeTimer);
     if (openKind === kind) return;
-    var html = kind === 'contact' ? contactHTML() : studiesHTML();
+    var html = kind === 'work' ? workHTML() : contactHTML();
     if (!html) return;
 
     var first = openKind === null;
     openKind = kind;
     panelIn.innerHTML = html;
 
-    if (kind === 'contact') {
-      var x = document.createElement('button');
-      x.type = 'button';
-      x.className = 'nav-close';
-      x.setAttribute('aria-label', 'close');
-      x.innerHTML = '&#10005;';
-      x.addEventListener('click', closePanel);
-      var head = panelIn.querySelector('.nav-panel-head');
-      if (head) head.appendChild(x);
-    }
+    var x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'nav-close';
+    x.setAttribute('aria-label', 'close');
+    x.innerHTML = '&#10005;';
+    x.addEventListener('click', function (e) { e.preventDefault(); closePanel(); });
+    var head = panelIn.querySelector('.nav-panel-head');
+    if (head) head.appendChild(x);
 
     nav.classList.add('nav-open');
     panel.style.height = measure() + 'px';
     watch(true);
-    contactBtn.setAttribute('aria-expanded', kind === 'contact' ? 'true' : 'false');
+    setExpanded(kind);
     // swapping contents while already open should not re-run the fade
-    if (!first) panelIn.style.transitionDelay = '0s';
-    else panelIn.style.transitionDelay = '';
+    panelIn.style.transitionDelay = first ? '' : '0s';
   }
 
   function closePanel() {
@@ -238,31 +262,50 @@ function initNav() {
     watch(false);
     nav.classList.remove('nav-open');
     panel.style.height = '0px';
-    contactBtn.setAttribute('aria-expanded', 'false');
+    setExpanded(null);
     // the contents come out with the box rather than being cut at the end
     closeTimer = setTimeout(function () {
       if (openKind === null) panelIn.innerHTML = '';
     }, NAV_PANEL_MS);
   }
 
-  contactBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    if (openKind === 'contact') closePanel();
-    else openPanel('contact');
+  // ── what opens them ────────────────────────────────────────────────────
+  items.forEach(function (el) {
+    var kind = el.getAttribute('data-key');
+    var hasPanel = el.hasAttribute('aria-expanded');
+
+    if (fine) {
+      el.addEventListener('pointerenter', function () {
+        place(el, el !== home);
+        clearTimeout(hoverTimer);
+        if (hasPanel) {
+          hoverTimer = setTimeout(function () { openPanel(kind); }, NAV_OPEN_DELAY);
+        } else if (openKind !== null) {
+          // arriving anywhere else in the bar is a decision to leave
+          closePanel();
+        }
+      });
+      el.addEventListener('pointerleave', function () { clearTimeout(hoverTimer); });
+      return;
+    }
+
+    // No hover here, so a panel would be unreachable and the six studies with
+    // it -- portfolio.html has no other link to them. First tap opens, and the
+    // panel leads with the page the item points at, so the destination is a
+    // visible row rather than a hidden second tap.
+    if (!hasPanel) return;
+    el.addEventListener('click', function (e) {
+      if (openKind === kind) return;   // second tap follows the link
+      e.preventDefault();
+      openPanel(kind);
+    });
   });
 
-  // Case studies keeps its href and navigates on click. The panel is a
-  // desktop shortcut on the way to it, not a replacement for it -- which is
-  // also why it is hover-only: on a touch screen the tap is the navigation.
-  if (csLink && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-    csLink.addEventListener('pointerenter', function () {
-      clearTimeout(hoverTimer);
-      hoverTimer = setTimeout(function () { openPanel('studies'); }, NAV_OPEN_DELAY);
-    });
-    csLink.addEventListener('pointerleave', function () { clearTimeout(hoverTimer); });
+  if (fine) {
+    links.addEventListener('pointerleave', function () { rest(false); });
     nav.addEventListener('pointerleave', function () {
       clearTimeout(hoverTimer);
-      if (openKind === 'studies') closePanel();
+      closePanel();
     });
   }
 
@@ -270,7 +313,11 @@ function initNav() {
     if (openKind !== null && !nav.contains(e.target)) closePanel();
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && openKind !== null) { closePanel(); contactBtn.focus(); }
+    if (e.key === 'Escape' && openKind !== null) {
+      var k = byKey[openKind];
+      closePanel();
+      if (k) k.focus();
+    }
   });
 
   // ── what the rest of the site sits on ──────────────────────────────────
