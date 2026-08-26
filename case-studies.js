@@ -38,6 +38,22 @@ var CASE_STUDIES = [
       { v: '6 years', l: 'still a client' }
     ],
     quote: { text: 'loved working with raj to create new content to deliver the messages that drive me and the business. his editing style helped shape this piece into something direct and impactful.', name: 'sarah edwards', role: 'founder, copper + cloves' },
+    // One sentence, lifted out of the paragraph it is already in and set at
+    // display size where it stands. NOT a copy: csLift() removes it from the
+    // running text, so the page still says it exactly once.
+    //
+    // Raj, 2026-08-26, on this page: "imp shit is not highlighted. it's the
+    // site's most important page if you think about it." Six sections of 14px
+    // DM Mono at one weight for 1400px is a grey block with no focal point in
+    // it, which is section 3 of CLAUDE.md again -- uniform emphasis is
+    // identical to no emphasis.
+    //
+    // This line and not another because it is the reframe the insights
+    // section turns on, and because CLAUDE.md already names it as his: an
+    // "x NOT y" shape that ships precisely because he wrote it. Choosing
+    // which of his lines carries the page, and where it sits, is the whole
+    // of the editing permission -- no word of it changes.
+    lift: { section: 'insights', text: 'better isn&rsquo;t better, different is what&rsquo;s often better.' },
     // Raj's own sentences from the 2026-08-12 dump. Typos fixed, whole lines
     // cut, NOTHING re-said -- see CLAUDE.md section 6, "copy is his, verbatim".
     // An earlier pass paraphrased all six of these into balanced clauses and
@@ -282,11 +298,45 @@ function csFactsHTML(cs) {
 function csRunHTML(cs) {
   var src = cs.content && cs.content.outcome;
   if (!src) return '';
-  var re = /(\d+(?:\.\d+)?k)\s*(?:views on the \d+\w* video|next)/gi;
+  var re = /(\d+(?:\.\d+)?)k\s*(?:views on the \d+\w* video|next)/gi;
   var out = [], m;
-  while ((m = re.exec(src)) !== null) out.push(m[1]);
+  while ((m = re.exec(src)) !== null) out.push(parseFloat(m[1]));
   if (out.length < 3) return '';
-  return '<div class="cs-run">' + out.join(' &middot; ') + '</div>';
+
+  // Drawn, not just typeset. Raj, 2026-08-26: the metrics "arent being clear
+  // enough -- the x and view counts etc." Six numbers joined by middots read
+  // as one serial number: you have to read all six and hold them in your head
+  // before the run has a shape. Six bars have the shape before you have read
+  // a digit, which is the same argument the list row's drawn multiple already
+  // won on this page.
+  //
+  // Scaled to the tallest in the run, not to a fixed ceiling: this is a
+  // picture of one client's six videos against each other, not a comparison
+  // across studies -- CS_BAR_MAX is the one that has to hold still, and it
+  // does, over on the list. No baseline tick either. Their average post is a
+  // number that was never logged, and drawing a line for it would invent the
+  // denominator the multiple above it rests on (see the CLOSED note on C+C).
+  var max = Math.max.apply(null, out);
+  var bars = '';
+  for (var i = 0; i < out.length; i++) {
+    // Straight proportion of the tallest, from zero. A floor was in here for
+    // one build and it was the wrong instinct: these six run 10k to 20k, so
+    // honest bars already sit between half height and full height and there
+    // is nothing to rescue. A floor only ever flattens a real difference.
+    // A ratio, not a percentage: the CSS turns it into a height AND the
+    // margin above it, so the fill is bottom-aligned inside a fixed slot and
+    // all six counts underneath share a baseline. A percentage height would
+    // have had nothing to resolve against.
+    var h = (out[i] / max).toFixed(4);
+    bars += '<span class="cs-run-bar" style="--h:' + h + '">' +
+              '<i></i>' +
+              '<b>' + out[i] + 'k</b>' +
+            '</span>';
+  }
+  return '<div class="cs-run">' +
+           '<div class="cs-run-bars">' + bars + '</div>' +
+           '<div class="cs-run-label">views per video</div>' +
+         '</div>';
 }
 
 // The same figures on the list row, minus the multiple -- that already has a
@@ -494,7 +544,9 @@ function initCaseStudies() {
 // back up the page. A drawing that replays every scroll stops being a
 // drawing and becomes a loop.
 function csDrawBars(list) {
-  var bars = list.querySelectorAll('.cs-bar');
+  // .cs-run is the six-bar view-count picture on a study page; it draws on
+  // the same observer and the same rule -- once, on arrival, then held.
+  var bars = list.querySelectorAll('.cs-bar, .cs-run');
   if (!bars.length) return;
 
   var reduced = window.matchMedia
@@ -512,8 +564,12 @@ function csDrawBars(list) {
       // When two or three rows land together on the first screen, they
       // cascade rather than snapping at once. 70ms, and it is capped so a
       // fast scroll to the sixth row never sits waiting on a queue.
-      var n = Math.min(parseInt(el.getAttribute('data-i'), 10) || 0, 3);
-      el.style.transitionDelay = (n * 70) + 'ms, ' + (n * 70 + 90) + 'ms';
+      // .cs-run staggers its own six children in CSS; the two-part delay
+      // below belongs to .cs-bar's solid + reach pair and nothing else.
+      if (el.className.indexOf('cs-bar') !== -1) {
+        var n = Math.min(parseInt(el.getAttribute('data-i'), 10) || 0, 3);
+        el.style.transitionDelay = (n * 70) + 'ms, ' + (n * 70 + 90) + 'ms';
+      }
       el.classList.add('is-drawn');
     }
   }, { threshold: 0.6 });
@@ -554,6 +610,31 @@ function csSyncHash() {
   }
 }
 
+// One of his own sentences, set at display size in the place it already sits.
+//
+// The permission this runs on is CLAUDE.md section 6 exactly: "you may cut a
+// whole line, choose which lines survive and what order they sit in." So the
+// sentence is CUT out of the running paragraph and re-set, never duplicated
+// and never reworded -- if it appeared in both places the page would be
+// saying it twice, which is the one thing this file's whole copy discipline
+// is about. A lift that does not match its section renders the paragraph
+// untouched, so a typo here costs nothing.
+//
+// Split rather than wrapped in place: a display-size line inside a 14px
+// paragraph would have to sit on the body's line-height, and it needs its own.
+function csLift(cs, key, body) {
+  var wrap = function (t) { return '<div class="cs-section-body">' + t + '</div>'; };
+  if (!cs.lift || cs.lift.section !== key) return wrap(body);
+  var at = body.indexOf(cs.lift.text);
+  if (at === -1) return wrap(body);
+
+  var before = body.slice(0, at).replace(/\s+$/, '');
+  var after = body.slice(at + cs.lift.text.length).replace(/^\s+/, '');
+  return (before ? wrap(before) : '') +
+         '<p class="cs-lift">' + cs.lift.text + '</p>' +
+         (after ? wrap(after) : '');
+}
+
 function openCase(cs, fromHash) {
   var detail = document.getElementById('cs-detail');
   var listWrap = document.getElementById('cs-listwrap');
@@ -575,7 +656,7 @@ function openCase(cs, fromHash) {
     if (!body) continue;
     sections += '<section class="cs-section">' +
                   '<div class="cs-section-label">' + sec.label + '</div>' +
-                  '<div class="cs-section-body">' + body + '</div>' +
+                  csLift(cs, sec.key, body) +
                 '</section>';
   }
 
@@ -611,10 +692,24 @@ function openCase(cs, fromHash) {
 
   detail.innerHTML =
     '<button class="cs-back" id="cs-back">&#8592; all case studies</button>' +
+    // The client name and the person are one line now, and the multiple is
+    // the thing at display size under it.
+    //
+    // CLAUDE.md carried the opposite rule -- "the multiple must never outgrow
+    // the client name" -- and the reason it gave was that a 40px figure over
+    // a 36px name gave the page two heroes. That reason is intact; this
+    // satisfies it from the other end. Asked on 2026-08-26 what should hit
+    // hardest at the top of a study, Raj chose the multiple, with the name
+    // stepping down to a line above it. One hero, and it is the number the
+    // page exists to make.
+    //
+    // Blue stays on the client name. It is the who-half of this page's
+    // split and it means the same thing here as it does in the list row.
     '<header class="cs-hero">' +
       '<div class="cs-hero-eyebrow">' + cs.sector + '</div>' +
-      '<h1 class="cs-hero-client">' + cs.client + '</h1>' +
-      '<div class="cs-hero-person">' + cs.person + '</div>' +
+      '<h1 class="cs-hero-client">' + cs.client +
+        '<span class="cs-hero-sep">&middot;</span>' +
+        '<span class="cs-hero-person">' + cs.person + '</span></h1>' +
       csFactsHTML(cs) +
     '</header>' +
     '<div class="cs-layout">' +
@@ -638,6 +733,10 @@ function openCase(cs, fromHash) {
   }
 
   document.getElementById('cs-back').addEventListener('click', closeCase);
+
+  // the run bars draw on arrival, same observer and same once-only rule as
+  // the list's multiples
+  csDrawBars(detail);
 
   // hero video -- lazy load + play
   var v = detail.querySelector('.cs-media video');

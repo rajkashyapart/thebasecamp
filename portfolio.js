@@ -305,6 +305,28 @@ function weave(items, avoidFirst) {
 // Reel sequence: a pinned 14-piece opener, then the remaining client work
 // shuffled (randomised each load), with the personal work held mostly until
 // after client work is over — only a few pieces subtly scattered into it.
+// The frame reserves its box from a --vr default of 9/16 (see .reel-media in
+// styles.css) so nothing has to wait on the network to know how big it is.
+// This is the correction for the minority that are not 9/16 -- the wide
+// photographs in the personal set. It runs against the real dimensions the
+// moment they exist, and does nothing at all when they match the default,
+// which is every video in the bank.
+//
+// Same shape as case-studies.js's csFitFrame, same property name, on purpose:
+// two places solving this two different ways is how one of them drifts.
+function reelFitFrame(el) {
+  var frame = el.parentElement;
+  if (!frame) return;
+  function apply() {
+    var w = el.videoWidth || el.naturalWidth;
+    var h = el.videoHeight || el.naturalHeight;
+    if (!w || !h) return;
+    frame.style.setProperty('--vr', (w / h).toFixed(4));
+  }
+  el.addEventListener(el.tagName === 'IMG' ? 'load' : 'loadedmetadata', apply);
+  apply();
+}
+
 function slideFrom(proj, it) {
   return {
     type: it.type, src: it.src, name: proj.name,
@@ -475,6 +497,7 @@ function renderReel(mode) {
       videoEl.draggable = false;
       media.className += ' is-video';
       media.appendChild(videoEl);
+      reelFitFrame(videoEl);
 
       var chip = document.createElement('div');
       chip.className = 'reel-audio';
@@ -488,8 +511,9 @@ function renderReel(mode) {
       img.loading = 'lazy';
       img.draggable = false;
       img.alt = s.name;
-      img.src = s.src;
       media.appendChild(img);
+      reelFitFrame(img);
+      img.src = s.src;   // after the listener, or a cached hit fires first
     }
 
     var label = document.createElement('div');

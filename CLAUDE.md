@@ -191,6 +191,18 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   cut photographs to make it fit.
   On a phone the hero is moved into the writing, under the clients line:
   every word used to come before every picture.
+  **`--top` is a page margin, not nav clearance, and it is 30-44px.** It was
+  `clamp(34px,4.6vh,52px)` on desktop and a hardcoded **86px** on the stacked
+  phone layout, and every pixel of the difference was reserved for a 46px bar
+  on the top edge. On a 706px viewport that was 12% of the screen held for a
+  fixture that moved to the bottom three sessions earlier. Raj, 2026-08-26:
+  *"header adjusted negative space no longer required sitewide for any device
+  as nav bar has been brought towards the bottom."* `about.js` reads this back
+  off `getComputedStyle` when it packs the hero band, so what comes off the
+  top goes into the photographs rather than into a gap further down. Every
+  other page was already clean -- CIAD's slides are `safe center`, so their
+  top padding is symmetric breathing room. **When a fixture moves, grep for
+  everything that was sized around it.**
   **The mosaic drifts.** 24px/s, linear, starting 2.5s after arrival so
   the first screen lands first. It stops while the cursor is over the
   photographs and starts again only when the cursor reaches the writing —
@@ -310,6 +322,21 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   moves once when the card comes into view — a transform on the thumb, never
   a change of value, because moving the value swings the price under it and
   reads as the page deciding for them.
+- **Portfolio's reel frames reserve their box before the network answers.**
+  `.reel-media` used to shrink-wrap a `<video>` with `width:auto` and
+  `max-height:84vh`, so until a poster or a manifest arrived the slide
+  measured **0x0** and then snapped to 419x745. On a fast connection that is
+  one frame; on a slow one it is the several seconds Raj described, once per
+  slide, all the way down the page. Raj, 2026-08-26: *"reels must never load
+  too small -- there seems to be a glitch that it loads small and jumps to
+  being actual bigger size."* It carries a `--vr` default of `0.5625` and an
+  `aspect-ratio` now, exactly like `.cs-media`, and `reelFitFrame()` corrects
+  it from `videoWidth/videoHeight` (or an image's natural size) for the
+  minority that are not 9:16. Every reel in the bank is a reel, so for the
+  videos the reserved box **is** the final box. Same property name and same
+  shape as `csFitFrame()` on purpose -- two places solving this two different
+  ways is how one of them drifts. **Never size a media frame off its
+  content's intrinsic dimensions; an undecoded `<video>` has none.**
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
   Its eyebrow reads **work**, matching the nav item that points at it — a
   visitor should never click one word and land on another. Case studies'
@@ -443,6 +470,15 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   place for these figures to disagree. Labels are written to read **both
   stacked and inline**, because the list row prints the same cells minus
   the multiple.
+  **The multiple is the biggest thing on a study page, and the client name
+  steps down to make room.** Asked on 2026-08-26 what should hit hardest at
+  the top of a study, Raj chose the figure. So the name and the person share
+  one 32px line and the multiple runs `clamp(58px,8vw,92px)`. This inverts
+  what this file used to say -- *"the multiple must never outgrow the client
+  name"* -- and the reason behind that sentence is intact: it existed to stop
+  the page having **two heroes**, and it is satisfied here from the other end.
+  Whichever of the two is larger is the one the page is about; never raise
+  one without looking at the other in the same edit.
   **It is one figure with two quiet lines under it, never a row of equal
   cells.** Built as four equal 30px cells for one build and Raj's verdict
   was *"this is ugly"* (2026-08-23) — correctly, and the reason is section
@@ -464,6 +500,17 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   read louder than its own figure. The webfont does carry a lining set.
   Applied to the strip only; the list row's multiple stays oldstyle because
   Raj signed that off with the drawn bar.
+  **The view counts are drawn, and they are the only blue on the strip.**
+  `13k &middot; 20k &middot; 11k &middot; 19k &middot; 15k &middot; 10k` set
+  as one 14px line is six numbers a reader has to read and hold before the run
+  has any shape, and it carried no label saying what they were. Six bars have
+  the shape before a digit is read -- the same argument the list row's drawn
+  multiple already won. Scaled to the **tallest bar in the run**, not to
+  `CS_BAR_MAX`: this is one client's six videos against each other, where the
+  list is six clients against one ceiling. Straight proportion from zero, no
+  floor -- a floor only flattens a real difference. Blue, because the pink
+  above it is the claim and these are the receipts under it. **No baseline
+  tick**, for the same reason the page prints no baseline: see C+C below.
   **Don't put "no ad spend." or "every video over 10k" back.** Both are
   true and both are his, and both were in the strip for one build. The
   first already lives in `portfolio.js` and CIAD's unit line; the second is
@@ -475,6 +522,21 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   strip is the ten-second read, the sections are the ten-minute one.
   Nothing unique went with the old box: "48 videos" is in upsurge's
   overview and solution, "sold out" is in the cacao outcome.
+- **One of his sentences is lifted per study, and lifting is not copying.**
+  A study detail was six sections of 14px DM Mono at one weight running
+  1400px: blurred, one grey block with nothing to land on between the video
+  and the testimonial. `csLift()` takes one sentence out of the paragraph it
+  already sits in and re-sets it at `clamp(26px,4vw,40px)` where it stands --
+  the running text no longer contains it, so the page still says it exactly
+  once. That is the whole of the editing permission in section 6 (*choose
+  which lines survive and what order they sit in*) and none of the writing
+  one: **no word of the sentence changes, and it is never duplicated.** A
+  `lift` whose text does not match its section renders the paragraph
+  untouched, so a typo costs nothing. Ink, not an accent -- both accents on
+  this page already mean something, and it does not need colour to be the
+  only display-face line between the hero and the quote. C+C's is *"better
+  isn't better, different is what's often better."*, because it is the
+  reframe the insights section turns on. **Pick the line, never write one.**
 - **The list row carries the engagement, not just the result.** A 9px
   tracked line under the teaser — same size as the sector, so nothing
   enters the type budget — saying what the work actually was: *6 videos ·
@@ -706,6 +768,17 @@ alone and went with the rebuild on 2026-08-10. Palette in `:root`:
 `--accent-r:#ff7bac`, `--accent-b:#0d8aaf`, `--accent-g:#3a8c52`. Never the
 old red or iOS blue.
 
+**Text is selectable everywhere except three surfaces.** `body` carried a
+blanket `user-select:none` from the SPA days, which made every word on the
+site unselectable -- the email address included. Raj, 2026-08-26: *"why is
+none of the text sitewide clickable or like selectable?"* It is gone, and
+`::selection` takes the brand pink at 0.28 alpha. The three that keep it are
+`#screen-playground` (pan/zoom canvas), `#screen-video` (the intro, no text)
+and `#screen-ciad` -- the deck swipes, and a click on the left or right third
+of any screen, paragraph included, turns the page. `#pg-nav` keeps it too, as
+chrome rather than content. **Both sliders are native `<input type=range>`
+and never needed it.** Don't put it back on `body`.
+
 **Two browser traps that each cost a round here:**
 
 - **`overflow:hidden` on a box whose height is animating kills its
@@ -721,6 +794,17 @@ old red or iOS blue.
 - **The audit's spacing budget catches values within 15% of each other.** A
   10px margin next to an existing 8px reads as a fifth tier and fails the
   page. Reach for an existing tier token before inventing a number.
+- **`getComputedStyle` returns the *used* value for `margin:auto`, not the
+  keyword.** About's `.player` declares only `margin-top:auto`, so the number
+  it reports is whatever free space is left in the flex column -- it read 11
+  one day and 22 the next purely because the column above it got shorter, and
+  failed the page for sitting 8% from a real 24px tier. `audit.js` reads
+  `computedStyleMap()` for these four properties now, where `auto` is still
+  `auto`. A layout result is not a spacing decision.
+- **A `<video>` with no decoded source has no intrinsic size.** Chrome gives
+  it 300x150 and a flex parent may collapse it to 0x0 outright. Anything
+  sizing off it will jump when the network answers -- reserve the box with
+  `aspect-ratio` and correct it from real dimensions after.
 
 **Validate JS after every edit** — corruption comes from smart quotes, `/* */`
 comments, Unicode in comments and template literals. Use `//` comments and

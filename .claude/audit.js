@@ -179,7 +179,22 @@ function measure() {
 
     // structural spacing only -- the values that separate things, not the
     // optical nudges inside a pill
+    // `margin:auto` on a flex or grid child resolves to whatever free space
+    // is left in the track, and getComputedStyle hands back that USED value
+    // in px -- so About's .player, whose only declaration is margin-top:auto,
+    // was reporting an 11 one day and a 22 the next purely because the column
+    // above it got shorter. That is a layout result, not a spacing decision,
+    // and it was failing the page for sitting 8% from a real 24px tier.
+    // computedStyleMap() gives the computed value, where `auto` is still the
+    // keyword `auto`, so it can be told apart from a number someone chose.
+    const csm = el.computedStyleMap ? el.computedStyleMap() : null;
+    const declared = prop => {
+      if (!csm) return true;
+      try { return String(csm.get(prop)) !== 'auto'; } catch (e) { return true; }
+    };
     ['marginTop', 'marginBottom', 'rowGap', 'columnGap'].forEach(p => {
+      const dash = p.replace(/[A-Z]/g, m => '-' + m.toLowerCase());
+      if (!declared(dash)) return;
       const v = Math.round(parseFloat(cs[p]));
       if (v >= MIN_SPACE && v < 400) spacing[v] = (spacing[v] || 0) + 1;
     });
