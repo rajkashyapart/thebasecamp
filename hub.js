@@ -63,6 +63,27 @@ function hubSetTier(i) {
   hubPaintMonth(t.videos);
 }
 
+// The drag hint. Once, when the card is on screen, and after the card's own
+// spring entrance has settled -- a hint that plays while the thing is still
+// flying in is a hint nobody sees.
+function hubDragHint(vol) {
+  if (!vol) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var fired = false;
+  function go() {
+    if (fired) return;
+    fired = true;
+    setTimeout(function () { vol.classList.add('hint'); }, 900);
+  }
+  if (!('IntersectionObserver' in window)) { go(); return; }
+  var io = new IntersectionObserver(function (es) {
+    for (var i = 0; i < es.length; i++) {
+      if (es[i].isIntersecting) { io.disconnect(); go(); }
+    }
+  }, { threshold: 0.6 });
+  io.observe(vol);
+}
+
 function initHubBuild() {
   var vol = document.getElementById('hub-vol');
   // No slider, or ciad.js never arrived: the markup already carries the
@@ -77,6 +98,7 @@ function initHubBuild() {
 }
 
 function initHub() {
+  hubDragHint(document.getElementById('hub-vol'));
   var pgNavHub = document.getElementById('pg-nav');
   if (pgNavHub) pgNavHub.classList.add('nav-visible');
   initHubBuild();

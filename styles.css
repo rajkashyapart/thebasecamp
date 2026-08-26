@@ -230,7 +230,7 @@ p,li,dd,figcaption,
    bottom now costs. */
 #pg-nav{
   --nav-gap:20px;
-  --nav-r:16px;
+  --nav-r:20px;
   position:fixed;z-index:900;
   left:50%;bottom:var(--nav-gap);transform:translateX(-50%);
   width:max-content;max-width:calc(100vw - 28px);
@@ -241,7 +241,7 @@ p,li,dd,figcaption,
   /* the site's own two-part shadow, same language as the hero tile: a tight
      contact shadow so it sits on the paper, a long soft one so it floats
      off it. A floating object needs both; the old bar needed neither. */
-  box-shadow:0 2px 6px rgba(45,33,22,0.07), 0 16px 40px -14px rgba(45,33,22,0.24);
+  box-shadow:0 2px 8px rgba(45,33,22,0.08), 0 24px 54px -16px rgba(45,33,22,0.34);
   /* No overflow:hidden here. It is what a backdrop-filter cannot survive on
      a box whose height is animating -- Chrome stops repainting the filter
      over part of the capsule and the page behind shows through the panel,
@@ -263,9 +263,19 @@ p,li,dd,figcaption,
 #pg-nav::before{
   content:'';position:absolute;inset:0;z-index:-1;
   border-radius:inherit;
-  background:rgba(253,251,249,0.86);
-  backdrop-filter:blur(16px) saturate(1.4);
-  -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  /* Raj, 2026-08-26: "the nav bar in itself is too bland -- not acquiring
+     enough attention. maybe make it pink liquid glass."
+     Glass, not pink: pink on this bar already means "the page you are on",
+     and a pink capsule would leave that marker nothing to say. What makes
+     glass read as glass is not the blur, it is the lighting -- a bright
+     edge along the top where the light catches it, a darker one along the
+     bottom where it does not, and a gradient down the face. The blur alone
+     was a frosted sticker. */
+  background:linear-gradient(rgba(255,255,255,0.80), rgba(250,247,243,0.60));
+  backdrop-filter:blur(24px) saturate(1.8);
+  -webkit-backdrop-filter:blur(24px) saturate(1.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),
+             inset 0 -1px 0 rgba(45,33,22,0.06);
 }
 /* index.html is the only dark page left -- CIAD is light, always. */
 [data-theme="dark"] #pg-nav::before{background:rgba(13,13,15,0.88);}
@@ -278,11 +288,11 @@ p,li,dd,figcaption,
    second control for one destination taking up the capsule's left third. */
 .nav-row{
   display:flex;align-items:center;justify-content:center;
-  padding:11px 22px;
+  padding:14px 24px;
 }
 .pg-links{display:flex;align-items:center;gap:22px;position:relative;}
 .pg-links a,.pg-links button{
-  font-family:'DM Mono',monospace;font-size:13px;font-weight:400;letter-spacing:0.11em;
+  font-family:'DM Mono',monospace;font-size:15px;font-weight:400;letter-spacing:0.10em;
   text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.58;
   transition:opacity 0.2s ease,transform 0.14s var(--e-out);
   cursor:pointer;white-space:nowrap;position:relative;z-index:1;
@@ -306,7 +316,7 @@ p,li,dd,figcaption,
    -- marking the current page -- instead of spending it on a hover. */
 .nav-pill{
   position:absolute;left:0;top:50%;
-  height:26px;margin-top:-13px;width:0;
+  height:30px;margin-top:-15px;width:0;
   border-radius:8px;
   background:rgba(255,123,172,0.22);
   pointer-events:none;z-index:0;
@@ -366,12 +376,24 @@ p,li,dd,figcaption,
   color:var(--ink-muted);
 }
 .nav-panel-list{display:flex;flex-direction:column;gap:2px;}
+/* Raj, 2026-08-26: the rows "do not properly suggest that they can be tapped
+   on to land on a different page." An arrow, sliding forward on hover --
+   the same signal the case studies list already uses, so it is a word the
+   site already speaks rather than a new one. */
 .nav-panel-list a{
-  display:flex;align-items:baseline;gap:12px;
-  font-family:'DM Mono',monospace;font-size:var(--t-read);
+  display:flex;align-items:center;gap:12px;
+  font-family:'DM Mono',monospace;font-size:15px;
   color:var(--ink);text-decoration:none;
-  padding:7px 8px;margin:0 -8px;border-radius:7px;
+  padding:9px 10px;margin:0 -10px;border-radius:9px;
   transition:background-color 0.16s ease;
+}
+.nav-panel-list a::after{
+  content:'\2192';
+  margin-left:auto;color:var(--ink-muted);
+  transition:transform 0.18s var(--e-out), color 0.18s ease;
+}
+@media(hover:hover) and (pointer:fine){
+  .nav-panel-list a:hover::after{transform:translateX(4px);color:var(--ink);}
 }
 @media(hover:hover) and (pointer:fine){
   .nav-panel-list a:hover{background:rgba(30,25,20,0.05);}
@@ -379,10 +401,6 @@ p,li,dd,figcaption,
 .nav-panel-list a:active{background:rgba(30,25,20,0.08);}
 /* the one link out of the panel gets the page's other accent, same split the
    rest of the site runs: pink is the person and the way to reach him */
-.hub-eyebrow a{color:inherit;text-transform:none;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(30,25,20,0.25);transition:text-decoration-color 0.18s ease;}
-@media(hover:hover) and (pointer:fine){
-  .hub-eyebrow a:hover{text-decoration-color:var(--accent-r);}
-}
 
 .nav-close{
   display:none;
@@ -407,7 +425,7 @@ p,li,dd,figcaption,
   .nav-row{padding:5px 12px;justify-content:space-between;}
   .pg-brand{display:none;}
   .pg-links{gap:0;flex:1;justify-content:space-between;}
-  .pg-links a,.pg-links button{font-size:10px !important;letter-spacing:0.04em;white-space:nowrap;}
+  .pg-links a{font-size:12px !important;letter-spacing:0.05em;white-space:nowrap;}
   .nav-pill{height:22px;margin-top:-11px;border-radius:6px;}
   .nav-panel-in{padding:14px 12px 4px;}
   .pg-headline{font-size:28px;}
@@ -612,7 +630,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   position:relative;z-index:10;
   display:flex;flex-direction:column;align-items:stretch;
   text-align:left;
-  max-width:1160px;padding:30px 32px calc(12px + var(--nav-clear,86px));
+  max-width:1160px;padding:14px 32px calc(8px + var(--nav-clear,86px));
   opacity:0;transition:opacity 0.5s ease;
   width:100%;
   gap:var(--hb-section);
@@ -767,36 +785,62 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    why .hub-facts already declares it. Without it the slider and the month
    were half the card wide while the copy above ran full width. */
 .hub-build{ margin-top:var(--hb-tight);width:100%; }
+/* Raj, 2026-08-26: "'drag it - build your month' does not acquire attention.
+   a viewer does not see it at once. they need to." It was 11px of tracked
+   grey over a 2px line -- the instruction for the one thing on this page a
+   visitor is meant to touch, set quieter than the caption under it.
+   Three changes, because he said motion alone would not do it: the line goes
+   to body size in full ink, the two words that are the instruction take the
+   accent, and the control under it doubles in weight. */
 .hub-build-label{
   display:block;margin-bottom:var(--hb-tight);
-  font-family:'DM Mono',monospace;font-size:var(--hb-label);
-  letter-spacing:0.15em;text-transform:uppercase;
-  color:var(--ink-muted);opacity:0.75;
+  font-family:'DM Mono',monospace;font-size:14px;
+  letter-spacing:0.06em;text-transform:lowercase;
+  color:var(--ink-body);
 }
+.hub-drag{color:var(--accent-r);}
 .hub-range{
   -webkit-appearance:none;appearance:none;
   display:block;width:100%;background:transparent;cursor:grab;margin:0;
   /* a 2px track is a 2px target; the padding makes the whole strip grabbable */
-  padding:7px 0;touch-action:none;
+  padding:12px 0;touch-action:none;
 }
 .hub-range:active{cursor:grabbing;}
 .hub-range::-webkit-slider-runnable-track{
-  height:2px;border-radius:2px;background:rgba(30,25,20,0.16);
+  height:5px;border-radius:3px;background:rgba(30,25,20,0.13);
 }
 .hub-range::-moz-range-track{
-  height:2px;border-radius:2px;background:rgba(30,25,20,0.16);
+  height:5px;border-radius:3px;background:rgba(30,25,20,0.13);
 }
 .hub-range::-webkit-slider-thumb{
   -webkit-appearance:none;appearance:none;
-  width:18px;height:18px;margin-top:-8px;border-radius:50%;
-  background:var(--accent-r);border:3px solid var(--bg-warm);
-  box-shadow:0 2px 10px rgba(255,123,172,0.45);
+  width:28px;height:28px;margin-top:-11.5px;border-radius:50%;
+  background:var(--accent-r);border:4px solid var(--bg-warm);
+  box-shadow:0 3px 14px rgba(255,123,172,0.55), 0 0 0 1px rgba(255,123,172,0.30);
   transition:transform 0.16s var(--e-out);
 }
 .hub-range::-moz-range-thumb{
-  width:18px;height:18px;border-radius:50%;
-  background:var(--accent-r);border:3px solid var(--bg-warm);
-  box-shadow:0 2px 10px rgba(255,123,172,0.45);
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent-r);border:4px solid var(--bg-warm);
+  box-shadow:0 3px 14px rgba(255,123,172,0.55), 0 0 0 1px rgba(255,123,172,0.30);
+}
+
+/* It moves once, when the card arrives. Nothing tells you a thing is
+   draggable faster than watching it move -- and this is the rarest kind of
+   animation there is, seen once per visit, which is the only kind that is
+   allowed to be for delight. A transform on the thumb, not a change of
+   value: moving the value would swing the price and the readouts under it
+   and read as the page deciding for them. */
+@keyframes hubDragHint{
+  0%{ transform:translateX(0); }
+  38%{ transform:translateX(30px); }
+  100%{ transform:translateX(0); }
+}
+.hub-range.hint::-webkit-slider-thumb{ animation:hubDragHint 1.15s var(--e-in-out) 1; }
+.hub-range.hint::-moz-range-thumb{ animation:hubDragHint 1.15s var(--e-in-out) 1; }
+@media(prefers-reduced-motion:reduce){
+  .hub-range.hint::-webkit-slider-thumb,
+  .hub-range.hint::-moz-range-thumb{ animation:none; }
 }
 .hub-range:active::-webkit-slider-thumb{transform:scale(1.14);}
 .hub-range:focus-visible{outline:none;}
@@ -809,7 +853,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   gap:3px;margin-top:var(--hb-tight);
 }
 .hub-day{
-  position:relative;height:9px;border-radius:2px;
+  position:relative;height:12px;border-radius:3px;
   background:rgba(30,25,20,0.07);
 }
 .hub-day::after{
@@ -968,8 +1012,12 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
   margin-top:auto;padding-top:var(--hb-unit);
   align-self:stretch;
-  font-family:'DM Mono',monospace;font-size:var(--hb-label);
-  letter-spacing:0.1em;text-transform:lowercase;
+  /* 11px was a caption. These are the only two actions on the page and one
+     of them is now the address itself, so both go to the page's prose size
+     -- both, because the two cards are a comparison and a comparison needs
+     one structure. 17px is already in this page's inventory. */
+  font-family:'DM Mono',monospace;font-size:17px;
+  letter-spacing:0.04em;text-transform:lowercase;
   text-decoration:none;cursor:pointer;
   transition:transform 0.16s var(--e-out),
              background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
@@ -981,7 +1029,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .hub-opt-btn::before{content:'';}
 .hub-opt-btn-inner{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  width:100%;padding:13px 18px;border-radius:100px;
+  width:100%;padding:15px 20px;border-radius:100px;
   transition:inherit;
 }
 /* primary: filled. secondary: outlined. Real weight difference, not a tint. */
