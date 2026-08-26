@@ -17,13 +17,14 @@
 //                oddfellows: the slot for where you are is a wasted slot.
 //                Their version relabels it "home"; his word for home is
 //                playground, so the item simply is not there instead.
-//   work         -> the reel. Hovering gives the reel and the six studies,
-//                so every piece of proof on the site is one hover and one
-//                click from anywhere.
+//   work         -> the reel. Hovering gives the two pages the work lives on
+//                and nothing from inside them. Raj, 2026-08-26: "work should
+//                only show 2 things upon pop up, not the options within the
+//                subpages as well." The six studies were in here and they
+//                were the panel deciding for the visitor which study to read.
 //   about        -> about. Nothing underneath it, so no panel.
-//   contact      -> work with me. Hovering gives the email, the instagram
-//                and the calendly, because the second visitor does not want
-//                a page, they want the address.
+//   contact      -> work with me, and the panel says so in his words. One
+//                option: the panel is what the word means, not a menu.
 //
 // The markup lives here rather than in seven HTML files. It was duplicated
 // across all of them, which is how the old bar ended up carrying a dead
@@ -46,15 +47,6 @@ var NAV = [
     owns: ['hub.html', 'ciad.html'] }
 ];
 
-// Every one of these already exists on the site -- the first two in About's
-// last line, the third on CIAD's button, and "let's make something" is
-// hub.html's own headline. Nothing here is written.
-var NAV_CONTACT = [
-  { label: 'work with me', text: 'let&rsquo;s make something', href: 'hub.html' },
-  { label: 'email', text: 'hello@rajkashyap.studio', href: 'mailto:hello@rajkashyap.studio' },
-  { label: 'instagram', text: 'uncurated.raj', href: 'https://instagram.com/uncurated.raj' },
-  { label: 'book a call', text: 'content in a day', href: 'https://calendly.com/shootwraj/content-in-a-day' }
-];
 
 var NAV_OPEN_DELAY = 160;   // ms of hover before a panel unfolds
 var NAV_PANEL_MS = 340;     // matches the height transition in styles.css
@@ -150,41 +142,22 @@ function initNav() {
   }
 
   // ── the panels ─────────────────────────────────────────────────────────
-  function section(label, rows) {
-    if (!rows) return '';
-    return '<div class="nav-panel-head"><div class="nav-panel-label">' + label + '</div></div>' +
+  // No section heads and no second lines. A panel that lists what is inside
+  // the pages it points at is the panel making the choice for the visitor,
+  // which is the opposite of what this pass is for. The head element is only
+  // built where there is no hover, because that is the only place the close
+  // button has a job.
+  function link(href, text) {
+    return '<a href="' + href + '">' + text + '</a>';
+  }
+
+  function panelHTML(kind) {
+    var rows = kind === 'work'
+      ? link('portfolio.html', 'things i&rsquo;ve made') +
+        link('case-studies.html', 'capabilities')
+      : link('hub.html', 'let&rsquo;s build something');
+    return (fine ? '' : '<div class="nav-panel-head"></div>') +
            '<div class="nav-panel-list">' + rows + '</div>';
-  }
-
-  function link(href, text, sub, ext) {
-    return '<a href="' + href + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>' +
-           text + (sub ? '<span class="np-sub">' + sub + '</span>' : '') + '</a>';
-  }
-
-  // The six come from CASE_STUDIES, the array case-studies.html already
-  // renders its list from. Never a second copy of the names here -- the same
-  // rule that keeps the five multiples in one place.
-  function workHTML() {
-    // no sub: the section head above it already says the reel, and saying it
-    // twice in nine words is the thing this whole pass is meant to remove
-    var reel = link('portfolio.html', 'things i&rsquo;ve made');
-    var studies = '';
-    if (typeof CASE_STUDIES !== 'undefined') {
-      for (var i = 0; i < CASE_STUDIES.length; i++) {
-        var cs = CASE_STUDIES[i];
-        studies += link('case-studies.html#' + cs.id, cs.client, cs.sector);
-      }
-    }
-    return section('the reel', reel) + (studies ? section('capabilities', studies) : '');
-  }
-
-  function contactHTML() {
-    var rows = '';
-    for (var i = 0; i < NAV_CONTACT.length; i++) {
-      var c = NAV_CONTACT[i];
-      rows += link(c.href, c.text, c.label, c.href.indexOf('http') === 0);
-    }
-    return section('say hello', rows);
   }
 
   var openKind = null;
@@ -232,21 +205,22 @@ function initNav() {
   function openPanel(kind) {
     clearTimeout(closeTimer);
     if (openKind === kind) return;
-    var html = kind === 'work' ? workHTML() : contactHTML();
-    if (!html) return;
+    var html = panelHTML(kind);
 
     var first = openKind === null;
     openKind = kind;
     panelIn.innerHTML = html;
 
-    var x = document.createElement('button');
-    x.type = 'button';
-    x.className = 'nav-close';
-    x.setAttribute('aria-label', 'close');
-    x.innerHTML = '&#10005;';
-    x.addEventListener('click', function (e) { e.preventDefault(); closePanel(); });
     var head = panelIn.querySelector('.nav-panel-head');
-    if (head) head.appendChild(x);
+    if (head) {
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'nav-close';
+      x.setAttribute('aria-label', 'close');
+      x.innerHTML = '&#10005;';
+      x.addEventListener('click', function (e) { e.preventDefault(); closePanel(); });
+      head.appendChild(x);
+    }
 
     nav.classList.add('nav-open');
     panel.style.height = measure() + 'px';

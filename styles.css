@@ -359,9 +359,7 @@ p,li,dd,figcaption,
   display:flex;align-items:center;justify-content:space-between;
   gap:12px;margin-bottom:9px;min-height:16px;
 }
-/* the work panel runs two sections -- the reel, then the six studies -- and
-   the gap between them has to beat the gap inside them or they fuse */
-.nav-panel-list + .nav-panel-head{margin-top:20px;}
+
 .nav-panel-label{
   font-family:'DM Mono',monospace;font-size:var(--t-micro);
   letter-spacing:var(--tr-label);text-transform:uppercase;
@@ -375,21 +373,20 @@ p,li,dd,figcaption,
   padding:7px 8px;margin:0 -8px;border-radius:7px;
   transition:background-color 0.16s ease;
 }
-.nav-panel-list a .np-sub{
-  font-size:var(--t-micro);letter-spacing:var(--tr-label);text-transform:uppercase;
-  color:var(--ink-muted);margin-left:auto;
-}
 @media(hover:hover) and (pointer:fine){
   .nav-panel-list a:hover{background:rgba(30,25,20,0.05);}
 }
 .nav-panel-list a:active{background:rgba(30,25,20,0.08);}
 /* the one link out of the panel gets the page's other accent, same split the
    rest of the site runs: pink is the person and the way to reach him */
-.nav-panel-list a.np-out{color:var(--accent-r);}
+.hub-eyebrow a{color:inherit;text-transform:none;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(30,25,20,0.25);transition:text-decoration-color 0.18s ease;}
+@media(hover:hover) and (pointer:fine){
+  .hub-eyebrow a:hover{text-decoration-color:var(--accent-r);}
+}
 
 .nav-close{
   display:none;
-  flex:0 0 auto;
+  flex:0 0 auto;margin-left:auto;
   width:24px;height:24px;border:0;border-radius:6px;background:none;
   color:var(--ink-muted);font-family:'DM Mono',monospace;font-size:14px;
   line-height:1;cursor:pointer;
