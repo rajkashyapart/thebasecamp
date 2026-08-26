@@ -116,7 +116,13 @@ function initNav() {
   var home = null;
 
   function place(el, roaming, silent) {
+    // The label under the mark has to be legible against the mark, not
+    // against the bar: near-black on the pink fill, warm white on the blue
+    // wash. So the class travels with the pill.
+    items.forEach(function (n) { n.classList.remove('pill-here'); });
+    nav.classList.toggle('nav-roam', !!roaming);
     if (!el) { pill.classList.add('idle'); return; }
+    el.classList.add('pill-here');
     var a = el.getBoundingClientRect(), b = links.getBoundingClientRect();
     if (silent) pill.style.transition = 'none';
     pill.classList.remove('idle');

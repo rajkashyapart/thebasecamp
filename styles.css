@@ -231,17 +231,19 @@ p,li,dd,figcaption,
 #pg-nav{
   --nav-gap:20px;
   --nav-r:20px;
+  --nav-fg:#f5f2ee;      /* 15.06:1 on the bar */
+  --nav-dim:#b3ada4;     /* still 7.4:1 -- dim by colour, never by opacity */
   position:fixed;z-index:900;
   left:50%;bottom:var(--nav-gap);transform:translateX(-50%);
   width:max-content;max-width:calc(100vw - 28px);
   display:flex;flex-direction:column;align-items:stretch;
   background:transparent;
-  border:1px solid rgba(30,25,20,0.07);
+  border:1px solid rgba(255,255,255,0.10);
   border-radius:var(--nav-r);
   /* the site's own two-part shadow, same language as the hero tile: a tight
      contact shadow so it sits on the paper, a long soft one so it floats
      off it. A floating object needs both; the old bar needed neither. */
-  box-shadow:0 2px 8px rgba(45,33,22,0.08), 0 24px 54px -16px rgba(45,33,22,0.34);
+  box-shadow:0 3px 10px rgba(20,16,12,0.20), 0 26px 60px -18px rgba(20,16,12,0.46);
   /* No overflow:hidden here. It is what a backdrop-filter cannot survive on
      a box whose height is animating -- Chrome stops repainting the filter
      over part of the capsule and the page behind shows through the panel,
@@ -260,28 +262,38 @@ p,li,dd,figcaption,
    half of the capsule, and you read the nav's rows through About's own
    paragraphs. A separate layer that is sized by the same box but does not
    own the animating overflow repaints correctly. */
+/* Smoked glass, near-black, on warm paper.
+   Raj asked for pink with a blue marker. Measured, that pairing does not
+   work: --accent-b on --accent-r is 1.65:1, so the marker would be invisible
+   on its own bar -- the two brand colours sit almost on top of each other in
+   luminance. Black is the ground where both of them get a job. Pink on it is
+   7.33:1 and the text on the bar is 15.06:1, better than the paper capsule
+   it replaces. Apple's material rule lands in the same place independently:
+   darker materials separate structural regions, lighter ones draw attention
+   to interactive elements, and a nav is structure.
+
+   This is not the dark theme coming back. That was a whole page system --
+   near-black ground, geometric sans, folders, a toggle -- and it is still
+   gone. This is one floating object, and the ground stays warm paper. */
 #pg-nav::before{
   content:'';position:absolute;inset:0;z-index:-1;
   border-radius:inherit;
-  /* Raj, 2026-08-26: "the nav bar in itself is too bland -- not acquiring
-     enough attention. maybe make it pink liquid glass."
-     Glass, not pink: pink on this bar already means "the page you are on",
-     and a pink capsule would leave that marker nothing to say. What makes
-     glass read as glass is not the blur, it is the lighting -- a bright
-     edge along the top where the light catches it, a darker one along the
-     bottom where it does not, and a gradient down the face. The blur alone
-     was a frosted sticker. */
-  background:linear-gradient(rgba(255,255,255,0.80), rgba(250,247,243,0.60));
-  backdrop-filter:blur(24px) saturate(1.8);
-  -webkit-backdrop-filter:blur(24px) saturate(1.8);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),
-             inset 0 -1px 0 rgba(45,33,22,0.06);
+  background:linear-gradient(rgba(44,40,34,0.74), rgba(22,20,17,0.82));
+  backdrop-filter:blur(24px) saturate(1.6);
+  -webkit-backdrop-filter:blur(24px) saturate(1.6);
+  /* the lighting is what makes glass read as glass: a bright edge where it
+     catches the light, a dark one where it does not */
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.17),
+             inset 0 -1px 0 rgba(0,0,0,0.38);
+}
+/* Apple: translucency is a preference, not a given. */
+@media(prefers-reduced-transparency:reduce){
+  #pg-nav::before{
+    background:#1b1815;
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
 }
 /* index.html is the only dark page left -- CIAD is light, always. */
-[data-theme="dark"] #pg-nav::before{background:rgba(13,13,15,0.88);}
-[data-theme="dark"] #pg-nav{border-color:rgba(255,255,255,0.09);}
-[data-theme="light"] #pg-nav::before{background:rgba(245,237,225,0.90);}
-[data-theme="light"] #pg-nav{border-color:rgba(120,80,40,0.12);}
 
 /* Just the links now. The wordmark came off on Raj's call: it pointed at
    playground.html and the first link in the row already does, so it was a
@@ -293,8 +305,8 @@ p,li,dd,figcaption,
 .pg-links{display:flex;align-items:center;gap:22px;position:relative;}
 .pg-links a,.pg-links button{
   font-family:'DM Mono',monospace;font-size:15px;font-weight:400;letter-spacing:0.10em;
-  text-transform:uppercase;color:var(--ink);text-decoration:none;opacity:0.58;
-  transition:opacity 0.2s ease,transform 0.14s var(--e-out);
+  text-transform:uppercase;color:var(--nav-dim);text-decoration:none;
+  transition:color 0.2s ease,transform 0.14s var(--e-out);
   cursor:pointer;white-space:nowrap;position:relative;z-index:1;
   background:none;border:0;padding:0;line-height:1;
 }
@@ -310,24 +322,32 @@ p,li,dd,figcaption,
    that behaviour was the underline's whole reason for being a real element
    and it survives the swap.
 
-   Two colours, one element: pink where it is resting, which is the page you
-   are on, and a neutral ink wash while it is following the cursor, which is
-   a page you might go to. That keeps the accent doing the job it already had
-   -- marking the current page -- instead of spending it on a hover. */
+   Two accents, one element, and they never mean the same thing: pink, solid,
+   where it is resting -- the page you are on. Blue, a wash, while it follows
+   the cursor -- a page you might go to. Raj, 2026-08-26, was right that blue
+   belonged here and I had it as grey.
+   Pink is the solid one because "you are here" should be the louder of the
+   two, and because pink on this bar is 7.33:1 against blue's 4.45:1. */
 .nav-pill{
   position:absolute;left:0;top:50%;
   height:30px;margin-top:-15px;width:0;
-  border-radius:8px;
-  background:rgba(255,123,172,0.22);
+  border-radius:9px;
+  background:var(--accent-r);
   pointer-events:none;z-index:0;
+  /* width is a layout property and this is a hover-driven element, which is
+     normally a finding. It stays: the pill is absolutely positioned inside
+     .pg-links, so the layout it dirties is its own box and nothing else's,
+     and the alternative -- scaleX on a fixed-width box -- distorts a 9px
+     radius into an ellipse on every travel. */
+  will-change:transform,width;
   transition:transform 0.22s var(--e-out),
              width 0.22s var(--e-out),
              background-color 0.22s ease,
              opacity 0.18s ease;
   view-transition-name:nav-pill;
 }
-/* travelling: the mark is no longer saying "you are here" */
-.nav-pill.roaming{background:rgba(30,25,20,0.07);}
+/* travelling: a wash, not a fill, so the label on top stays legible */
+.nav-pill.roaming{background:rgba(13,138,175,0.62);}
 /* before shared.js has measured anything, and on a page with no active link */
 .nav-pill.idle{opacity:0;}
 ::view-transition-group(nav-pill){
@@ -348,18 +368,37 @@ p,li,dd,figcaption,
 .nav-panel{
   height:0;overflow:hidden;
   width:0;min-width:100%;
+  /* closing is a system response, opening is a decision -- 240 out against
+     340 in. The .nav-open rule below supplies the slower open; this base
+     duration is what the close falls back to when the class comes off. */
   /* the capsule's top corners, since the panel is what occupies them once it
      is open and the nav no longer clips */
   border-radius:var(--nav-r) var(--nav-r) 0 0;
-  transition:height 0.34s var(--e-drawer);
+  transition:height 0.24s var(--e-out);
 }
+#pg-nav.nav-open .nav-panel{transition:height 0.34s var(--e-drawer);}
 .nav-panel-in{
   position:relative;
   padding:18px 18px 6px;
-  opacity:0;transform:translateY(6px);
-  transition:opacity 0.2s var(--e-out),transform 0.2s var(--e-out);
+  /* blur with the fade: Apple's rule for glass is that it should arrive as
+     material rather than appear at full sharpness, and the blur is also what
+     stops the crossfade reading as two overlapping objects */
+  opacity:0;transform:translateY(6px);filter:blur(4px);
+  transition:opacity 0.2s var(--e-out),transform 0.2s var(--e-out),filter 0.2s var(--e-out);
 }
-#pg-nav.nav-open .nav-panel-in{opacity:1;transform:none;transition-delay:0.09s;}
+#pg-nav.nav-open .nav-panel-in{opacity:1;transform:none;filter:blur(0);transition-delay:0.09s;}
+
+/* Chrome on every page, so this is not optional. Gentler, not zero: the
+   colours still change, the contents still cross-fade, nothing travels and
+   nothing grows. */
+@media(prefers-reduced-motion:reduce){
+  .nav-pill{transition:background-color 0.2s ease,opacity 0.18s ease;}
+  .nav-panel,#pg-nav.nav-open .nav-panel{transition:none;}
+  .nav-panel-in{transform:none;filter:none;transition:opacity 0.2s ease;}
+  #pg-nav.nav-open .nav-panel-in{transform:none;filter:none;}
+  .nav-panel-list a::after{transition:color 0.18s ease;}
+  .pg-links a:active{transform:none;}
+}
 
 /* label left, close right, on one line. The close button was absolutely
    positioned over the panel's top-right, which on a phone put a 44px tap
@@ -373,7 +412,7 @@ p,li,dd,figcaption,
 .nav-panel-label{
   font-family:'DM Mono',monospace;font-size:var(--t-micro);
   letter-spacing:var(--tr-label);text-transform:uppercase;
-  color:var(--ink-muted);
+  color:var(--nav-dim);
 }
 .nav-panel-list{display:flex;flex-direction:column;gap:2px;}
 /* Raj, 2026-08-26: the rows "do not properly suggest that they can be tapped
@@ -383,22 +422,22 @@ p,li,dd,figcaption,
 .nav-panel-list a{
   display:flex;align-items:center;gap:12px;
   font-family:'DM Mono',monospace;font-size:15px;
-  color:var(--ink);text-decoration:none;
+  color:var(--nav-fg);text-decoration:none;
   padding:9px 10px;margin:0 -10px;border-radius:9px;
   transition:background-color 0.16s ease;
 }
 .nav-panel-list a::after{
   content:'\2192';
-  margin-left:auto;color:var(--ink-muted);
+  margin-left:auto;color:var(--nav-dim);
   transition:transform 0.18s var(--e-out), color 0.18s ease;
 }
 @media(hover:hover) and (pointer:fine){
-  .nav-panel-list a:hover::after{transform:translateX(4px);color:var(--ink);}
+  .nav-panel-list a:hover::after{transform:translateX(4px);color:var(--nav-fg);}
 }
 @media(hover:hover) and (pointer:fine){
-  .nav-panel-list a:hover{background:rgba(30,25,20,0.05);}
+  .nav-panel-list a:hover{background:rgba(255,255,255,0.08);}
 }
-.nav-panel-list a:active{background:rgba(30,25,20,0.08);}
+.nav-panel-list a:active{background:rgba(255,255,255,0.13);}
 /* the one link out of the panel gets the page's other accent, same split the
    rest of the site runs: pink is the person and the way to reach him */
 
@@ -406,14 +445,14 @@ p,li,dd,figcaption,
   display:none;
   flex:0 0 auto;margin-left:auto;
   width:24px;height:24px;border:0;border-radius:6px;background:none;
-  color:var(--ink-muted);font-family:'DM Mono',monospace;font-size:14px;
+  color:var(--nav-dim);font-family:'DM Mono',monospace;font-size:14px;
   line-height:1;cursor:pointer;
   align-items:center;justify-content:center;
   transition:background-color 0.16s ease,color 0.16s ease;
 }
 @media(hover:none){ .nav-close{display:flex;} }
 @media(hover:hover) and (pointer:fine){
-  .nav-close:hover{background:rgba(30,25,20,0.06);color:var(--ink);}
+  .nav-close:hover{background:rgba(255,255,255,0.09);color:var(--nav-fg);}
 }
 .nav-close:active{transform:scale(0.94);}
 
@@ -434,14 +473,19 @@ p,li,dd,figcaption,
    after the finger lifted, so the nav showed two "current" pages at once
    until the next navigation repainted it. */
 @media(hover:hover) and (pointer:fine){
-  .pg-links a:hover,.pg-links button:hover{opacity:1;}
+  .pg-links a:hover{color:var(--nav-fg);}
 }
-.pg-links a.active{opacity:1;text-decoration:none;}
+.pg-links a.active{color:var(--nav-fg);text-decoration:none;}
+/* Whichever link the pill is under has to be legible against the pill, not
+   against the bar -- near-black on the pink fill, warm white on the blue
+   wash. shared.js moves the class with the mark. */
+.pg-links a.pill-here{color:var(--ink);}
+#pg-nav.nav-roam .pg-links a.pill-here{color:var(--nav-fg);}
 /* The nav is the one thing on this site touched on every page, so its press
    answer is the smallest one that still registers: full opacity and a hair
    under size, back in 140ms. Nothing here fades in or slides -- the pill
    above already carries the only motion this bar is allowed. */
-.pg-links a:active{opacity:1;transform:scale(0.94);}
+.pg-links a:active{transform:scale(0.96);}
 .pg-links a:focus-visible,.nav-close:focus-visible,.nav-panel-list a:focus-visible{
   outline:2px solid var(--accent-r);outline-offset:3px;border-radius:4px;opacity:1;
 }
