@@ -481,6 +481,7 @@ function initCaseStudies() {
     })(CASE_STUDIES[i], i);
   }
   csDrawBars(list);
+  csSyncHash();
 }
 
 // Draw once on arrival, then hold -- the same rule CIAD's ring and stationed
@@ -523,7 +524,37 @@ function csDrawBars(list) {
   }
 }
 
-function openCase(cs) {
+// A study has a URL now: case-studies.html#copper-cloves. It had none -- the
+// rows were buttons and openCase swapped the DOM in place -- so every study
+// on this site was unlinkable, which is a strange thing for a page whose own
+// proof strip exists because "someone landing on a shared link never saw the
+// list row". The nav's case-studies panel needs somewhere to point, and this
+// is the thing it needed to point at.
+//
+// fromHash suppresses the write-back, or opening from a hash would push a
+// second identical entry and the back button would need pressing twice.
+function csFindById(id) {
+  for (var i = 0; i < CASE_STUDIES.length; i++) {
+    if (CASE_STUDIES[i].id === id) return CASE_STUDIES[i];
+  }
+  return null;
+}
+
+function csSyncHash() {
+  var detail = document.getElementById('cs-detail');
+  if (!detail) return;
+  var id = (location.hash || '').replace(/^#/, '');
+  var open = detail.style.display === 'block';
+  if (id) {
+    var cs = csFindById(id);
+    if (cs && !open) openCase(cs, true);
+    else if (!cs && open) closeCase(true);
+  } else if (open) {
+    closeCase(true);
+  }
+}
+
+function openCase(cs, fromHash) {
   var detail = document.getElementById('cs-detail');
   var listWrap = document.getElementById('cs-listwrap');
 
@@ -600,6 +631,11 @@ function openCase(cs) {
   listWrap.style.display = 'none';
   detail.style.display = 'block';
   window.scrollTo(0, 0);
+  // pushState, not location.hash: a real history entry means the back button
+  // closes the study, which is what every visitor's thumb expects
+  if (!fromHash) {
+    try { history.pushState(null, '', '#' + cs.id); } catch (e) {}
+  }
 
   document.getElementById('cs-back').addEventListener('click', closeCase);
 
@@ -619,7 +655,10 @@ function openCase(cs) {
   csMountReels(detail);
 }
 
-function closeCase() {
+function closeCase(fromHash) {
+  if (!fromHash) {
+    try { history.pushState(null, '', location.pathname + location.search); } catch (e) {}
+  }
   for (var i = 0; i < csHls.length; i++) { try { csHls[i].destroy(); } catch (e) {} }
   csHls = [];
   document.getElementById('cs-detail').style.display = 'none';
@@ -629,3 +668,5 @@ function closeCase() {
 }
 
 document.addEventListener('DOMContentLoaded', initCaseStudies);
+window.addEventListener('popstate', csSyncHash);
+window.addEventListener('hashchange', csSyncHash);
