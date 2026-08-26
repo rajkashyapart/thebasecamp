@@ -83,6 +83,31 @@ separate passes were made at Work With Me and About and every one made the page
 | Physical-object metaphors | 1. Hang tags, receipts, wristbands, folders — pick one. Three skeuomorphs is noise, not charm. |
 | Easing curves | 5, all tokens in `:root`, none written by hand. `--e-out` is the default (entering, exiting, answering a press); `--e-in-out` for something already on screen moving; `--e-drawer` for the CIAD deck's long travel; `--e-dissolve` for the video intro only; `--e-spring` overshoots and is allowed **only** on the playground recenter. A bounce on anything a visitor triggers more than once a page is wrong — it was on the CTA hover and came off. Loop animations keep a literal symmetric curve at the call site. |
 
+**The other half: what survives has to be loud.** Raj, 2026-08-26: *"the
+overall website is beautiful. but important things are not big enough or not
+acquiring enough attention as a whole."* Subtraction is half the job and this
+file only ever wrote down that half, which is how four separate things ended
+up correct and invisible at once — the nav, an email address, a slider's own
+instruction, and a menu that gave no sign it could be clicked. Every one of
+them had been *reduced* properly and none had been *promoted*.
+
+So after any cut, ask the second question: **is the thing that survived now
+the loudest thing on the screen?** If it is the page's primary action, its
+one address, or the control the visitor is meant to touch, it should beat
+everything around it on size, weight or colour — not merely be present.
+Three specific failures worth remembering:
+
+- An instruction set smaller than the caption under it. *"drag it — build
+  your month"* was 11px of tracked grey over a 2px line: the label for the
+  one thing on that page a visitor is meant to touch.
+- An address that existed only as a button's *label*. hub.html pointed at
+  the mailto for months while never printing `hello@rajkashyap.studio`
+  anywhere on the page.
+- **Motion is not emphasis.** Raj, 2026-08-26, on the slider hint:
+  *"make it move once on arrival. but that alone wouldnt solve it - needs
+  scale, colour, or something to generate enough contrast."* A thing that
+  moves once is still small the rest of the time.
+
 When unsure between two approaches, pick the one with more craft — and note
 that removing something is usually the higher-craft option.
 
@@ -121,6 +146,12 @@ Then run the **squint test** on the screenshots — blur until text is illegible
 
 A diff against the previous state only catches regressions. It can never catch
 clutter, because clutter arrives a little at a time and every step looks fine.
+
+**A touch path has to be tested in a real touch context.** A Playwright
+context with only a 390px viewport still matches `(hover:hover)`, so every
+hover-gated branch runs and the touch branch never does. Pass
+`hasTouch:true, isMobile:true` or the phone code is unverified — this is how
+a first-tap-opens-the-panel path gets shipped without once being exercised.
 
 Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
 
@@ -167,6 +198,20 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   manual scroll holds it off for 2.5s, and it is off entirely on a phone
   and under `prefers-reduced-motion`. Every tile lifts 5px / 1.02 on
   hover, 200ms ease-out; that and the drift stopping are one gesture.
+  **Every photograph arrives as ascii and dissolves into the print.** Raj,
+  2026-08-23, asked to try it and chose the shape of it: not the resting
+  state, coarse, ink on paper, on every picture. So each tile paints as a
+  drawing of itself, holds 220ms, and cross-dissolves over 500ms behind a
+  3px blur; below the fold the wall stays as text until the drift reaches
+  it. Coarse is a **cell size** (~6px) and not a column count — fixing the
+  count would give a 245px tile 5px characters and the hero 12px ones, three
+  grains on one screen — and the 64-column cap is what keeps the hero coarse.
+  Contrast is stretched off the 3rd/97th percentile, never min/max: one lamp
+  in the bar shot pins the range at white and half the wall comes out a solid
+  block of `@`. Drawn one `fillText` per row, not per character. The canvas
+  is removed from the DOM the frame it finishes, so nothing here survives the
+  arrival — which is the only reason it adds nothing to any budget. Off
+  entirely under `prefers-reduced-motion`.
   The thirty-four photographs live in `shots/`, served locally. Raj's originals
   are raw camera JPGs on Bunny — ~150MB for the set, and **that pull zone
   has no image optimizer**, so `?width=` returns the original bytes. There
@@ -215,7 +260,60 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   screen one, because the four screens before the price are the argument
   for it. Days are pink here, not the deck's blue: on this page blue means
   *the path you scope yourself*, which is the other card.
+- **The nav is a floating capsule at the bottom, in smoked glass.** After
+  oddfellows.tv, 2026-08-26 — their placement and behaviour, not their
+  material. It is **near-black** (`rgba(44,40,34,0.74)` → `rgba(22,20,17,0.82)`
+  behind `blur(24px) saturate(1.6)`), with a lit top edge and a dark bottom
+  one, because what makes glass read as glass is the lighting and not the
+  blur. **This is not the dark theme coming back** — that was a whole page
+  system and it stays gone; this is one floating object and every page under
+  it is still warm paper.
+  **Both accents are on it and they never mean the same thing.** Pink, solid
+  fill: the page you are on. Blue, a wash: the item under the cursor. Raj
+  asked for a pink bar with a blue marker and that specific pairing cannot
+  work — `--accent-b` on `--accent-r` is **1.65:1**, an invisible marker.
+  On black the numbers are 15.06 : 7.33 : 4.45 for text, pink, blue, which
+  is why pink is the solid one: *you are here* should be the louder.
+  **Measure a colour pairing before recommending it.**
+  **Four items, and three on the front page.** `playground · work · about ·
+  contact`, and the playground item is simply absent when you are already
+  there — Raj's own idea off that reference, where the slot for where you
+  are is a wasted slot. Six became four; nothing became unreachable, because
+  what left the bar went into a panel under the item it belongs to.
+  **Two panels, one per visitor.** `work` opens *things i've made* and
+  *capabilities*; `contact` opens *let's build something*. Panels list the
+  **pages**, never what is inside them — Raj, 2026-08-26: *"work should only
+  show 2 things upon pop up, not the options within the subpages as well."*
+  The six studies were in there and they were the panel choosing which study
+  to read on the visitor's behalf.
+  Every row carries a sliding arrow, because without one a row does not say
+  it can be clicked. On touch the first tap opens and the second follows the
+  link, since portfolio.html has no other route to the studies.
+  **The markup lives in one table in `shared.js`, not in seven HTML files.**
+  It was duplicated across all of them, which is how a dead
+  `<i class="nav-ink">` survived in six copies. The anchors are still real
+  anchors.
+- **Work With Me prints the address, and the address is the button.** The
+  second card pointed at `mailto:hello@rajkashyap.studio` for months while
+  its label read *"tell me what you're imagining"*, so the address itself was
+  never on the page contact lands on. The label is the address now, at 17px,
+  and **both** cards' buttons went 11 → 17 — both, because the two cards are
+  a comparison and a comparison needs one structure. Raj's line was cut, not
+  reworded.
+  **This page fits one viewport exactly and every size increase has to be
+  paid for.** The bigger buttons put it 14px over; that came back out of the
+  container's top padding. Measure `scrollHeight` vs `clientHeight` at
+  1440×900 after any change here — it is 900/900 and it should stay there.
+  **The slider is the loudest thing in its card.** *"drag it"* takes the
+  accent (the two words that are the instruction, never the whole line), the
+  line is 14px in ink, the track is 5px, the handle 28px with a glow, and it
+  moves once when the card comes into view — a transform on the thumb, never
+  a change of value, because moving the value swings the price under it and
+  reads as the page deciding for them.
 - **Portfolio is a full-screen vertical reel.** Not a mosaic. No glass cursor.
+  Its eyebrow reads **work**, matching the nav item that points at it — a
+  visitor should never click one word and land on another. Case studies'
+  eyebrow reads **capabilities** for the same reason.
 - **CIAD is a five-screen deck** — the question, the problem, how we work,
   the work, the month after — crossed by one button that morphs from "find
   out" into "book a call". One action on screen at any moment; the rail
@@ -305,6 +403,14 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   data cannot keep: C+C's outcome names six videos and `portfolio.js` holds
   three ids, one of them the hero. **Don't promise completeness over a row
   built from whatever the reel bank happens to hold.**
+- **A study has a URL: `case-studies.html#copper-cloves`.** It had none until
+  2026-08-26 — the rows were `<button>`s and `openCase` swapped the DOM in
+  place — which made every study on this site unlinkable, a strange state for
+  a page whose proof strip exists precisely because *"someone landing on a
+  shared link never saw the list row"*. `pushState`, so the back button
+  closes a study; `csSyncHash` handles arriving on one, `popstate` and
+  `hashchange`. Don't remove it: the nav's `work` panel used to point at
+  these and any future menu will want to.
 - **A study detail is one column, and it has no index.** No sidebar, no
   section numbers, no scroll-spy and no rules between sections — all
   removed 2026-08-22 on an Elon pass. The longest study
@@ -576,13 +682,22 @@ Each page is a standalone HTML file with one `init*()` function called on
 | `playground.html` | Photo scatter canvas — desktop pan/zoom, mobile vertical feed | `playground.js` |
 | `hub.html` | "Work With Me" — two offers, side by side | `ciad.js` (for `OD_TIERS`) + `hub.js` |
 | `about.html` | About — photographs in `shots/` | `about.js` |
-| `case-studies.html` | Case studies | `case-studies.js` |
+| `case-studies.html` | Case studies — deep-linked by `#id` | `portfolio.js` + `case-studies.js` |
 | `ciad.html` | Outlier Content in a Day — a five-screen deck | `ciad.js` |
 | `portfolio.html` | Full-screen vertical reel | `portfolio.js` |
 
 `styles.css` (2200+ lines) holds every page, sectioned by
-`/* === SCREEN N: NAME === */`. `shared.js` only shows `#pg-nav`. Navigation is
+`/* === SCREEN N: NAME === */`. **`shared.js` builds the entire nav** from one
+`NAV` table — each page ships only `<nav id="pg-nav"></nav>` — and publishes
+`--nav-clear` (the collapsed row plus its gap, measured off `.nav-row` and
+**never** off `#pg-nav`, which is several hundred pixels tall with a panel
+open and would reflow the whole site). CIAD's bar, playground's recenter,
+portfolio's hint, cue and label, About's mosaic floor and both scrolling
+pages' last rows all sit on that value. Navigation is
 real `<a href>` links; CSS View Transitions handle the fade. No SPA routing.
+
+**The nav capsule is the one dark surface on the site**, and it is chrome
+rather than ground — see §5. Everything below it is warm paper.
 
 **One design system: warm paper.** `--bg-warm:#f5f2ee`, grain, Cormorant
 italic display, DM Mono for everything else. The iOS dark precision system —
@@ -590,6 +705,22 @@ near-black ground, geometric sans, folder metaphor, theme toggle — was CIAD's
 alone and went with the rebuild on 2026-08-10. Palette in `:root`:
 `--accent-r:#ff7bac`, `--accent-b:#0d8aaf`, `--accent-g:#3a8c52`. Never the
 old red or iOS blue.
+
+**Two browser traps that each cost a round here:**
+
+- **`overflow:hidden` on a box whose height is animating kills its
+  `backdrop-filter`.** Chrome stops repainting the blur over part of the
+  element and the page behind shows through, sharp — About's paragraphs ran
+  straight through the nav panel's rows. The clip belongs to whichever child
+  actually needs clipping, never to the filtered box.
+- **The global mobile rule `a,button{min-height:44px}`** (in the
+  `max-width:639px` block) silently sets the height of anything built out of
+  links or buttons. It is why the phone nav was 62px tall for its 10px type,
+  and why an absolutely-positioned close button landed through the first row
+  of a panel. Account for it before choosing padding.
+- **The audit's spacing budget catches values within 15% of each other.** A
+  10px margin next to an existing 8px reads as a fifth tier and fails the
+  page. Reach for an existing tier token before inventing a number.
 
 **Validate JS after every edit** — corruption comes from smart quotes, `/* */`
 comments, Unicode in comments and template literals. Use `//` comments and
