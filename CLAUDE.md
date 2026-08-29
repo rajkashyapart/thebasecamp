@@ -77,7 +77,7 @@ separate passes were made at Work With Me and About and every one made the page
 
 | Budget | Limit |
 |---|---|
-| Distinct font sizes | 5 |
+| Distinct font sizes | 5. Every size on the site went **+4px** on 2026-08-29 on Raj's instruction — the scale kept its steps, so the count is unchanged. Two places could not take it and are written as literals with the reason at the call site: CIAD's ring diagram (its type is geometry — six words sit on a fixed 240px circle) and Work With Me's buttons on a phone. |
 | Accent colours | 1 — except About, Work With Me, CIAD, Case Studies and Playground, which run 2 because the split means something (blue marks the work / the path you scope / the craft / *who* the client is / Raj's own notes; pink marks the person / the recommendation / the payoff / *what it did* / the one link out). Two accents used interchangeably are not allowed. Colour lands on the word that carries the meaning, never on a whole line. There is no third — green was retired from playground's doodles on 2026-08-12 and `--accent-g` is now declared but unused. |
 | Structural spacing values | 4 tiers, well separated. Two values within 15% of each other communicate nothing and cost a decision. |
 | Physical-object metaphors | 1. Hang tags, receipts, wristbands, folders — pick one. Three skeuomorphs is noise, not charm. |
@@ -308,14 +308,22 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
 - **Work With Me prints the address, and the address is the button.** The
   second card pointed at `mailto:hello@rajkashyap.studio` for months while
   its label read *"tell me what you're imagining"*, so the address itself was
-  never on the page contact lands on. The label is the address now, at 17px,
-  and **both** cards' buttons went 11 → 17 — both, because the two cards are
-  a comparison and a comparison needs one structure. Raj's line was cut, not
-  reworded.
-  **This page fits one viewport exactly and every size increase has to be
-  paid for.** The bigger buttons put it 14px over; that came back out of the
-  container's top padding. Measure `scrollHeight` vs `clientHeight` at
-  1440×900 after any change here — it is 900/900 and it should stay there.
+  never on the page contact lands on. The label is the address now, at 21px,
+  and **both** cards' buttons went 11 → 17 → 21 — both, because the two cards
+  are a comparison and a comparison needs one structure. Raj's line was cut,
+  not reworded.
+  **On a phone the address is the widest fixed thing on the site.**
+  `hello@rajkashyap.studio` is one unbreakable string: at 21px DM Mono it
+  measures 311px and the card gives its button 327px, so with the pill's
+  padding it forced `#hub-content` to 420px on a 390px viewport and the whole
+  page scrolled sideways. Below 639px both buttons drop to `--hb-body` and the
+  pill's side padding goes to 12 — the pill is `width:100%`, so that padding
+  only sets the width at which the label breaks, nothing visible.
+  **This page no longer fits one viewport.** It did — 900/900 at 1440×900 —
+  until the sitewide +4 of 2026-08-29, which put it at 1048/900 with both CTAs
+  under the fold. Measure `scrollHeight` vs `clientHeight` at 1440×900 after
+  any change here; 900/900 is the state to get back to, and the only lever
+  left is type size, which is Raj's call.
   **The slider is the loudest thing in its card.** *"drag it"* takes the
   accent (the two words that are the instruction, never the whole line), the
   line is 14px in ink, the track is 5px, the handle 28px with a glow, and it
@@ -366,6 +374,18 @@ Do at least two rounds. Stop when nothing visible is wrong, or Raj says so.
   the site argues with itself. Hedges are part of the fact: "up to 5×"
   never becomes "5×". Figures being compared must *start* together, which
   is why that hedge hangs on its own line above its number.
+- **The deck no longer fits one screen per slide.** Five screens sized to one
+  viewport is what it was built as, and the sitewide +4 of 2026-08-29 cost
+  every one of them: "the problem" scrolls 144px on a 390×706 phone (its
+  paragraph went six lines to eight), "how we work" 15px, and on desktop the
+  disqualifier's second line lands under the rail. Slides are
+  `overflow-y:auto` with `align-items:safe center`, so nothing is cut — but a
+  deck that scrolls is not the thing this page was. `.od-slide` also reserves
+  `--od-bar-h` only, while the bar sits one `--nav-clear` above the bottom
+  edge, so the last ~33px (desktop) / ~71px (phone) of any slide sit behind
+  the bar. That under-reserve predates the +4 and only shows now that content
+  reaches it; the ring and the price screen each reserve `--nav-clear`
+  themselves rather than every slide paying 74px.
 - **The bar is one row, including on a phone.** Stacked (rail above a
   full-width button) it was 168px — a quarter of a 706px viewport before
   any content. Don't stack it again.

@@ -83,28 +83,28 @@ body{margin:0;padding:0;overflow:hidden;width:100%;height:100vh;height:100dvh;}
   /* ---- Type scale ----
      Twelve steps, no in-between values. If a new size feels needed, one of
      these is the right one — the gaps are what make the hierarchy readable.
-     9-11 are tracked uppercase labels only; 12+ is anything read as a
-     sentence. Nothing below 9px ships. */
-  --t-micro:9px;    /* uppercase eyebrows, tracked +0.16em */
-  --t-tiny:10px;    /* small mono UI, chips */
-  --t-fine:11px;    /* nav, buttons, captions */
-  --t-body:12px;    /* mono body, compact */
-  --t-read:13px;    /* mono body, comfortable */
-  --t-lead:14px;    /* lead paragraphs */
-  --t-h6:16px;
-  --t-h5:18px;
-  --t-h4:20px;
-  --t-h3:22px;
-  --t-h2:24px;
-  --t-h1:28px;      /* above this, use a clamp() — display type is fluid */
+     13-15 are tracked uppercase labels only; 16+ is anything read as a
+     sentence. Nothing below 13px ships. */
+  --t-micro:13px;    /* uppercase eyebrows, tracked +0.16em */
+  --t-tiny:14px;    /* small mono UI, chips */
+  --t-fine:15px;    /* nav, buttons, captions */
+  --t-body:16px;    /* mono body, compact */
+  --t-read:17px;    /* mono body, comfortable */
+  --t-lead:18px;    /* lead paragraphs */
+  --t-h6:20px;
+  --t-h5:22px;
+  --t-h4:24px;
+  --t-h3:26px;
+  --t-h2:28px;
+  --t-h1:32px;      /* above this, use a clamp() — display type is fluid */
 
   /* ---- Prose ----
      Sentences are set in the serif; mono is for labels, data and controls.
      Cormorant has a small x-height, so its reading sizes run ~4px larger than
      a sans would to land at the same optical size. */
-  --t-prose:18px;
-  --t-prose-sm:16px;  /* prose inside a narrow card or list */
-  --t-prose-lead:21px;
+  --t-prose:22px;
+  --t-prose-sm:20px;  /* prose inside a narrow card or list */
+  --t-prose-lead:25px;
   --lh-serif:1.55;
 
   /* ---- Line-height, by role ---- */
@@ -195,7 +195,7 @@ p,li,dd,figcaption,
 #raj-logo.out{opacity:0;transform:scale(0.97);animation:none;}
 #vid-text-overlay{position:fixed;inset:0;z-index:650;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);pointer-events:none;transition:background 0.6s var(--e-dissolve);}
 #vid-text-overlay.clear{background:transparent;}
-#vid-headline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(28px,5vw,42px);color:#fff;letter-spacing:0.015em;text-shadow:0 2px 20px rgba(0,0,0,0.5);opacity:0;transform:translateY(6px);transition:opacity 0.5s var(--e-dissolve),transform 0.5s var(--e-dissolve),color 0.5s var(--e-dissolve),text-shadow 0.5s var(--e-dissolve);view-transition-name:nsp-headline;}
+#vid-headline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(32px,calc(5vw + 4px),46px);color:#fff;letter-spacing:0.015em;text-shadow:0 2px 20px rgba(0,0,0,0.5);opacity:0;transform:translateY(6px);transition:opacity 0.5s var(--e-dissolve),transform 0.5s var(--e-dissolve),color 0.5s var(--e-dissolve),text-shadow 0.5s var(--e-dissolve);view-transition-name:nsp-headline;}
 #vid-headline.show{opacity:1;transform:translateY(0);}
 #vid-headline.out{opacity:0;transition:opacity 0.4s ease;}
 #vid-headline.dark{color:var(--ink);text-shadow:none;}
@@ -304,7 +304,7 @@ p,li,dd,figcaption,
 }
 .pg-links{display:flex;align-items:center;gap:22px;position:relative;}
 .pg-links a,.pg-links button{
-  font-family:'DM Mono',monospace;font-size:15px;font-weight:400;letter-spacing:0.10em;
+  font-family:'DM Mono',monospace;font-size:19px;font-weight:400;letter-spacing:0.10em;
   text-transform:uppercase;color:var(--nav-dim);text-decoration:none;
   transition:color 0.2s ease,transform 0.14s var(--e-out);
   cursor:pointer;white-space:nowrap;position:relative;z-index:1;
@@ -421,7 +421,7 @@ p,li,dd,figcaption,
    site already speaks rather than a new one. */
 .nav-panel-list a{
   display:flex;align-items:center;gap:12px;
-  font-family:'DM Mono',monospace;font-size:15px;
+  font-family:'DM Mono',monospace;font-size:19px;
   color:var(--nav-fg);text-decoration:none;
   padding:9px 10px;margin:0 -10px;border-radius:9px;
   transition:background-color 0.16s ease;
@@ -445,7 +445,7 @@ p,li,dd,figcaption,
   display:none;
   flex:0 0 auto;margin-left:auto;
   width:24px;height:24px;border:0;border-radius:6px;background:none;
-  color:var(--nav-dim);font-family:'DM Mono',monospace;font-size:14px;
+  color:var(--nav-dim);font-family:'DM Mono',monospace;font-size:18px;
   line-height:1;cursor:pointer;
   align-items:center;justify-content:center;
   transition:background-color 0.16s ease,color 0.16s ease;
@@ -464,10 +464,10 @@ p,li,dd,figcaption,
   .nav-row{padding:5px 12px;justify-content:space-between;}
   .pg-brand{display:none;}
   .pg-links{gap:0;flex:1;justify-content:space-between;}
-  .pg-links a{font-size:12px !important;letter-spacing:0.05em;white-space:nowrap;}
+  .pg-links a{font-size:16px !important;letter-spacing:0.05em;white-space:nowrap;}
   .nav-pill{height:22px;margin-top:-11px;border-radius:6px;}
   .nav-panel-in{padding:14px 12px 4px;}
-  .pg-headline{font-size:28px;}
+  .pg-headline{font-size:32px;}
 }
 /* Gated. Ungated, a tap on a phone left the link sitting at full opacity
    after the finger lifted, so the nav showed two "current" pages at once
@@ -494,7 +494,7 @@ p,li,dd,figcaption,
 #pg-canvas::before{content:'';position:absolute;inset:0;z-index:0;background-image:radial-gradient(circle, rgba(180,175,168,0.25) 1px, transparent 1px);background-size:24px 24px;pointer-events:none;}
 #pg-canvas.dragging{cursor:grabbing;}
 #pg-world{position:absolute;top:0;left:0;width:3600px;height:2800px;will-change:transform;z-index:1;transform-origin:0 0;}
-.pg-recenter{position:fixed;bottom:calc(var(--nav-clear,86px) + 10px);right:28px;z-index:200;font-family:'DM Mono',monospace;font-size:11px;font-weight:400;letter-spacing:0.12em;text-transform:lowercase;color:var(--ink);background:rgba(245,242,238,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.08);border-radius:20px;padding:8px 18px;cursor:pointer;transition:opacity 0.35s ease,transform 0.16s var(--e-out),background 0.2s ease;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+.pg-recenter{position:fixed;bottom:calc(var(--nav-clear,86px) + 10px);right:28px;z-index:200;font-family:'DM Mono',monospace;font-size:15px;font-weight:400;letter-spacing:0.12em;text-transform:lowercase;color:var(--ink);background:rgba(245,242,238,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.08);border-radius:20px;padding:8px 18px;cursor:pointer;transition:opacity 0.35s ease,transform 0.16s var(--e-out),background 0.2s ease;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
 @media(hover:hover) and (pointer:fine){
 .pg-recenter:hover{background:rgba(245,242,238,1);transform:scale(1.04);}
 }
@@ -505,13 +505,13 @@ p,li,dd,figcaption,
 .pg-card.drop-settle{transition:box-shadow 300ms var(--e-out)!important;}
 
 .pg-center{position:absolute;text-align:center;z-index:90;pointer-events:none;transform:translate(-50%,-50%);}
-.pg-headline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:42px;line-height:1.2;color:var(--ink);letter-spacing:0.015em;white-space:nowrap;view-transition-name:nsp-headline;}
-.pg-sub{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;font-family:'DM Mono',monospace;font-size:11px;font-weight:300;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-muted);}
-.pg-sub::before{content:'\2295';font-size:12px;}
+.pg-headline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:46px;line-height:1.2;color:var(--ink);letter-spacing:0.015em;white-space:nowrap;view-transition-name:nsp-headline;}
+.pg-sub{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;font-family:'DM Mono',monospace;font-size:15px;font-weight:300;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-muted);}
+.pg-sub::before{content:'\2295';font-size:16px;}
 
 .pg-cta{
   display:inline-block;margin-top:20px;
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;font-weight:400;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;font-weight:400;
   letter-spacing:0.02em;color:var(--accent-r);text-decoration:none;
   pointer-events:all;cursor:pointer;
   opacity:0;animation:pgCtaIn 0.6s ease 1.2s forwards,pgBreathe 3s ease-in-out 2s infinite;
@@ -525,14 +525,14 @@ p,li,dd,figcaption,
 .pg-card{position:absolute;border-radius:5px;overflow:hidden;cursor:grab;box-shadow:3px 6px 24px rgba(30,25,20,0.14),0 1px 4px rgba(30,25,20,0.05);transition:box-shadow 0.25s var(--e-out),transform 0.25s var(--e-out);cursor:pointer;}
 @media(hover:hover) and (pointer:fine){.pg-card:hover{box-shadow:4px 10px 38px rgba(30,25,20,0.2);z-index:80!important;}}
 .pg-card img{width:100%;height:100%;object-fit:cover;display:block;}
-.pg-card-link::after{content:'->';position:absolute;top:10px;right:12px;font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);opacity:0;transform:translateX(-4px);transition:opacity 0.2s var(--e-out),transform 0.2s var(--e-out);}
+.pg-card-link::after{content:'->';position:absolute;top:10px;right:12px;font-family:'DM Mono',monospace;font-size:16px;color:rgba(255,255,255,0.4);opacity:0;transform:translateX(-4px);transition:opacity 0.2s var(--e-out),transform 0.2s var(--e-out);}
 @media(hover:hover) and (pointer:fine){.pg-card-link:hover::after{opacity:1;transform:translateX(0);}}
 .pg-video-card::after{display:none;}
 
 .pg-text-card{position:absolute;border-radius:5px;overflow:hidden;box-shadow:3px 6px 24px rgba(30,25,20,0.14),0 1px 4px rgba(30,25,20,0.05);transition:box-shadow 0.25s ease,transform 0.25s ease;cursor:default;}
 .pg-text-inner{width:100%;height:100%;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;}
-.pg-text-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;line-height:1.4;color:var(--ink);font-weight:400;}
-.pg-text-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-muted);font-weight:300;}
+.pg-text-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.4;color:var(--ink);font-weight:400;}
+.pg-text-tag{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-muted);font-weight:300;}
 
 .pg-glyph{position:absolute;pointer-events:none;opacity:0.68;color:var(--accent-r);z-index:50;}
 /* .g (green) is gone with the marks that used it -- it was the site's only
@@ -647,11 +647,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 #back-home{display:none !important;}
 
 #hub-content{
-  --hb-display:clamp(29px,3.4vw,48px);
-  --hb-title:24px;
-  --hb-prose:17px;
-  --hb-body:14px;
-  --hb-label:11px;
+  --hb-display:clamp(33px,calc(3.4vw + 4px),52px);
+  --hb-title:28px;
+  --hb-prose:21px;
+  --hb-body:18px;
+  --hb-label:15px;
 
   /* Four tiers, and each one has to be visibly bigger than the one below or
      it communicates nothing and costs a decision:
@@ -838,7 +838,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    accent, and the control under it doubles in weight. */
 .hub-build-label{
   display:block;margin-bottom:var(--hb-tight);
-  font-family:'DM Mono',monospace;font-size:14px;
+  font-family:'DM Mono',monospace;font-size:18px;
   letter-spacing:0.06em;text-transform:lowercase;
   color:var(--ink-body);
 }
@@ -1059,8 +1059,8 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   /* 11px was a caption. These are the only two actions on the page and one
      of them is now the address itself, so both go to the page's prose size
      -- both, because the two cards are a comparison and a comparison needs
-     one structure. 17px is already in this page's inventory. */
-  font-family:'DM Mono',monospace;font-size:17px;
+     one structure. 21px is already in this page's inventory. */
+  font-family:'DM Mono',monospace;font-size:21px;
   letter-spacing:0.04em;text-transform:lowercase;
   text-decoration:none;cursor:pointer;
   transition:transform 0.16s var(--e-out),
@@ -1159,6 +1159,19 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   }
   .hub-option-primary{padding:24px;}
   .hub-option:not(.hub-option-primary){padding-left:18px;}
+  /* `hello@rajkashyap.studio` is one unbreakable string. At 21px DM Mono it
+     measures 311px, and this card gives a button 327px between the page
+     margin and the card's own padding -- so with the pill's 40px of padding
+     the label forced #hub-content to 420px on a 390px phone and the whole
+     page scrolled sideways. 18px is already in this page's inventory and
+     lands the button at 307px. Both buttons move, not just the address:
+     the two cards are a comparison and a comparison needs one structure.
+     The pill's side padding comes off with it. It is `width:100%` here, so
+     the padding does nothing to how the button looks -- it only sets the
+     width below which the label breaks, and at 20px the arrow fell to a
+     second line with 6px in it. */
+  .hub-opt-btn{font-size:var(--hb-body);}
+  .hub-opt-btn-inner{padding-inline:12px;}
 }
 
 /* ======================================================
@@ -1273,7 +1286,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 }
 .od-h{
   font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:clamp(34px,6.4vw,74px);line-height:var(--lh-display);
+  font-size:clamp(38px,calc(6.4vw + 4px),78px);line-height:var(--lh-display);
   letter-spacing:var(--tr-display);color:var(--ink);
   margin-bottom:var(--od-2);
 }
@@ -1286,7 +1299,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 
 /* Raj's hand. Set at the price step so it costs no new type size. */
 .od-hand{
-  font-family:'Caveat','Cormorant Garamond',serif;font-size:20px;line-height:1.1;
+  font-family:'Caveat','Cormorant Garamond',serif;font-size:24px;line-height:1.1;
   letter-spacing:0;text-transform:none;color:var(--accent-r);
 }
 .od-hand-block{display:inline-block;margin-top:var(--od-2);transform:rotate(-2deg);}
@@ -1344,12 +1357,18 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* The words sit on the ring rather than outside it, with the ground showing
    through behind each one -- outside, "distribution" pushes the circle small
    enough to stop reading as a circle. */
+/* The ring's type is geometry, not reading size: six words sit ON a circle of
+   fixed diameter and the centre has to stay two single lines. It is the one
+   place on the site that did not take the sitewide +4 -- at 15/13px the six
+   labels overlapped each other, "that's a full-time job" wrapped, and POST,
+   PSYCHOLOGY and PRODUCTION were pushed off the bottom of a 706px phone.
+   Written as literals so nothing changes here by inheriting a token. */
 .od-chain{list-style:none;}
 .od-chain li{
   position:absolute;left:calc(50% + var(--x));top:calc(50% + var(--y));
   transform:translate(-50%,-50%);
   padding:3px 7px;background:var(--od-ground);white-space:nowrap;
-  font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
+  font-size:11px;letter-spacing:var(--tr-ui);text-transform:uppercase;
   color:var(--accent-b);
   /* each word resolves as the stroke reaches it: 900ms for the full turn,
      so 150ms a stop */
@@ -1361,13 +1380,16 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 .od-loop-mid{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:min(48%,178px);text-align:center;
-  font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
+  font-size:11px;letter-spacing:var(--tr-ui);text-transform:uppercase;
   color:var(--ink-muted);
   opacity:0;transition:opacity 0.4s ease-out 0.86s;
 }
 .od-drawn .od-loop-mid{opacity:1;}
 .od-loop-mid .od-hand{
   display:block;margin-top:var(--od-1);
+  /* 20px, not the page's 24: this line has to hold one line inside a 240px
+     ring, which is what the ring's diameter was chosen around. */
+  font-size:20px;
   text-transform:none;letter-spacing:0;
 }
 
@@ -1554,7 +1576,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 /* the top margin also houses the hanging "up to" above one of the figures */
 .od-reel-cap{margin-top:15px;display:flex;flex-direction:column;gap:1px;}
 .od-reel-cap b{
-  display:block;font-weight:400;font-size:20px;line-height:1.15;
+  display:block;font-weight:400;font-size:24px;line-height:1.15;
   color:var(--accent-r);
 }
 /* "up to" is Raj's hedge on one of the five and it stays -- dropping it to
@@ -1673,7 +1695,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   font-size:var(--t-fine);letter-spacing:var(--tr-label);text-transform:uppercase;
   color:var(--accent-r);margin-bottom:var(--od-1);
 }
-.od-tier-price{font-size:20px;line-height:1.2;color:var(--ink);margin-bottom:2px;}
+.od-tier-price{font-size:24px;line-height:1.2;color:var(--ink);margin-bottom:2px;}
 .od-tier-vol{
   font-size:var(--t-fine);letter-spacing:var(--tr-ui);text-transform:uppercase;
   color:var(--ink-muted);
@@ -1770,7 +1792,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    tier contracts rather than the month getting cropped. */
 @media(min-width:861px) and (max-height:860px){
   #screen-ciad{--od-3:40px;}
-  .od-h-price{font-size:44px;}
+  .od-h-price{font-size:48px;}
 }
 
 /* ---- mobile ---- */
@@ -1805,14 +1827,20 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
      up the room -- the thing they came to build is the focal point here */
   .od-inner-price{gap:var(--od-2);}
   .od-price-head .od-eyebrow{margin-bottom:var(--od-1);}
-  .od-h-price{font-size:26px;}
+  .od-h-price{font-size:30px;}
   .od-month{gap:4px;max-width:172px;}
   .od-build-label{margin-bottom:var(--od-1);}
   /* the currency toggle moves alongside the figures instead of under them --
      a whole row for two words is the most expensive thing on this screen */
   .od-readout{display:grid;grid-template-columns:1fr auto;column-gap:var(--od-2);}
   .od-readout > *{grid-column:1;}
-  .od-readout .od-cur{grid-column:2;grid-row:1 / span 5;align-self:center;margin-top:0;}
+  /* The toggle covers the four figure lines only. It used to span five, which
+     left "one every 2-3 days" sharing its row: 175px of column for a line of
+     Caveat that is 200px at the sitewide +4, so it wrapped and pushed "three
+     months upfront -> save 10%" behind the bar. The cadence line takes the
+     whole width under the toggle instead. */
+  .od-readout .od-cur{grid-column:2;grid-row:1 / span 4;align-self:center;margin-top:0;}
+  .od-readout .od-hand{grid-column:1 / -1;}
   .od-foot{gap:var(--od-1);}
   /* The disqualifier goes on a phone. It is three lines and 88px, and on a
      390x706 live viewport it was sitting under the bar's gradient where it
@@ -1873,10 +1901,21 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .od-loop{
     --ring:min(100%,240px);
     width:var(--ring);
-    margin-block:calc(var(--ring) * -0.125);
+    /* The negative margin gave back the empty arc bands above "ideation" and
+       below "production". With the sitewide +4 the paragraph above runs eight
+       lines instead of six, so `safe center` stops centring and the 30px the
+       ring hangs below its flow box falls outside the slide's scroll range --
+       clipped, not scrollable, which took POST, PSYCHOLOGY and PRODUCTION off
+       the screen entirely. The slide scrolls; a drawing that is cut off does
+       not come back.
+       The bottom margin is the nav capsule: `.od-slide` reserves
+       `--od-bar-h` only, and the bar sits one --nav-clear above the bottom
+       edge, so the last 74px of any slide are behind the capsule. Every other
+       screen ends well short of it; this one ends on "production". */
+    margin-block:0 var(--nav-clear,74px);
   }
-  .od-loop-mid{width:calc(var(--ring) * 0.59);font-size:var(--t-micro);}
-  .od-chain li{padding:2px 5px;font-size:var(--t-micro);}
+  .od-loop-mid{width:calc(var(--ring) * 0.59);font-size:9px;}
+  .od-chain li{padding:2px 5px;font-size:9px;}
   /* The bar was two stacked rows here -- rail, 34px, full-width button -- and
      it came to 168px. A phone in Safari has about 706px of live viewport, not
      the 844 the device claims, so the bar was taking a quarter of the screen
@@ -1951,11 +1990,11 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
 #screen-about{z-index:45;background:var(--bg-warm);overflow-y:auto;overflow-x:hidden;}
 
 #about-inner{
-  --name:clamp(30px,3.2vw,46px);
-  --sec:28px;
-  --text:15px;
-  --small:13.5px;
-  --hand:20px;
+  --name:clamp(34px,calc(3.2vw + 4px),50px);
+  --sec:32px;
+  --text:19px;
+  --small:17.5px;
+  --hand:24px;
 
   --sec-rule-gap:13px;
 
@@ -2488,7 +2527,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
    block was the education list Raj has already corrected twice. */
 @media(min-width:821px) and (max-height:920px){
   #about-inner{
-    --name:clamp(26px,2.4vw,33px);--sec:24px;--text:13.5px;--small:12.5px;--hand:17px;
+    --name:clamp(30px,calc(2.4vw + 4px),37px);--sec:28px;--text:17.5px;--small:16.5px;--hand:21px;
     --sec-rule-gap:10px;
     --u:16px;--s:24px;
   }
@@ -2529,7 +2568,7 @@ body:has(#screen-video) #pg-nav.nav-visible{opacity:1;pointer-events:all;visibil
   .tile.hero.inline img{width:100%;height:auto;}
 }
 @media(max-width:430px){
-  #about-inner{--name:32px;--sec:25px;--text:14.5px;--small:13px;--hand:19px;--sec-rule-gap:11px;}
+  #about-inner{--name:36px;--sec:29px;--text:18.5px;--small:17px;--hand:23px;--sec-rule-gap:11px;}
   /* one column of skills, not two: at 350px wide "strategy & positioning"
      wraps, and a wrapped two-column list reads as broken alignment */
   .skills{columns:1;}
@@ -2620,7 +2659,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   /* ---- INDEX: video fills correctly, CTA tappable ---- */
   #screen-video{ overflow:hidden; }
   #vid-text-overlay{ padding:0 24px; }
-  #vid-headline{ font-size:clamp(22px,6vw,32px); }
+  #vid-headline{ font-size:clamp(26px,calc(6vw + 4px),36px); }
 
   /* ---- PLAYGROUND: artsy vertical feed (mobile) ---- */
   #pg-canvas{ overflow-y:auto; overflow-x:hidden; touch-action:auto; cursor:auto; -webkit-overflow-scrolling:touch; }
@@ -2638,7 +2677,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   }
   .pgf-hero-fixed .pgf-title{
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300;
-    font-size:clamp(24px,7vw,36px); line-height:1.04; letter-spacing:0.01em;
+    font-size:clamp(28px,calc(7vw + 4px),40px); line-height:1.04; letter-spacing:0.01em;
     margin:0; color:#fff;
   }
   /* 18, and .pgf-outro-cta matches it. The same action was set at 16 here
@@ -2650,20 +2689,20 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .pgf-hero-fixed .pgf-cta{
     display:inline-block; margin-top:13px; pointer-events:auto;
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-    font-size:18px; color:#fff; text-decoration:none;
+    font-size:22px; color:#fff; text-decoration:none;
     border-bottom:1px solid rgba(255,255,255,0.55); padding-bottom:2px;
   }
   .pgf-hero-fixed .pgf-cta:active{ transform:scale(0.97); }
   /* closing moment at the end of the feed */
   .pgf-outro{ position:relative; z-index:2; text-align:center; padding:48px 24px 32px; }
   .pgf-outro-line{
-    font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.18em;
+    font-family:'DM Mono',monospace; font-size:15px; letter-spacing:0.18em;
     text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px;
   }
   .pgf-outro-cta{
     display:inline-block; pointer-events:auto;
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-    font-size:18px; color:var(--accent-b,#0d8aaf); text-decoration:none;
+    font-size:22px; color:var(--accent-b,#0d8aaf); text-decoration:none;
     border-bottom:1px solid rgba(13,138,175,0.4); padding-bottom:2px;
     transition:transform .14s var(--e-out);
   }
@@ -2704,7 +2743,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   }
   .pgf-text span{
     font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-    font-size:clamp(15px,4.6vw,20px); line-height:1.22; color:#f5f2ee;
+    font-size:clamp(19px,calc(4.6vw + 4px),24px); line-height:1.22; color:#f5f2ee;
   }
   /* scattered doodle glyphs (eyes + stick figures, like desktop) */
   .pgf-glyph{
@@ -2793,7 +2832,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .reel-view-btn{
   position:relative; z-index:1;
   appearance:none; border:0; background:transparent; cursor:pointer;
-  font-family:'DM Mono',monospace; font-size:10px;
+  font-family:'DM Mono',monospace; font-size:14px;
   letter-spacing:0.13em; text-transform:lowercase; white-space:nowrap;
   color:var(--ink-muted);
   padding:7px 15px; border-radius:100px;
@@ -2814,7 +2853,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   position:fixed; left:50%; bottom:calc(var(--nav-clear,86px) + 6px);
   transform:translateX(-50%); z-index:60;
   font-family:'DM Mono',monospace;
-  font-size:10px; letter-spacing:0.16em; text-transform:uppercase;
+  font-size:14px; letter-spacing:0.16em; text-transform:uppercase;
   color:var(--ink-muted);
   background:rgba(245,242,238,0.72);
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
@@ -2852,18 +2891,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .reel-intro{ flex-direction:column; text-align:center; }
 .reel-intro-inner{ position:relative; z-index:2; padding:0 24px; }
 .reel-intro-eyebrow{
-  font-family:'DM Mono',monospace; font-size:11px;
+  font-family:'DM Mono',monospace; font-size:15px;
   letter-spacing:0.34em; text-transform:uppercase;
   color:var(--ink-muted); margin-bottom:20px;
 }
 .reel-intro-title{
   font-family:'Cormorant Garamond',serif; font-weight:300;
-  font-size:clamp(56px,13vw,150px); line-height:0.9;
+  font-size:clamp(60px,calc(13vw + 4px),154px); line-height:0.9;
   color:var(--ink); letter-spacing:-0.015em; margin:0;
 }
 .reel-intro-title em{ font-style:italic; color:var(--accent-r); }
 .reel-intro-sub{
-  font-family:'DM Mono',monospace; font-size:11px;
+  font-family:'DM Mono',monospace; font-size:15px;
   letter-spacing:0.14em; color:var(--ink-muted); margin-top:28px;
 }
 .reel-cue{
@@ -2948,16 +2987,16 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   padding:22px 24px calc(22px + var(--nav-clear,86px)); pointer-events:none; text-align:left;
 }
 .reel-cat{
-  font-family:'DM Mono',monospace; font-size:9px;
+  font-family:'DM Mono',monospace; font-size:13px;
   letter-spacing:0.18em; text-transform:uppercase;
   color:rgba(255,255,255,0.72); margin-bottom:7px;
 }
 .reel-name{
   font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-  font-size:clamp(22px,3vw,40px); line-height:1.03; color:#fff;
+  font-size:clamp(26px,calc(3vw + 4px),44px); line-height:1.03; color:#fff;
 }
 .reel-sub{
-  font-family:'DM Mono',monospace; font-size:10px;
+  font-family:'DM Mono',monospace; font-size:14px;
   letter-spacing:0.18em; text-transform:uppercase;
   color:rgba(255,255,255,0.78); margin-top:8px;
 }
@@ -2968,7 +3007,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    cost a decision every time something new is added near them. */
 .reel-pglink{
   display:inline-block; margin-top:12px; pointer-events:auto;
-  font-family:'DM Mono',monospace; font-size:10px;
+  font-family:'DM Mono',monospace; font-size:14px;
   letter-spacing:0.14em; text-transform:uppercase;
   color:#fff; text-decoration:none;
   border-bottom:1px solid rgba(255,255,255,0.5); transition:border-color 0.2s ease;
@@ -2985,14 +3024,14 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 }
 .reel-credit-row{
   margin:0; font-family:'DM Mono',monospace;
-  font-size:11px; line-height:1.66; letter-spacing:0.005em;
+  font-size:15px; line-height:1.66; letter-spacing:0.005em;
   color:rgba(255,255,255,0.82);
   text-wrap:pretty;
 }
 .reel-credit-row + .reel-credit-row{ margin-top:5px; }
 .reel-credit-key{
   display:inline-block; margin-right:8px;
-  font-size:9px; letter-spacing:0.16em; text-transform:uppercase;
+  font-size:13px; letter-spacing:0.16em; text-transform:uppercase;
   color:rgba(255,255,255,0.5);
 }
 .reel-todo{ color:var(--accent-r); opacity:0.85; font-style:italic; }
@@ -3007,15 +3046,15 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   text-shadow:0 1px 12px rgba(18,13,8,0.55);
 }
 .reel-groupmark-n{
-  font-size:9px; letter-spacing:0.2em;
+  font-size:13px; letter-spacing:0.2em;
   color:var(--accent-r);
 }
 .reel-groupmark-name{
-  font-size:10px; letter-spacing:0.16em; text-transform:uppercase;
+  font-size:14px; letter-spacing:0.16em; text-transform:uppercase;
   color:rgba(255,255,255,0.92);
 }
 .reel-groupmark-count{
-  font-size:9px; letter-spacing:0.12em;
+  font-size:13px; letter-spacing:0.12em;
   color:rgba(255,255,255,0.55);
 }
 /* a hairline down the frame's left edge for the whole of a client's run */
@@ -3033,9 +3072,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   .reel-frame::after{ height:52%; }
   .reel-label{ padding:26px 22px calc(26px + var(--nav-clear,86px)); }
   .reel-credit{ max-width:100%; margin-top:12px; padding-top:12px; }
-  .reel-credit-row{ font-size:11px; line-height:1.66; }
+  .reel-credit-row{ font-size:15px; line-height:1.66; }
   #reel-view{ right:12px; top:14px; }
-  .reel-view-btn{ font-size:9px; padding:6px 10px; letter-spacing:0.08em; }
+  .reel-view-btn{ font-size:13px; padding:6px 10px; letter-spacing:0.08em; }
   .reel-groupmark{ padding:14px 18px; gap:8px; }
 }
 
@@ -3077,10 +3116,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 #cs-listwrap{ position:relative; z-index:2; max-width:920px; margin:0 auto; padding:48px 24px calc(40px + var(--nav-clear,86px)); }
 .cs-head{ text-align:center; margin-bottom:56px; }
-.cs-eyebrow{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
-.cs-title{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(40px,8vw,72px); line-height:0.98; color:var(--ink); margin:0; letter-spacing:-0.01em; }
+.cs-eyebrow{ font-family:'DM Mono',monospace; font-size:15px; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
+.cs-title{ font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(44px,calc(8vw + 4px),76px); line-height:0.98; color:var(--ink); margin:0; letter-spacing:-0.01em; }
 .cs-title em{ font-style:italic; color:var(--accent-r); }
-.cs-sub{ font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.06em; color:var(--ink-muted); margin-top:16px; }
+.cs-sub{ font-family:'DM Mono',monospace; font-size:16px; letter-spacing:0.06em; color:var(--ink-muted); margin-top:16px; }
 /* 28, not 14. The gap between two cards has to beat the 22px padding inside
    them or the six read as one blob -- the audit was calling this fused, and it
    was right. Raj kept the card layout, so the fix is the spacing, not the box. */
@@ -3094,7 +3133,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    should be spent on -- the multiple is the only figure here that means
    anything, so pink goes there and nowhere else. 12px, not 13: 12 is already
    the page's small-type size and two sizes a pixel apart communicate nothing. */
-.cs-card-no{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); letter-spacing:0.1em; flex-shrink:0; }
+.cs-card-no{ font-family:'DM Mono',monospace; font-size:16px; color:var(--ink-muted); letter-spacing:0.1em; flex-shrink:0; }
 .cs-card-body{ flex:1; min-width:0; }
 /* Blue, and this page now runs two accents on purpose. Raj, 2026-08-12: "the
    client names should be coloured/highlighted. needs contrast in some way."
@@ -3105,9 +3144,9 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    point -- if the names took pink too, six names and six figures in one
    colour would leave nothing for the eye to rank. Don't use the two
    interchangeably. */
-.cs-card-client{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); line-height:1.05; color:var(--accent-b); }
-.cs-card-sector{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
-.cs-card-teaser{ font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-muted); margin-top:8px; line-height:1.5; }
+.cs-card-client{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(26px,calc(3vw + 4px),34px); line-height:1.05; color:var(--accent-b); }
+.cs-card-sector{ font-family:'DM Mono',monospace; font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
+.cs-card-teaser{ font-family:'DM Mono',monospace; font-size:16px; color:var(--ink-muted); margin-top:8px; line-height:1.5; }
 /* The row's footer: what the engagement actually was, so the list answers
    "how much work, over how long" without a click. Raj, 2026-08-23: the page
    "should properly summarise the context inside for each client - with key
@@ -3117,7 +3156,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    directly above. The multiple is deliberately not in here -- it has its own
    column and its own drawn bar two inches to the right. Studies with nothing
    logged past their multiple render no line at all. */
-.cs-card-facts{ font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:16px; line-height:1.6; }
+.cs-card-facts{ font-family:'DM Mono',monospace; font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-top:16px; line-height:1.6; }
 /* The one figure on the row that carries meaning, so it gets the page's one
    accent. Fixed width and left-aligned, not right-aligned: six multiples in a
    column are being compared, and comparison needs them to *start* together --
@@ -3132,12 +3171,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-card-mult{
   flex:0 0 auto; width:210px; text-align:left;
   font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-  font-size:clamp(22px,3vw,30px); line-height:1; letter-spacing:-0.01em;
+  font-size:clamp(26px,calc(3vw + 4px),34px); line-height:1; letter-spacing:-0.01em;
   color:var(--accent-r);
 }
 .cs-card-mult > i{
   display:block; font-style:normal; font-family:'DM Mono',monospace;
-  font-size:9px; letter-spacing:0.16em; text-transform:uppercase;
+  font-size:13px; letter-spacing:0.16em; text-transform:uppercase;
   color:var(--ink-muted); margin-bottom:3px;
 }
 
@@ -3193,7 +3232,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    it. Six copies of this would be the same fact stated six times. */
 .cs-bar-legend{
   position:absolute; top:12px;
-  font-family:'DM Mono',monospace; font-size:9px; font-style:normal;
+  font-family:'DM Mono',monospace; font-size:13px; font-style:normal;
   letter-spacing:0.1em; color:var(--ink-muted); white-space:nowrap;
   transform:translateX(-2px);
 }
@@ -3202,7 +3241,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 @media(prefers-reduced-motion:reduce){
   .cs-bar-solid,.cs-bar-reach{ transform:scaleX(1); transition:none; }
 }
-.cs-card-arrow{ font-size:20px; color:var(--ink-muted); flex-shrink:0; transition:transform .25s, color .2s; }
+.cs-card-arrow{ font-size:24px; color:var(--ink-muted); flex-shrink:0; transition:transform .25s, color .2s; }
 /* Blue on hover, not pink. The arrow goes *into* a client, so it belongs to
    the who-half with the name it sits beside -- one gesture lighting one row.
    Pink stays on the booking CTA at the foot, which is the only other action
@@ -3210,12 +3249,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    budget exists to stop. */
 @media(hover:hover) and (pointer:fine){ .cs-card:hover .cs-card-arrow{ transform:translateX(4px); color:var(--accent-b); } }
 .cs-foot{ text-align:center; margin-top:56px; }
-.cs-foot-line{ font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
+.cs-foot-line{ font-family:'DM Mono',monospace; font-size:15px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:16px; }
 /* Pink and on the page's own display size. It was 24px blue -- which was both
    the sixth type size and the last second accent on the page, one rule causing
    two breaches. It shares the card headline's clamp now, so it adds no size,
    and it takes the one accent because the action is the payoff. */
-.cs-cta{ display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(22px,3vw,30px); color:var(--accent-r); text-decoration:none; border-bottom:1px solid rgba(255,123,172,0.45); padding-bottom:2px; transition:transform .2s; }
+.cs-cta{ display:inline-block; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(26px,calc(3vw + 4px),34px); color:var(--accent-r); text-decoration:none; border-bottom:1px solid rgba(255,123,172,0.45); padding-bottom:2px; transition:transform .2s; }
 .cs-cta:active{ transform:scale(0.98); }
 
 /* 620, down from 1080. The sidebar took 200px plus a 56px gutter, so the
@@ -3230,11 +3269,11 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    section label -- 11 against 10 is two decisions and one appearance, which
    is the type budget's whole complaint. Back link and eyebrow now stack at
    one size. */
-.cs-back{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted); background:none; border:none; cursor:pointer; padding:6px 0; transition:color .2s ease, transform .14s var(--e-out); }
+.cs-back{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted); background:none; border:none; cursor:pointer; padding:6px 0; transition:color .2s ease, transform .14s var(--e-out); }
 @media(hover:hover) and (pointer:fine){.cs-back:hover{ color:var(--ink); }}
 .cs-back:active{ color:var(--ink); transform:scale(0.96); }
 .cs-hero{ margin:18px 0 36px; }
-.cs-hero-eyebrow{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
+.cs-hero-eyebrow{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
 /* Same blue as the list row it was opened from, so the name you clicked is
    the name that greets you in the colour you clicked it in.
 
@@ -3246,7 +3285,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    than having a ramp of her own. */
 .cs-hero-client{
   font-family:'Cormorant Garamond',serif; font-weight:300;
-  font-size:clamp(26px,3.2vw,32px); line-height:1.15;
+  font-size:clamp(30px,calc(3.2vw + 4px),36px); line-height:1.15;
   color:var(--accent-b); margin:0;
 }
 /* On the name's line, after it, in muted ink. The separator is a real
@@ -3345,13 +3384,13 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    lining-nums, 34.2 -> 39.2 at 100px), so the figure sits on the baseline at
    cap height instead. Applied here only: the list row's multiple is oldstyle
    and Raj signed that off with the drawn bar. */
-.cs-fact-v{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(58px,8vw,92px); line-height:0.9; letter-spacing:-0.015em; font-variant-numeric:lining-nums; font-feature-settings:'lnum' 1; color:var(--accent-r); }
+.cs-fact-v{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:clamp(62px,calc(8vw + 4px),96px); line-height:0.9; letter-spacing:-0.015em; font-variant-numeric:lining-nums; font-feature-settings:'lnum' 1; color:var(--accent-r); }
 /* Tracking is size-specific: near zero on the figure above, +0.14em on this
    10px label. One value across both would be wrong at one of them. */
-.cs-fact-l{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
+.cs-fact-l{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:8px; }
 /* "up to" is part of the fact and never drops. Above the number, same as the
    list row, so a hedged figure still starts where an unhedged one does. */
-.cs-fact-v i{ display:block; font-style:italic; font-size:10px; font-family:'DM Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:2px; }
+.cs-fact-v i{ display:block; font-style:italic; font-size:14px; font-family:'DM Mono',monospace; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:2px; }
 /* The run, drawn. It was "13k &middot; 20k &middot; 11k &middot; 19k &middot;
    15k &middot; 10k" set as one 14px line, which is six numbers a reader has to
    read and hold before the run has any shape at all -- and it had no label, so
@@ -3398,17 +3437,17 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cs-run-bar:nth-child(6) i{ transition-delay:225ms; }
 .cs-run-bar b{
   display:block; text-align:center;
-  font-family:'DM Mono',monospace; font-weight:400; font-size:10px;
+  font-family:'DM Mono',monospace; font-weight:400; font-size:14px;
   letter-spacing:0.04em; color:var(--ink); margin-top:7px;
 }
 /* The label the six numbers never had. Raj's own vocabulary, off the outcome
    sentence two screens down: "13k views on the 1st video". */
-.cs-run-label{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:9px; }
+.cs-run-label{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); margin-top:9px; }
 @media(prefers-reduced-motion:reduce){
   .cs-run-bar i{ transform:scaleY(1); transition:none; }
 }
 /* the terms the run happened under, receding under it */
-.cs-fact-spec{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.04em; color:var(--ink-muted); margin-top:14px; }
+.cs-fact-spec{ font-family:'DM Mono',monospace; font-size:18px; letter-spacing:0.04em; color:var(--ink-muted); margin-top:14px; }
 
 /* .cs-metrics / .cs-metric / .cs-metric-v / .cs-metric-l are gone; the strip
    above replaced the box they styled.
@@ -3421,8 +3460,8 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    has to clear a line break by more than a hair or the two fuse. */
 .cs-section{ margin-bottom:40px; }
 .cs-section:last-of-type{ margin-bottom:44px; }
-.cs-section-label{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
-.cs-section-body{ font-family:'DM Mono',monospace; font-size:14px; line-height:1.8; color:var(--ink); max-width:62ch; }
+.cs-section-label{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:10px; }
+.cs-section-body{ font-family:'DM Mono',monospace; font-size:18px; line-height:1.8; color:var(--ink); max-width:62ch; }
 /* One of his own sentences, lifted out of the paragraph it already sits in
    and set where it stands -- see csLift() in case-studies.js. It is not a
    second copy: the running text no longer contains it.
@@ -3442,7 +3481,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    62ch line would run 900px and there is a 620px column. */
 .cs-lift{
   font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400;
-  font-size:clamp(26px,4vw,40px); line-height:1.18; letter-spacing:-0.012em;
+  font-size:clamp(30px,calc(4vw + 4px),44px); line-height:1.18; letter-spacing:-0.012em;
   color:var(--ink); max-width:20ch;
   /* the gap above and below beats the 40px between sections, so it reads as
      a beat inside its section rather than as a section of its own */
@@ -3452,8 +3491,8 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
    prompts that were rendering on the live page. Unwritten content now renders
    nothing at all. */
 .cs-quote{ margin:40px 0 0; padding:26px 24px; border-left:3px solid var(--accent-r); background:rgba(255,255,255,0.4); border-radius:0 10px 10px 0; }
-.cs-quote blockquote{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:clamp(18px,2.6vw,24px); line-height:1.5; color:var(--ink); margin:0 0 12px; }
-.cs-quote figcaption{ font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted); }
+.cs-quote blockquote{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:clamp(22px,calc(2.6vw + 4px),28px); line-height:1.5; color:var(--ink); margin:0 0 12px; }
+.cs-quote figcaption{ font-family:'DM Mono',monospace; font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted); }
 .cs-cta-wrap{ margin-top:44px; text-align:center; }
 
 @media(max-width:760px){
